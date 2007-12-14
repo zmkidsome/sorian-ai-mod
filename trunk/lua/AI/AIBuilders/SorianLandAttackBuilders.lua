@@ -224,7 +224,7 @@ BuilderGroup {
     # Tech 2 priority
     Builder {
         BuilderName = 'Sorian T2AttackTank - Tech 2',
-        PlatoonTemplate = 'T2AttackTank',
+        PlatoonTemplate = 'T2AttackTankSorian',
         Priority = 600,
         BuilderType = 'Land',
         BuilderConditions = {
@@ -237,7 +237,7 @@ BuilderGroup {
     # Tech 3 priority
     Builder {
         BuilderName = 'Sorian T2AttackTank2 - Tech 3',
-        PlatoonTemplate = 'T2AttackTank',
+        PlatoonTemplate = 'T2AttackTankSorian',
         Priority = 550,
         BuilderType = 'Land',
         BuilderConditions = {
@@ -319,7 +319,7 @@ BuilderGroup {
     BuildersType = 'FactoryBuilder',
     Builder {
         BuilderName = 'Sorian T2 Tank Enemy Nearby',
-        PlatoonTemplate = 'T2AttackTank',
+        PlatoonTemplate = 'T2AttackTankSorian',
         Priority = 925,
         BuilderConditions = {
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'AntiSurface', 2 } },

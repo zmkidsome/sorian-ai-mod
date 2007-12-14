@@ -63,3 +63,18 @@ PlatoonTemplate {
         { categories.EXPERIMENTAL * categories.LAND * categories.MOBILE, 2, 3, 'attack', 'none' }
     },
 }
+
+PlatoonTemplate {
+    Name = 'T2AttackTankSorian',
+    FactionSquads = {
+        UEF = {
+            { 'del0204', 1, 1, 'attack', 'None' },
+        },
+        Aeon = {
+            { 'xal0203', 1, 1, 'attack', 'None' },
+        },
+        Cybran = {
+            { 'drl0204', 1, 1, 'attack', 'None' },
+        },
+    },
+}
