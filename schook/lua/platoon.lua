@@ -302,7 +302,7 @@ Platoon = Class(sorianoldPlatoon) {
         
         #If we have cloaking (are cybran), then turn on our cloaking
         if scout:TestToggleCaps('RULEUTC_CloakToggle') then
-			LOG('*AI DEBUG: Enable Land Scout Cloak')
+			#LOG('*AI DEBUG: Enable Land Scout Cloak')
             scout:EnableUnitIntel('Cloak')
 			#scout:SetScriptBit('RULEUTC_CloakToggle', false)
         end
@@ -375,13 +375,13 @@ Platoon = Class(sorianoldPlatoon) {
         aiBrain:BuildScoutLocations()
         
         if scout:TestToggleCaps('RULEUTC_CloakToggle') then
-            #scout:EnableUnitIntel('Cloak')
-			scout:SetScriptBit('RULEUTC_CloakToggle', false)
+            scout:EnableUnitIntel('Cloak')
+			#scout:SetScriptBit('RULEUTC_CloakToggle', false)
         end
         
 		if scout:TestToggleCaps('RULEUTC_StealthToggle') then
-            #scout:EnableUnitIntel('RadarStealth')
-			scout:SetScriptBit('RULEUTC_StealthToggle', false)
+            scout:EnableUnitIntel('RadarStealth')
+			#scout:SetScriptBit('RULEUTC_StealthToggle', false)
         end
         
         while not scout:IsDead() do
@@ -494,16 +494,16 @@ Platoon = Class(sorianoldPlatoon) {
     #       nil
     #-----------------------------------------------------	
 	AirIntelToggle = function(self)
-		LOG('*AI DEBUG: AirIntelToggle run')
+		#LOG('*AI DEBUG: AirIntelToggle run')
 		for k,v in self:GetPlatoonUnits() do
 			if v:TestToggleCaps('RULEUTC_CloakToggle') then
-				#v:EnableUnitIntel('Cloak')
-				v:SetScriptBit('RULEUTC_CloakToggle', false)
+				v:EnableUnitIntel('Cloak')
+				#v:SetScriptBit('RULEUTC_CloakToggle', false)
 			end
         
 			if v:TestToggleCaps('RULEUTC_StealthToggle') then
-				#v:EnableUnitIntel('RadarStealth')
-				v:SetScriptBit('RULEUTC_StealthToggle', false)
+				v:EnableUnitIntel('RadarStealth')
+				#v:SetScriptBit('RULEUTC_StealthToggle', false)
 			end
 		end
 	end,
