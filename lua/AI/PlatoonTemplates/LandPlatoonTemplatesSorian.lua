@@ -15,7 +15,7 @@ PlatoonTemplate {
 }
 PlatoonTemplate {
     Name = 'T1LandScoutFormSorian',
-    Plan = 'ScoutingAISorian',
+    Plan = 'ScoutingAI',
     GlobalSquads = {
         { categories.MOBILE * categories.SCOUT * categories.TECH1, 1, 1, 'scout', 'none' }
     }
