@@ -1,0 +1,32 @@
+== Release Notes ==
+
+*0.8.3:* AI will reevaluate targets periodically, AI will use Megalith, Balance changes, Attempt at fixing, stuck units involving transports, Bug fix in transport usage.
+
+*0.8.2:* Fixed Cloak/Stealth/Radar bug.
+
+*0.8.1:* Fixed bug in unit.lua.
+
+*0.8.0:* Fixed AI cloak/stealth behavior, updated for aisupport mod support, more balance fixes, other changes I forgot.
+
+*0.7.5:* Adjusted speed to T3
+
+*0.7.3:* Typo fixes preventing AI expansion and defense building, fix for unneeded pathing.
+*0.7:* Fixed Commander behaviors, adjusted IBO.
+
+*0.6.5:* More balance fixes, Engineers will reclaim.
+
+*0.6:* Balance fixes, T4 Response, Late game T4 groups, code separation.
+
+*0.5.2:* Fixed a minor bug.
+
+*0.5.1:* Support for the AI Support Mod.
+
+*0.5:* More commander behavior fixes, T4s should be fixed, more balance changes and adjustments.
+
+*0.4:* Really fixed commander behavior, tweaked defenses, hopefully fixed land t4s, ai should use higher tech land more.
+
+*0.3:* Fixed Commander behaviors, More tweaks.
+
+*0.2:* Land and Air units will use their stealth/cloak, some more fine tuning of the Sorian AI, Engineers shouldn't abandon projects(I hope), Removed old log messages, Old SC Commander behaviors are back.
+
+*0.1:* Initial Test Release
