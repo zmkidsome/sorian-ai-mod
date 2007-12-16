@@ -1,6 +1,6 @@
 == Release Notes ==
 
-*0.8.3:* AI will reevaluate targets periodically, AI will use Megalith, Balance changes, Attempt at fixing, stuck units involving transports, Bug fix in transport usage.
+*0.8.3:* AI will reevaluate targets periodically, AI will use Megalith, Balance changes, Attempt at fixing stuck units involving transports, Bug fix in transport usage.
 
 *0.8.2:* Fixed Cloak/Stealth/Radar bug.
 
