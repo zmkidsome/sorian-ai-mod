@@ -383,4 +383,12 @@ function CommanderThreadSorian(cdr, platoon)
     end
 end
 
+function AirUnitRefit(self)
+    for k,v in self:GetPlatoonUnits() do
+        if not v:IsDead() and not v.RefitThread then
+            v.RefitThread = v:ForkThread( AirUnitRefitThread, self:GetPlan(), self.PlatoonData )
+        end
+    end
+end
+
 end

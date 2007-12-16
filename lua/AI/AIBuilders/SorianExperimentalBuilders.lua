@@ -76,6 +76,29 @@ BuilderGroup {
         }
     },
     Builder {
+        BuilderName = 'Sorian T3 Land Exp3 Engineer 1',
+        PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
+        Priority = 875,
+        BuilderConditions = {
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                NearMarkerType = 'Rally Point',
+                BuildStructures = {
+                    'T4LandExperimental3',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
         BuilderName = 'Sorian T2 Engineer Assist Experimental Mobile Land',
         PlatoonTemplate = 'T2EngineerAssist',
         Priority = 800,
