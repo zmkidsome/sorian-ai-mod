@@ -7,7 +7,7 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
     optThreatWeight = optThreatWeight or 1
     local finalPath = {}
 	
-	if VDist2( start[1], start[3], destination[1], destination[3] ) < 20 then
+	if VDist2( start[1], start[3], destination[1], destination[3] ) < 100 then
 		table.insert(finalPath, destination)    
 		return finalPath
 	end
@@ -156,7 +156,7 @@ function SendPlatoonWithTransports(aiBrain, platoon, destination, bRequired, bSk
                         # if it's land...
                         local terrain = GetTerrainHeight(threatEntry[1], threatEntry[2])
                         local surface = GetSurfaceHeight(threatEntry[1], threatEntry[2])
-                        if terrain - surface > 0  then
+                        if terrain >= surface then
                            minThreat = threatEntry[3]
                            transportLocation = {threatEntry[1], 0, threatEntry[2]}
                        end

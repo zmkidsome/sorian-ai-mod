@@ -314,6 +314,7 @@ Platoon = Class(sorianoldPlatoon) {
         local timeAlive = 0
         local closest, entType, closeDist
         local oldClosest
+		local eng = self:GetPlatoonUnits()[1]
         while aiBrain:PlatoonExists(self) do
             local massRatio = aiBrain:GetEconomyStoredRatio('MASS')
             local energyRatio = aiBrain:GetEconomyStoredRatio('ENERGY')
@@ -352,8 +353,14 @@ Platoon = Class(sorianoldPlatoon) {
                     closeDist = tempDist
                 end
             end
-
-            if closest and ( massRatio < .9 or energyRatio < .9 ) then
+			
+			local result, bPos = false
+			
+			if closest then
+				result, bPos = eng:CanPathTo( closest:GetPosition() )
+			end
+			
+            if closest and ( massRatio < .9 or energyRatio < .9 ) and result then
                 oldClosest = closest
                 IssueClearCommands( self:GetPlatoonUnits() )
 				IssueReclaim( self:GetPlatoonUnits(), closest )

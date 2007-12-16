@@ -183,4 +183,187 @@ function GetTransports(platoon, units)
     end
 end
 
+function UseTransports(units, transports, location, transportPlatoon)
+    local aiBrain
+    for k,v in units do
+        if not v:IsDead() then
+            aiBrain = v:GetAIBrain()
+            break
+        end
+    end
+    if not aiBrain then
+        LOG('*AI DEBUG: Attack force failed no brain - transports')
+        return false
+    end
+        # Load transports
+    local transportTable = {}
+    local transSlotTable = {}
+    if not transports then
+        LOG('*AI DEBUG: Attack force failed no transports')
+        return false
+    end
+    #LOG('*AI DEBUG: Attack force using Transports')
+    for num,unit in transports do
+        local id = unit:GetUnitId()
+        if not transSlotTable[id] then
+            transSlotTable[id] = GetNumTransportSlots(unit)
+        end
+        table.insert( transportTable,
+            {
+                Transport = unit,
+                LargeSlots = transSlotTable[id].Large,
+                MediumSlots = transSlotTable[id].Medium,
+                SmallSlots = transSlotTable[id].Small,
+                Units = {}
+            }
+        )
+    end
+
+    local shields = {}
+    local remainingSize3 = {}
+    local remainingSize2 = {}
+    local remainingSize1 = {}
+    local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
+    for num, unit in units do
+        if not unit:IsDead() then
+            if unit:IsUnitState( 'Attached' ) then
+                aiBrain:AssignUnitsToPlatoon( pool, {unit}, 'Unassigned', 'None' )
+                LOG('*AI DEBUG: ARMY ' .. aiBrain:GetArmyIndex() .. ': Already Attached units adding to pool' )
+            elseif EntityCategoryContains( categories.url0306 + categories.DEFENSE, unit ) then
+                table.insert( shields, unit )
+            elseif unit:GetBlueprint().Transport.TransportClass == 3 then
+                table.insert( remainingSize3, unit )
+            elseif unit:GetBlueprint().Transport.TransportClass == 2 then
+                table.insert( remainingSize2, unit )
+            elseif unit:GetBlueprint().Transport.TransportClass == 1 then
+                table.insert( remainingSize1, unit )
+            else
+                table.insert( remainingSize1, unit )
+            end
+        end
+    end
+#    LOG( '*AI DEBUG: NUM SHIELDS= ', table.getn( shields ) )
+#    LOG( '*AI DEBUG: NUM LARGE = ', table.getn( remainingSize3 ) )
+#    LOG( '*AI DEBUG: NUM MEDIUM = ', table.getn( remainingSize2 ) )
+#    LOG( '*AI DEBUG: NUM SMALL = ', table.getn( remainingSize1 ) )
+
+    local needed = GetNumTransports(units)
+    local largeHave = 0
+    for num, data in transportTable do
+        largeHave = largeHave + data.LargeSlots
+    end
+    local leftoverUnits = {}
+    local currLeftovers = {}
+    local leftoverShields = {}
+    transportTable, leftoverShields = SortUnitsOnTransports( transportTable, shields, largeHave - needed.Large )
+
+    transportTable, leftoverUnits = SortUnitsOnTransports( transportTable, remainingSize3, -1 )
+
+    transportTable, currLeftovers = SortUnitsOnTransports( transportTable, leftoverShields, -1 )
+
+    for k,v in currLeftovers do table.insert(leftoverUnits, v) end
+    transportTable, currLeftovers = SortUnitsOnTransports( transportTable, remainingSize2, -1 )
+
+    for k,v in currLeftovers do table.insert(leftoverUnits, v) end
+    transportTable, currLeftovers = SortUnitsOnTransports( transportTable, remainingSize1, -1 )
+
+    for k,v in currLeftovers do table.insert(leftoverUnits, v) end
+    transportTable, currLeftovers = SortUnitsOnTransports( transportTable, currLeftovers, -1 )
+
+    aiBrain:AssignUnitsToPlatoon( pool, currLeftovers, 'Unassigned', 'None' )
+
+
+    if transportPlatoon then
+        transportPlatoon.UsingTransport = true
+    end
+
+    #LOG('*AI DEBUG: ARMY ' .. aiBrain:GetArmyIndex() .. ': Loading Attack force on transports - Faction = ' .. aiBrain:GetFactionIndex() )
+    local monitorUnits = {}
+    for num, data in transportTable do
+        if table.getn( data.Units ) > 0 then
+            IssueClearCommands( data.Units )
+            IssueTransportLoad( data.Units, data.Transport )
+            for k,v in data.Units do table.insert( monitorUnits, v) end
+        end
+    end
+
+    local attached = true
+    repeat
+        WaitSeconds(2)
+        local allDead = true
+		local transDead = true
+        for k,v in units do
+            if not v:IsDead() then
+                allDead = false
+                break
+            end
+        end
+        for k,v in transports do
+            if not v:IsDead() then
+                transDead = false
+                break
+            end
+        end
+        if allDead or transDead then return false end
+        attached = true
+        for k,v in monitorUnits do
+            if not v:IsDead() and not v:IsIdleState() then
+                attached = false
+                break
+            end
+        end
+    until attached
+    # Any units that aren't transports and aren't attached send back to pool
+    for k,unit in units do
+        if not unit:IsDead() and not EntityCategoryContains( categories.TRANSPORTATION, unit ) then
+            if not unit:IsUnitState('Attached') then
+                aiBrain:AssignUnitsToPlatoon( pool, {unit}, 'Unassigned', 'None' )
+            end
+        end
+    end
+    
+    #LOG('*AI DEBUG: Transport loaded')
+
+    
+    if table.getn(transports) != 0 then
+        local safePath = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Air', transports[1]:GetPosition(), location, 200)
+        if safePath then 
+            for _,p in safePath do
+                IssueMove(transports, p)
+            end
+            #LOG('*AI DEBUG: Transport using safe path')
+        end
+    end
+
+    IssueTransportUnload( transports, location )
+    local attached = true
+    while attached do
+        WaitSeconds(3)
+        local allDead = true
+        for k,v in transports do
+            if not v:IsDead() then
+                allDead = false
+                break
+            end
+        end
+        if allDead then
+            return false
+        end
+        attached = false
+        for num, unit in units do
+            if not unit:IsDead() and unit:IsUnitState('Attached') then
+                attached = true
+                break
+            end
+        end
+    end
+    
+    if transportPlatoon then
+        transportPlatoon.UsingTransport = false
+    end    
+    ReturnTransportsToPool( transports, true )
+    #LOG('*AI DEBUG: Finished using transports')
+    return true
+end
+
 end
