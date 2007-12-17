@@ -1,5 +1,7 @@
 == Release Notes ==
 
+*0.8.7:* More optimizations, small balance changes.
+
 *0.8.6:* Fix for low Sim Speed, Balance and Economy changes.
 
 *0.8.5:* Fix for TMLs not firing, Removed new Cloak/Stealth/Radar features, Fix for BaseGuards, Fix for stuck engineers, Fix for Commander upgrades, Cheat AIs names are now formatted properly, Platoons will now use formations and attackmove, Balance Changes. 
