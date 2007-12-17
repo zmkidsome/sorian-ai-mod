@@ -373,7 +373,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Expansion Area Firebase Engineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 900,
+        Priority = 925,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 256, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
@@ -416,7 +416,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Cybran',
         PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
-        Priority = 900,
+        Priority = 925,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 700, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
@@ -461,7 +461,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Aeon',
         PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
-        Priority = 900,
+        Priority = 925,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 900, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
@@ -506,7 +506,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - UEF',
         PlatoonTemplate = 'UEFT3EngineerBuilderSorian',
-        Priority = 900,
+        Priority = 925,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 750, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
@@ -551,7 +551,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Seraphim',
         PlatoonTemplate = 'SeraphimT3EngineerBuilderSorian',
-        Priority = 900,
+        Priority = 925,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 825, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },

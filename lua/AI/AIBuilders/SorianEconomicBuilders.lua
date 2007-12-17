@@ -630,7 +630,7 @@ BuilderGroup {
         BuilderName = 'Sorian T1 Engineer Reclaim',
         PlatoonTemplate = 'EngineerBuilderSorian',
         PlatoonAIPlan = 'ReclaimAISorian',
-        Priority = 900,
+        Priority = 800,
         InstanceCount = 3,
         BuilderConditions = {
                 { SBC, 'ReclaimablesInArea', { 'LocationType', }},
@@ -949,7 +949,7 @@ BuilderGroup {
         BuilderName = 'Sorian T2 Engineer Reclaim',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         PlatoonAIPlan = 'ReclaimAISorian',
-        Priority = 900,
+        Priority = 800,
         InstanceCount = 3,
         BuilderConditions = {
 				{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'TECH2 ENERGYPRODUCTION'}},
@@ -1111,7 +1111,7 @@ BuilderGroup {
         BuilderName = 'Sorian T3 Engineer Reclaim',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         PlatoonAIPlan = 'ReclaimAISorian',
-        Priority = 900,
+        Priority = 800,
         InstanceCount = 3,
         BuilderConditions = {
 				{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'TECH3 ENERGYPRODUCTION'}},

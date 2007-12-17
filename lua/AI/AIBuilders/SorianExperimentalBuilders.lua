@@ -31,7 +31,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Land Exp1 Engineer 1',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 875,
+        Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
@@ -55,7 +55,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Land Exp2 Engineer 1',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 875,
+        Priority = 950,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
@@ -78,7 +78,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Land Exp3 Engineer 1',
         PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
-        Priority = 875,
+        Priority = 950,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
@@ -196,7 +196,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Air Exp1 Engineer 1',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 875,
+        Priority = 950,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.AIR }},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
@@ -314,7 +314,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Satellite Exp Engineer',
         PlatoonTemplate = 'UEFT3EngineerBuilderSorian',
-        Priority = 875,
+        Priority = 950,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENGINEER * categories.TECH3}},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
