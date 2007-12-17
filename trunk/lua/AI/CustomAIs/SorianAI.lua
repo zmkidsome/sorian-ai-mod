@@ -12,10 +12,10 @@ AIList = {
 CheatAIList = {
     {
         key = 'soriancheat',
-        name = "AI: Sorian",
+        name = "AIx: Sorian",
     },
     {
         key = 'sorianrushcheat',
-        name = "AI: Sorian Rush",
+        name = "AIx: Sorian Rush",
     },
 }

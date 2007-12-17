@@ -1,4 +1,19 @@
 PlatoonTemplate {
+    Name = 'BaseGuardSmallSorian',
+    Plan = 'GuardBaseSorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 5, 15, 'Attack', 'none' }
+    },
+}
+
+PlatoonTemplate {
+    Name = 'BaseGuardMediumSorian',
+    Plan = 'GuardBaseSorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 15, 25, 'Attack', 'none' }
+    },
+}
+PlatoonTemplate {
     Name = 'StartLocationAttackSorian',
     Plan = 'GuardMarkerSorian',
     GlobalSquads = {
@@ -15,7 +30,7 @@ PlatoonTemplate {
 }
 PlatoonTemplate {
     Name = 'T1LandScoutFormSorian',
-    Plan = 'ScoutingAI',
+    Plan = 'ScoutingAISorian',
     GlobalSquads = {
         { categories.MOBILE * categories.SCOUT * categories.TECH1, 1, 1, 'scout', 'none' }
     }

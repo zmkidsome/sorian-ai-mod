@@ -54,7 +54,7 @@ BuilderGroup {
                 BaseTemplate = ExBaseTmpl,
                 ExpansionBase = true,
                 NearMarkerType = 'Start Location',
-                LocationRadius = 1000,
+                LocationRadius = 1500,
                 LocationType = 'LocationType',
                 ThreatMin = -1000,
                 ThreatMax = 5,
@@ -77,7 +77,7 @@ BuilderGroup {
         BuilderName = 'Sorian T1VacantStartingAreaEngineer',
         PlatoonTemplate = 'EngineerBuilderSorian',
         Priority = 940,
-        InstanceCount = 2,
+        InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -94,7 +94,7 @@ BuilderGroup {
                 BaseTemplate = ExBaseTmpl,
                 ExpansionBase = true,
                 NearMarkerType = 'Start Location',
-                LocationRadius = 1000,
+                LocationRadius = 1500,
                 LocationType = 'LocationType',
                 ThreatMin = -1000,
                 ThreatMax = 100,
@@ -116,7 +116,7 @@ BuilderGroup {
         BuilderName = 'Sorian T2VacantStartingAreaEngineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         Priority = 930,
-        InstanceCount = 2,
+        InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -134,7 +134,7 @@ BuilderGroup {
                 BaseTemplate = ExBaseTmpl,
                 ExpansionBase = true,
                 NearMarkerType = 'Start Location',
-                LocationRadius = 1000,
+                LocationRadius = 1500,
                 LocationType = 'LocationType',
                 ThreatMin = -1000,
                 ThreatMax = 0,
@@ -159,7 +159,7 @@ BuilderGroup {
         BuilderName = 'Sorian T3VacantStartingAreaEngineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 930,
-        InstanceCount = 2,
+        InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -174,7 +174,7 @@ BuilderGroup {
                 BaseTemplate = ExBaseTmpl,
                 ExpansionBase = true,
                 NearMarkerType = 'Start Location',
-                LocationRadius = 1000,
+                LocationRadius = 1500,
                 LocationType = 'LocationType',
                 ThreatMin = -1000,
                 ThreatMax = 0,
@@ -210,7 +210,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Vacant Expansion Area Engineer(Full Base)',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 922,
+        Priority = 930,
         InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
@@ -250,7 +250,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Vacant Expansion Area Engineer(Fire base)',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 900,
         InstanceCount = 4,
         BuilderConditions = {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
@@ -285,7 +285,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2VacantExpansiongAreaEngineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 900,
         InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
@@ -324,7 +324,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3VacantExpansionAreaEngineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 900,
         InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
@@ -373,7 +373,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Expansion Area Firebase Engineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 875,
+        Priority = 900,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 256, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
@@ -414,12 +414,12 @@ BuilderGroup {
         }
     },
     Builder {
-        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer',
-        PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 875,
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Cybran',
+        PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
+        Priority = 900,
         InstanceCount = 1,
         BuilderConditions = {
-            { MABC, 'CanBuildFirebase', { 'LocationType', 256, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
+            { MABC, 'CanBuildFirebase', { 'LocationType', 700, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
             { UCBC, 'UnitCapCheckLess', { .85 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -430,7 +430,142 @@ BuilderGroup {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
                 FireBase = true,
-                FireBaseRange = 256,
+                FireBaseRange = 700,
+                NearMarkerType = 'Expansion Area',
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRATEGIC',
+                MarkerRadius = 20,
+                BuildStructures = {
+                    'T2StrategicMissile',
+                    'T3AADefense',
+                    'T2GroundDefense',
+                    'T2StrategicMissile',
+                    'T2StrategicMissile',
+                    'T3AADefense',
+                    'T2GroundDefense',
+                    'T2StrategicMissile',
+                    'T2Artillery',
+                    'T2Artillery',
+                    'T2Artillery',
+					'T3Artillery',
+					'T2ShieldDefense',
+					'T2Radar',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Aeon',
+        PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
+        Priority = 900,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { MABC, 'CanBuildFirebase', { 'LocationType', 900, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
+            { UCBC, 'UnitCapCheckLess', { .85 } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 900,
+                NearMarkerType = 'Expansion Area',
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRATEGIC',
+                MarkerRadius = 20,
+                BuildStructures = {
+                    'T2StrategicMissile',
+                    'T3AADefense',
+                    'T2GroundDefense',
+                    'T2StrategicMissile',
+                    'T2StrategicMissile',
+                    'T3AADefense',
+                    'T2GroundDefense',
+                    'T2StrategicMissile',
+                    'T2Artillery',
+                    'T2Artillery',
+                    'T2Artillery',
+					'T3Artillery',
+					'T2ShieldDefense',
+					'T2Radar',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - UEF',
+        PlatoonTemplate = 'UEFT3EngineerBuilderSorian',
+        Priority = 900,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { MABC, 'CanBuildFirebase', { 'LocationType', 750, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
+            { UCBC, 'UnitCapCheckLess', { .85 } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 750,
+                NearMarkerType = 'Expansion Area',
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRATEGIC',
+                MarkerRadius = 20,
+                BuildStructures = {
+                    'T2StrategicMissile',
+                    'T3AADefense',
+                    'T2GroundDefense',
+                    'T2StrategicMissile',
+                    'T2StrategicMissile',
+                    'T3AADefense',
+                    'T2GroundDefense',
+                    'T2StrategicMissile',
+                    'T2Artillery',
+                    'T2Artillery',
+                    'T2Artillery',
+					'T3Artillery',
+					'T2ShieldDefense',
+					'T2Radar',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Seraphim',
+        PlatoonTemplate = 'SeraphimT3EngineerBuilderSorian',
+        Priority = 900,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { MABC, 'CanBuildFirebase', { 'LocationType', 825, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
+            { UCBC, 'UnitCapCheckLess', { .85 } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 825,
                 NearMarkerType = 'Expansion Area',
                 LocationType = 'LocationType',
                 ThreatMin = -1000,
