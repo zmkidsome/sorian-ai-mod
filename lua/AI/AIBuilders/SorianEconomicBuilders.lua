@@ -79,7 +79,7 @@ BuilderGroup {
         Priority = 925,
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH2' }},
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH3' }},
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY TECH3' }},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'ENGINEER TECH2' } },
             { UCBC, 'EngineerCapCheck', { 'LocationType', 'Tech2' } },
         },
@@ -88,10 +88,10 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Engineer Disband - Filler 1',
         PlatoonTemplate = 'T2BuildEngineer',
-        Priority = 800,
+        Priority = 810,
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 6, 'ENGINEER TECH2' }},
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH3' }},
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY TECH3' }},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'ENGINEER TECH2' } },
             { UCBC, 'EngineerCapCheck', { 'LocationType', 'Tech2' } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.95, 1.2 } },
@@ -102,10 +102,10 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Engineer Disband - Filler 2',
         PlatoonTemplate = 'T2BuildEngineer',
-        Priority = 700,
+        Priority = 710,
         BuilderConditions = {
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.95, 1.2} },
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH3' }},
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY TECH3' }},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'ENGINEER TECH2' } },
             { UCBC, 'EngineerCapCheck', { 'LocationType', 'Tech2' } },
             { IBC, 'BrainNotLowMassMode', {} },
@@ -176,7 +176,7 @@ BuilderGroup {
         PlatoonTemplate = 'T3LandSubCommander',
         Priority = 900,
         BuilderConditions = {
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.95, 1.3 } },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 } },
             { UCBC, 'EngineerCapCheck', { 'LocationType', 'SCU' } },
             { IBC, 'BrainNotLowMassMode', {} },
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -504,7 +504,7 @@ BuilderGroup {
         BuilderData = {
             Enhancement = { 'LeftPod', 'RightPod', 'ResourceAllocation', 'AdvancedEngineering' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
+		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
     Builder {
         BuilderName = 'Sorian UEF CDR Upgrade T3 Eng - Shields',
@@ -522,7 +522,7 @@ BuilderGroup {
         BuilderData = {
             Enhancement = { 'RightPodRemove', 'Shield', 'T3Engineering', 'ShieldGeneratorField' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
+        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
 
     # Aeon
@@ -542,7 +542,7 @@ BuilderGroup {
         BuilderData = {
             Enhancement = { 'AdvancedEngineering', 'Shield', 'HeatSink' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
+        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
     Builder {
         BuilderName = 'Sorian Aeon CDR Upgrade T3 Eng - ResourceAdv - EnhSensor',
@@ -560,7 +560,7 @@ BuilderGroup {
         BuilderData = {
             Enhancement = { 'T3Engineering', 'ShieldHeavy' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
+        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
     
     # Cybran
@@ -580,7 +580,7 @@ BuilderGroup {
         BuilderData = {
             Enhancement = { 'ResourceAllocation', 'AdvancedEngineering' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
+        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
     Builder {
         BuilderName = 'Sorian Cybran CDR Upgrade T3 Eng - Resource',
@@ -598,7 +598,7 @@ BuilderGroup {
         BuilderData = {
             Enhancement = { 'T3Engineering', 'MicrowaveLaserGenerator' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
+        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
 }
 
@@ -630,7 +630,7 @@ BuilderGroup {
         BuilderName = 'Sorian T1 Engineer Reclaim',
         PlatoonTemplate = 'EngineerBuilderSorian',
         PlatoonAIPlan = 'ReclaimAISorian',
-        Priority = 950,
+        Priority = 900,
         InstanceCount = 3,
         BuilderConditions = {
                 { SBC, 'ReclaimablesInArea', { 'LocationType', }},
@@ -949,7 +949,7 @@ BuilderGroup {
         BuilderName = 'Sorian T2 Engineer Reclaim',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         PlatoonAIPlan = 'ReclaimAISorian',
-        Priority = 950,
+        Priority = 900,
         InstanceCount = 3,
         BuilderConditions = {
 				{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'TECH2 ENERGYPRODUCTION'}},
@@ -1111,7 +1111,7 @@ BuilderGroup {
         BuilderName = 'Sorian T3 Engineer Reclaim',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         PlatoonAIPlan = 'ReclaimAISorian',
-        Priority = 950,
+        Priority = 900,
         InstanceCount = 3,
         BuilderConditions = {
 				{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'TECH3 ENERGYPRODUCTION'}},
@@ -1348,7 +1348,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1ResourceEngineer 450',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 925,
+        Priority = 940,
         InstanceCount = 4,
         BuilderConditions = {
                 { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
@@ -1388,7 +1388,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1ResourceEngineer 3000',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 800,
+        Priority = 825,
         InstanceCount = 1,
         BuilderConditions = {
                 { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
@@ -1446,7 +1446,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 T2Resource Engineer 3000',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 800,
+        Priority = 825,
         InstanceCount = 1,
         BuilderConditions = {
                 { UCBC, 'EngineerLessAtLocation', { 'LocationType', 6, 'ENGINEER TECH3'}},
@@ -1499,7 +1499,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 T3Resource Engineer 3000 range',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 800,
+        Priority = 825,
         BuilderConditions = {
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 3000, -500, 1, 0, 'AntiSurface', 1 }},
             },

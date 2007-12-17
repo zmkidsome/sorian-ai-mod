@@ -23,31 +23,16 @@ function ReclaimablesInArea(aiBrain, locType)
     if aiBrain:GetEconomyStoredRatio('MASS') > .9 and aiBrain:GetEconomyStoredRatio('ENERGY') > .9 then
         return false
     end
-	local engineerManager = aiBrain.BuilderManagers[locType].EngineerManager
-    if not engineerManager then
-        return false
-    end
 	
     local ents = AIUtils.AIGetReclaimablesAroundLocation( aiBrain, locType )
     if not ents or table.getn( ents ) == 0 then
 		return false
     end
-	local Unit
-	local Units = AIUtils.GetOwnUnitsAroundPoint( aiBrain, categories.ENGINEER - categories.COMMAND, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius() )
-    for k,v in Units do
-		if not v:IsDead() then
-			Unit = v
-			break
-		end
-	end
-	if not Unit then
-		return false
-	end
+
     for k,v in ents do
-		result, bPos = Unit:CanPathTo( v:GetPosition() )
-        if v.MassReclaim and v.MassReclaim > 0 and aiBrain:GetEconomyStoredRatio('MASS') < .9 and result then
+        if v.MassReclaim and v.MassReclaim > 0 and aiBrain:GetEconomyStoredRatio('MASS') < .9 then
             return true
-        elseif v.EnergyReclaim and v.EnergyReclaim > 0 and aiBrain:GetEconomyStoredRatio('ENERGY') < .9 and result then
+        elseif v.EnergyReclaim and v.EnergyReclaim > 0 and aiBrain:GetEconomyStoredRatio('ENERGY') < .9 then
             return true
         end
     end

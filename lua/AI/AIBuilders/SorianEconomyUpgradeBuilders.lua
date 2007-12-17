@@ -86,6 +86,7 @@ BuilderGroup {
             { EBC, 'GreaterThanEconIncome',  { 2.2, 10}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.2 }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'MASSEXTRACTION TECH2', 'MASSEXTRACTION' } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION' }},
         },
         FormRadius = 10000,
         BuilderType = 'Any',
@@ -101,6 +102,7 @@ BuilderGroup {
             { EBC, 'GreaterThanEconIncome',  { 6, 10}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.2 }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 2, 'MASSEXTRACTION TECH2', 'MASSEXTRACTION' } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION' }},
         },
         FormRadius = 10000,
         BuilderType = 'Any',
@@ -116,6 +118,7 @@ BuilderGroup {
             { EBC, 'GreaterThanEconIncome',  { 15, 10}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.2 }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 4, 'MASSEXTRACTION TECH2', 'MASSEXTRACTION' } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION' }},
         },
         FormRadius = 10000,
         BuilderType = 'Any',
@@ -167,7 +170,7 @@ BuilderGroup {
         Priority = 200,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY TECH2 LAND, FACTORY TECH3 LAND'}},
+                { UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY TECH2, FACTORY TECH3'}},
                 { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH2, FACTORY TECH3' } },
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2 LAND, FACTORY TECH3 LAND' } },		            
@@ -182,7 +185,7 @@ BuilderGroup {
         InstanceCount = 1,
         FormDebugFunction = nil,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY TECH2 AIR, FACTORY TECH3 AIR'}},
+                { UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY TECH2, FACTORY TECH3'}},
                 { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH2, FACTORY TECH3' } },
 				{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2 AIR, FACTORY TECH3 AIR' } },
@@ -197,7 +200,7 @@ BuilderGroup {
         InstanceCount = 1,
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
-                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY LAND TECH1' }},
+                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY LAND' }},
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2 LAND, FACTORY TECH3 LAND' } },
                 { EBC, 'GreaterThanEconIncome',  { 3.5, 50}},
@@ -214,7 +217,7 @@ BuilderGroup {
         FormDebugFunction = nil,
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
-                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY AIR TECH1' }},
+                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY AIR' }},
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2 AIR, FACTORY TECH3 AIR' } },
                 { EBC, 'GreaterThanEconIncome',  { 3.5, 50}},
@@ -231,7 +234,7 @@ BuilderGroup {
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'NAVAL FACTORY TECH1' } },
+                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'NAVAL FACTORY' } },
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3 NAVAL, FACTORY TECH2 NAVAL' } },
                 { EBC, 'GreaterThanEconIncome',  { 4.5, 60}},
                 { IBC, 'BrainNotLowPowerMode', {} },
