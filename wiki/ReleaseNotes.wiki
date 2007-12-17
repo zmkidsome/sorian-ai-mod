@@ -4,7 +4,7 @@
 
 *0.8.6:* Fix for low Sim Speed, Balance and Economy changes.
 
-*0.8.5:* Fix for TMLs not firing, Removed new Cloak/Stealth/Radar features, Fix for BaseGuards, Fix for stuck engineers, Fix for Commander upgrades, Cheat AIs names are now formatted properly, Platoons will now use formations and attackmove, Balance Changes. 
+*0.8.5:* Fix for TMLs not firing, Removed new Cloak/Stealth/Radar features, Fix for Base guards, Fix for stuck engineers, Fix for Commander upgrades, Cheat AIs names are now formatted properly, Platoons will now use formations and attackmove, Balance Changes. 
 
 *0.8.3:* AI will reevaluate targets periodically, AI will use Megalith, Balance changes, Attempt at fixing stuck units involving transports, Bug fix in transport usage.
 
