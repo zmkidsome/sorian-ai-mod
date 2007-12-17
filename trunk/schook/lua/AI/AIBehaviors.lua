@@ -391,9 +391,4 @@ function AirUnitRefit(self)
     end
 end
 
-function BuildOnceAISorian(platoon)
-    local aiBrain = platoon:GetBrain()
-	platoon.BuilderHandle:SetPriority(0)
-end
-
 end

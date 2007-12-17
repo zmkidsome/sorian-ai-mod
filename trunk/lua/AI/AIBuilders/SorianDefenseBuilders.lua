@@ -218,7 +218,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 10, categories.TACTICALMISSILEPLATFORM}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
             #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T2StrategicMissile', categories.STRUCTURE + ( categories.LAND * ( categories.TECH2 + categories.TECH3 ) ) } },
         },

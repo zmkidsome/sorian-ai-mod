@@ -600,7 +600,6 @@ Platoon = Class(sorianoldPlatoon) {
             if not unitPos then break end
             local recPos = nil
             closest = false
-			local result, bPos = false
 			for num, recType in reclaimables do
 				for k, v in recType do
 					recPos = v:GetPosition()
@@ -610,9 +609,8 @@ Platoon = Class(sorianoldPlatoon) {
 					end
 					if not (unitPos[1] and unitPos[3] and recPos[1] and recPos[3]) then return end
 					local tempDist = VDist2( unitPos[1], unitPos[3], recPos[1], recPos[3] )
-					result, bPos = eng:CanPathTo( v:GetPosition() )
 					# We don't want any reclaimables super close to us
-					if ( ( not closest or tempDist < closeDist ) and ( not oldClosest or closest != oldClosest ) ) and result then
+					if ( ( not closest or tempDist < closeDist ) and ( not oldClosest or closest != oldClosest ) ) then
 						closest = v
 						entType = num
 						closeDist = tempDist
@@ -640,6 +638,7 @@ Platoon = Class(sorianoldPlatoon) {
 						local basePosition = aiBrain.BuilderManagers[locationType].Position
 						local location = AIUtils.RandomLocation(basePosition[1],basePosition[3])
 						self:MoveToLocation( location, false )
+						WaitSeconds(10)
                         self:PlatoonDisband()
                         return
                     end
@@ -650,6 +649,7 @@ Platoon = Class(sorianoldPlatoon) {
 				local basePosition = aiBrain.BuilderManagers[locationType].Position
                 local location = AIUtils.RandomLocation(basePosition[1],basePosition[3])
                 self:MoveToLocation( location, false )
+				WaitSeconds(10)
                 self:PlatoonDisband()
             end
         end
