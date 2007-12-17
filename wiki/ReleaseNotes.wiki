@@ -1,5 +1,7 @@
 == Release Notes ==
 
+*0.8.8:* Lag bug fix, more balance and defense changes.
+
 *0.8.7:* More optimizations, small balance changes.
 
 *0.8.6:* Fix for low Sim Speed, Balance and Economy changes.
