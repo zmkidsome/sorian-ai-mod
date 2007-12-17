@@ -38,6 +38,7 @@ BaseBuilderTemplate {
         'SorianT2LightDefenses',
         'SorianT3LightDefenses',
 
+		'SorianT2ArtilleryFormBuilders',
         'SorianT2MissileDefenses',
         'SorianT3NukeDefenses',
         'SorianT3NukeDefenseBehaviors',

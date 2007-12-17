@@ -375,7 +375,7 @@ BuilderGroup {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.MOBILE * categories.AIR * categories.TECH3 * categories.ANTIAIR} },
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 10, 'TRANSPORTFOCUS' } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 8, 'TRANSPORTFOCUS' } },
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
@@ -390,7 +390,8 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirTransport',
         Priority = 500,
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 3, 'TRANSPORTFOCUS' } },
+            #{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 3, 'TRANSPORTFOCUS' } },
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.MOBILE * categories.AIR * categories.ANTIAIR} },
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
@@ -407,7 +408,8 @@ BuilderGroup {
         PlatoonTemplate = 'T2AirTransport',
         Priority = 600,
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 3, 'TRANSPORTFOCUS' } },
+            #{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 3, 'TRANSPORTFOCUS' } },
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.TECH1} },
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
@@ -424,7 +426,8 @@ BuilderGroup {
         PlatoonTemplate = 'T3AirTransport',
         Priority = 700,
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 3, 'TRANSPORTFOCUS' } },
+            #{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 3, 'TRANSPORTFOCUS' } },
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.MOBILE * categories.AIR * categories.TECH3 * categories.ANTIAIR} },
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },

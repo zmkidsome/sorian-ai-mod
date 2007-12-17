@@ -4,6 +4,68 @@ sorianoldPlatoon = Platoon
 
 Platoon = Class(sorianoldPlatoon) {
 
+    TacticalAISorian = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        local armyIndex = aiBrain:GetArmyIndex()
+        local platoonUnits = self:GetPlatoonUnits()
+        local unit
+        
+        if not aiBrain:PlatoonExists(self) then return end
+        
+        #GET THE Launcher OUT OF THIS PLATOON
+        for k, v in platoonUnits do
+            if EntityCategoryContains(categories.STRUCTURE * categories.TACTICALMISSILEPLATFORM, v) then
+                unit = v
+                break
+            end
+        end
+        
+        if not unit then return end
+        
+        local bp = unit:GetBlueprint()
+        local weapon = bp.Weapon[1]
+        local maxRadius = weapon.MaxRadius
+        local minRadius = weapon.MinRadius
+        unit:SetAutoMode(true)
+        #local atkPri = { 'COMMAND', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE', 'CONSTRUCTION', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MOBILE LAND',
+        #    'TECH2 MOBILE LAND', 'TECH1 MOBILE LAND', 'ALLUNITS' }
+        self:SetPrioritizedTargetList( 'Attack', { categories.COMMAND, categories.CONSTRUCTION, categories.STRUCTURE * categories.DEFENSE,
+            categories.EXPERIMENTAL * categories.MOBILE, categories.TECH3 * categories.MOBILE, categories.TECH2 * categories.MOBILE,
+            categories.TECH1 * categories.MOBILE, categories.ALLUNITS } )
+        while aiBrain:PlatoonExists(self) do
+            local target = false
+            local blip = false
+            while unit:GetTacticalSiloAmmoCount() < 1 or not target do
+                WaitSeconds(7)
+                target = false
+                while not target do
+                    #if aiBrain:GetCurrentEnemy() and aiBrain:GetCurrentEnemy():IsDefeated() then
+                    #    aiBrain:PickEnemyLogic()
+                    #end
+
+                    #target = AIUtils.AIFindBrainTargetInRange( aiBrain, self, 'Attack', maxRadius, atkPri, aiBrain:GetCurrentEnemy() )
+
+                    if not target then
+                        target = self:FindPrioritizedUnit('Attack', 'Enemy', true, unit:GetPosition(), maxRadius)
+                    end
+                    if target then
+                        break
+                    end
+                    WaitSeconds(3)
+                    if not aiBrain:PlatoonExists(self) then
+                        return
+                    end
+                end
+            end
+            if not target:IsDead() then
+                #LOG('*AI DEBUG: Firing Tactical Missile at enemy swine!')
+                IssueTactical({unit}, target)
+            end
+            WaitSeconds(3)
+        end
+    end,
+
     AirHuntAI = function(self)
         self:Stop()
         local aiBrain = self:GetBrain()
@@ -260,7 +322,7 @@ Platoon = Class(sorianoldPlatoon) {
             end
             
             if moveNext == 'Guard Base' then
-                return self:GuardBase()
+                return self:GuardBaseSorian()
             end
             
             # we're there... wait here until we're done
@@ -294,18 +356,215 @@ Platoon = Class(sorianoldPlatoon) {
     #-----------------------------------------------------	
 	AirIntelToggle = function(self)
 		#LOG('*AI DEBUG: AirIntelToggle run')
-		for k,v in self:GetPlatoonUnits() do
-			if v:TestToggleCaps('RULEUTC_CloakToggle') then
-				v:EnableUnitIntel('Cloak')
-				#v:SetScriptBit('RULEUTC_CloakToggle', false)
-			end
-        
+		for k,v in self:GetPlatoonUnits() do        
 			if v:TestToggleCaps('RULEUTC_StealthToggle') then
-				v:EnableUnitIntel('RadarStealth')
-				#v:SetScriptBit('RULEUTC_StealthToggle', false)
+				v:SetScriptBit('RULEUTC_StealthToggle', false)
 			end
 		end
 	end,
+	
+    GuardBaseSorian = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        local armyIndex = aiBrain:GetArmyIndex()
+        local target = false
+        local basePosition = false
+
+        if self.PlatoonData.LocationType and self.PlatoonData.LocationType != 'NOTMAIN' then
+            basePosition = aiBrain.BuilderManagers[self.PlatoonData.LocationType].Position
+        else
+            basePosition = aiBrain:FindClosestBuilderManagerPosition(self:GetPlatoonPosition())
+        end
+        
+        local guardRadius = self.PlatoonData.GuardRadius or 75
+        
+        while aiBrain:PlatoonExists(self) do
+            if self:IsOpponentAIRunning() then
+                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL)
+                if target and not target:IsDead() and VDist3( target:GetPosition(), self:GetPlatoonPosition() ) then
+                    self:Stop()
+                    self:AggressiveMoveToLocation( target:GetPosition() )
+                else
+					local position = AIUtils.RandomLocation(basePosition[1],basePosition[3])
+                    self:Stop()
+                    self:MoveToLocation( position, false )
+                end
+            end
+            WaitSeconds(5)
+        end
+    end,
+	
+    AttackForceAI = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        
+        # get units together
+        if not self:GatherUnits() then
+            return
+        end
+        
+        # Setup the formation based on platoon functionality
+        
+        local enemy = aiBrain:GetCurrentEnemy()
+
+        local platoonUnits = self:GetPlatoonUnits()
+        local numberOfUnitsInPlatoon = table.getn(platoonUnits)
+        local oldNumberOfUnitsInPlatoon = numberOfUnitsInPlatoon
+        local stuckCount = 0
+        
+        self.PlatoonAttackForce = true
+        # formations have penalty for taking time to form up... not worth it here
+        # maybe worth it if we micro
+        #self:SetPlatoonFormationOverride('GrowthFormation')
+		local bAggro = self.PlatoonData.AggressiveMove or false
+        local PlatoonFormation = self.PlatoonData.UseFormation or 'NoFormation'
+        self:SetPlatoonFormationOverride(PlatoonFormation)
+        
+        while aiBrain:PlatoonExists(self) do
+            local pos = self:GetPlatoonPosition() # update positions; prev position done at end of loop so not done first time  
+            
+            # if we can't get a position, then we must be dead
+            if not pos then
+                break
+            end
+            
+            
+            # if we're using a transport, wait for a while
+            if self.UsingTransport then
+                WaitSeconds(10)
+                continue
+            end
+                        
+            # pick out the enemy
+            if aiBrain:GetCurrentEnemy() and aiBrain:GetCurrentEnemy():IsDefeated() then
+                aiBrain:PickEnemyLogic()
+            end
+
+            # merge with nearby platoons
+            self:MergeWithNearbyPlatoons('AttackForceAI', 10)
+
+            # rebuild formation
+            platoonUnits = self:GetPlatoonUnits()
+            numberOfUnitsInPlatoon = table.getn(platoonUnits)
+            # if we have a different number of units in our platoon, regather
+            if (oldNumberOfUnitsInPlatoon != numberOfUnitsInPlatoon) then
+                self:StopAttack()
+                self:SetPlatoonFormationOverride(PlatoonFormation)
+            end
+            oldNumberOfUnitsInPlatoon = numberOfUnitsInPlatoon
+
+            # deal with lost-puppy transports
+            local strayTransports = {}
+            for k,v in platoonUnits do
+                if EntityCategoryContains(categories.TRANSPORTATION, v) then
+                    table.insert(strayTransports, v)
+                end 
+            end
+            if table.getn(strayTransports) > 0 then
+                local dropPoint = pos
+                dropPoint[1] = dropPoint[1] + Random(-3, 3)
+                dropPoint[3] = dropPoint[3] + Random(-3, 3)
+                IssueTransportUnload( strayTransports, dropPoint )
+                WaitSeconds(10)
+                local strayTransports = {}
+                for k,v in platoonUnits do
+                    local parent = v:GetParent()
+                    if parent and EntityCategoryContains(categories.TRANSPORTATION, parent) then
+                        table.insert(strayTransports, parent)
+                        break
+                    end 
+                end
+                if table.getn(strayTransports) > 0 then
+                    local MAIN = aiBrain.BuilderManagers.MAIN
+                    if MAIN then
+                        dropPoint = MAIN.Position
+                        IssueTransportUnload( strayTransports, dropPoint )
+                        WaitSeconds(30)
+                    end
+                end
+                self.UsingTransport = false
+                AIUtils.ReturnTransportsToPool( strayTransports, true )
+                platoonUnits = self:GetPlatoonUnits()
+            end    
+    
+
+        	#Disband platoon if it's all air units, so they can be picked up by another platoon
+            local mySurfaceThreat = AIAttackUtils.GetSurfaceThreatOfUnits(self)
+            if mySurfaceThreat == 0 and AIAttackUtils.GetAirThreatOfUnits(self) > 0 then
+                self:PlatoonDisband()
+                return
+            end
+                        
+            local cmdQ = {} 
+            # fill cmdQ with current command queue for each unit
+            for k,v in platoonUnits do
+                if not v:IsDead() then
+                    local unitCmdQ = v:GetCommandQueue()
+                    for cmdIdx,cmdVal in unitCmdQ do
+                        table.insert(cmdQ, cmdVal)
+                        break
+                    end
+                end
+            end            
+            
+            # if we're on our final push through to the destination, and we find a unit close to our destination
+            local closestTarget = self:FindClosestUnit( 'attack', 'enemy', true, categories.ALLUNITS )
+            local nearDest = false
+            local oldPathSize = table.getn(self.LastAttackDestination)
+            if self.LastAttackDestination then
+                nearDest = oldPathSize == 0 or VDist3(self.LastAttackDestination[oldPathSize], pos) < 20
+            end
+            
+            # if we're near our destination and we have a unit closeby to kill, kill it
+            if table.getn(cmdQ) <= 1 and closestTarget and VDist3( closestTarget:GetPosition(), pos ) < 20 and nearDest then
+                self:StopAttack()
+                if PlatoonFormation != 'No Formation' then
+                    IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
+                else
+                    IssueAttack(platoonUnits, closestTarget)
+                end
+                cmdQ = {1}
+            # if we have nothing to do, try finding something to do        
+            elseif table.getn(cmdQ) == 0 then
+                self:StopAttack()
+                cmdQ = AIAttackUtils.AIPlatoonSquadAttackVector( aiBrain, self, bAggro )
+                stuckCount = 0
+            # if we've been stuck and unable to reach next marker? Ignore nearby stuff and pick another target  
+            elseif self.LastPosition and VDist2Sq(self.LastPosition[1], self.LastPosition[3], pos[1], pos[3]) < ( self.PlatoonData.StuckDistance or 16) then
+                stuckCount = stuckCount + 1
+                if stuckCount >= 2 then               
+                    self:StopAttack()
+                    cmdQ = AIAttackUtils.AIPlatoonSquadAttackVector( aiBrain, self, bAggro )
+                    stuckCount = 0
+                end
+            else
+                stuckCount = 0
+            end
+            
+            self.LastPosition = pos
+            
+            if table.getn(cmdQ) == 0 then
+                # if we have a low threat value, then go and defend an engineer or a base
+                if mySurfaceThreat < 4  
+                    and mySurfaceThreat > 0 
+                    and not self.PlatoonData.NeverGuard 
+                    and not (self.PlatoonData.NeverGuardEngineers and self.PlatoonData.NeverGuardBases)
+                then
+                    #LOG('*DEBUG: Trying to guard')
+                    return self:GuardEngineer(self.AttackForceAI)
+                end
+                
+                # we have nothing to do, so find the nearest base and disband
+                if not self.PlatoonData.NeverMerge then
+                    return self:ReturnToBaseAI()
+                end
+                WaitSeconds(5)
+            else
+                # wait a little longer if we're stuck so that we have a better chance to move
+                WaitSeconds(Random(5,11) + 2 * stuckCount)
+            end
+        end
+    end,
 	
     ReclaimAISorian = function(self)
         self:Stop()
@@ -328,10 +587,12 @@ Platoon = Class(sorianoldPlatoon) {
                 WaitTicks(1)
                 self:PlatoonDisband()
             end
-			local reclaimables = {}
+			local reclaimables = { Mass = {}, Energy = {} }
             for k,v in ents do
-                if (v.MassReclaim and v.MassReclaim > 0) or (v.EnergyReclaim and v.EnergyReclaim > 0) then
-                    table.insert( reclaimables, v )
+                if v.MassReclaim and v.MassReclaim > 0 then
+                    table.insert( reclaimables.Mass, v )
+                elseif v.EnergyReclaim and v.EnergyReclaim > 0 then
+                    table.insert( reclaimables.Energy, v )
                 end
             end
             
@@ -339,28 +600,30 @@ Platoon = Class(sorianoldPlatoon) {
             if not unitPos then break end
             local recPos = nil
             closest = false
-            for k, v in reclaimables do
-                recPos = v:GetPosition()
-                if not recPos then 
-                    WaitTicks(1)
-                    self:PlatoonDisband()
-                end
-                if not (unitPos[1] and unitPos[3] and recPos[1] and recPos[3]) then return end
-                local tempDist = VDist2( unitPos[1], unitPos[3], recPos[1], recPos[3] )
-                # We don't want any reclaimables super close to us
-                if ( ( not closest or tempDist < closeDist ) and ( not oldClosest or closest != oldClosest ) ) then
-                    closest = v
-                    closeDist = tempDist
-                end
-            end
-			
 			local result, bPos = false
-			
-			if closest then
-				result, bPos = eng:CanPathTo( closest:GetPosition() )
+			for num, recType in reclaimables do
+				for k, v in recType do
+					recPos = v:GetPosition()
+					if not recPos then 
+						WaitTicks(1)
+						self:PlatoonDisband()
+					end
+					if not (unitPos[1] and unitPos[3] and recPos[1] and recPos[3]) then return end
+					local tempDist = VDist2( unitPos[1], unitPos[3], recPos[1], recPos[3] )
+					result, bPos = eng:CanPathTo( v:GetPosition() )
+					# We don't want any reclaimables super close to us
+					if ( ( not closest or tempDist < closeDist ) and ( not oldClosest or closest != oldClosest ) ) and result then
+						closest = v
+						entType = num
+						closeDist = tempDist
+					end
+				end
+                if num == 'Mass' and closest and massFirst then
+                    break
+                end
 			end
 			
-            if closest and ( massRatio < .9 or energyRatio < .9 ) and result then
+            if closest and (( entType == 'Mass' and massRatio < .9 ) or ( entType == 'Energy' and energyRatio < .9 )) then
                 oldClosest = closest
                 IssueClearCommands( self:GetPlatoonUnits() )
 				IssueReclaim( self:GetPlatoonUnits(), closest )
@@ -374,18 +637,19 @@ Platoon = Class(sorianoldPlatoon) {
                     timeAlive = timeAlive + 2
                     count = count + 1
                     if self.PlatoonData.ReclaimTime and timeAlive >= self.PlatoonData.ReclaimTime then
+						local basePosition = aiBrain.BuilderManagers[locationType].Position
+						local location = AIUtils.RandomLocation(basePosition[1],basePosition[3])
+						self:MoveToLocation( location, false )
                         self:PlatoonDisband()
                         return
                     end
 					allIdle = true
-                    for k,v in self:GetPlatoonUnits() do
-                        if not v:IsDead() and not v:IsIdleState() then
-                            allIdle = false
-                            break
-                        end
-                    end
-                until allIdle or count >= 14
+					if not eng:IsIdleState() then allIdle = false end
+                until allIdle or count >= 60
             else
+				local basePosition = aiBrain.BuilderManagers[locationType].Position
+                local location = AIUtils.RandomLocation(basePosition[1],basePosition[3])
+                self:MoveToLocation( location, false )
                 self:PlatoonDisband()
             end
         end
@@ -406,8 +670,178 @@ Platoon = Class(sorianoldPlatoon) {
 				break
             end
         end
-		WaitSeconds(60)
+		local count = 0
+        repeat
+            WaitSeconds(2)
+            if not aiBrain:PlatoonExists(self) then
+				return
+            end
+            count = count + 1
+			allIdle = true
+			if not eng:IsIdleState() then allIdle = false end
+        until allIdle or count >= 30
         self:PlatoonDisband()
+    end,
+	
+    LandScoutingAISorian = function(self)
+        AIAttackUtils.GetMostRestrictiveLayer(self)
+        
+        local aiBrain = self:GetBrain()
+        local scout = self:GetPlatoonUnits()[1]
+        
+        aiBrain:BuildScoutLocations()
+        
+        #If we have cloaking (are cybran), then turn on our cloaking
+        if scout:TestToggleCaps('RULEUTC_CloakToggle') then
+			scout:SetScriptBit('RULEUTC_CloakToggle', false)
+        end
+               
+        while not scout:IsDead() do
+            #Head towards the the area that has not had a scout sent to it in a while           
+            local targetData = false
+            
+            #For every scouts we send to all opponents, send one to scout a low pri area.
+            if aiBrain.IntelData.HiPriScouts < aiBrain.NumOpponents and table.getn(aiBrain.InterestList.HighPriority) > 0 then
+                targetData = aiBrain.InterestList.HighPriority[1]
+                aiBrain.IntelData.HiPriScouts = aiBrain.IntelData.HiPriScouts + 1
+                targetData.LastScouted = GetGameTimeSeconds()
+                
+                aiBrain:SortScoutingAreas(aiBrain.InterestList.HighPriority)
+                
+            elseif table.getn(aiBrain.InterestList.LowPriority) > 0 then
+                targetData = aiBrain.InterestList.LowPriority[1]
+                aiBrain.IntelData.HiPriScouts = 0
+                targetData.LastScouted = GetGameTimeSeconds()
+                
+                aiBrain:SortScoutingAreas(aiBrain.InterestList.LowPriority)
+            end
+            
+            #Is there someplace we should scout?
+            if targetData then
+                #Can we get there safely?
+                local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, self.MovementLayer, scout:GetPosition(), targetData.Position, 100)
+                
+                IssueClearCommands(self)
+
+                if path then
+                    local pathLength = table.getn(path)
+                    for i=1, pathLength-1 do
+                        self:MoveToLocation(path[i], false)
+                    end 
+                end
+
+                self:MoveToLocation(targetData.Position, false)  
+                
+                #Scout until we reach our destination
+                while not scout:IsDead() and not scout:IsIdleState() do                                       
+                    WaitSeconds(2.5)
+                end
+            end
+            
+            WaitSeconds(1)
+        end
+    end,
+	
+    AirScoutingAISorian = function(self)
+        
+        local aiBrain = self:GetBrain()
+        local scout = self:GetPlatoonUnits()[1]
+        
+        aiBrain:BuildScoutLocations()
+        
+        if scout:TestToggleCaps('RULEUTC_CloakToggle') then
+			scout:SetScriptBit('RULEUTC_CloakToggle', false)
+        end
+        
+        while not scout:IsDead() do
+            local targetArea = false
+            local highPri = false
+            
+            local mustScoutArea, mustScoutIndex = aiBrain:GetUntaggedMustScoutArea()
+            local unknownThreats = aiBrain:GetThreatsAroundPosition(scout:GetPosition(), 16, true, 'Unknown')
+            
+            #1) If we have any "must scout" (manually added) locations that have not been scouted yet, then scout them
+            if mustScoutArea then
+                mustScoutArea.TaggedBy = scout
+                targetArea = mustScoutArea.Position
+            
+            #2) Scout "unknown threat" areas with a threat higher than 25
+            elseif table.getn(unknownThreats) > 0 and unknownThreats[1][3] > 25 then
+                aiBrain:AddScoutArea({unknownThreats[1][1], 0, unknownThreats[1][2]})
+            
+            #3) Scout high priority locations    
+            elseif aiBrain.IntelData.AirHiPriScouts < aiBrain.NumOpponents and aiBrain.IntelData.AirLowPriScouts < 1 
+            and table.getn(aiBrain.InterestList.HighPriority) > 0 then
+                aiBrain.IntelData.AirHiPriScouts = aiBrain.IntelData.AirHiPriScouts + 1
+                
+                highPri = true
+                
+                targetData = aiBrain.InterestList.HighPriority[1]
+                targetData.LastScouted = GetGameTimeSeconds()
+                targetArea = targetData.Position
+                
+                aiBrain:SortScoutingAreas(aiBrain.InterestList.HighPriority)
+                
+            #4) Every time we scout NumOpponents number of high priority locations, scout a low priority location               
+            elseif aiBrain.IntelData.AirLowPriScouts < 1 and table.getn(aiBrain.InterestList.LowPriority) > 0 then
+                aiBrain.IntelData.AirHiPriScouts = 0
+                aiBrain.IntelData.AirLowPriScouts = aiBrain.IntelData.AirLowPriScouts + 1
+                
+                targetData = aiBrain.InterestList.LowPriority[1]
+                targetData.LastScouted = GetGameTimeSeconds()
+                targetArea = targetData.Position
+                
+                aiBrain:SortScoutingAreas(aiBrain.InterestList.LowPriority)
+            else
+                #Reset number of scoutings and start over
+                aiBrain.IntelData.AirLowPriScouts = 0
+                aiBrain.IntelData.AirHiPriScouts = 0
+            end
+            
+            #Air scout do scoutings.
+            if targetArea then
+                self:Stop()
+                
+                local vec = self:DoAirScoutVecs(scout, targetArea)
+                
+                while not scout:IsDead() and not scout:IsIdleState() do                   
+                    
+                    #If we're close enough...
+                    if VDist2Sq(vec[1], vec[3], scout:GetPosition()[1], scout:GetPosition()[3]) < 15625 then
+                        if mustScoutArea then
+                            #Untag and remove
+                            for idx,loc in aiBrain.InterestList.MustScout do
+                                if loc == mustScoutArea then
+                                   table.remove(aiBrain.InterestList.MustScout, idx)
+                                   break 
+                                end
+                            end
+                        end
+                        #Break within 125 ogrids of destination so we don't decelerate trying to stop on the waypoint.
+                        break
+                    end
+                    
+                    if VDist3( scout:GetPosition(), targetArea ) < 25 then
+                        break
+                    end
+
+                    WaitSeconds(5)
+                end
+            else
+                WaitSeconds(1)
+            end
+            WaitTicks(1)
+        end
+    end,
+	
+    ScoutingAISorian = function(self)
+        AIAttackUtils.GetMostRestrictiveLayer(self)
+        
+        if self.MovementLayer == 'Air' then 
+            return self:AirScoutingAISorian() 
+        else 
+            return self:LandScoutingAISorian()
+        end
     end,
 	
     #-----------------------------------------------------
@@ -702,7 +1136,7 @@ Platoon = Class(sorianoldPlatoon) {
     # Callback functions for EngineerBuildAI
     EngineerBuildDoneSorian = function(unit, params)
         if not unit.PlatoonHandle then return end
-        if not unit.PlatoonHandle.PlanName == 'EngineerBuildAI' then return end
+        if not unit.PlatoonHandle.PlanName == 'EngineerBuildAISorian' then return end
         #LOG("*AI DEBUG: Build done " .. unit.Sync.id)
         if not unit.ProcessBuild then
             unit.ProcessBuild = unit:ForkThread(unit.PlatoonHandle.ProcessBuildCommandSorian, true)
@@ -711,7 +1145,7 @@ Platoon = Class(sorianoldPlatoon) {
     end,
     EngineerCaptureDoneSorian = function(unit, params)
         if not unit.PlatoonHandle then return end
-        if not unit.PlatoonHandle.PlanName == 'EngineerBuildAI' then return end
+        if not unit.PlatoonHandle.PlanName == 'EngineerBuildAISorian' then return end
         #LOG("*AI DEBUG: Capture done" .. unit.Sync.id)
         if not unit.ProcessBuild then
             unit.ProcessBuild = unit:ForkThread(unit.PlatoonHandle.ProcessBuildCommandSorian, false)
@@ -719,7 +1153,7 @@ Platoon = Class(sorianoldPlatoon) {
     end,
     EngineerReclaimDoneSorian = function(unit, params)
         if not unit.PlatoonHandle then return end
-        if not unit.PlatoonHandle.PlanName == 'EngineerBuildAI' then return end
+        if not unit.PlatoonHandle.PlanName == 'EngineerBuildAISorian' then return end
         #LOG("*AI DEBUG: Reclaim done" .. unit.Sync.id)
         if not unit.ProcessBuild then
             unit.ProcessBuild = unit:ForkThread(unit.PlatoonHandle.ProcessBuildCommandSorian, false)
@@ -727,7 +1161,7 @@ Platoon = Class(sorianoldPlatoon) {
     end,
     EngineerFailedToBuildSorian = function(unit, params)
         if not unit.PlatoonHandle then return end
-        if not unit.PlatoonHandle.PlanName == 'EngineerBuildAI' then return end
+        if not unit.PlatoonHandle.PlanName == 'EngineerBuildAISorian' then return end
         if unit.ProcessBuildDone and unit.ProcessBuild then
             KillThread(unit.ProcessBuild)
             unit.ProcessBuild = nil

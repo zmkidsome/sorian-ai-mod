@@ -65,6 +65,7 @@ BaseBuilderTemplate {
         'SorianT2DefensivePoints',
         'SorianT3DefensivePoints',
 		
+		'SorianT2ArtilleryFormBuilders',
         'SorianT2MissileDefenses',
         'SorianT3NukeDefenses',
         'SorianT3NukeDefenseBehaviors',

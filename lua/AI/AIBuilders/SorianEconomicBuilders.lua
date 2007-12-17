@@ -47,7 +47,7 @@ BuilderGroup {
         PlatoonTemplate = 'T1BuildEngineer',
         Priority = 800,
         BuilderConditions = {
-            { UCBC, 'EngineerLessAtLocation', { 'LocationType', 9, 'ENGINEER TECH1' }},
+            { UCBC, 'EngineerLessAtLocation', { 'LocationType', 8, 'ENGINEER TECH1' }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH3' }},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'ENGINEER TECH1' } },
             { UCBC, 'EngineerCapCheck', { 'LocationType', 'Tech1' } },
@@ -499,12 +499,12 @@ BuilderGroup {
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
                 { MIBC, 'FactionIndex', {1, 1}},
             },
-        Priority = 0,
+        Priority = 900,
         BuilderType = 'Any',
         BuilderData = {
             Enhancement = { 'LeftPod', 'RightPod', 'ResourceAllocation', 'AdvancedEngineering' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAI' },
+        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
     },
     Builder {
         BuilderName = 'Sorian UEF CDR Upgrade T3 Eng - Shields',
@@ -517,12 +517,12 @@ BuilderGroup {
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
                 { MIBC, 'FactionIndex', {1, 1}},
             },
-        Priority = 0,
+        Priority = 900,
         BuilderType = 'Any',
         BuilderData = {
             Enhancement = { 'RightPodRemove', 'Shield', 'T3Engineering', 'ShieldGeneratorField' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAI' },
+        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
     },
 
     # Aeon
@@ -537,12 +537,12 @@ BuilderGroup {
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
                 { MIBC, 'FactionIndex', {2, 2}},
             },
-        Priority = 0,
+        Priority = 900,
         BuilderType = 'Any',
         BuilderData = {
             Enhancement = { 'AdvancedEngineering', 'Shield', 'HeatSink' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAI' },
+        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
     },
     Builder {
         BuilderName = 'Sorian Aeon CDR Upgrade T3 Eng - ResourceAdv - EnhSensor',
@@ -555,12 +555,12 @@ BuilderGroup {
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
                 { MIBC, 'FactionIndex', {2, 2}},
             },
-        Priority = 0,
+        Priority = 900,
         BuilderType = 'Any',
         BuilderData = {
             Enhancement = { 'T3Engineering', 'ShieldHeavy' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAI' },
+        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
     },
     
     # Cybran
@@ -575,12 +575,12 @@ BuilderGroup {
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
                 { MIBC, 'FactionIndex', {3, 3}},
             },
-        Priority = 0,
+        Priority = 900,
         BuilderType = 'Any',
         BuilderData = {
             Enhancement = { 'ResourceAllocation', 'AdvancedEngineering' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAI' },
+        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
     },
     Builder {
         BuilderName = 'Sorian Cybran CDR Upgrade T3 Eng - Resource',
@@ -593,12 +593,12 @@ BuilderGroup {
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
                 { MIBC, 'FactionIndex', {1, 1}},
             },
-        Priority = 0,
+        Priority = 900,
         BuilderType = 'Any',
         BuilderData = {
             Enhancement = { 'T3Engineering', 'MicrowaveLaserGenerator' },
         },
-        PlatoonAddBehaviors = { 'BuildOnceAI' },
+        PlatoonAddBehaviors = { 'BuildOnceAISorian' },
     },
 }
 
@@ -665,7 +665,7 @@ BuilderGroup {
             },
         BuilderData = {
             LocationType = 'LocationType',
-            ReclaimTime = 30,
+            ReclaimTime = 120,
         },
         BuilderType = 'Any',
     },
@@ -985,7 +985,7 @@ BuilderGroup {
             },
         BuilderData = {
             LocationType = 'LocationType',
-            ReclaimTime = 30,
+            ReclaimTime = 120,
         },
         BuilderType = 'Any',
     },
@@ -1147,7 +1147,7 @@ BuilderGroup {
             },
         BuilderData = {
             LocationType = 'LocationType',
-            ReclaimTime = 30,
+            ReclaimTime = 120,
         },
         BuilderType = 'Any',
     },
@@ -1311,7 +1311,7 @@ BuilderGroup {
         Priority = 1000,
         InstanceCount = 4,
         BuilderConditions = {
-                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH2, ENGINEER TECH3' }},
+                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 150, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',
@@ -1331,7 +1331,7 @@ BuilderGroup {
         Priority = 970,
         InstanceCount = 4,
         BuilderConditions = {
-                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH2, ENGINEER TECH3' }},
+                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 250, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',
@@ -1351,7 +1351,7 @@ BuilderGroup {
         Priority = 925,
         InstanceCount = 4,
         BuilderConditions = {
-                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH2, ENGINEER TECH3' }},
+                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 450, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',
@@ -1371,7 +1371,7 @@ BuilderGroup {
         Priority = 900,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH2, ENGINEER TECH3' }},
+                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 1000, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',
@@ -1391,7 +1391,7 @@ BuilderGroup {
         Priority = 800,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH2, ENGINEER TECH3' }},
+                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 3000, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',
@@ -1411,7 +1411,7 @@ BuilderGroup {
         Priority = 975,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
+                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 6, 'ENGINEER TECH3' }},
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 250, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',
@@ -1430,7 +1430,7 @@ BuilderGroup {
         Priority = 875,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3'}},
+                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 6, 'ENGINEER TECH3'}},
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 1000, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',
@@ -1449,7 +1449,7 @@ BuilderGroup {
         Priority = 800,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3'}},
+                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 6, 'ENGINEER TECH3'}},
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 3000, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',

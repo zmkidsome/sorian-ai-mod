@@ -536,6 +536,8 @@ BuilderGroup {
         BuilderData = {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
+			UseFormation = 'AttackFormation',
+			AggressiveMove = true,
             ThreatWeights = {
                 IgnoreStrongerTargetsRatio = 100.0,
             },
@@ -556,7 +558,8 @@ BuilderGroup {
         BuilderData = {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
-            UseFormation = 'AttackFormation',
+			UseFormation = 'AttackFormation',
+			AggressiveMove = true,
         },        
         BuilderConditions = {
             { UCBC, 'PoolLessAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND - categories.ENGINEER - categories.TECH1 } },
@@ -572,7 +575,8 @@ BuilderGroup {
         BuilderData = {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
-            UseFormation = 'AttackFormation',
+			UseFormation = 'AttackFormation',
+			AggressiveMove = true,
         },
         BuilderConditions = {
             { UCBC, 'PoolLessAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER} },
@@ -588,7 +592,8 @@ BuilderGroup {
         BuilderData = {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
-            UseFormation = 'AttackFormation',
+			UseFormation = 'AttackFormation',
+			AggressiveMove = true,
             ThreatWeights = {
                 IgnoreStrongerTargetsRatio = 2.0,
             },
@@ -624,7 +629,8 @@ BuilderGroup {
             MinThreatThreshold = 1000,			# If threat is lower than this, do not attack
             AvoidBases = true,
             AvoidBasesRadius = 75,
-            AggressiveMove = true,      
+			UseFormation = 'AttackFormation',
+			AggressiveMove = true,
             AvoidClosestRadius = 50,  
         },    
         InstanceCount = 2,
@@ -651,7 +657,8 @@ BuilderGroup {
             MinThreatThreshold = 1900,			# If threat is lower than this, do not attack
             AvoidBases = true,
             AvoidBasesRadius = 75,
-            AggressiveMove = true,      
+			UseFormation = 'AttackFormation',
+			AggressiveMove = true,
             AvoidClosestRadius = 50,  
         },    
         InstanceCount = 2,
@@ -693,7 +700,7 @@ BuilderGroup {
     
     Builder {
         BuilderName = 'Sorian Base Location Guard Small',
-        PlatoonTemplate = 'BaseGuardSmall',
+        PlatoonTemplate = 'BaseGuardSmallSorian',
         Priority = 1000,
         BuilderConditions = { 
                 #{ UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },     
@@ -709,7 +716,7 @@ BuilderGroup {
 
     Builder {
         BuilderName = 'Sorian Base Location Guard Medium',
-        PlatoonTemplate = 'BaseGuardMedium',
+        PlatoonTemplate = 'BaseGuardMediumSorian',
         Priority = 1000,
         BuilderConditions = { 
                 #{ UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },     
@@ -742,7 +749,8 @@ BuilderGroup {
             #ThreatThreshold = '',
             AvoidBases = true,
             AvoidBasesRadius = 75,
-            AggressiveMove = true,      
+			UseFormation = 'AttackFormation',
+			AggressiveMove = true,
             AvoidClosestRadius = 50,  
         },    
         InstanceCount = 2,
