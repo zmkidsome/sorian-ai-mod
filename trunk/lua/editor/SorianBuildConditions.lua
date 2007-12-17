@@ -25,18 +25,10 @@ function ReclaimablesInArea(aiBrain, locType)
     end
 	
     local ents = AIUtils.AIGetReclaimablesAroundLocation( aiBrain, locType )
-    if not ents or table.getn( ents ) == 0 then
-		return false
+    if ents and table.getn( ents ) > 0 then
+		return true
     end
-
-    for k,v in ents do
-        if v.MassReclaim and v.MassReclaim > 0 and aiBrain:GetEconomyStoredRatio('MASS') < .9 then
-            return true
-        elseif v.EnergyReclaim and v.EnergyReclaim > 0 and aiBrain:GetEconomyStoredRatio('ENERGY') < .9 then
-            return true
-        end
-    end
-    
+	
     return false
 end
 
