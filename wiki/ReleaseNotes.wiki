@@ -1,3 +1,5 @@
+#summary Release notes for the Sorian AI Mod
+
 == Release Notes ==
 
 *0.8.8:* Lag bug fix, more balance and defense changes.
