@@ -4,6 +4,40 @@ sorianoldPlatoon = Platoon
 
 Platoon = Class(sorianoldPlatoon) {
 
+    ArtilleryAISorian = function(self)
+        local aiBrain = self:GetBrain()
+
+        local atkPri = { 'SPECIALHIGHPRI', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE TECH3', 'COMMAND', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE', 'EXPERIMENTAL LAND',
+            'MOBILE TECH3 LAND', 'MOBILE TECH2 LAND', 'MOBILE TECH1 LAND', 'STRUCTURE FACTORY', 'SPECIALLOWPRI', 'ALLUNITS' }
+        local atkPriTable = {}
+        for k,v in atkPri do
+            table.insert( atkPriTable, ParseEntityCategory( v ) )
+        end
+        self:SetPrioritizedTargetList( 'Attack', atkPriTable )
+
+        # Set priorities on the unit so if the target has died it will reprioritize before the platoon does
+        local unit = false
+        for k,v in self:GetPlatoonUnits() do
+            if not v:IsDead() then
+                unit = v
+                break
+            end
+        end
+        if not unit then
+            return
+        end
+        unit:SetTargetPriorities( atkPriTable )
+        
+        while aiBrain:PlatoonExists(self) do
+            local target = self:FindPrioritizedUnit()
+            if target then
+                self:Stop()
+                self:AttackTarget(target)
+            end
+            WaitSeconds(20)
+        end
+    end,
+
     TacticalAISorian = function(self)
         self:Stop()
         local aiBrain = self:GetBrain()
@@ -1187,7 +1221,7 @@ Platoon = Class(sorianoldPlatoon) {
         local aiBrain = eng:GetAIBrain()
         while not eng:IsDead() and (eng.GoingHome or eng.Fighting or eng:IsUnitState("Building") or 
                   eng:IsUnitState("Attacking") or eng:IsUnitState("Repairing") or 
-                  eng:IsUnitState("Reclaiming") or eng:IsUnitState("Capturing") or eng.ProcessBuild != nil 
+                  eng:IsUnitState("Reclaiming") or eng:IsUnitState("Capturing") or eng:IsUnitState("Upgrading") or eng.ProcessBuild != nil 
 				  or eng.UnitBeingBuiltBehavior) do
                   
             WaitSeconds(3)

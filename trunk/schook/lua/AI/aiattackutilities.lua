@@ -6,6 +6,11 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
     optMaxMarkerDist = optMaxMarkerDist or 250
     optThreatWeight = optThreatWeight or 1
     local finalPath = {}
+	local testPath = false
+	
+	local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
+	
+	if per == 'sorian' or per == 'sorianrush' then testPath = true end
 	
 	if VDist2( start[1], start[3], destination[1], destination[3] ) < 100 then
 		table.insert(finalPath, destination)    
@@ -27,7 +32,7 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
     if not endNode then return false, 'NoEndNode' end
     
      --Generate the safest path between the start and destination
-    local path = GeneratePath(aiBrain, startNode, endNode, ThreatTable[platoonLayer], optThreatWeight)
+    local path = GeneratePath(aiBrain, startNode, endNode, ThreatTable[platoonLayer], optThreatWeight, destination, testPath)
     if not path and platoonLayer == 'Amphibious' then
         return PlatoonGenerateSafePathTo(aiBrain, 'Land', start, destination, optThreatWeight, optMaxMarkerDist)
     end    
@@ -46,6 +51,85 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
     table.insert(finalPath, destination)
     
     return finalPath
+end
+
+function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, destination, testPath)
+    threatWeight = threatWeight or 1
+    
+    local graph = GetPathGraphs()[startNode.layer][startNode.graphName]
+    
+    --ZOMG A*
+    local closed = {}
+    
+    --Queue will be sorted such that best path is at the end.
+    local queue = { 
+        {
+            cost = 0, 
+            path = {startNode, }, 
+            threat = 0
+        }
+    }
+    
+    --I didn't know we had a continue statement when I wrote this, and this was a workaround to avoid using continue. :(
+    local AStarLoopBody = function()
+        local curPath = table.remove(queue)
+        local lastNode = curPath.path[table.getn(curPath.path)]
+        
+        if closed[lastNode] then return false end
+		
+		local dist2 = VDist2(lastNode.position[1], lastNode.position[3], destination[1], destination[3])
+        
+        if lastNode == endNode or (dist2 < 75 and testPath) then return curPath end
+        
+        closed[lastNode] = true
+        
+        local mapSizeX = ScenarioInfo.size[1]
+        local mapSizeZ = ScenarioInfo.size[2]
+        for i, adjacentNode in lastNode.adjacent do
+            local fork = {
+                cost = curPath.cost, 
+                path = {unpack(curPath.path)}, 
+                threat = curPath.threat
+            }
+            
+            local newNode = graph[adjacentNode]
+            
+            if newNode then
+                --get distance from new node to end node
+                local dist = VDist2Sq(newNode.position[1], newNode.position[3], endNode.position[1], endNode.position[3])
+
+                # this brings the dist value from 0 to 100% of the maximum length with can travel on a map
+                dist = 100 * dist / ( mapSizeX + mapSizeZ ) #(mapSizeX * mapSizeX  + mapSizeZ * mapSizeZ)
+                
+                --get threat from current node to adjacent node
+                local threat = aiBrain:GetThreatBetweenPositions(newNode.position, lastNode.position, nil, threatType)
+                           
+                --update path stuff
+                fork.cost = fork.cost + dist + threat*threatWeight
+                fork.threat = fork.threat + threat
+                
+                --add the node to the path
+                table.insert(fork.path, newNode)
+                table.insert(queue,fork)
+             end
+        end
+        
+        --sort queue
+        table.sort(queue, function(a,b) return a.cost > b.cost end)
+		
+        return false
+    end
+    
+    --Do A*
+    while table.getn(queue) > 0 do
+        loopRet = AStarLoopBody()       
+        
+        if loopRet then
+            return loopRet     
+        end
+    end
+    
+    return false
 end
 
 function SendPlatoonWithTransports(aiBrain, platoon, destination, bRequired, bSkipLastMove)

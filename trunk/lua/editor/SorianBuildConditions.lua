@@ -20,7 +20,7 @@ local Utils = import('/lua/utilities.lua')
 #
 ##############################################################################################################
 function ReclaimablesInArea(aiBrain, locType)
-    if aiBrain:GetEconomyStoredRatio('MASS') > .9 and aiBrain:GetEconomyStoredRatio('ENERGY') > .9 then
+    if aiBrain:GetEconomyStoredRatio('MASS') > .5 and aiBrain:GetEconomyStoredRatio('ENERGY') > .5 then
         return false
     end
 	
@@ -45,5 +45,23 @@ function DamagedStructuresInArea(aiBrain, locationtype)
         end
     end
 	#LOG('*AI DEBUG: DamagedStructuresInArea return false')
+    return false
+end
+
+function MarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threatMax, threatRings, threatType, startX, startZ)
+    if not startX and not startZ then
+         startX, startZ = aiBrain:GetArmyStartPos()
+    end
+    local loc
+    if threatMin and threatMax and threatRings then
+        loc = AIUtils.AIGetClosestThreatMarkerLoc(aiBrain, markerType, startX, startZ, threatMin, threatMax, threatRings, threatType)
+    else
+        loc = AIUtils.AIGetClosestMarkerLocation(aiBrain, markerType, startX, startZ)
+    end
+    if loc and loc[1] and loc[3] then
+        if VDist2(startX, startZ, loc[1], loc[3]) < distance and aiBrain:CanBuildStructureAt( 'ueb1102', loc ) then
+            return true
+        end
+    end
     return false
 end

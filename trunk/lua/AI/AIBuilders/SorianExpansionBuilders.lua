@@ -64,9 +64,9 @@ BuilderGroup {
                     'T1GroundDefense',                    
 					'T1AADefense',
                     'T1LandFactory',
-                    'T1GroundDefense',                    
-					'T1AADefense',
 					'T1Radar',
+                    'T1GroundDefense',                    
+					'T1AADefense',					
                 }               
             },
             NeedGuard = true,
@@ -76,7 +76,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1VacantStartingAreaEngineer',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 940,
+        Priority = 932,
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 100, 0, 'StructuresNotMex' } },
@@ -103,10 +103,10 @@ BuilderGroup {
                 BuildStructures = {                    
                     'T1GroundDefense',                    
 					'T1AADefense',
-                    'T1LandFactory',    
-                    'T1GroundDefense',                    
-					'T1AADefense',
+                    'T1LandFactory',
 					'T1Radar',
+                    'T1GroundDefense',                    
+					'T1AADefense',					
                 }
             },
             NeedGuard = true,
@@ -115,7 +115,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2VacantStartingAreaEngineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 930,
+        Priority = 922,
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
@@ -145,11 +145,11 @@ BuilderGroup {
                     'T1LandFactory',
 					'T2AADefense',
                     'T2GroundDefense',
+					'T2Radar',
                     'T1LandFactory',  
                     'T2GroundDefense',                    
 					'T2AADefense',
-					'T2ShieldDefense',
-					'T2Radar',
+					'T2ShieldDefense',					
                 }
             },
             NeedGuard = true,
@@ -158,7 +158,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3VacantStartingAreaEngineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 930,
+        Priority = 922,
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
@@ -187,12 +187,12 @@ BuilderGroup {
                     'T2GroundDefense',                    
                     'T1LandFactory',
 					'T3AADefense',
+					'T2Radar',
                     'T2GroundDefense',
                     'T1LandFactory',  
                     'T2GroundDefense',                    
 					'T3AADefense',
-					'T2ShieldDefense',
-					'T2Radar',
+					'T2ShieldDefense',					
                 }
             },
             NeedGuard = true,
@@ -210,7 +210,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Vacant Expansion Area Engineer(Full Base)',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 930,
+        Priority = 922,
         InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 100, 2, 'StructuresNotMex' } },
@@ -239,9 +239,9 @@ BuilderGroup {
                     'T1GroundDefense',                    
 					'T1AADefense',
                     'T1LandFactory',  
-                    'T1GroundDefense',                    
-					'T1AADefense',
 					'T1Radar',
+                    'T1GroundDefense',                    
+					'T1AADefense',					
                 }
             },
             NeedGuard = true,
@@ -250,8 +250,8 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Vacant Expansion Area Engineer(Fire base)',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 900,
-        InstanceCount = 4,
+        Priority = 850,
+        InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             #{ UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
@@ -285,7 +285,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2VacantExpansiongAreaEngineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 900,
+        Priority = 850,
         InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
@@ -309,13 +309,13 @@ BuilderGroup {
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {
-                    'T1LandFactory',
                     'T2GroundDefense',
                     'T2AADefense',
+					'T1LandFactory',
+					'T2Radar',
                     'T2GroundDefense',
 					'T2AADefense',
-					'T2ShieldDefense',
-					'T2Radar',
+					'T2ShieldDefense',					
                 }
             },
             NeedGuard = true,
@@ -324,7 +324,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3VacantExpansionAreaEngineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 900,
+        Priority = 850,
         InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
@@ -348,13 +348,13 @@ BuilderGroup {
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {
-                    'T1LandFactory',
                     'T2GroundDefense',
-					'T2GroundDefense',
-                    'T3AADefense',
-                    'T3AADefense',
-					'T2ShieldDefense',
+					'T3AADefense',
+					'T1LandFactory',
 					'T2Radar',
+                    'T2GroundDefense',
+                    'T3AADefense',
+					'T2ShieldDefense',					
                 }
             },
             NeedGuard = true,
@@ -401,14 +401,14 @@ BuilderGroup {
                     'T2StrategicMissile',
                     'T2AADefense',
                     'T2GroundDefense',
+					'T2Radar',
                     'T2StrategicMissile',
                     'T2StrategicMissileDefense',
                     'T2AADefense',
                     'T2GroundDefense',
                     'T2StrategicMissile',
                     'T2StrategicMissile',       
-					'T2ShieldDefense',
-					'T2Radar',
+					'T2ShieldDefense',					
                 }
             }
         }
@@ -443,6 +443,7 @@ BuilderGroup {
                     'T2StrategicMissile',
                     'T3AADefense',
                     'T2GroundDefense',
+					'T2Radar',
                     'T2StrategicMissile',
                     'T2StrategicMissile',
                     'T3AADefense',
@@ -452,8 +453,7 @@ BuilderGroup {
                     'T2Artillery',
                     'T2Artillery',
 					'T3Artillery',
-					'T2ShieldDefense',
-					'T2Radar',
+					'T2ShieldDefense',					
                 }
             }
         }
@@ -488,6 +488,7 @@ BuilderGroup {
                     'T2StrategicMissile',
                     'T3AADefense',
                     'T2GroundDefense',
+					'T2Radar',
                     'T2StrategicMissile',
                     'T2StrategicMissile',
                     'T3AADefense',
@@ -497,8 +498,7 @@ BuilderGroup {
                     'T2Artillery',
                     'T2Artillery',
 					'T3Artillery',
-					'T2ShieldDefense',
-					'T2Radar',
+					'T2ShieldDefense',					
                 }
             }
         }
@@ -533,6 +533,7 @@ BuilderGroup {
                     'T2StrategicMissile',
                     'T3AADefense',
                     'T2GroundDefense',
+					'T2Radar',
                     'T2StrategicMissile',
                     'T2StrategicMissile',
                     'T3AADefense',
@@ -543,8 +544,7 @@ BuilderGroup {
                     'T2Artillery',
 					'T3Artillery',
 					'T2ShieldDefense',
-					'T2Radar',
-                }
+				}
             }
         }
     },
@@ -578,6 +578,7 @@ BuilderGroup {
                     'T2StrategicMissile',
                     'T3AADefense',
                     'T2GroundDefense',
+					'T2Radar',
                     'T2StrategicMissile',
                     'T2StrategicMissile',
                     'T3AADefense',
@@ -587,8 +588,7 @@ BuilderGroup {
                     'T2Artillery',
                     'T2Artillery',
 					'T3Artillery',
-					'T2ShieldDefense',
-					'T2Radar',
+					'T2ShieldDefense',					
                 }
             }
         }

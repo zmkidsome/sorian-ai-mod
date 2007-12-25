@@ -153,33 +153,9 @@ BuilderGroup {
         FormRadius = 10000,
         InstanceCount = 50,
         BuilderType = 'Any',
-        BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
-        },
-        BuilderData = {
-            ThreatWeights = {
-                TargetThreatType = 'Commander',
-            },
-            UseMoveOrder = true,
-            PrioritizedCategories = { 'EXPERIMENTAL LAND', 'COMMAND', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'TECH3 STRATEGIC STRUCTURE', 'MASSFABRICATION', 'ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE ANTIAIR', 'STRUCTURE DEFENSE DIRECTFIRE', 'FACTORY AIR', 'FACTORY LAND' }, # list in order
-        },
-    },
-}
-
-BuilderGroup {
-    BuilderGroupName = 'SorianMobileLandExperimentalFormLate',
-    BuildersType = 'PlatoonFormBuilder',
-    Builder {
-        BuilderName = 'Sorian T4 Exp Land Late',
-        PlatoonAddPlans = {'NameUnits'},
-        PlatoonTemplate = 'T4ExperimentalLandLate',
-        Priority = 10000,
-        FormRadius = 10000,
-        InstanceCount = 50,
-        BuilderType = 'Any',
-        BuilderConditions = {
-            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'FACTORY TECH3'}},
-        },
+        #BuilderConditions = {
+        #    { UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
+        #},
         BuilderData = {
             ThreatWeights = {
                 TargetThreatType = 'Commander',
@@ -271,33 +247,9 @@ BuilderGroup {
         InstanceCount = 50,
         FormRadius = 10000,
         BuilderType = 'Any',
-        BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
-        },
-        BuilderData = {
-            ThreatWeights = {
-                TargetThreatType = 'Commander',
-            },
-            UseMoveOrder = true,
-            PrioritizedCategories = { 'EXPERIMENTAL', 'COMMAND', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'TECH3 STRATEGIC STRUCTURE', 'ENERGYPRODUCTION', 'MASSFABRICATION', 'STRUCTURE' }, # list in order
-        },
-    },
-}
-
-BuilderGroup {
-    BuilderGroupName = 'SorianMobileAirExperimentalFormLate',
-    BuildersType = 'PlatoonFormBuilder',
-    Builder {
-        BuilderName = 'Sorian T4 Exp Air Late',
-        PlatoonTemplate = 'T4ExperimentalAirLate',
-        PlatoonAddPlans = {'NameUnits'},
-        Priority = 800,
-        InstanceCount = 50,
-        FormRadius = 10000,
-        BuilderType = 'Any',
-        BuilderConditions = {
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'FACTORY TECH3'}},
-        },
+        #BuilderConditions = {
+        #    { UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
+        #},
         BuilderData = {
             ThreatWeights = {
                 TargetThreatType = 'Commander',

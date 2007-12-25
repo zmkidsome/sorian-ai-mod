@@ -17,7 +17,7 @@ function CDRRunAwaySorian( aiBrain, cdr )
         #AIUtils.AIFindDefensiveArea( aiBrain, cdr, categories.DEFENSE * categories.ANTIAIR, 10000 )
         #LOG('*AI DEBUG: ARMY ' .. aiBrain.Nickname .. ': CDR AI ACTIVATE - CDR RUNNING AWAY' )
         local nmeAir = aiBrain:GetNumUnitsAroundPoint( categories.AIR - categories.SCOUT - categories.INTELLIGENCE, cdrPos, 30, 'Enemy' )
-        local nmeLand = aiBrain:GetNumUnitsAroundPoint( categories.LAND - categories.ENGINEER - categories.SCOUT - categories.TECH1, cdrPos, 40, 'Enemy' )
+        local nmeLand = aiBrain:GetNumUnitsAroundPoint( categories.COMMAND + categories.LAND - categories.ENGINEER - categories.SCOUT - categories.TECH1, cdrPos, 40, 'Enemy' )
 		local nmaShield = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE, cdrPos, 100, 'Ally' )
         if nmeAir > 4 or nmeLand > 9 or nmeT3 > 4 or nmeHardcore > 0 or cdr:GetHealthPercent() < .80 or shieldPercent < .30 then
 			if cdr:GetUnitBeingBuilt() then
@@ -66,7 +66,7 @@ function CDRRunAwaySorian( aiBrain, cdr )
                 if not cdr:IsDead() then
                     cdrPos = cdr:GetPosition()
                     nmeAir = aiBrain:GetNumUnitsAroundPoint( categories.AIR - categories.SCOUT - categories.INTELLIGENCE, cdrPos, 30, 'Enemy' )
-                    nmeLand = aiBrain:GetNumUnitsAroundPoint( categories.LAND - categories.ENGINEER - categories.SCOUT - categories.TECH1, cdrPos, 40, 'Enemy' )
+                    nmeLand = aiBrain:GetNumUnitsAroundPoint( categories.COMMAND + categories.LAND - categories.ENGINEER - categories.SCOUT - categories.TECH1, cdrPos, 40, 'Enemy' )
 					nmeT3 = aiBrain:GetNumUnitsAroundPoint( categories.LAND * categories.TECH3 - categories.ENGINEER, cdrPos, 50, 'Enemy' )
                     nmeHardcore = aiBrain:GetNumUnitsAroundPoint( categories.EXPERIMENTAL, cdrPos, 130, 'Enemy' )
 					if (cdr:HasEnhancement( 'Shield' ) or cdr:HasEnhancement( 'ShieldGeneratorField' ) or cdr:HasEnhancement( 'ShieldHeavy' )) and cdr:ShieldIsOn() then
@@ -370,7 +370,7 @@ function CommanderThreadSorian(cdr, platoon)
         WaitTicks(1)
         
         #call platoon resume building deal...
-        if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr.UnitBeingBuiltBehavior then
+        if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading") then
             if not cdr.EngineerBuildQueue or table.getn(cdr.EngineerBuildQueue) == 0 then
                 local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
                 aiBrain:AssignUnitsToPlatoon( pool, {cdr}, 'Unassigned', 'None' )

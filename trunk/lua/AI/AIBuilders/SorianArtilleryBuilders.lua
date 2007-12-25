@@ -150,6 +150,32 @@ BuilderGroup {
     },
 }
 
+BuilderGroup {
+    BuilderGroupName = 'SorianT3ArtilleryFormBuilders',
+    BuildersType = 'PlatoonFormBuilder',
+    Builder {
+        BuilderName = 'Sorian T3 Artillery',
+        PlatoonTemplate = 'T3ArtilleryStructureSorian',
+        Priority = 1,
+        InstanceCount = 1000,
+        FormRadius = 10000,
+        BuilderType = 'Any',
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianT4ArtilleryFormBuilders',
+    BuildersType = 'PlatoonFormBuilder',
+    Builder {
+        BuilderName = 'Sorian T4 Artillery',
+        PlatoonTemplate = 'T4ArtilleryStructureSorian',
+        Priority = 1,
+        InstanceCount = 1000,
+        FormRadius = 10000,
+        BuilderType = 'Any',
+    },
+}
+
 # Nukes
 BuilderGroup {
     BuilderGroupName = 'SorianNukeBuildersEngineerBuilders',
