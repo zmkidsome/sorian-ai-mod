@@ -39,6 +39,8 @@ BaseBuilderTemplate {
         'SorianT3LightDefenses',
 
 		'SorianT2ArtilleryFormBuilders',
+		'SorianT3ArtilleryFormBuilders',
+		'SorianT4ArtilleryFormBuilders',
         'SorianT2MissileDefenses',
         'SorianT3NukeDefenses',
         'SorianT3NukeDefenseBehaviors',
@@ -79,11 +81,9 @@ BaseBuilderTemplate {
         # ==== EXPERIMENTALS ==== #
         'SorianMobileLandExperimentalEngineers',
         'SorianMobileLandExperimentalForm',
-		'SorianMobileLandExperimentalFormLate',
         
         'SorianMobileAirExperimentalEngineers',
         'SorianMobileAirExperimentalForm',
-		'SorianMobileAirExperimentalFormLate',
     },
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',
@@ -99,10 +99,10 @@ BaseBuilderTemplate {
     },
     BaseSettings = {
         EngineerCount = {
-            Tech1 = 15,
-            Tech2 = 10,
-            Tech3 = 10,
-            SCU = 1,
+            Tech1 = 10,
+            Tech2 = 15,
+            Tech3 = 20,
+            SCU = 2,
         },
         FactoryCount = {
             Land = 4,
@@ -129,13 +129,13 @@ BaseBuilderTemplate {
         local threatCutoff = 10 # value of overall threat that determines where enemy bases are
         local distance = import('/lua/ai/AIUtilities.lua').GetThreatDistance( aiBrain, location, threatCutoff )
         if not distance or distance > 1000 then
-            return 50
+            return 51
         elseif distance > 500 then
-            return 75
+            return 76
         elseif distance > 250 then
-            return 100
+            return 101
         else # within 250
-            return 25
+            return 26
         end
         
         return 0

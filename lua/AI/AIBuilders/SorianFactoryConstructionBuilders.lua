@@ -103,6 +103,27 @@ BuilderGroup {
         }
     },
     Builder {
+        BuilderName = 'SorianCDR T1 Land Factory Higher Pri - Init',
+        PlatoonTemplate = 'CommanderBuilderSorian',
+        Priority = 905,
+        BuilderConditions = {                        
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
+            { UCBC, 'FactoryCapCheck', { 'LocationType', 'Land' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 3, 'LAND FACTORY'}},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = true,
+                BuildStructures = {
+                    'T1LandFactory',
+                },
+            }
+        }
+    },
+    Builder {
         BuilderName = 'SorianCDR T1 Land Factory Higher Pri',
         PlatoonTemplate = 'CommanderBuilderSorian',
         Priority = 900,
@@ -111,6 +132,8 @@ BuilderGroup {
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Land' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'LAND FACTORY'}},
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'AIR FACTORY'}},
         },
         BuilderType = 'Any',
         BuilderData = {

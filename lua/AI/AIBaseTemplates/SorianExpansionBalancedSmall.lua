@@ -30,7 +30,10 @@ BaseBuilderTemplate {
         'SorianT1LightDefenses',
         'SorianT2LightDefenses',
         'SorianT3LightDefenses',
-
+		
+		'SorianT2ArtilleryFormBuilders',
+		'SorianT3ArtilleryFormBuilders',
+		'SorianT4ArtilleryFormBuilders',
         
         # ==== LAND UNIT BUILDERS ==== #
         'SorianT1LandFactoryBuilders',

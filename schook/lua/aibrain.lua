@@ -3,8 +3,15 @@ do
 oldAIBrain = AIBrain
 
 AIBrain = Class(oldAIBrain) {
+
+    PickEnemy = function(self)
+        while true do
+            self:PickEnemyLogic(true)
+            WaitSeconds(120)
+        end
+    end,
 	
-    PickEnemyLogic = function(self)
+    PickEnemyLogic = function(self, brainbool)
         local armyStrengthTable = {}
         
         local selfIndex = self:GetArmyIndex()
@@ -33,7 +40,7 @@ AIBrain = Class(oldAIBrain) {
         else
 			local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
             local findEnemy = false
-            if not self:GetCurrentEnemy() or per == 'sorian' or per == 'sorianrush' then
+            if not self:GetCurrentEnemy() or ((per == 'sorian' or per == 'sorianrush') and brainbool) then
                 findEnemy = true
             else
                 local cIndex = self:GetCurrentEnemy():GetArmyIndex()

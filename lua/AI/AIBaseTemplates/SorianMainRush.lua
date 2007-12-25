@@ -62,6 +62,8 @@ BaseBuilderTemplate {
         'SorianT3DefensivePoints',
 		
 		'SorianT2ArtilleryFormBuilders',
+		'SorianT3ArtilleryFormBuilders',
+		'SorianT4ArtilleryFormBuilders',
         'SorianT2MissileDefenses',
         'SorianT3NukeDefenses',
         'SorianT3NukeDefenseBehaviors',
@@ -114,11 +116,9 @@ BaseBuilderTemplate {
         # ==== EXPERIMENTALS ==== #
         'SorianMobileLandExperimentalEngineers',
         'SorianMobileLandExperimentalForm',
-		'SorianMobileLandExperimentalFormLate',
         
         'SorianMobileAirExperimentalEngineers',
         'SorianMobileAirExperimentalForm',
-		'SorianMobileAirExperimentalFormLate',
 		
         # ==== ARTILLERY BUILDERS ==== #
         'SorianT3ArtilleryGroup',
@@ -148,10 +148,10 @@ BaseBuilderTemplate {
             Tech1 = 15,
             Tech2 = 10,
             Tech3 = 15,
-            SCU = 3,
+            SCU = 2,
         },
         FactoryCount = {
-            Land = 6,
+            Land = 5,
             Air = 2,
             Sea = 0,
             Gate = 1,
