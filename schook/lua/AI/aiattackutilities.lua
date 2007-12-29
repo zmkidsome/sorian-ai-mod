@@ -12,7 +12,7 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	
 	if per == 'sorian' or per == 'sorianrush' then testPath = true end
 	
-	if VDist2( start[1], start[3], destination[1], destination[3] ) < 100 then
+	if VDist2( start[1], start[3], destination[1], destination[3] ) < 100 and (per == 'sorian' or per == 'sorianrush') then
 		table.insert(finalPath, destination)    
 		return finalPath
 	end
@@ -79,7 +79,9 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
 		
 		local dist2 = VDist2(lastNode.position[1], lastNode.position[3], destination[1], destination[3])
         
-        if lastNode == endNode or (dist2 < 75 and testPath) then return curPath end
+        if lastNode == endNode or (dist2 < 100 and testPath and lastNode != startNode) then
+			return curPath
+		end
         
         closed[lastNode] = true
         

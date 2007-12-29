@@ -50,7 +50,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -61,7 +61,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -73,7 +73,7 @@ BuilderGroup {
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -85,7 +85,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -96,7 +96,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
 }
@@ -113,7 +113,7 @@ BuilderGroup {
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -126,7 +126,7 @@ BuilderGroup {
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -143,7 +143,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -154,7 +154,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -165,7 +165,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -176,7 +176,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -186,7 +186,7 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Naval' } },
         },
@@ -205,7 +205,7 @@ BuilderGroup {
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -218,7 +218,7 @@ BuilderGroup {
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -235,7 +235,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -246,7 +246,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -257,7 +257,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -268,7 +268,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
     },
     Builder {
@@ -278,7 +278,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
         },
         BuilderType = 'Air',
@@ -291,7 +291,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Naval' } },
         },
     }
@@ -306,7 +306,7 @@ BuilderGroup {
         Priority = 755,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 2, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
@@ -322,7 +322,7 @@ BuilderGroup {
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 5, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -345,7 +345,7 @@ BuilderGroup {
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR } },
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH2, FACTORY AIR TECH3' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -363,7 +363,7 @@ BuilderGroup {
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR } },
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -380,7 +380,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -399,7 +399,7 @@ BuilderGroup {
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR } },
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH2, FACTORY AIR TECH3' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -417,7 +417,7 @@ BuilderGroup {
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR } },
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -434,7 +434,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
         },
         BuilderType = 'Air',
     },
@@ -447,7 +447,7 @@ BuilderGroup {
             { MIBC, 'TransportNeedGreater', { 7 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH2, FACTORY AIR TECH3' } },
         },
@@ -461,7 +461,7 @@ BuilderGroup {
             { MIBC, 'TransportNeedGreater', { 7 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' } },
         },
@@ -475,7 +475,7 @@ BuilderGroup {
             { MIBC, 'TransportNeedGreater', { 7 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
         },
         BuilderType = 'Air',
@@ -537,6 +537,7 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderData = {
             PrioritizedCategories = {
+				'ENGINEER',
                 'MASSEXTRACTION',
                 'ENERGYPRODUCTION',
                 'MASSFABRICATION',
@@ -550,7 +551,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 6, 'AIR MOBILE BOMBER' } },
+            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 4, 'AIR MOBILE BOMBER' } },
             { UCBC, 'PoolLessAtLocation', { 'LocationType', 1, 'AIR MOBILE TECH2, MOBILE AIR TECH3' } },
         },
     },
@@ -588,7 +589,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 8, 'AIR MOBILE BOMBER' } },
+            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 6, 'AIR MOBILE BOMBER' } },
             { UCBC, 'PoolLessAtLocation', { 'LocationType', 1, 'AIR MOBILE TECH3' } },
         },
     },
@@ -626,7 +627,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 3, 'AIR MOBILE BOMBER TECH3' } },
+            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 4, 'AIR MOBILE BOMBER TECH3' } },
         },
     },
     Builder {
@@ -688,6 +689,33 @@ BuilderGroup {
         },
         BuilderConditions = {
             { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'EXPERIMENTAL AIR', 'Enemy'}},
+        },
+    },
+    Builder {
+        BuilderName = 'Sorian BomberAttackThreatResponse',
+        PlatoonTemplate = 'BomberAttack',
+		PlatoonAddPlans = { 'AirUnitRefit', 'AirIntelToggle' },
+        Priority = 1000,
+        InstanceCount = 5,
+        BuilderType = 'Any',
+        BuilderData = {
+            PrioritizedCategories = {
+                'STRUCTURE STRATEGIC EXPERIMENTAL',
+                'STRUCTURE STRATEGIC TECH3',
+                'COMMAND',
+                'MASSEXTRACTION',
+                'ENERGYPRODUCTION',
+                'MASSFABRICATION',
+                'SHIELD',
+                'ANTIAIR STRUCTURE',
+                'DEFENSE STRUCTURE',
+                'STRUCTURE',
+                'MOBILE ANTIAIR',
+                'ALLUNITS',
+            },
+        },
+        BuilderConditions = {
+            { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'STRUCTURE STRATEGIC TECH3, STRUCTURE STRATEGIC EXPERIMENTAL', 'Enemy'}},
         },
     },
 }

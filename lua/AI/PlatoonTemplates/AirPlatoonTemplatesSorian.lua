@@ -40,8 +40,16 @@ PlatoonTemplate {
 }
 
 PlatoonTemplate {
+    Name = 'T4ExperimentalAirSorian',
+    Plan = 'ExperimentalAIHubSorian', 
+    GlobalSquads = {
+        { categories.AIR * categories.EXPERIMENTAL * categories.MOBILE, 1, 1, 'attack', 'none' },
+    },
+}
+
+PlatoonTemplate {
     Name = 'T4ExperimentalAirLate',
-    Plan = 'ExperimentalAIHub', 
+    Plan = 'ExperimentalAIHubSorian', 
     GlobalSquads = {
         { categories.AIR * categories.EXPERIMENTAL * categories.MOBILE, 2, 3, 'attack', 'none' },
     },

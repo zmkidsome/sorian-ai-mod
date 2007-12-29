@@ -71,9 +71,18 @@ PlatoonTemplate {
         { categories.LAND * categories.SCOUT, 0, 1, 'attack', 'none' },
     }
 }
+
+PlatoonTemplate {
+    Name = 'T4ExperimentalLandSorian',
+    Plan = 'ExperimentalAIHubSorian',   
+    GlobalSquads = {
+        { categories.EXPERIMENTAL * categories.LAND * categories.MOBILE, 1, 1, 'attack', 'none' }
+    },
+}
+
 PlatoonTemplate {
     Name = 'T4ExperimentalLandLate',
-    Plan = 'ExperimentalAIHub',   
+    Plan = 'ExperimentalAIHubSorian',   
     GlobalSquads = {
         { categories.EXPERIMENTAL * categories.LAND * categories.MOBILE, 2, 3, 'attack', 'none' }
     },

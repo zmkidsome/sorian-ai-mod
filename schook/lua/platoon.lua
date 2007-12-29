@@ -4,16 +4,41 @@ sorianoldPlatoon = Platoon
 
 Platoon = Class(sorianoldPlatoon) {
 
+    NukeAISorian = function(self)
+    end,
+
+    ExperimentalAIHubSorian = function(self)
+	    local behaviors = import('/lua/ai/AIBehaviors.lua')
+	    
+	    local experimental = self:GetPlatoonUnits()[1]
+	    if not experimental then
+		    return
+	    end
+        local ID = experimental:GetUnitId()
+        
+        if ID == 'uel0401' then
+            return behaviors.FatBoyBehaviorSorian(self)
+        elseif ID == 'uaa0310' then
+            return behaviors.CzarBehaviorSorian(self)
+        elseif ID == 'xsa0402' then
+            return behaviors.AhwassaBehaviorSorian(self)
+        elseif ID == 'ura0401' then
+            return behaviors.TickBehaviorSorian(self)
+        end
+        
+        return behaviors.BehemothBehaviorSorian(self)
+    end,
+
     ArtilleryAISorian = function(self)
         local aiBrain = self:GetBrain()
 
-        local atkPri = { 'SPECIALHIGHPRI', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE TECH3', 'COMMAND', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE', 'EXPERIMENTAL LAND',
+        local atkPri = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'STRUCTURE STRATEGIC TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE', 'EXPERIMENTAL LAND',
             'MOBILE TECH3 LAND', 'MOBILE TECH2 LAND', 'MOBILE TECH1 LAND', 'STRUCTURE FACTORY', 'SPECIALLOWPRI', 'ALLUNITS' }
         local atkPriTable = {}
         for k,v in atkPri do
             table.insert( atkPriTable, ParseEntityCategory( v ) )
         end
-        self:SetPrioritizedTargetList( 'Attack', atkPriTable )
+        self:SetPrioritizedTargetList( 'Artillery', atkPriTable )
 
         # Set priorities on the unit so if the target has died it will reprioritize before the platoon does
         local unit = false
@@ -26,13 +51,20 @@ Platoon = Class(sorianoldPlatoon) {
         if not unit then
             return
         end
+        local bp = unit:GetBlueprint()
+        local weapon = bp.Weapon[1]
+        local maxRadius = weapon.MaxRadius
         unit:SetTargetPriorities( atkPriTable )
         
         while aiBrain:PlatoonExists(self) do
-            local target = self:FindPrioritizedUnit()
-            if target then
-                self:Stop()
-                self:AttackTarget(target)
+			if self:IsOpponentAIRunning() then                
+                target = AIUtils.AIFindBrainTargetInRangeSorian( aiBrain, self, 'Artillery', maxRadius, atkPri )
+                if target and not unit:IsDead() then
+                    IssueClearCommands( {unit} )
+                    IssueAttack( {unit}, target:GetPosition() )
+				elseif not target then
+					self:Stop()
+				end
             end
             WaitSeconds(20)
         end
@@ -693,6 +725,7 @@ Platoon = Class(sorianoldPlatoon) {
         if not self.PlatoonData or not self.PlatoonData.LocationType then
             self:PlatoonDisband()
         end
+		local eng = self:GetPlatoonUnits()[1]
 		#LOG('*AI DEBUG: Engineer Repairing')
         local aiBrain = self:GetBrain()
 		local engineerManager = aiBrain.BuilderManagers[self.PlatoonData.LocationType].EngineerManager

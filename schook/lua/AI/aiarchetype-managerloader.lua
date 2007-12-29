@@ -2,6 +2,7 @@ do
 
 function ExecutePlan(aiBrain)
     aiBrain:SetConstantEvaluate(false)
+	local behaviors = import('/lua/ai/AIBehaviors.lua')
     WaitSeconds(1)
     if not aiBrain.BuilderManagers.MAIN.FactoryManager:HasBuilderList() then
         aiBrain:SetResourceSharing(true)
@@ -9,11 +10,7 @@ function ExecutePlan(aiBrain)
 		local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
         
 		aiBrain:SetupUnderEnergyStatTrigger(0.1)
-        if per == 'sorian' or per == 'sorianrush' then
-			aiBrain:SetupUnderMassStatTriggerSorian(0.1)
-		else
-			aiBrain:SetupUnderMassStatTrigger(0.1)
-		end
+		aiBrain:SetupUnderMassStatTrigger(0.1)
         
         SetupMainBase(aiBrain)
         
@@ -31,6 +28,7 @@ function ExecutePlan(aiBrain)
 
 		if per == 'sorian' or per == 'sorianrush' then
 			ForkThread(UnitCapWatchThreadSorian, aiBrain)
+			ForkThread(behaviors.NukeCheck, aiBrain)
 		else
 			ForkThread(UnitCapWatchThread, aiBrain)
 		end
