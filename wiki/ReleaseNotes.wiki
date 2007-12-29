@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.1:* Fixed 2 bugs, new Nuke behaviors, modified targeting priorities, new Artillery behaviors, factories will tech to T3.
+
 *0.9.0:* Useless pathing fix, balance changes.
 
 *0.8.8:* Lag bug fix, more balance and defense changes.
