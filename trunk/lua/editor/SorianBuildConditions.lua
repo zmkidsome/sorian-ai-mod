@@ -65,3 +65,35 @@ function MarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threat
     end
     return false
 end
+
+##############################################################################################################
+# function: HaveLessThanUnitsInCategoryBeingBuilt = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: integer  numunits        = "Number of units"
+# parameter 2: integer  radius          = "radius"
+#
+##############################################################################################################
+function HaveLessThanUnitsInCategoryBeingBuilt(aiBrain, numunits, category)
+    if type(category) == 'string' then
+        category = ParseEntityCategory(category)
+    end
+	
+    local unitsBuilding = aiBrain:GetListOfUnits( categories.CONSTRUCTION, false )
+	local numBuilding = 0
+    for unitNum, unit in unitsBuilding do
+        if not unit:BeenDestroyed() and unit:IsUnitState('Building') then
+            local buildingUnit = unit:GetUnitBeingBuilt()
+            if buildingUnit and not buildingUnit:IsDead() and EntityCategoryContains( category, buildingUnit ) then
+				numBuilding = numBuilding + 1	
+            end
+        end
+		if numunits <= numBuilding then
+			return false
+		end
+    end
+	if numunits > numBuilding then
+		return true
+	end
+	return false
+end

@@ -148,7 +148,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T4 Exp Land',
         PlatoonAddPlans = {'NameUnits'},
-        PlatoonTemplate = 'T4ExperimentalLand',
+        PlatoonTemplate = 'T4ExperimentalLandSorian',
         Priority = 10000,
         FormRadius = 10000,
         InstanceCount = 50,
@@ -241,7 +241,7 @@ BuilderGroup {
     BuildersType = 'PlatoonFormBuilder',
     Builder {
         BuilderName = 'Sorian T4 Exp Air',
-        PlatoonTemplate = 'T4ExperimentalAir',
+        PlatoonTemplate = 'T4ExperimentalAirSorian',
         PlatoonAddPlans = {'NameUnits'},
         Priority = 800,
         InstanceCount = 50,
@@ -256,6 +256,98 @@ BuilderGroup {
             },
             UseMoveOrder = true,
             PrioritizedCategories = { 'EXPERIMENTAL', 'COMMAND', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'TECH3 STRATEGIC STRUCTURE', 'ENERGYPRODUCTION', 'MASSFABRICATION', 'STRUCTURE' }, # list in order
+        },
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianMobileNavalExperimentalEngineers',
+    BuildersType = 'EngineerBuilder',
+    Builder {
+        BuilderName = 'Sorian T4 Sea Exp1 Engineer',
+        PlatoonTemplate = 'T3EngineerBuilder',
+        Priority = 875,
+        BuilderConditions = {
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.NAVAL }},
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENGINEER * categories.TECH3}},
+            { MABC, 'MarkerLessThanDistance',  { 'Naval Area', 400}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = false,
+                NearMarkerType = 'Naval Area',
+                BuildStructures = {
+                    'T4SeaExperimental1',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T2 Engineer Assist Experimental Mobile Naval',
+        PlatoonTemplate = 'T2EngineerAssist',
+        Priority = 800,
+        InstanceCount = 5,
+        BuilderConditions = {
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+            { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.NAVAL * categories.MOBILE}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                AssisteeType = 'Engineer',
+                AssistRange = 80,
+                BeingBuiltCategories = {'EXPERIMENTAL MOBILE NAVAL'},
+                Time = 60,
+            },
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Naval',
+        PlatoonTemplate = 'T3EngineerAssist',
+        Priority = 750,
+        InstanceCount = 5,
+        BuilderConditions = {
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+            { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.NAVAL * categories.MOBILE}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                AssisteeType = 'Engineer',
+                AssistRange = 80,
+                BeingBuiltCategories = {'EXPERIMENTAL MOBILE NAVAL'},
+                Time = 60,
+            },
+        }
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianMobileNavalExperimentalForm',
+    BuildersType = 'PlatoonFormBuilder',
+    Builder {
+        BuilderName = 'Sorian T4 Exp Sea',
+        PlatoonTemplate = 'T4ExperimentalSea',
+        PlatoonAddBehaviors = { 'TempestBehaviorSorian' },
+        PlatoonAddPlans = {'NameUnits'},
+        PlatoonAIPlan = 'AttackForceAI',
+        Priority = 1300,
+        FormRadius = 10000,
+        InstanceCount = 50,
+        BuilderType = 'Any',
+        BuilderData = {
+            ThreatWeights = {
+                TargetThreatType = 'Commander',
+            },
+            PrioritizedCategories = { 'COMMAND', 'FACTORY -NAVAL','EXPERIMENTAL', 'MASSPRODUCTION', 'STRUCTURE' }, # list in order
         },
     },
 }
@@ -342,7 +434,7 @@ BuilderGroup {
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderData = {
-            PrioritizedCategories = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'TECH3 STRATEGIC STRUCTURE', 'ENERGYPRODUCTION', 'MASSFABRICATION', 'STRUCTURE' }, # list in order
+            PrioritizedCategories = { 'STRATEGIC STRUCTURE EXPERIMENTAL', 'TECH3 STRATEGIC STRUCTURE', 'ENERGYPRODUCTION', 'MASSFABRICATION', 'STRUCTURE' }, # list in order
         },
     },
 }

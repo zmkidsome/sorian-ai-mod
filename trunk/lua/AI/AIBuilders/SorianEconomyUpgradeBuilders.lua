@@ -22,6 +22,7 @@ local PCBC = '/lua/editor/PlatoonCountBuildConditions.lua'
 local SAI = '/lua/ScenarioPlatoonAI.lua'
 local TBC = '/lua/editor/ThreatBuildConditions.lua'
 local PlatoonFile = '/lua/platoon.lua'
+local SBC = '/lua/editor/SorianBuildConditions.lua'
 
 BuilderGroup {
     BuilderGroupName = 'SorianTime Exempt Extractor Upgrades Expansion',
@@ -185,7 +186,7 @@ BuilderGroup {
         InstanceCount = 1,
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY TECH2, FACTORY TECH3'}},
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH2, FACTORY TECH3' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH2, FACTORY TECH3' } },
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },		            
                 { EBC, 'GreaterThanEconIncome',  { 3.5, 50}},
@@ -200,7 +201,7 @@ BuilderGroup {
         FormDebugFunction = nil,
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY TECH2, FACTORY TECH3'}},
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH2, FACTORY TECH3' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH2, FACTORY TECH3' } },
 				{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
                 { EBC, 'GreaterThanEconIncome',  { 3.5, 50}},
@@ -213,7 +214,7 @@ BuilderGroup {
         Priority = 200,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY LAND' }},
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
@@ -230,7 +231,7 @@ BuilderGroup {
         InstanceCount = 1,
         FormDebugFunction = nil,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY AIR' }},
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
@@ -246,7 +247,7 @@ BuilderGroup {
         Priority = 200,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'NAVAL FACTORY' } },
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3, FACTORY TECH2' } },
@@ -267,7 +268,7 @@ BuilderGroup {
         Priority = 300,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 #{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'MASSEXTRACTION TECH3'}},
                 { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 2, 'FACTORY TECH3, FACTORY TECH2' } },
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
@@ -284,7 +285,7 @@ BuilderGroup {
         Priority = 300,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 2, 'FACTORY TECH3, FACTORY TECH2' } },
                 #{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'MASSEXTRACTION TECH3'} },
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
@@ -301,7 +302,7 @@ BuilderGroup {
         InstanceCount = 1,
         BuilderConditions = {
                 { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 2, 'FACTORY TECH3, FACTORY TECH2' } },
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 #{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'MASSEXTRACTION TECH3'} },
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
                 { EBC, 'GreaterThanEconIncome',  { 7, 250}},
@@ -324,11 +325,11 @@ BuilderGroup {
         Priority = 200,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
-                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY LAND TECH1' }},
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                #{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY LAND TECH1' }},
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH2'}},
-                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2 LAND, FACTORY TECH3 LAND' } },
+                { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH3, FACTORY TECH2'}},
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
                 { EBC, 'GreaterThanEconIncome',  { 3, 50}},
                 #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.4} },
                 { IBC, 'BrainNotLowPowerMode', {} },
@@ -342,11 +343,11 @@ BuilderGroup {
         InstanceCount = 1,
         FormDebugFunction = nil,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
-                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY AIR TECH1' }},
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                #{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY AIR TECH1' }},
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
-                { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH2'}},
+                { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH3, FACTORY TECH2'}},
                 { EBC, 'GreaterThanEconIncome',  { 3, 50}},
                 { IBC, 'BrainNotLowPowerMode', {} },
                 #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.4} },
@@ -359,14 +360,14 @@ BuilderGroup {
         Priority = 200,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'NAVAL FACTORY TECH1' } },
-                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3 NAVAL, FACTORY TECH2 NAVAL' } },
+                #{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'NAVAL FACTORY TECH1' } },
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 { EBC, 'GreaterThanEconIncome',  { 4.5, 60}},
                 { IBC, 'BrainNotLowPowerMode', {} },
                 #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.4} },
-                { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH2'}},
+                { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH3, FACTORY TECH2'}},
             },
         BuilderType = 'Any',
     },
@@ -381,10 +382,10 @@ BuilderGroup {
         Priority = 300,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 #{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'MASSEXTRACTION TECH3'}},
-                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 2, 'FACTORY TECH3 LAND, FACTORY TECH2 LAND' } },
-                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3 LAND' } },
+                #{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 2, 'FACTORY TECH3 LAND, FACTORY TECH2 LAND' } },
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
                 { UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 7, 'MOBILE LAND'}},
                 { EBC, 'GreaterThanEconIncome',  { 7, 180}},
                 { IBC, 'BrainNotLowPowerMode', {} },
@@ -399,10 +400,10 @@ BuilderGroup {
         Priority = 300,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
-                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 2, 'FACTORY TECH3 AIR, FACTORY TECH2 AIR' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                #{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 2, 'FACTORY TECH3 AIR, FACTORY TECH2 AIR' } },
                 #{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'MASSEXTRACTION TECH3'} },
-                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3 AIR' } },
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
                 { EBC, 'GreaterThanEconIncome',  { 7, 180}},
                 { IBC, 'BrainNotLowPowerMode', {} },
                 #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 1.2 }},
@@ -416,10 +417,10 @@ BuilderGroup {
         Priority = 300,
         InstanceCount = 1,
         BuilderConditions = {
-                { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 2, 'FACTORY TECH3 NAVAL, FACTORY TECH2 NAVAL' } },
-                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                #{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 2, 'FACTORY TECH3 NAVAL, FACTORY TECH2 NAVAL' } },
+                { SBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 #{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'MASSEXTRACTION TECH3'} },
-                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3 NAVAL' } },
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
                 { EBC, 'GreaterThanEconIncome',  { 7, 250}},
                 { IBC, 'BrainNotLowPowerMode', {} },
                 #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
