@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.2:* Water maps should be playable (needs more testing to verify), Czar beam fixed, AI should build more defenses, AI should lay off the T1 and T2 units when in T3.
+
 *0.9.1:* Fixed 2 bugs, new Nuke behaviors, modified targeting priorities, new Artillery behaviors, factories will tech to T3.
 
 *0.9.0:* Useless pathing fix, balance changes.
