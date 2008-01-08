@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.3:* Lots of economy changes, AI should work harder to defend airspace, AI will go after enemy mass extractors more, Commander will move to a safe spot in it's base if it isn't doing anything else, lots of other fine tuning.
+
 *0.9.2:* Water maps should be playable (needs more testing to verify), Czar beam fixed, AI should build more defenses, AI should lay off the T1 and T2 units when in T3.
 
 *0.9.1:* Fixed 2 bugs, new Nuke behaviors, modified targeting priorities, new Artillery behaviors, factories will tech to T3.
