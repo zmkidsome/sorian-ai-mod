@@ -1,4 +1,50 @@
 do
+local SUtils = import('/lua/AI/sorianutilities.lua')
+
+function AIGetEconomyNumbers(aiBrain)
+    #LOG('*AI DEBUG: RETURNING ECONOMY NUMBERS FROM AIBRAIN ', repr(aiBrain))
+    local econ = {}
+    econ.MassTrend = aiBrain:GetEconomyTrend('MASS')
+    econ.EnergyTrend = aiBrain:GetEconomyTrend('ENERGY')
+    econ.MassStorageRatio = aiBrain:GetEconomyStoredRatio('MASS')
+    econ.EnergyStorageRatio = aiBrain:GetEconomyStoredRatio('ENERGY')
+    econ.EnergyIncome = aiBrain:GetEconomyIncome('ENERGY')
+    econ.MassIncome = aiBrain:GetEconomyIncome('MASS')
+    econ.EnergyUsage = aiBrain:GetEconomyUsage('ENERGY')
+    econ.MassUsage = aiBrain:GetEconomyUsage('MASS')
+    econ.EnergyRequested = aiBrain:GetEconomyRequested('ENERGY')
+    econ.MassRequested = aiBrain:GetEconomyRequested('MASS')
+    econ.EnergyEfficiency = math.min(econ.EnergyIncome / econ.EnergyRequested, 2)
+    econ.MassEfficiency = math.min(econ.MassIncome / econ.MassRequested, 2)
+    econ.MassRequested = aiBrain:GetEconomyRequested('MASS')
+    econ.EnergyStorage = aiBrain:GetEconomyStored('ENERGY')
+    econ.MassStorage = aiBrain:GetEconomyStored('MASS')
+
+    if aiBrain.EconomyMonitorThread then
+        local econTime = aiBrain:GetEconomyOverTime()
+        
+        econ.EnergyRequestOverTime = econTime.EnergyRequested
+        econ.MassRequestOverTime = econTime.MassRequested
+        
+        econ.EnergyIncomeOverTime = SUtils.Round(econTime.EnergyIncome, 2)
+        econ.MassIncomeOverTime = SUtils.Round(econTime.MassIncome, 2)
+		
+        econ.EnergyEfficiencyOverTime = math.min(econTime.EnergyIncome / econTime.EnergyRequested, 2)
+        econ.MassEfficiencyOverTime = math.min(econTime.MassIncome / econTime.MassRequested, 2)
+    end
+        
+    if econ.MassStorageRatio != 0 then
+        econ.MassMaxStored = econ.MassStorage / econ.MassStorageRatio
+    else
+        econ.MassMaxStored = econ.MassStorage
+    end
+    if econ.EnergyStorageRatio != 0 then
+        econ.EnergyMaxStored = econ.EnergyStorage / econ.EnergyStorageRatio
+    else
+        econ.EnergyMaxStored = econ.EnergyStorage
+    end
+    return econ
+end
 
 function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPri )
     local position = platoon:GetPlatoonPosition()

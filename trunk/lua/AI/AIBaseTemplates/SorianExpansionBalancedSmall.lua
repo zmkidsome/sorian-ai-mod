@@ -81,7 +81,7 @@ BaseBuilderTemplate {
         },
         
         FactoryCount = {
-            Land = 3,
+            Land = 2,
             Air = 1,
             Sea = 0,
             Gate = 1,
@@ -101,7 +101,7 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if not personality == 'sorian' and not personality == 'sorianrush' then
+        if not personality == 'sorianrush' then
             return 0
         end
 

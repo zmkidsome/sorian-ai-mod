@@ -1,5 +1,284 @@
 do
 
+function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
+    
+    #---------------------------------------------------------------------------------
+    # This is the primary function for determining what to attack on the map
+    # This function uses two user-specified types of "threats" to determine what to attack
+    
+    
+    # Specify what types of "threat" to attack
+    # Threat isn't just what's threatening, but is a measure of various
+    # strengths in the game.  For example, 'Land' threat is a measure of
+    # how many mobile land units are in a given threat area
+    # Economy is a measure of how many economy-generating units there are
+    # in a given threat area
+    # Overall is a sum of all the types of threats
+    # AntiSurface is a measure of  how much damage the units in an area can
+    # do to surface-dwelling units.
+    # there are many other types of threat... CATCH THEM ALL
+           
+    local PrimaryTargetThreatType = 'Land'        
+    local SecondaryTargetThreatType = 'Economy'   
+    
+    
+    # These are the values that are used to weight the two types of "threats"
+    # primary by default is weighed most heavily, while a secondary threat is
+    # weighed less heavily
+    local PrimaryThreatWeight = 20
+    local SecondaryThreatWeight = 0.5
+    
+    # After being sorted by those two types of threats, the places to attack are then
+    # sorted by distance.  So you don't have to worry about specifying that units go
+    # after the closest valid threat - they do this naturally.
+    
+    # If the platoon we're sending is weaker than a potential target, lower
+    # the desirability of choosing that target by this factor
+    local WeakAttackThreatWeight = 10
+    
+    # If the platoon we're sending is stronger than a potential target, raise
+    # the desirability of choosing that target by this factor
+    local StrongAttackThreatWeight = 8
+    
+    
+    # We can also tune the desirability of a target based on various
+    # distance thresholds.  The thresholds are very near, near, mid, far
+    # and very far.  The Radius value represents the largest distance considered
+    # in a given category; the weight is the multiplicative factor used to increase
+    # the desirability for the distance category   
+
+    local VeryNearThreatWeight = 20000
+    local VeryNearThreatRadius = 25
+
+    local NearThreatWeight = 2500
+    local NearThreatRadius = 75
+    
+    local MidThreatWeight = 500    
+    local MidThreatRadius = 150
+ 
+    local FarThreatWeight = 100
+    local FarThreatRadius = 300 
+    
+    # anything that's farther than the FarThreatRadius is considered VeryFar           
+    local VeryFarThreatWeight = 1
+
+    # if the platoon is weaker than this threat level, then ignore stronger targets if they're stronger by
+    # the given ratio
+    local IgnoreStrongerTargetsIfWeakerThan = 5
+    local IgnoreStrongerTargetsRatio = 10.0
+    # If the platoon is weaker than the target, and the platoon represents a 
+    # larger fraction of the unitcap this this value, then ignore
+    # the strength of target - the platoon's death brings more units
+    local IgnoreStrongerUnitCap = 0.8
+     
+    # When true, ignores the commander's strength in determining defenses at target location         
+    local IgnoreCommanderStrength = true
+     
+    # If the combined threat of both primary and secondary threat types
+    # is less than this level, then just outright ignore it as a threat
+    local IgnoreThreatLessThan = 15
+    # if the platoon is stronger than this threat level, then ignore weaker targets if the platoon is stronger
+    # by the given ratio
+    local IgnoreWeakerTargetsIfStrongerThan = 20
+    local IgnoreWeakerTargetsRatio = 5
+
+    # When evaluating threat, how many rings in the threat grid do we look at
+    local EnemyThreatRings = 1
+    # if we've already chosen an enemy, should this platoon focus on that enemy    
+    local TargetCurrentEnemy = true
+    
+    #---------------------------------------------------------------------------------
+        
+    local platoonPosition = platoon:GetPlatoonPosition()
+    local selectedWeaponArc = 'None'
+    
+    if not platoonPosition then
+        #Platoon no longer exists.
+        return false
+    end
+    
+    # get overrides in platoon data
+    local ThreatWeights = platoon.PlatoonData.ThreatWeights
+    if ThreatWeights then
+        PrimaryThreatWeight = ThreatWeights.PrimaryThreatWeight or PrimaryThreatWeight
+        SecondaryThreatWeight = ThreatWeights.SecondaryThreatWeight or SecondaryThreatWeight
+        WeakAttackThreatWeight = ThreatWeights.WeakAttackThreatWeight or WeakAttackThreatWeight
+        StrongAttackThreatWeight = ThreatWeights.StrongAttackThreatWeight or StrongAttackThreatWeight
+        FarThreatWeight = ThreatWeights.FarThreatWeight or FarThreatWeight
+        NearThreatWeight = ThreatWeights.NearThreatWeight or NearThreatWeight
+        NearThreatRadius = ThreatWeights.NearThreatRadius or NearThreatRadius
+        IgnoreStrongerTargetsIfWeakerThan = ThreatWeights.IgnoreStrongerTargetsIfWeakerThan or IgnoreStrongerTargetsIfWeakerThan
+        IgnoreStrongerTargetsRatio = ThreatWeights.IgnoreStrongerTargetsRatio or IgnoreStrongerTargetsRatio 
+        SecondaryTargetThreatType = SecondaryTargetThreatType or ThreatWeights.SecondaryTargetThreatType
+        IgnoreCommanderStrength = IgnoreCommanderStrength or ThreatWeights.IgnoreCommanderStrength
+        IgnoreWeakerTargetsIfStrongerThan = ThreatWeights.IgnoreWeakerTargetsIfStrongerThan or IgnoreWeakerTargetsIfStrongerThan
+        IgnoreWeakerTargetsRatio = ThreatWeights.IgnoreWeakerTargetsRatio or IgnoreWeakerTargetsRatio        
+        IgnoreThreatLessThan = ThreatWeights.IgnoreThreatLessThan or IgnoreThreatLessThan
+        PrimaryTargetThreatType = ThreatWeights.PrimaryTargetThreatType or PrimaryTargetThreatType
+        SecondaryTargetThreatType = ThreatWeights.SecondaryTargetThreatType or SecondaryTargetThreatType
+        EnemyThreatRings = ThreatWeights.EnemyThreatRings or EnemyThreatRings
+        TargetCurrentEnemy = ThreatWeights.TargetCurrentyEnemy or TargetCurrentEnemy
+    end       
+    
+    # Need to use overall so we can get all the threat points on the map and then filter from there
+    # if a specific threat is used, it will only report back threat locations of that type
+    local enemyIndex = -1
+    if aiBrain:GetCurrentEnemy() and TargetCurrentEnemy then
+        enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+    end
+    
+    local threatTable = aiBrain:GetThreatsAroundPosition(platoonPosition, 16, true, 'Overall', enemyIndex )
+    
+    if table.getn(threatTable) == 0 then
+        return false
+    end
+    
+    local platoonUnits = platoon:GetPlatoonUnits()
+    #eval platoon threat  
+    local myThreat = GetThreatOfUnits(platoon)
+    local friendlyThreat = aiBrain:GetThreatAtPosition( platoonPosition, 1, true, ThreatTable[platoon.MovementLayer], aiBrain:GetArmyIndex() ) - myThreat
+    friendlyThreat = friendlyThreat * -1
+
+    local threatDist
+    local curMaxThreat = -99999999
+    local curMaxIndex = 1
+    local foundPathableThreat = false
+    local mapSizeX = ScenarioInfo.size[1]
+    local mapSizeZ = ScenarioInfo.size[2]
+    local maxMapLengthSq = mapSizeX * mapSizeX + mapSizeZ * mapSizeZ
+    local logCount = 0
+    
+    local unitCapRatio = GetArmyUnitCostTotal(aiBrain:GetArmyIndex()) / GetArmyUnitCap(aiBrain:GetArmyIndex())
+    
+    local maxRange = false
+    if platoon.MovementLayer == 'Water' then
+        maxRange, selectedWeaponArc = GetNavalPlatoonMaxRange(aiBrain, platoon)
+    end
+    
+    for tIndex,threat in threatTable do 
+        #check if we can path to the position or a position nearby
+        if not bSkipPathability then
+            if platoon.MovementLayer != 'Water' then
+                local success, bestGoalPos = CheckPlatoonPathingEx(platoon, {threat[1], 0, threat[2]})
+                logCount = logCount + 1
+                if not success then
+
+                    local okThresholdSq = 32 * 32
+                    local distSq = (threat[1] - bestGoalPos[1]) * (threat[1] - bestGoalPos[1]) + (threat[2] - bestGoalPos[3]) * (threat[2] - bestGoalPos[3])
+                    
+                    if distSq < okThresholdSq then
+                        threat[1] = bestGoalPos[1]
+                        threat[2] = bestGoalPos[3]
+                    else
+                        continue
+                    end
+                else
+                    threat[1] = bestGoalPos[1]
+                    threat[2] = bestGoalPos[3]
+                end
+            else
+                local bestPos = CheckNavalPathing(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc)
+                if not bestPos then
+                    continue
+                end
+            end
+        end
+        
+        #threat[3] represents the best target
+        
+        # calculate new threat
+        # for debugging
+        ################
+        local baseThreat = 0
+        local targetThreat = 0
+        local distThreat = 0
+        
+        local primaryThreat = 0
+        local secondaryThreat = 0
+        #################
+        
+        # Determine the value of the target
+        primaryThreat = aiBrain:GetThreatAtPosition( {threat[1], 0, threat[2]}, 1, true, PrimaryTargetThreatType, enemyIndex )
+        secondaryThreat = aiBrain:GetThreatAtPosition( {threat[1], 0, threat[2]}, 1, true, SecondaryTargetThreatType, enemyIndex )
+        
+        baseThreat = primaryThreat + secondaryThreat
+        
+        targetThreat = ( primaryThreat or 0 ) * PrimaryThreatWeight + ( secondaryThreat or 0 ) * SecondaryThreatWeight
+        threat[3] = targetThreat
+        
+        # Determine relative strength of platoon compared to enemy threat
+        local enemyThreat = aiBrain:GetThreatAtPosition( {threat[1], 0, threat[2]}, EnemyThreatRings, true, ThreatTable[platoon.MovementLayer] or 'AntiSurface')
+        if IgnoreCommanderStrength then
+            enemyThreat = enemyThreat - aiBrain:GetThreatAtPosition( {threat[1], EnemyThreatRings, threat[2]}, 1, true, 'Commander')
+        end
+        #defaults to no threat (threat difference is opposite of platoon threat)
+        local threatDiff =  myThreat - enemyThreat
+
+        if threatDiff <= 0 then
+            # if we have no threat... what happened?  Also don't attack things way stronger than us
+            if myThreat <= IgnoreStrongerTargetsIfWeakerThan 
+                    and (myThreat == 0 or enemyThreat / (myThreat + friendlyThreat) > IgnoreStrongerTargetsRatio) 
+                    and unitCapRatio < IgnoreStrongerUnitCap then
+                continue
+            end
+            # if we're weaker than the enemy... make the target less attractive anyway
+            threat[3] = threat[3] + threatDiff * WeakAttackThreatWeight
+        else
+            # ignore overall threats that are really low, otherwise we want to defeat the enemy wherever they are
+            if (baseThreat <= IgnoreThreatLessThan) or (myThreat >= IgnoreWeakerTargetsIfStrongerThan and (enemyThreat == 0 or myThreat / enemyThreat > IgnoreWeakerTargetsRatio)) then
+                continue
+            end
+            threat[3] = threat[3] + threatDiff * StrongAttackThreatWeight
+        end
+        
+        # only add distance if there's a threat at all
+        local threatDistNorm = -1
+        if targetThreat > 0 then
+            threatDist = VDist2(threat[1], threat[2], platoonPosition[1], platoonPosition[3])
+            #distance is 1-100 of the max map length, distance function weights are split by the distance radius
+            threatDistNorm = 100 * threatDist / maxMapLengthSq
+            if threatDistNorm < 1 then
+                threatDistNorm = 1
+            end
+            # farther away is less threatening, so divide
+            if threatDist <= VeryNearThreatRadius then
+                threat[3] = threat[3] + VeryNearThreatWeight / threatDistNorm
+                distThreat = VeryNearThreatWeight / threatDistNorm
+            elseif threatDist <= NearThreatRadius then
+                threat[3] = threat[3] + MidThreatWeight / threatDistNorm
+                distThreat = MidThreatWeight / threatDistNorm
+            elseif threatDist <= MidThreatRadius then
+                threat[3] = threat[3] + NearThreatWeight / threatDistNorm
+                distThreat = NearThreatWeight / threatDistNorm
+            elseif threatDist <= FarThreatRadius then
+                threat[3] = threat[3] + FarThreatWeight / threatDistNorm
+                distThreat = FarThreatWeight / threatDistNorm
+            else
+                threat[3] = threat[3] + VeryFarThreatWeight / threatDistNorm
+                distThreat = VeryFarThreatWeight / threatDistNorm
+            end
+            
+            # store max value
+            if threat[3] > curMaxThreat then
+                curMaxThreat = threat[3]
+                curMaxIndex = tIndex
+            end
+            foundPathableThreat = true
+       end #ignoreThreat
+    end #threatTable loop
+    
+    #no pathable threat found (or no threats at all)
+    if not foundPathableThreat or curMaxThreat == 0 then
+        return false
+    end
+    local x = threatTable[curMaxIndex][1]
+    local y = GetTerrainHeight( threatTable[curMaxIndex][1], threatTable[curMaxIndex][2] )
+    local z = threatTable[curMaxIndex][2]
+
+    return {x, y, z}
+    
+end
+
 function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, optThreatWeight, optMaxMarkerDist)   
         
     local location = start

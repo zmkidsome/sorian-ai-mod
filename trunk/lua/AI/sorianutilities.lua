@@ -1,5 +1,21 @@
 local AIUtils = import('/lua/ai/aiutilities.lua')
 
+function CanRespondEffectively(aiBrain, location, platoon)
+	local targets = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, location, 32, 'Enemy' )
+	for k,v in targets do
+		if platoon:CanAttackTarget( 'attack', v ) then
+			#LOG('*AI DEBUG: CanRespondEffectively returned True 1')
+			return true
+		end
+	end
+	if table.getn(targets) == 0 then
+		#LOG('*AI DEBUG: CanRespondEffectively returned True 2')
+		return true
+	end
+	#LOG('*AI DEBUG: CanRespondEffectively returned False')
+	return false
+end
+
 function Nuke(aiBrain)
     local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'SPECIALLOWPRI', 'ALLUNITS' }
 	local maxFire = false
@@ -53,4 +69,10 @@ function Nuke(aiBrain)
 			#WaitSeconds(15)
 		until nukeCount <= 0 or target == false
 	end
+end
+
+function Round(x, places)
+	shift = 10 ^ places
+	result = math.floor( x * shift + 0.5 ) / shift
+	return result
 end

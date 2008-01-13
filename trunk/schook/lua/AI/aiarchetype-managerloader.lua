@@ -8,9 +8,14 @@ function ExecutePlan(aiBrain)
         aiBrain:SetResourceSharing(true)
 		
 		local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        
-		aiBrain:SetupUnderEnergyStatTrigger(0.1)
-		aiBrain:SetupUnderMassStatTrigger(0.1)
+		
+		if per == 'sorian' or per == 'sorianrush' then
+			aiBrain:SetupUnderEnergyStatTriggerSorian(0.1)
+			aiBrain:SetupUnderMassStatTriggerSorian(0.1)		
+		else        
+			aiBrain:SetupUnderEnergyStatTrigger(0.1)
+			aiBrain:SetupUnderMassStatTrigger(0.1)
+		end
         
         SetupMainBase(aiBrain)
         

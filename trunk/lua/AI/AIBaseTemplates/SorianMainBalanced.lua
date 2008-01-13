@@ -53,11 +53,9 @@ BaseBuilderTemplate {
 		'SorianEngineerFirebaseBuilders',
         
         # ==== DEFENSES ==== #
-		'SorianT1BaseDefenses',
 		'SorianT2BaseDefenses',
 		'SorianT3BaseDefenses',
-		
-		'SorianT1PerimeterDefenses',
+
 		'SorianT2PerimeterDefenses',
 		'SorianT3PerimeterDefenses',
 		

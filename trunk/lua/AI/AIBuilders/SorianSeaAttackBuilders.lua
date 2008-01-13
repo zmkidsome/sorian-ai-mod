@@ -214,7 +214,7 @@ BuilderGroup {
         },
         BuilderConditions = {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, 'MOBILE TECH2 NAVAL, MOBILE TECH3 NAVAL' } },
-            { SeaAttackCondition, { 'LocationType', 30 } },
+            { SeaAttackCondition, { 'LocationType', 20 } },
         },
     },
     Builder {
@@ -238,7 +238,7 @@ BuilderGroup {
         },
         BuilderConditions = {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, 'MOBILE TECH3 NAVAL' } },
-            { SeaAttackCondition, { 'LocationType', 90 } },
+            { SeaAttackCondition, { 'LocationType', 60 } },
         },
     },
     Builder {
@@ -261,7 +261,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { SeaAttackCondition, { 'LocationType', 250 } },
+            { SeaAttackCondition, { 'LocationType', 180 } },
         },
     },
 }
