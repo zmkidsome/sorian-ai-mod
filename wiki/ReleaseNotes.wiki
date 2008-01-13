@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.4b:* Fix for Sorian Rush initial build order on small maps.
+
 *0.9.4:* Better commander threat evaluation, AI more aggressive, Rush AI more aggressive with units and commander, Improved tac missile targeting, Improved economy, Fix for AI starting multiple T4 projects when it shouldn't, Better defended expansion bases.
 
 *0.9.3:* Lots of economy changes, AI should work harder to defend airspace, AI will go after enemy mass extractors more, Commander will move to a safe spot in it's base if it isn't doing anything else, lots of other fine tuning.
