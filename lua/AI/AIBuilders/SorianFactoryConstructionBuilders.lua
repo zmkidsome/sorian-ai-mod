@@ -124,9 +124,54 @@ BuilderGroup {
         }
     },
     Builder {
+        BuilderName = 'Sorian T1 Land Factory Higher Pri',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 905,
+        BuilderConditions = {                        
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
+            { UCBC, 'FactoryCapCheck', { 'LocationType', 'Land' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'LAND FACTORY'}},
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'AIR FACTORY'}},
+			{ MIBC, 'GreaterThanGameTime', { 330 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = true,
+                BuildStructures = {
+                    'T1LandFactory',
+                },
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Air Factory Higher Pri',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 905,
+        BuilderConditions = {
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
+            { UCBC, 'FactoryCapCheck', { 'LocationType', 'Air' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'LAND FACTORY'}},
+			{ MIBC, 'GreaterThanGameTime', { 330 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = true,
+                BuildStructures = {
+                    'T1AirFactory',
+                },
+            }
+        }
+    },
+    Builder {
         BuilderName = 'SorianCDR T1 Land Factory Higher Pri',
         PlatoonTemplate = 'CommanderBuilderSorian',
-        Priority = 900,
+        Priority = 905,
         BuilderConditions = {                        
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Land' } },
@@ -141,6 +186,27 @@ BuilderGroup {
                 BuildClose = true,
                 BuildStructures = {
                     'T1LandFactory',
+                },
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'SorianCDR T1 Air Factory Higher Pri',
+        PlatoonTemplate = 'CommanderBuilderSorian',
+        Priority = 905,
+        BuilderConditions = {
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
+            { UCBC, 'FactoryCapCheck', { 'LocationType', 'Air' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'LAND FACTORY'}},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = true,
+                BuildStructures = {
+                    'T1AirFactory',
                 },
             }
         }
@@ -163,7 +229,7 @@ BuilderGroup {
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 1.0, 1.1} },
             { UCBC, 'UnitCapCheckLess', { .8 } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
-            { UCBC, 'FactoryRatioLessAtLocation', { 'LocationType', 'LAND', 'AIR' } },
+            #{ UCBC, 'FactoryRatioLessAtLocation', { 'LocationType', 'LAND', 'AIR' } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -204,7 +270,7 @@ BuilderGroup {
     Builder {        
         BuilderName = 'Sorian T1 Air Factory Builder Balance',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 905,
+        Priority = 906,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Air' } },

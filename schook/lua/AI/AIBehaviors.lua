@@ -131,7 +131,7 @@ function CDRRunAwaySorian( aiBrain, cdr )
 				if canTeleport then
                     runSpot = AIUtils.AIFindDefensiveAreaSorian( aiBrain, cdr, category, 10000, runShield )
                 else
-                    runSpot = AIUtils.AIFindDefensiveAreaSorian( aiBrain, cdr, category, 50, runShield )
+                    runSpot = AIUtils.AIFindDefensiveAreaSorian( aiBrain, cdr, category, 100, runShield )
                 end
                 if not prevSpot or runSpot[1] ~= prevSpot[1] or runSpot[3] ~= prevSpot[3] then
 					IssueClearCommands( {cdr} )
@@ -172,7 +172,7 @@ function CDRRunAwaySorian( aiBrain, cdr )
 end
 
 
-function CDROverChargeSorian( aiBrain, cdr )
+function CDROverChargeSorian( aiBrain, cdr, Mult )
     local weapBPs = cdr:GetBlueprint().Weapon
     local weapon
 
@@ -182,9 +182,9 @@ function CDROverChargeSorian( aiBrain, cdr )
             break
         end
     end
-    local distressRange = 95
+    local distressRange = 100
     local beingBuilt = false
-    local maxRadius = weapon.MaxRadius * 4.5
+    local maxRadius = weapon.MaxRadius * 4.5 * Mult
     cdr.UnitBeingBuiltBehavior = false
 	
     local cdrPos = cdr.CDRHome
@@ -208,7 +208,7 @@ function CDROverChargeSorian( aiBrain, cdr )
 	
     local overCharging = false
     
-    if Utilities.XZDistanceTwoVectors(cdrPos, cdr:GetPosition()) > distressRange then
+    if Utilities.XZDistanceTwoVectors(cdrPos, cdr:GetPosition()) > distressRange * Mult then
         return
     end
 	
@@ -239,7 +239,7 @@ function CDROverChargeSorian( aiBrain, cdr )
 		end
 	end
     
-    if (cdr:GetHealthPercent() > .85 and shieldPercent > .35) and (( totalUnits > 0 and numUnits1 < 10 and numUnits2 < 10 and numUnits3 < 5 and numUnits4 < 1 and numUnitsDF1 < 4 and numUnitsDF < 1 and numUnitsIF < 1) or ( not cdr.DistressCall and distressLoc and commanderResponse and Utilities.XZDistanceTwoVectors( distressLoc, cdrPos ) < distressRange )) then
+    if (cdr:GetHealthPercent() > .85 and shieldPercent > .35) and (( totalUnits > 0 and numUnits1 < 15 and numUnits2 < 10 and numUnits3 < 5 and numUnits4 < 1 and numUnitsDF1 < 4 and numUnitsDF < 1 and numUnitsIF < 1) or ( not cdr.DistressCall and distressLoc and commanderResponse and Utilities.XZDistanceTwoVectors( distressLoc, cdrPos ) < distressRange )) then
         CDRRevertPriorityChange( aiBrain, cdr )
         if cdr:GetUnitBeingBuilt() then
             #LOG('*AI DEBUG: ARMY ' .. aiBrain:GetArmyIndex() .. ': CDR was building something')
@@ -249,9 +249,9 @@ function CDROverChargeSorian( aiBrain, cdr )
         local plat = aiBrain:MakePlatoon( '', '' )
         aiBrain:AssignUnitsToPlatoon( plat, {cdr}, 'support', 'None' )
         plat:Stop()
-        local priList = { categories.EXPERIMENTAL, categories.TECH3 * categories.INDIRECTFIRE,
+        local priList = { categories.TECH3 * categories.INDIRECTFIRE,
             categories.TECH3 * categories.MOBILE, categories.TECH2 * categories.INDIRECTFIRE, categories.MOBILE * categories.TECH2,
-            categories.TECH1 * categories.INDIRECTFIRE, categories.TECH1 * categories.MOBILE, categories.ALLUNITS }
+            categories.TECH1 * categories.INDIRECTFIRE, categories.TECH1 * categories.MOBILE, categories.CONSTRUCTION * categories.STRUCTURE, categories.ECONOMIC * categories.STRUCTURE, categories.ALLUNITS }
         #LOG('*AI DEBUG: ARMY ' .. aiBrain.Nickname .. ': CDR AI ACTIVATE - Commander go fight stuff! -- ' .. totalUnits)
         local target
         local continueFighting = true
@@ -279,7 +279,9 @@ function CDROverChargeSorian( aiBrain, cdr )
                 if target then
                     local targetPos = target:GetPosition()
                     enemyThreat = aiBrain:GetThreatAtPosition( targetPos, 1, true, 'AntiSurface')
-                    if enemyThreat >= cdrThreat / 2 then
+					enemyCdrThreat = aiBrain:GetThreatAtPosition( targetPos, 1, true, 'Commander')
+					friendlyThreat = aiBrain:GetThreatAtPosition( targetPos, 1, true, 'AntiSurface', aiBrain:GetArmyIndex() )
+                    if enemyThreat - enemyCdrThreat >= friendlyThreat + (cdrThreat / 2) then
                         return
                     end
                     if aiBrain:GetEconomyStored('ENERGY') >= weapon.EnergyRequired and target and not target:IsDead() then
@@ -346,10 +348,10 @@ function CDROverChargeSorian( aiBrain, cdr )
     end
 end
 
-function CDRReturnHomeSorian(aiBrain, cdr)
+function CDRReturnHomeSorian(aiBrain, cdr, Mult)
     local loc, rad
     loc = cdr.CDRHome
-    rad = 100
+    rad = 100 * Mult
     # this is a reference... so it will autoupdate
     local cdrPos = cdr:GetPosition()
     local distSqAway = rad #1600
@@ -398,6 +400,28 @@ function CommanderBehaviorSorian(platoon)
     end
 end
 
+function CDRHideBehavior(aiBrain, cdr)
+	if cdr:IsIdleState() then
+		local category = false
+		local runShield = false
+		local nmaShield = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE, cdr:GetPosition(), 100, 'Ally' )
+		local nmaPD = aiBrain:GetNumUnitsAroundPoint( categories.DIRECTFIRE * categories.DEFENSE, cdr:GetPosition(), 100, 'Ally' )
+		local nmaAA = aiBrain:GetNumUnitsAroundPoint( categories.ANTIAIR * categories.DEFENSE, cdr:GetPosition(), 100, 'Ally' )
+		if nmaShield > 0 then
+			category = categories.SHIELD * categories.STRUCTURE
+			runShield = true
+		elseif nmaAA > 0 then
+			category = categories.DEFENSE * categories.ANTIAIR
+		elseif nmaPD > 0 then
+			category = categories.DEFENSE * categories.DIRECTFIRE
+		end
+		if category then
+			local baseLocation = AIUtils.AIFindDefensiveAreaSorian( aiBrain, cdr, category, 100, runShield )
+			IssueMove( {cdr}, baseLocation )
+		end
+	end
+end
+
 function CommanderThread(cdr, platoon)
     local aiBrain = cdr:GetAIBrain()
     
@@ -434,24 +458,40 @@ end
 
 function CommanderThreadSorian(cdr, platoon)
     local aiBrain = cdr:GetAIBrain()
+	Mult = platoon.PlatoonData.Mult or 1
+	Delay = platoon.PlatoonData.Delay or 0
     
     SetCDRHome(cdr, platoon)
     
 	aiBrain:BuildScoutLocations()
-	
+	moveOnNext = false
+	moveWait = 0
     while not cdr:IsDead() do
 		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Loop')
         WaitTicks(2)
         # Overcharge
-        if not cdr:IsDead() then CDROverChargeSorian( aiBrain, cdr ) end
+        if not cdr:IsDead() and GetGameTimeSeconds() > Delay then CDROverChargeSorian( aiBrain, cdr, Mult ) end
         WaitTicks(1)
         # Run away (not really useful right now, without teleport ability kicking in... might as well just go home)
         if not cdr:IsDead() then CDRRunAwaySorian( aiBrain, cdr ) end
         WaitTicks(1)
         # Go back to base
-        if not cdr:IsDead() then CDRReturnHomeSorian( aiBrain, cdr ) end
+        if not cdr:IsDead() then CDRReturnHomeSorian( aiBrain, cdr, Mult ) end
         WaitTicks(1)
-        
+        if not cdr:IsDead() and cdr:IsIdleState() and moveOnNext then 
+			CDRHideBehavior( aiBrain, cdr ) 
+			moveOnNext = false
+		end
+        WaitTicks(1)
+		if not cdr:IsDead() and cdr:IsIdleState() and not moveOnNext then 
+			moveWait = moveWait + 1
+			if moveWait >= 10 then
+				moveWait = 0
+				moveOnNext = true
+			end
+		end
+		WaitTicks(1)
+		
         #call platoon resume building deal...
         if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading") then
             if not cdr.EngineerBuildQueue or table.getn(cdr.EngineerBuildQueue) == 0 then
@@ -727,17 +767,22 @@ CzarBehaviorSorian = function(self)
     AssignExperimentalPrioritiesSorian(self)
     
     local targetUnit, targetBase = FindExperimentalTargetSorian(self)
-    local oldTargetUnit = nil
+    local oldTargetUnit, attackedUnit = nil
     while not experimental:IsDead() do
 
-        if targetUnit and targetUnit != oldTargetUnit then
+        if targetUnit and attackedUnit != targetUnit and VDist3( targetUnit:GetPosition(), experimental:GetPosition() ) < 100 then
             IssueClearCommands({experimental})
             WaitTicks(5)
             IssueAttack({experimental}, experimental:GetPosition())
             WaitTicks(5)
             IssueMove({experimental}, targetUnit:GetPosition())
-        end
-        
+			attackedUnit = targetUnit
+		elseif targetUnit and oldTargetUnit != targetUnit then
+		    IssueClearCommands({experimental})
+            WaitTicks(5)
+			IssueMove({experimental}, targetUnit:GetPosition())
+			attackedUnit = nil
+        end        
         
         local nearCommander = CommanderOverrideCheck(self)
         local oldCommander = nil
@@ -750,6 +795,7 @@ CzarBehaviorSorian = function(self)
                 WaitTicks(5)
                 IssueMove({experimental}, nearCommander:GetPosition())
                 targetUnit = nearCommander
+				attackedUnit = nil
             end
             
             WaitSeconds(1)

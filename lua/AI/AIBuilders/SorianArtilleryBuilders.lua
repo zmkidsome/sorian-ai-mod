@@ -42,6 +42,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
                 BuildStructures = {
@@ -66,6 +67,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
                 BuildStructures = {
@@ -110,6 +112,7 @@ BuilderGroup {
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.STRUCTURE}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {30, 1000}},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -118,6 +121,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
                 BuildStructures = {
@@ -189,12 +193,14 @@ BuilderGroup {
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.NUKE * categories.STRUCTURE * categories.TECH3}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.NUKE * categories.STRUCTURE}},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {22, 1000}},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
+			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
                 BuildStructures = {
@@ -218,6 +224,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
                 BuildStructures = {

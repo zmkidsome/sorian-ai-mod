@@ -4,6 +4,58 @@ oldAIBrain = AIBrain
 
 AIBrain = Class(oldAIBrain) {
 
+    InitializeSkirmishSystems = function(self)
+    
+        # Make sure we don't do anything for the human player!!!
+        if self.BrainType == 'Human' then
+            return
+        end
+    
+        #TURNING OFF AI POOL PLATOON, I MAY JUST REMOVE THAT PLATOON FUNCTIONALITY LATER
+        local poolPlatoon = self:GetPlatoonUniquelyNamed('ArmyPool')
+        if poolPlatoon then
+            poolPlatoon:TurnOffPoolAI()
+        end
+
+        # Stores handles to all builders for quick iteration and updates to all
+        self.BuilderHandles = {}
+
+        # Condition monitor for the whole brain
+        self.ConditionsMonitor = BrainConditionsMonitor.CreateConditionsMonitor(self)
+
+        # Economy monitor for new skirmish - stores out econ over time to get trend over 10 seconds
+        self.EconomyData = {}
+        self.EconomyTicksMonitor = 50
+        self.EconomyCurrentTick = 1
+        self.EconomyMonitorThread = self:ForkThread(self.EconomyMonitor)
+        self.LowEnergyMode = false
+
+        # Add default main location and setup the builder managers
+        self.NumBases = 1
+
+        self.BuilderManagers = {}
+        
+        self:AddBuilderManagers(self:GetStartVector3f(), 100, 'MAIN', false)
+        #self.BuilderManagers.MAIN.StrategyManager = StratManager.CreateStrategyManager(self, 'MAIN', self:GetStartVector3f(), 100)
+
+        # Begin the base monitor process
+		local per = ScenarioInfo.ArmySetup[self.Brain.Name].AIPersonality
+		
+		if per == 'sorian' or per == 'sorianrush' then
+			local spec = {
+				DefaultDistressRange = 200,
+			}
+			self:BaseMonitorInitialization(spec)
+		else		
+			self:BaseMonitorInitialization()
+		end
+        local plat = self:GetPlatoonUniquelyNamed('ArmyPool')
+        
+        plat:ForkThread( plat.BaseManagersDistressAI )
+        
+        self.EnemyPickerThread = self:ForkThread( self.PickEnemy )
+    end,
+
     PickEnemy = function(self)
         while true do
             self:PickEnemyLogic(true)
@@ -87,19 +139,65 @@ AIBrain = Class(oldAIBrain) {
             end
         end
     end,
+	
+    UnderEnergyThresholdSorian = function(self)
+        self:SetupOverEnergyStatTriggerSorian(0.2)
+        #for k,v in self.BuilderManagers do
+        #   v.EngineerManager:LowEnergySorian()
+        #end
+		self.LowEnergyMode = true
+    end,
+
+    OverEnergyThresholdSorian = function(self)
+        self:SetupUnderEnergyStatTriggerSorian(0.1)
+        #for k,v in self.BuilderManagers do
+        #    v.EngineerManager:RestoreEnergySorian()
+        #end
+		self.LowEnergyMode = false
+    end,
 
     UnderMassThresholdSorian = function(self)
-        self:SetupOverMassStatTrigger(0.1)
+        self:SetupOverMassStatTriggerSorian(0.2)
+        #for k,v in self.BuilderManagers do
+        #    v.EngineerManager:LowMassSorian()
+        #end
 		self.LowMassMode = true
     end,
 
     OverMassThresholdSorian = function(self)
-        self:SetupUnderMassStatTrigger(0.1)
-		self.LowMassMode = true
+        self:SetupUnderMassStatTriggerSorian(0.1)
+        #for k,v in self.BuilderManagers do
+        #    v.EngineerManager:RestoreMassSorian()
+        #end
+		self.LowMassMode = false
+    end,
+	
+    SetupUnderEnergyStatTriggerSorian = function(self, threshold)
+        import('/lua/scenariotriggers.lua').CreateArmyStatTrigger( self.UnderEnergyThresholdSorian, self, 'SkirmishUnderEnergyThresholdSorian',
+            {
+                {
+                    StatType = 'Economy_Ratio_Energy',
+                    CompareType = 'LessThanOrEqual',
+                    Value = threshold,
+                },
+            }
+        )
+    end,
+
+    SetupOverEnergyStatTriggerSorian = function(self, threshold)
+        import('/lua/scenariotriggers.lua').CreateArmyStatTrigger( self.OverEnergyThresholdSorian, self, 'SkirmishOverEnergyThresholdSorian',
+            {
+                {
+                    StatType = 'Economy_Ratio_Energy',
+                    CompareType = 'GreaterThanOrEqual',
+                    Value = threshold,
+                },
+            }
+        )
     end,
 
     SetupUnderMassStatTriggerSorian = function(self, threshold)
-        import('/lua/scenariotriggers.lua').CreateArmyStatTrigger( self.UnderMassThresholdSorian, self, 'SkirmishUnderMassThreshold',
+        import('/lua/scenariotriggers.lua').CreateArmyStatTrigger( self.UnderMassThresholdSorian, self, 'SkirmishUnderMassThresholdSorian',
             {
                 {
                     StatType = 'Economy_Ratio_Mass',
@@ -111,7 +209,7 @@ AIBrain = Class(oldAIBrain) {
     end,
 
     SetupOverMassStatTriggerSorian = function(self, threshold)
-        import('/lua/scenariotriggers.lua').CreateArmyStatTrigger( self.OverMassThresholdSorian, self, 'SkirmishOverMassThreshold',
+        import('/lua/scenariotriggers.lua').CreateArmyStatTrigger( self.OverMassThresholdSorian, self, 'SkirmishOverMassThresholdSorian',
             {
                 {
                     StatType = 'Economy_Ratio_Mass',

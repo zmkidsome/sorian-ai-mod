@@ -16,9 +16,10 @@ Platoon = Class(sorianoldPlatoon) {
 	    end
         local ID = experimental:GetUnitId()
         
-        if ID == 'uel0401' then
-            return behaviors.FatBoyBehaviorSorian(self)
-        elseif ID == 'uaa0310' then
+        #if ID == 'uel0401' then
+        #    return behaviors.FatBoyBehaviorSorian(self)
+        #elseif ID == 'uaa0310' then
+		if ID == 'uaa0310' then
             return behaviors.CzarBehaviorSorian(self)
         elseif ID == 'xsa0402' then
             return behaviors.AhwassaBehaviorSorian(self)
@@ -27,6 +28,137 @@ Platoon = Class(sorianoldPlatoon) {
         end
         
         return behaviors.BehemothBehaviorSorian(self)
+    end,
+	
+    DistressResponseAI = function(self)
+        local aiBrain = self:GetBrain()
+        while aiBrain:PlatoonExists(self) do
+            # In the loop so they may be changed by other platoon things
+            local distressRange = self.PlatoonData.DistressRange or aiBrain.BaseMonitor.DefaultDistressRange
+            local reactionTime = self.PlatoonData.DistressReactionTime or aiBrain.BaseMonitor.PlatoonDefaultReactionTime
+            local threatThreshold = self.PlatoonData.ThreatSupport or 1
+            local platoonPos = self:GetPlatoonPosition()
+			local transporting = false
+			units = self:GetPlatoonUnits()
+			for k, v in units do
+				if not v:IsDead() and v:IsUnitState( 'Attached' ) then
+					transporting = true
+				end
+				if transporting then break end
+			end
+            if platoonPos and not self.DistressCall and not transporting then
+                # Find a distress location within the platoons range
+                local distressLocation = aiBrain:BaseMonitorDistressLocation(platoonPos, distressRange, threatThreshold)
+                local moveLocation
+                
+                # We found a location within our range! Activate!
+                if distressLocation then
+                    #LOG('*AI DEBUG: ARMY '.. aiBrain:GetArmyIndex() ..': --- DISTRESS RESPONSE AI ACTIVATION ---')
+                    
+                    # Backups old ai plan
+                    local oldPlan = self:GetPlan()
+                    if self.AIThread then
+                        self.AIThread:Destroy()
+                    end
+                    
+                    # Continue to position until the distress call wanes
+                    repeat
+                        moveLocation = distressLocation
+                        self:Stop()
+                        local cmd = self:AggressiveMoveToLocation( distressLocation )
+						local poscheck = self:GetPlatoonPosition()
+						local prevpos = poscheck
+						local poscounter = 0
+						local breakResponse = false
+                        repeat
+                            WaitSeconds(reactionTime)
+                            if not aiBrain:PlatoonExists(self) then
+                                return
+                            end
+							poscheck = self:GetPlatoonPosition()
+							if VDist3(poscheck, prevpos) < 10 then
+								poscounter = poscounter + 1
+								if poscounter >= 4 then
+									breakResponse = true
+									poscounter = 0
+								end
+							elseif not SUtils.CanRespondEffectively(aiBrain, distressLocation, self) then
+								breakResponse = true
+								poscounter = 0
+							else
+								prevpos = poscheck
+								poscounter = 0
+							end
+                        until not self:IsCommandsActive(cmd) or breakResponse or aiBrain:GetThreatAtPosition(moveLocation, 0, true, 'Overall') <= threatThreshold
+                        
+                        
+                        platoonPos = self:GetPlatoonPosition()
+                        if platoonPos then
+                            # Now that we have helped the first location, see if any other location needs the help
+                            distressLocation = aiBrain:BaseMonitorDistressLocation(platoonPos, distressRange)
+                            if distressLocation then
+                                self:AggressiveMoveToLocation( distressLocation )
+                            end
+                        end
+                    # If no more calls or we are at the location; break out of the function
+                    until not distressLocation or not SUtils.CanRespondEffectively(aiBrain, distressLocation, self) or ( distressLocation[1] == moveLocation[1] and distressLocation[3] == moveLocation[3] )
+                    
+                    #LOG('*AI DEBUG: '..aiBrain.Name..' DISTRESS RESPONSE AI DEACTIVATION - oldPlan: '..oldPlan)
+					if not oldPlan then
+						units = self:GetPlatoonUnits()
+						for k, v in units do
+							if not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.EXPERIMENTAL, v) then
+								oldPlan = 'ExperimentalAIHubSorian'
+							elseif not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.LAND - categories.EXPERIMENTAL, v) then
+								oldPlan = 'AttackForceAI'
+							elseif not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.AIR - categories.EXPERIMENTAL, v) then
+								oldPlan = 'HuntAI'
+							end
+							if oldPlan then break end
+						end
+					end
+                    self:SetAIPlan(oldPlan)
+                end
+            end
+            WaitSeconds(11)
+        end
+    end,
+	
+    PoolDistressAI = function(self)
+        local aiBrain = self:GetBrain()
+        local distressRange = aiBrain.BaseMonitor.PoolDistressRange
+        local reactionTime = aiBrain.BaseMonitor.PoolReactionTime
+        while aiBrain:PlatoonExists(self) do
+            local platoonUnits = self:GetPlatoonUnits()
+            if aiBrain:PBMHasPlatoonList() then
+                for locNum, locData in aiBrain.PBM.Locations do
+                    if not locData.DistressCall then
+                        local distressLocation = aiBrain:BaseMonitorDistressLocation( locData.Location, aiBrain.BaseMonitor.PoolDistressRange, aiBrain.BaseMonitor.PoolDistressThreshold )
+                        local moveLocation
+                        if distressLocation then
+                            #LOG('*AI DEBUG: ARMY '.. aiBrain:GetArmyIndex() ..': --- POOL DISTRESS RESPONSE ---')
+                            local group = {}
+                            for k,v in platoonUnits do
+                                vPos = table.copy(v:GetPosition())
+                                if VDist2( vPos[1], vPos[3], locData.Location[1], locData.Location[3] ) < locData.Radius and not EntityCategoryContains(categories.ENGINEER, v) and not EntityCategoryContains(categories.TRANSPORTATION - categories.uea0203, v) and not EntityCategoryContains(categories.daa0206, v) and not EntityCategoryContains(categories.urs0305 + categories.uas0305 + categories.ues0305, v) then
+                                    table.insert(group, v)
+                                end
+                            end
+                            IssueClearCommands( group )
+                            if distressLocation[1] <= 0 or distressLocation[3] <= 0 or distressLocation[1] >= ScenarioInfo.size[1] or
+                                    distressLocation[3] >= ScenarioInfo.size[2] then
+                                #LOG('*AI DEBUG: POOLDISTRESSAI SENDING UNITS TO WRONG LOCATION')
+                            end
+                            IssueAggressiveMove( group, distressLocation )
+                            IssueMove( group, aiBrain:PBMGetLocationCoords( locData.LocationType ) )
+                            locData.DistressCall = true
+                            self:ForkThread( self.UnlockPBMDistressLocation, locData )
+                        end
+                    end
+                end
+            end
+            WaitSeconds( aiBrain.BaseMonitor.PoolReactionTime )
+        end
     end,
 
     ArtilleryAISorian = function(self)
@@ -96,8 +228,10 @@ Platoon = Class(sorianoldPlatoon) {
         unit:SetAutoMode(true)
         #local atkPri = { 'COMMAND', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE', 'CONSTRUCTION', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MOBILE LAND',
         #    'TECH2 MOBILE LAND', 'TECH1 MOBILE LAND', 'ALLUNITS' }
-        self:SetPrioritizedTargetList( 'Attack', { categories.COMMAND, categories.CONSTRUCTION, categories.STRUCTURE * categories.DEFENSE,
-            categories.EXPERIMENTAL * categories.MOBILE, categories.TECH3 * categories.MOBILE, categories.TECH2 * categories.MOBILE,
+        self:SetPrioritizedTargetList( 'Attack', { categories.COMMAND, categories.STRUCTURE * categories.STRATEGIC * categories.TECH3, categories.STRUCTURE * categories.STRATEGIC * categories.TECH2, categories.STRUCTURE * categories.DEFENSE * categories.TECH3,
+            categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.DEFENSE * categories.TECH1, categories.STRUCTURE * categories.CONSTRUCTION * categories.TECH3, categories.STRUCTURE * categories.CONSTRUCTION * categories.TECH2,
+			categories.STRUCTURE * categories.CONSTRUCTION * categories.TECH1, categories.EXPERIMENTAL * categories.MOBILE, categories.STRUCTURE * categories.ECONOMIC * categories.TECH3,
+			categories.STRUCTURE * categories.ECONOMIC * categories.TECH2, categories.STRUCTURE * categories.ECONOMIC * categories.TECH1, categories.TECH3 * categories.MOBILE, categories.TECH2 * categories.MOBILE,
             categories.TECH1 * categories.MOBILE, categories.ALLUNITS } )
         while aiBrain:PlatoonExists(self) do
             local target = false
@@ -333,10 +467,11 @@ Platoon = Class(sorianoldPlatoon) {
             self.LastMarker[1] = bestMarker.Position
             #LOG("GuardMarker: Attacking " .. bestMarker.Name)
             local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, self.MovementLayer, self:GetPlatoonPosition(), bestMarker.Position, 200)
+			local success, bestGoalPos = AIAttackUtils.CheckPlatoonPathingEx(self, bestMarker.Position)
             IssueClearCommands(self:GetPlatoonUnits())
             if path then
 				local position = self:GetPlatoonPosition()
-				if VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 512 then
+				if not success or VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 512 then
 					usedTransports = AIAttackUtils.SendPlatoonWithTransports(aiBrain, self, bestMarker.Position, true)
 				elseif VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 256 then
 					usedTransports = AIAttackUtils.SendPlatoonWithTransports(aiBrain, self, bestMarker.Position, false)
@@ -358,7 +493,7 @@ Platoon = Class(sorianoldPlatoon) {
                 return
             end
 			
-			if not path and not usedTransports then
+			if (not path or not success) and not usedTransports then
                 self:PlatoonDisband()
                 return
 			end
@@ -374,9 +509,20 @@ Platoon = Class(sorianoldPlatoon) {
             end
             
             # wait till we get there
+			local oldPlatPos = self:GetPlatoonPosition()
+			local StuckCount = 0
             repeat
                 WaitSeconds(5)    
-                platLoc = self:GetPlatoonPosition() 
+                platLoc = self:GetPlatoonPosition()
+				if VDist3(oldPlatPos, platLoc) < 1 then
+					StuckCount = StuckCount + 1
+				else
+					StuckCount = 0
+				end
+				if StuckCount > 5 then
+					return self:GuardMarker()
+				end
+				oldPlatPos = platLoc
             until VDist2Sq(platLoc[1], platLoc[3], bestMarker.Position[1], bestMarker.Position[3]) < 64 or not aiBrain:PlatoonExists(self)
             
             # if we're supposed to guard for some time
@@ -442,15 +588,15 @@ Platoon = Class(sorianoldPlatoon) {
             basePosition = aiBrain:FindClosestBuilderManagerPosition(self:GetPlatoonPosition())
         end
         
-        local guardRadius = self.PlatoonData.GuardRadius or 75
+        local guardRadius = self.PlatoonData.GuardRadius or 200
         
         while aiBrain:PlatoonExists(self) do
             if self:IsOpponentAIRunning() then
                 target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL)
-                if target and not target:IsDead() and VDist3( target:GetPosition(), self:GetPlatoonPosition() ) then
+                if target and not target:IsDead() and VDist3( target:GetPosition(), self:GetPlatoonPosition() ) < guardRadius then
                     self:Stop()
                     self:AggressiveMoveToLocation( target:GetPosition() )
-                else
+                elseif VDist3( basePosition, self:GetPlatoonPosition() ) > guardRadius then
 					local position = AIUtils.RandomLocation(basePosition[1],basePosition[3])
                     self:Stop()
                     self:MoveToLocation( position, false )
@@ -1177,7 +1323,7 @@ Platoon = Class(sorianoldPlatoon) {
         end
 
         if not eng:IsUnitState('Building') then
-            return self.ProcessBuildCommand(eng, false)
+            return self.ProcessBuildCommandSorian(eng, false)
         end
     end,
 	

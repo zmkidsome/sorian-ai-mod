@@ -21,7 +21,7 @@ BaseBuilderTemplate {
         'SorianT2EngineerBuilders',
         'SorianT3EngineerBuilders',
         'SorianEngineerFactoryConstruction',
-        'SorianLandInitialFactoryConstruction',
+        'SorianEngineerFactoryConstruction Balance',
         
         # Build Mass low pri at this base
         'SorianEngineerMassBuildersLowerPri',
@@ -44,6 +44,7 @@ BaseBuilderTemplate {
         'SorianT2MissileDefenses',
         'SorianT3NukeDefenses',
         'SorianT3NukeDefenseBehaviors',
+		'SorianT2ShieldsExpansion',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
@@ -105,7 +106,7 @@ BaseBuilderTemplate {
             SCU = 2,
         },
         FactoryCount = {
-            Land = 4,
+            Land = 3,
             Air = 2,
             Sea = 0,
             Gate = 1,
@@ -122,20 +123,20 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if not personality == 'sorian' and not personality == 'sorianrush' then
+        if not personality == 'sorian' then
             return 0
         end
 
         local threatCutoff = 10 # value of overall threat that determines where enemy bases are
         local distance = import('/lua/ai/AIUtilities.lua').GetThreatDistance( aiBrain, location, threatCutoff )
         if not distance or distance > 1000 then
-            return 51
+            return 50
         elseif distance > 500 then
-            return 76
+            return 75
         elseif distance > 250 then
-            return 101
+            return 100
         else # within 250
-            return 26
+            return 25
         end
         
         return 0

@@ -65,8 +65,6 @@ BuilderGroup {
 					'T1AADefense',
                     'T1LandFactory',
 					'T1Radar',
-                    'T1GroundDefense',                    
-					'T1AADefense',					
                 }               
             },
             NeedGuard = true,
@@ -77,7 +75,7 @@ BuilderGroup {
         BuilderName = 'Sorian T1VacantStartingAreaEngineer',
         PlatoonTemplate = 'EngineerBuilderSorian',
         Priority = 932,
-        InstanceCount = 1,
+        InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 100, 0, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -105,8 +103,6 @@ BuilderGroup {
 					'T1AADefense',
                     'T1LandFactory',
 					'T1Radar',
-                    'T1GroundDefense',                    
-					'T1AADefense',					
                 }
             },
             NeedGuard = true,
@@ -144,12 +140,7 @@ BuilderGroup {
                     'T2GroundDefense',                    
                     'T1LandFactory',
 					'T2AADefense',
-                    'T2GroundDefense',
 					'T2Radar',
-                    'T1LandFactory',  
-                    'T2GroundDefense',                    
-					'T2AADefense',
-					'T2ShieldDefense',					
                 }
             },
             NeedGuard = true,
@@ -159,7 +150,7 @@ BuilderGroup {
         BuilderName = 'Sorian T3VacantStartingAreaEngineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 922,
-        InstanceCount = 1,
+        InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -187,12 +178,7 @@ BuilderGroup {
                     'T2GroundDefense',                    
                     'T1LandFactory',
 					'T3AADefense',
-					'T2Radar',
-                    'T2GroundDefense',
-                    'T1LandFactory',  
-                    'T2GroundDefense',                    
-					'T3AADefense',
-					'T2ShieldDefense',					
+					'T2Radar',				
                 }
             },
             NeedGuard = true,
@@ -240,8 +226,6 @@ BuilderGroup {
 					'T1AADefense',
                     'T1LandFactory',  
 					'T1Radar',
-                    'T1GroundDefense',                    
-					'T1AADefense',					
                 }
             },
             NeedGuard = true,
@@ -271,8 +255,7 @@ BuilderGroup {
                 ThreatMax = 0,
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
-                BuildStructures = {                    
-                		#'T1Radar',
+                BuildStructures = {
                     'T1GroundDefense',                    
                     'T1GroundDefense',
 					'T1AADefense',
@@ -312,10 +295,7 @@ BuilderGroup {
                     'T2GroundDefense',
                     'T2AADefense',
 					'T1LandFactory',
-					'T2Radar',
-                    'T2GroundDefense',
-					'T2AADefense',
-					'T2ShieldDefense',					
+					'T2Radar',				
                 }
             },
             NeedGuard = true,
@@ -351,10 +331,7 @@ BuilderGroup {
                     'T2GroundDefense',
 					'T3AADefense',
 					'T1LandFactory',
-					'T2Radar',
-                    'T2GroundDefense',
-                    'T3AADefense',
-					'T2ShieldDefense',					
+					'T2Radar',				
                 }
             },
             NeedGuard = true,
