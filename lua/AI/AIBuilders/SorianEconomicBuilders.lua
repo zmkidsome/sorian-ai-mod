@@ -37,6 +37,20 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 4, 'ENGINEER TECH1' }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH3' }},
+			{ SBC, 'MapGreaterThan', {1000, 1000} },
+            { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'ENGINEER TECH1' } },
+            { UCBC, 'EngineerCapCheck', { 'LocationType', 'Tech1' } },
+        },
+        BuilderType = 'All',
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Engineer Disband - Init Small',
+        PlatoonTemplate = 'T1BuildEngineer',
+        Priority = 900,
+        BuilderConditions = {
+            { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH1' }},
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH3' }},
+			{ SBC, 'MapLessThan', {1000, 1000} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'ENGINEER TECH1' } },
             { UCBC, 'EngineerCapCheck', { 'LocationType', 'Tech1' } },
         },
@@ -49,6 +63,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 6, 'ENGINEER TECH1' }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH3' }},
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MOBILE LAND DIRECTFIRE' } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'ENGINEER TECH1' } },
             { UCBC, 'EngineerCapCheck', { 'LocationType', 'Tech1' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -339,7 +354,7 @@ BuilderGroup {
         PlatoonTemplate = 'CommanderBuilderSorian',
         Priority = 875,
         BuilderConditions = {            
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 0.5 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.5 }},
             { EBC, 'LessThanEconEfficiencyOverTime', { 2.0, 1.3 }},
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, 'ENGINEER TECH2, ENGINEER TECH3' } },
         },
@@ -1696,7 +1711,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Power Engineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 1100,
+        Priority = 950,
         BuilderConditions = {
 			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'TECH3 ENGINEER' }},
@@ -1715,7 +1730,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Power Engineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 1200,
+        Priority = 1000,
         BuilderType = 'Any',
         BuilderConditions = {
 			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
