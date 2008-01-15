@@ -22,6 +22,7 @@ local SAI = '/lua/ScenarioPlatoonAI.lua'
 local TBC = '/lua/editor/ThreatBuildConditions.lua'
 local IBC = '/lua/editor/InstantBuildConditions.lua'
 local PlatoonFile = '/lua/platoon.lua'
+local SBC = '/lua/editor/SorianBuildConditions.lua'
 
 BuilderGroup {
     BuilderGroupName = 'SorianAirScoutFactoryBuilders',
@@ -154,7 +155,23 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.FACTORY - categories.TECH1 }},
 			{ MIBC, 'LessThanGameTime', { 300 } },
+			{ SBC, 'MapGreaterThan', {500, 500} },
             { UCBC, 'HaveLessThanUnitsWithCategory', { 3, categories.LAND * categories.SCOUT }},
+            #{ UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.SCOUT * categories.LAND } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+        },
+        BuilderType = 'Land',
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Land Scout Initial - Small Map',
+        PlatoonTemplate = 'T1LandScout',
+        Priority = 875,
+        BuilderConditions = {
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.FACTORY - categories.TECH1 }},
+			{ MIBC, 'LessThanGameTime', { 300 } },
+			{ SBC, 'MapLessThan', {500, 500} },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.LAND * categories.SCOUT }},
             #{ UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.SCOUT * categories.LAND } },
             { IBC, 'BrainNotLowPowerMode', {} },
             #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -438,6 +455,7 @@ BuilderGroup {
         BuilderName = 'Sorian T1 Radar Upgrade Expansion',
         PlatoonTemplate = 'T1RadarUpgrade',
         Priority = 200,
+		InstanceCount = 1,
         BuilderConditions = {
             { EBC, 'GreaterThanEconIncome',  { 4, 100 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
