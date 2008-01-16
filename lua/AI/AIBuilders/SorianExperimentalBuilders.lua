@@ -22,6 +22,7 @@ local SAI = '/lua/ScenarioPlatoonAI.lua'
 local IBC = '/lua/editor/InstantBuildConditions.lua'
 local TBC = '/lua/editor/ThreatBuildConditions.lua'
 local PlatoonFile = '/lua/platoon.lua'
+local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
 local SBC = '/lua/editor/SorianBuildConditions.lua'
 
 local AIAddBuilderTable = import('/lua/ai/AIAddBuilderTable.lua')
@@ -37,7 +38,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
-            { SBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Any',
@@ -62,7 +63,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
-            { SBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Any',
@@ -87,7 +88,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
-            { SBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Any',
@@ -280,7 +281,7 @@ BuilderGroup {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENGINEER * categories.TECH3}},
             { MABC, 'MarkerLessThanDistance',  { 'Naval Area', 400}},
-            { SBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -374,7 +375,7 @@ BuilderGroup {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.ORBITALSYSTEM }},
-            { SBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Any',
