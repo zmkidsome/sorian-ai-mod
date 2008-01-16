@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.4d:* Fix for Attackforces returning to base just outside of enemy base, new economy controls are now instant build conditions, small changes to commander behavior, AI will now try to protect power generators with shields, base guards wont be used if there are sufficient base defenses.
+
 *0.9.4c:* Fix for AI not upgrading factories, other small balance changes.
 
 *0.9.4b:* Fix for Sorian Rush initial build order on small maps.
