@@ -530,7 +530,7 @@ BuilderGroup {
     BuildersType = 'PlatoonFormBuilder',
     Builder {
         BuilderName = 'Sorian Unit Cap Default Land Attack',
-        PlatoonTemplate = 'LandAttack',
+        PlatoonTemplate = 'LandAttackSorian',
         Priority = 1,
         InstanceCount = 10,
         BuilderType = 'Any',
@@ -555,7 +555,7 @@ BuilderGroup {
     BuildersType = 'PlatoonFormBuilder',
     Builder {
         BuilderName = 'Sorian Frequent Land Attack T1',
-        PlatoonTemplate = 'LandAttackMedium',
+        PlatoonTemplate = 'LandAttackMediumSorian',
         Priority = 1,
         InstanceCount = 12,
         BuilderType = 'Any',
@@ -572,7 +572,7 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian Frequent Land Attack T2',
-        PlatoonTemplate = 'LandAttackMedium',
+        PlatoonTemplate = 'LandAttackMediumSorian',
         Priority = 1,
         InstanceCount = 13,
         BuilderType = 'Any',
@@ -590,7 +590,7 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian Frequent Land Attack T3',
-        PlatoonTemplate = 'LandAttackMedium',
+        PlatoonTemplate = 'LandAttackMediumSorian',
         Priority = 1,
         InstanceCount = 13,
         BuilderType = 'Any',
@@ -714,6 +714,7 @@ BuilderGroup {
                 #{ UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },     
         		#{ MIBC, 'LessThanGameTime', { 720 } },  	
                 #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.MOBILE * categories.LAND - categories.ENGINEER } },
+				{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 4, categories.STRUCTURE * categories.DEFENSE - categories.TECH1 } },
             },
         BuilderData = {
             LocationType = 'LocationType',

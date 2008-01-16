@@ -195,7 +195,7 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
 	local numStructs = aiBrain:GetNumUnitsAroundPoint( categories.STRUCTURE, cdrPos, maxRadius, 'Enemy' )
 	local numUnitsDF = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.STRUCTURE * categories.DIRECTFIRE - categories.TECH1, cdrPos, maxRadius + 50, 'Enemy' )
 	local numUnitsDF1 = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.STRUCTURE * categories.DIRECTFIRE * categories.TECH1, cdrPos, maxRadius + 30, 'Enemy' )
-	local numUnitsIF = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.STRUCTURE * categories.INDIRECTFIRE - categories.TECH1, cdrPos, maxRadius + 130, 'Enemy' )
+	local numUnitsIF = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.STRUCTURE * categories.INDIRECTFIRE - categories.TECH1, cdrPos, maxRadius + 260, 'Enemy' )
 	local totalUnits = numUnits1 + numUnits2 + numUnits3 + numUnits4 + numStructs
     local distressLoc = aiBrain:BaseMonitorDistressLocation(cdrPos)
 	if (cdr:HasEnhancement( 'Shield' ) or cdr:HasEnhancement( 'ShieldGeneratorField' ) or cdr:HasEnhancement( 'ShieldHeavy' )) and cdr:ShieldIsOn() then
@@ -231,7 +231,7 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
 		elseif distressUnitsexp > 0 then
 			commanderResponse = false
 			#LOG('*AI DEBUG: AIBehavior Experimental In Range!')
-		elseif numUnits1 > 9 or numUnits2 > 9 or numUnits3 > 4 or numUnits4 > 0 or numUnitsDF > 0 or numUnitsIF > 0 or numUnitsDF1 > 3 then
+		elseif numUnits1 > 9 or numUnits2 > 9 or numUnits3 > 4 or numUnits4 > 0 or numUnitsDF > 0 or numUnitsIF > 0 or numUnitsDF1 > 2 then
 			commanderResponse = false
 		else
 			commanderResponse = true
@@ -239,7 +239,7 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
 		end
 	end
     
-    if (cdr:GetHealthPercent() > .85 and shieldPercent > .35) and (( totalUnits > 0 and numUnits1 < 15 and numUnits2 < 10 and numUnits3 < 5 and numUnits4 < 1 and numUnitsDF1 < 4 and numUnitsDF < 1 and numUnitsIF < 1) or ( not cdr.DistressCall and distressLoc and commanderResponse and Utilities.XZDistanceTwoVectors( distressLoc, cdrPos ) < distressRange )) then
+    if (cdr:GetHealthPercent() > .85 and shieldPercent > .35) and (( totalUnits > 0 and numUnits1 < 15 and numUnits2 < 10 and numUnits3 < 5 and numUnits4 < 1 and numUnitsDF1 < 3 and numUnitsDF < 1 and numUnitsIF < 1) or ( not cdr.DistressCall and distressLoc and commanderResponse and Utilities.XZDistanceTwoVectors( distressLoc, cdrPos ) < distressRange )) then
         CDRRevertPriorityChange( aiBrain, cdr )
         if cdr:GetUnitBeingBuilt() then
             #LOG('*AI DEBUG: ARMY ' .. aiBrain:GetArmyIndex() .. ': CDR was building something')
@@ -298,7 +298,9 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
                     end
                 elseif distressLoc then
                     enemyThreat = aiBrain:GetThreatAtPosition( distressLoc, 1, true, 'AntiSurface')
-                    if enemyThreat >= cdrThreat / 2 then
+					enemyCdrThreat = aiBrain:GetThreatAtPosition( distressLoc, 1, true, 'Commander')
+					friendlyThreat = aiBrain:GetThreatAtPosition( distressLoc, 1, true, 'AntiSurface', aiBrain:GetArmyIndex() )
+                    if enemyThreat - enemyCdrThreat >= friendlyThreat + (cdrThreat / 2) then
                         return
                     end                
                     if distressLoc and ( Utilities.XZDistanceTwoVectors( distressLoc, cdrPos ) < distressRange ) then
@@ -342,6 +344,9 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
         #LOG("*AI DEBUG: " .. aiBrain.Nickname .. " done overcharging")
 		cdr.Fighting = false
         IssueClearCommands( {cdr} )
+        if overCharging then
+			IssueMove( {cdr}, cdr.CDRHome )
+        end
 		if cdr.UnitBeingBuiltBehavior then
 			cdr:ForkThread( CDRFinishUnit )
 		end

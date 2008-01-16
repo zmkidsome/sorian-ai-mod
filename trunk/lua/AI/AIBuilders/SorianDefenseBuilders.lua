@@ -935,7 +935,7 @@ BuilderGroup {
         BuilderData = {
             NumAssistees = 2,
             Construction = {
-                AdjacencyCategory = 'FACTORY',
+                AdjacencyCategory = 'FACTORY, ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3',
                 AdjacencyDistance = 100,
                 BuildClose = false,
                 BuildStructures = {
@@ -966,7 +966,7 @@ BuilderGroup {
         BuilderData = {
             NumAssistees = 2,
             Construction = {
-                AdjacencyCategory = 'FACTORY',
+                AdjacencyCategory = 'FACTORY, ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3',
                 AdjacencyDistance = 100,
                 BuildClose = false,
                 BuildStructures = {
@@ -1068,7 +1068,7 @@ BuilderGroup {
         BuilderData = {
             NumAssistees = 2,
             Construction = {
-                AdjacencyCategory = 'FACTORY',
+                AdjacencyCategory = 'FACTORY, ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3',
                 AdjacencyDistance = 100,
                 BuildClose = false,
                 BuildStructures = {
@@ -1095,7 +1095,7 @@ BuilderGroup {
         BuilderData = {
             NumAssistees = 2,
             Construction = {
-                AdjacencyCategory = 'FACTORY',
+                AdjacencyCategory = 'FACTORY, ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3',
                 AdjacencyDistance = 100,
                 BuildClose = false,
                 BuildStructures = {

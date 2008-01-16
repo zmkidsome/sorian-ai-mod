@@ -1,4 +1,27 @@
 PlatoonTemplate {
+    Name = 'LandAttackSorian',
+    Plan = 'AttackForceAISorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 1, 25, 'Attack', 'none' }
+    },
+}
+
+PlatoonTemplate {
+    Name = 'LandAttackMediumSorian',
+    Plan = 'AttackForceAISorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 25, 50, 'Attack', 'none' }
+    },
+}
+PlatoonTemplate {
+    Name = 'LandAttackLargeSorian',
+    Plan = 'AttackForceAISorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 50, 100, 'Attack', 'none' }
+    },
+}
+
+PlatoonTemplate {
     Name = 'BaseGuardSmallSorian',
     Plan = 'GuardBaseSorian',
     GlobalSquads = {
