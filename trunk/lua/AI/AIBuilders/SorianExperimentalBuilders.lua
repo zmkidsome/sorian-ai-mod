@@ -153,7 +153,7 @@ BuilderGroup {
     BuildersType = 'PlatoonFormBuilder',
     Builder {
         BuilderName = 'Sorian T4 Exp Land',
-        PlatoonAddPlans = {'NameUnits', 'DistressResponseAI', 'PlatoonCallForHelpAI'},
+        PlatoonAddPlans = {'NameUnits'},
         PlatoonTemplate = 'T4ExperimentalLandSorian',
         Priority = 10000,
         FormRadius = 10000,
@@ -250,7 +250,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T4 Exp Air',
         PlatoonTemplate = 'T4ExperimentalAirSorian',
-        PlatoonAddPlans = {'NameUnits', 'DistressResponseAI', 'PlatoonCallForHelpAI'},
+        PlatoonAddPlans = {'NameUnits'},
         Priority = 800,
         InstanceCount = 50,
         FormRadius = 10000,
@@ -347,7 +347,7 @@ BuilderGroup {
         BuilderName = 'Sorian T4 Exp Sea',
         PlatoonTemplate = 'T4ExperimentalSea',
         PlatoonAddBehaviors = { 'TempestBehaviorSorian' },
-        PlatoonAddPlans = {'NameUnits', 'DistressResponseAI', 'PlatoonCallForHelpAI'},
+        PlatoonAddPlans = {'NameUnits'},
         PlatoonAIPlan = 'AttackForceAI',
         Priority = 1300,
         FormRadius = 10000,

@@ -231,7 +231,7 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
 		elseif distressUnitsexp > 0 then
 			commanderResponse = false
 			#LOG('*AI DEBUG: AIBehavior Experimental In Range!')
-		elseif numUnits1 > 9 or numUnits2 > 9 or numUnits3 > 4 or numUnits4 > 0 or numUnitsDF > 0 or numUnitsIF > 0 or numUnitsDF1 > 2 then
+		elseif numUnits1 > 14 or numUnits2 > 9 or numUnits3 > 4 or numUnits4 > 0 or numUnitsDF > 0 or numUnitsIF > 0 or numUnitsDF1 > 2 then
 			commanderResponse = false
 		else
 			commanderResponse = true
@@ -488,6 +488,7 @@ function CommanderThreadSorian(cdr, platoon)
 			moveOnNext = false
 		end
         WaitTicks(1)
+		if not cdr:IsDead() and not cdr:IsIdleState() and moveWait > 0 then moveWait = 0 end
 		if not cdr:IsDead() and cdr:IsIdleState() and not moveOnNext then 
 			moveWait = moveWait + 1
 			if moveWait >= 10 then
@@ -498,7 +499,9 @@ function CommanderThreadSorian(cdr, platoon)
 		WaitTicks(1)
 		
         #call platoon resume building deal...
-        if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading") then
+        if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr:IsUnitState("Building")
+		and not cdr:IsUnitState("Attacking") and not cdr:IsUnitState("Repairing") and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading") 
+		and not ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) > 250 ) then
             if not cdr.EngineerBuildQueue or table.getn(cdr.EngineerBuildQueue) == 0 then
                 local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
                 aiBrain:AssignUnitsToPlatoon( pool, {cdr}, 'Unassigned', 'None' )

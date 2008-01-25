@@ -11,6 +11,7 @@ local AIUtils = import('/lua/ai/aiutilities.lua')
 local ScenarioFramework = import('/lua/scenarioframework.lua')
 local ScenarioUtils = import('/lua/sim/ScenarioUtilities.lua')
 local Utils = import('/lua/utilities.lua')
+local SUtils = import('/lua/AI/sorianutilities.lua')
 
 ##############################################################################################################
 # function: ReclaimablesInArea = BuildCondition   doc = "Please work function docs."
@@ -100,4 +101,66 @@ function MapLessThan(aiBrain, sizeX, sizeZ)
 	end
 	#LOG('*AI DEBUG: MapLessThan returned False SizeX: ' .. sizeX .. ' sizeZ: ' .. sizeZ)
 	return false
+end
+
+##############################################################################################################
+# function: PoolThreatGreaterThanEnemyBase = BuildCondition
+#
+# parameter 0: string   aiBrain        = "default_brain"
+# parameter 1: string	  locationType   = "loactionType"
+# parameter 2: string   ucat            = "Unit Category"
+# parameter 3: string   ttype           = "Enemy Threat Type"
+# parameter 4: string   uttype          = "Unit Threat Type"
+# parameter 5: integer divideby        = "Divide Unit Threat by"
+#
+##############################################################################################################
+function PoolThreatGreaterThanEnemyBase(aiBrain, locationType, ucat, ttype, uttype, divideby)
+    local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
+    local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+	local divby = divideby or 1
+    if not engineerManager then
+        return false
+    end
+	
+	if aiBrain:GetCurrentEnemy() then
+		enemy = aiBrain:GetCurrentEnemy()
+		enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+	else
+		return false
+	end
+	local StartX, StartZ = enemy:GetArmyStartPos()
+    local position = engineerManager:GetLocationCoords()
+    local radius = engineerManager:GetLocationRadius()
+    
+	local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, ttype or 'Overall', enemyIndex )
+    local Threat = pool:GetPlatoonThreat( uttype or 'Overall', ucat, position, radius )
+    if SUtils.Round((Threat / divby), 1) > enemyThreat then
+        return true
+    end
+    return false
+end
+
+##############################################################################################################
+# function: LessThanThreatAtEnemyBase = BuildCondition
+#
+# parameter 0: string   aiBrain        = "default_brain"
+# parameter 3: string   ttype          = "Enemy Threat Type"
+# parameter 5: integer number         = "Threat Amount"
+#
+##############################################################################################################
+function LessThanThreatAtEnemyBase(aiBrain, ttype, number)
+	if aiBrain:GetCurrentEnemy() then
+		enemy = aiBrain:GetCurrentEnemy()
+		enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+	else
+		return false
+	end
+	
+	local StartX, StartZ = enemy:GetArmyStartPos()
+    
+	local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, ttype or 'Overall', enemyIndex )
+    if number < enemyThreat then
+        return true
+    end
+    return false
 end

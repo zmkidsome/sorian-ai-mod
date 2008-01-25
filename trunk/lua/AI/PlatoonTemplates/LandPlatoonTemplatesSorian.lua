@@ -38,9 +38,9 @@ PlatoonTemplate {
 }
 PlatoonTemplate {
     Name = 'StrikeForceMediumSorian',
-    Plan = 'StrikeForceAI',
+    Plan = 'StrikeForceAISorian',
     GlobalSquads = {
-        { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 15, 25, 'Attack', 'none' }
+        { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 15, 25, 'Attack', 'AttackFormation' }
     },
 }
 PlatoonTemplate {

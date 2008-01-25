@@ -110,7 +110,7 @@ Platoon = Class(sorianoldPlatoon) {
 							if not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.EXPERIMENTAL, v) then
 								oldPlan = 'ExperimentalAIHubSorian'
 							elseif not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.LAND - categories.EXPERIMENTAL, v) then
-								oldPlan = 'AttackForceAI'
+								oldPlan = 'AttackForceAISorian'
 							elseif not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.AIR - categories.EXPERIMENTAL, v) then
 								oldPlan = 'HuntAI'
 							end
@@ -297,7 +297,40 @@ Platoon = Class(sorianoldPlatoon) {
             end
             WaitSeconds(17)
         end
-    end,    
+    end,  
+
+    FighterHuntAI = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        local armyIndex = aiBrain:GetArmyIndex()
+        local target
+        local blip
+		local hadtarget = false
+        while aiBrain:PlatoonExists(self) do
+            if self:IsOpponentAIRunning() then
+                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL)
+                if target and target:GetFractionComplete() == 1 then
+                    blip = target:GetBlip(armyIndex)
+                    self:Stop()
+                    self:AggressiveMoveToLocation( table.copy(target:GetPosition()) )
+					hadtarget = true
+				elseif not target and hadtarget then
+					local x,z = aiBrain:GetArmyStartPos()
+					local position = AIUtils.RandomLocation(x,z)
+					local safePath, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Air', self:GetPlatoonPosition(), position, 200)
+					if safePath then
+						for _,p in safePath do
+							self:MoveToLocation( p, false )
+						end
+					else
+						self:MoveToLocation( position, false )
+					end
+					hadtarget = false
+                end
+            end
+            WaitSeconds(17)
+        end
+    end,	
           
     #-----------------------------------------------------
     #   Function: GuardMarkerSorian
@@ -1079,6 +1112,7 @@ Platoon = Class(sorianoldPlatoon) {
         # formations have penalty for taking time to form up... not worth it here
         # maybe worth it if we micro
         #self:SetPlatoonFormationOverride('GrowthFormation')
+		local bAggro = self.PlatoonData.AggressiveMove or false
         local PlatoonFormation = self.PlatoonData.UseFormation or 'NoFormation'
         self:SetPlatoonFormationOverride(PlatoonFormation)
         
@@ -1189,14 +1223,14 @@ Platoon = Class(sorianoldPlatoon) {
             # if we have nothing to do, try finding something to do        
             elseif table.getn(cmdQ) == 0 then
                 self:StopAttack()
-                cmdQ = AIAttackUtils.AIPlatoonSquadAttackVector( aiBrain, self )
+                cmdQ = AIAttackUtils.AIPlatoonSquadAttackVector( aiBrain, self, bAggro )
                 stuckCount = 0
             # if we've been stuck and unable to reach next marker? Ignore nearby stuff and pick another target  
             elseif self.LastPosition and VDist2Sq(self.LastPosition[1], self.LastPosition[3], pos[1], pos[3]) < ( self.PlatoonData.StuckDistance or 16) then
                 stuckCount = stuckCount + 1
                 if stuckCount >= 2 then               
                     self:StopAttack()
-                    cmdQ = AIAttackUtils.AIPlatoonSquadAttackVector( aiBrain, self )
+                    cmdQ = AIAttackUtils.AIPlatoonSquadAttackVector( aiBrain, self, bAggro )
                     stuckCount = 0
                 end
             else
@@ -1213,7 +1247,7 @@ Platoon = Class(sorianoldPlatoon) {
                     and not (self.PlatoonData.NeverGuardEngineers and self.PlatoonData.NeverGuardBases)
                 then
                     #LOG('*DEBUG: Trying to guard')
-                    return self:GuardEngineer(self.AttackForceAI)
+                    return self:GuardEngineer(self.AttackForceAISorian)
                 end
                 
                 # we have nothing to do, so find the nearest base and disband
@@ -1225,6 +1259,80 @@ Platoon = Class(sorianoldPlatoon) {
                 # wait a little longer if we're stuck so that we have a better chance to move
                 WaitSeconds(Random(5,11) + 2 * stuckCount)
             end
+        end
+    end,
+	
+    StrikeForceAISorian = function(self)
+        local aiBrain = self:GetBrain()
+        local armyIndex = aiBrain:GetArmyIndex()
+        local data = self.PlatoonData
+        local categoryList = {}
+        local atkPri = {}
+        if data.PrioritizedCategories then
+            for k,v in data.PrioritizedCategories do
+                table.insert( atkPri, v )
+                table.insert( categoryList, ParseEntityCategory( v ) )
+            end
+        end
+        table.insert( atkPri, 'ALLUNITS' )
+        table.insert( categoryList, categories.ALLUNITS )
+        self:SetPrioritizedTargetList( 'Attack', categoryList )
+        local target
+        local blip = false
+        local maxRadius = data.SearchRadius or 50
+        local movingToScout = false
+		AIAttackUtils.GetMostRestrictiveLayer(self)
+        while aiBrain:PlatoonExists(self) do
+            if not target or target:IsDead() then
+                if aiBrain:GetCurrentEnemy() and aiBrain:GetCurrentEnemy():IsDefeated() then
+                    aiBrain:PickEnemyLogic()
+                end
+                local mult = { 1,10,25 }
+                for _,i in mult do
+                    target = AIUtils.AIFindBrainTargetInRange( aiBrain, self, 'Attack', maxRadius * i, atkPri, aiBrain:GetCurrentEnemy() )
+                    if target then
+                        break
+                    end
+                    WaitSeconds(3)
+                    if not aiBrain:PlatoonExists(self) then
+                        return
+                    end
+                end
+                #target = self:FindPrioritizedUnit('Attack', 'Enemy', true, self:GetPlatoonPosition(), maxRadius)
+				if target then
+					local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, self.MovementLayer, self:GetPlatoonPosition(), target:GetPosition(), 10 )
+					self:Stop()
+					if not path then
+						if reason == 'NoStartNode' or reason == 'NoEndNode' then				
+							if not data.UseMoveOrder then
+								self:AttackTarget( target )
+							else
+								self:MoveToLocation( table.copy( target:GetPosition() ), false)
+							end
+						end
+					else
+						local pathSize = table.getn(path)
+						for wpidx,waypointPath in path do
+							if wpidx == pathSize and not data.UseMoveOrder then
+								self:AttackTarget( target )
+							else
+								self:MoveToLocation(waypointPath, false)
+							end
+						end   
+					end
+					movingToScout = false
+                elseif not movingToScout then
+                    movingToScout = true
+                    self:Stop()
+                    for k,v in AIUtils.AIGetSortedMassLocations(aiBrain, 10, nil, nil, nil, nil, self:GetPlatoonPosition()) do
+                        if v[1] < 0 or v[3] < 0 or v[1] > ScenarioInfo.size[1] or v[3] > ScenarioInfo.size[2] then
+                            #LOG('*AI DEBUG: STRIKE FORCE SENDING UNITS TO WRONG LOCATION - ' .. v[1] .. ', ' .. v[3] )
+                        end
+                        self:MoveToLocation( (v), false )
+                    end
+                end
+            end
+            WaitSeconds( 7 )
         end
     end,
 	

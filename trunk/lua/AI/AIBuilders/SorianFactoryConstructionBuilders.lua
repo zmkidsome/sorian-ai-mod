@@ -134,12 +134,11 @@ BuilderGroup {
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'LAND FACTORY'}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'AIR FACTORY'}},
-			{ MIBC, 'GreaterThanGameTime', { 330 } },
+			{ MIBC, 'GreaterThanGameTime', { 255 } },
         },
         BuilderType = 'Any',
         BuilderData = {
             Construction = {
-                BuildClose = true,
                 BuildStructures = {
                     'T1LandFactory',
                 },
@@ -156,12 +155,11 @@ BuilderGroup {
             { UCBC, 'UnitCapCheckLess', { .8 } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'LAND FACTORY'}},
-			{ MIBC, 'GreaterThanGameTime', { 330 } },
+			{ MIBC, 'GreaterThanGameTime', { 255 } },
         },
         BuilderType = 'Any',
         BuilderData = {
             Construction = {
-                BuildClose = true,
                 BuildStructures = {
                     'T1AirFactory',
                 },
