@@ -141,7 +141,7 @@ AIBrain = Class(oldAIBrain) {
     end,
 	
     UnderEnergyThresholdSorian = function(self)
-        self:SetupOverEnergyStatTriggerSorian(0.2)
+        self:SetupOverEnergyStatTriggerSorian(0.15)
         #for k,v in self.BuilderManagers do
         #   v.EngineerManager:LowEnergySorian()
         #end
@@ -157,7 +157,7 @@ AIBrain = Class(oldAIBrain) {
     end,
 
     UnderMassThresholdSorian = function(self)
-        self:SetupOverMassStatTriggerSorian(0.2)
+        self:SetupOverMassStatTriggerSorian(0.15)
         #for k,v in self.BuilderManagers do
         #    v.EngineerManager:LowMassSorian()
         #end

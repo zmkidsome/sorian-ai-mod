@@ -71,8 +71,29 @@ function Nuke(aiBrain)
 	end
 end
 
+function DestinationBetweenPoints(destination, start, finish)
+	local distance = VDist2Sq(start[1], start[3], finish[1], finish[3])
+	local step = math.ceil(distance / 10000)
+	local xstep = (start[1] - finish[1]) / step
+	local ystep = (start[3] - finish[3]) / step
+	for i = 1, step do
+		#DrawCircle( {start[1] - (xstep * i), 0, start[3] - (ystep * i)}, 5, '0000ff' )
+		#DrawCircle( {start[1] - (xstep * i), 0, start[3] - (ystep * i)}, 100, '0000ff' )
+		if VDist2Sq(start[1] - (xstep * i), start[3] - (ystep * i), finish[1], finish[3]) <= 10000 then break end
+		if VDist2Sq(start[1] - (xstep * i), start[3] - (ystep * i), destination[1], destination[3]) < 10000 then
+			return true
+		end
+	end	
+	return false
+end
+
 function Round(x, places)
-	shift = 10 ^ places
-	result = math.floor( x * shift + 0.5 ) / shift
-	return result
+	if places then
+		shift = 10 ^ places
+		result = math.floor( x * shift + 0.5 ) / shift
+		return result
+	else
+		result = math.floor( x + 0.5 )
+		return result
+	end
 end

@@ -1,9 +1,34 @@
 PlatoonTemplate {
+    Name = 'AirAttackSorian',
+    Plan = 'StrikeForceAISorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.AIR - categories.EXPERIMENTAL - categories.TRANSPORTFOCUS - categories.ANTINAVY, 1, 100, 'Attack', 'GrowthFormation' }
+    },
+}
+
+PlatoonTemplate {
+    Name = 'BomberAttackSorian',
+    Plan = 'StrikeForceAISorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.AIR * categories.BOMBER - categories.EXPERIMENTAL - categories.ANTINAVY, 1, 100, 'Attack', 'GrowthFormation' },
+        #{ categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.EXPERIMENTAL - categories.BOMBER - categories.TRANSPORTFOCUS, 0, 10, 'Attack', 'GrowthFormation' },
+    }
+}
+
+PlatoonTemplate {
     Name = 'GunshipAttackSorian',
     Plan = 'AirHuntAI',
     GlobalSquads = {
         { categories.MOBILE * categories.AIR * categories.GROUNDATTACK - categories.EXPERIMENTAL - categories.TRANSPORTFOCUS, 1, 100, 'Attack', 'GrowthFormation' },
         { categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.EXPERIMENTAL - categories.BOMBER - categories.TRANSPORTFOCUS, 0, 10, 'Attack', 'GrowthFormation' },
+    }
+}
+
+PlatoonTemplate {
+    Name = 'GunshipSFSorian',
+    Plan = 'StrikeForceAISorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.AIR * categories.GROUNDATTACK - categories.EXPERIMENTAL - categories.TRANSPORTFOCUS, 1, 100, 'Attack', 'GrowthFormation' },
     }
 }
 
@@ -25,7 +50,7 @@ PlatoonTemplate {
 
 PlatoonTemplate {
     Name = 'AntiAirHuntSorian',
-    Plan = 'AirHuntAI',
+    Plan = 'FighterHuntAI',
     GlobalSquads = {
         { categories.AIR * categories.MOBILE * categories.ANTIAIR * ( categories.TECH1 + categories.TECH2 + categories.TECH3 ) - categories.BOMBER - categories.TRANSPORTFOCUS - categories.EXPERIMENTAL, 1, 100, 'attack', 'none' },
     }

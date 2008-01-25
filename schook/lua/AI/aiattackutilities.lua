@@ -1,4 +1,5 @@
 do
+local SUtils = import('/lua/AI/sorianutilities.lua')
 
 function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     
@@ -291,7 +292,7 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	
 	if per == 'sorian' or per == 'sorianrush' then testPath = true end
 	
-	if VDist2( start[1], start[3], destination[1], destination[3] ) < 100 and (per == 'sorian' or per == 'sorianrush') then
+	if VDist2Sq( start[1], start[3], destination[1], destination[3] ) <= 10000 and testPath then
 		table.insert(finalPath, destination)    
 		return finalPath
 	end
@@ -311,7 +312,7 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
     if not endNode then return false, 'NoEndNode' end
     
      --Generate the safest path between the start and destination
-    local path = GeneratePath(aiBrain, startNode, endNode, ThreatTable[platoonLayer], optThreatWeight, destination, testPath)
+    local path = GeneratePath(aiBrain, startNode, endNode, ThreatTable[platoonLayer], optThreatWeight, destination, location, testPath)
     if not path and platoonLayer == 'Amphibious' then
         return PlatoonGenerateSafePathTo(aiBrain, 'Land', start, destination, optThreatWeight, optMaxMarkerDist)
     end    
@@ -332,7 +333,7 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
     return finalPath
 end
 
-function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, destination, testPath)
+function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, destination, location, testPath)
     threatWeight = threatWeight or 1
     
     local graph = GetPathGraphs()[startNode.layer][startNode.graphName]
@@ -348,6 +349,17 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
             threat = 0
         }
     }
+	if testPath and VDist2Sq(location[1], location[3], startNode.position[1], startNode.position[3]) > 10000 and 
+	SUtils.DestinationBetweenPoints(destination, location, startNode.position) then
+			local newPath = {
+				{
+					cost = 0,
+					path = {newNode = {position = destination} },
+					threat = 0
+				}
+			}
+			return newPath
+	end
     
     --I didn't know we had a continue statement when I wrote this, and this was a workaround to avoid using continue. :(
     local AStarLoopBody = function()
@@ -355,13 +367,11 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
         local lastNode = curPath.path[table.getn(curPath.path)]
         
         if closed[lastNode] then return false end
-		
-		local dist2 = VDist2(lastNode.position[1], lastNode.position[3], destination[1], destination[3])
         
-        if lastNode == endNode or (dist2 < 100 and testPath and lastNode != startNode) then
+		if lastNode == endNode then
 			return curPath
 		end
-        
+		
         closed[lastNode] = true
         
         local mapSizeX = ScenarioInfo.size[1]
@@ -376,6 +386,9 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
             local newNode = graph[adjacentNode]
             
             if newNode then
+				if testPath and SUtils.DestinationBetweenPoints(destination, lastNode.position, newNode.position) then
+						return curPath
+				end
                 --get distance from new node to end node
                 local dist = VDist2Sq(newNode.position[1], newNode.position[3], endNode.position[1], endNode.position[3])
 
