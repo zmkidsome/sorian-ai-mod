@@ -22,6 +22,7 @@ local SAI = '/lua/ScenarioPlatoonAI.lua'
 local IBC = '/lua/editor/InstantBuildConditions.lua'
 local TBC = '/lua/editor/ThreatBuildConditions.lua'
 local PlatoonFile = '/lua/platoon.lua'
+local SBC = '/lua/editor/SorianBuildConditions.lua'
 
 local AIAddBuilderTable = import('/lua/ai/AIAddBuilderTable.lua')
 
@@ -1262,6 +1263,30 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderData = {
             NumAssistees = 1,
+            Construction = {
+                BuildClose = true,
+                BuildStructures = {
+                    'T2MissileDefense',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T2 Base D Anti-TML Engineer - Emerg Response',
+        PlatoonTemplate = 'T2EngineerBuilderSorian',
+        Priority = 1200,
+        BuilderConditions = {
+            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 6, 'ANTIMISSILE TECH2' }},
+            { SBC, 'GreaterThanEnemyUnitsAroundBase', { 'LocationType', 0, 'TACTICALMISSILEPLATFORM TECH2 STRUCTURE', 256 } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.2 }},
+            { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.ANTIMISSILE * categories.TECH2 } },
+            { UCBC, 'UnitCapCheckLess', { .9 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            NumAssistees = 2,
             Construction = {
                 BuildClose = true,
                 BuildStructures = {

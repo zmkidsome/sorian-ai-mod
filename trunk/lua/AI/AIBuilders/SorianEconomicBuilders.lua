@@ -278,7 +278,7 @@ BuilderGroup {
         BuilderType = 'Any',
         PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
-			Delay = 255,
+			Delay = 165,
 			Mult = 5,
             Construction = {
                 BuildStructures = {
@@ -307,7 +307,7 @@ BuilderGroup {
         BuilderType = 'Any',
         PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
-			Delay = 255,
+			Delay = 165,
 			Mult = 5,
             Construction = {
                 BuildStructures = {
@@ -664,10 +664,10 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Hydrocarbon Engineer',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 1001, #980
+        Priority = 1002, #980
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.ENGINEER * ( categories.TECH2 + categories.TECH3 ) } },
-				{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 4, categories.ENGINEER * categories.TECH1 } },
+				{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, categories.MASSEXTRACTION } },
                 { UCBC, 'HaveLessThanUnitsWithCategory', { 3, 'HYDROCARBON'}},
                 { SBC, 'MarkerLessThanDistance',  { 'Hydrocarbon', 200}},
             },
@@ -691,6 +691,42 @@ BuilderGroup {
             },
         BuilderData = {
             LocationType = 'LocationType',
+        },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Engineer Find Unfinished',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        PlatoonAIPlan = 'ManagerEngineerFindUnfinished',
+        Priority = 1800,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { SBC, 'UnfinishedUnits', { 'LocationType', categories.STRUCTURE}},
+            },
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                BeingBuiltCategories = {'STRUCTURE STRATEGIC, STRUCTURE ECONOMIC, STRUCTURE'},
+                Time = 20,
+            },
+        },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Engineer Find Low Shield',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        PlatoonAIPlan = 'ManagerEngineerFindLowShield',
+        Priority = 1801,
+        InstanceCount = 3,
+        BuilderConditions = {
+                { SBC, 'ShieldDamaged', { 'LocationType'}},
+            },
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                BeingBuiltCategories = {'STRUCTURE SHIELD TECH2, STRUCTURE SHIELD TECH3'},
+                Time = 20,
+            },
         },
         BuilderType = 'Any',
     },
@@ -1042,6 +1078,42 @@ BuilderGroup {
         BuilderType = 'Any',
     },
     Builder {
+        BuilderName = 'Sorian T2 Engineer Find Unfinished',
+        PlatoonTemplate = 'T2EngineerBuilderSorian',
+        PlatoonAIPlan = 'ManagerEngineerFindUnfinished',
+        Priority = 1800,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { SBC, 'UnfinishedUnits', { 'LocationType', categories.STRUCTURE}},
+            },
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                BeingBuiltCategories = {'STRUCTURE STRATEGIC, STRUCTURE ECONOMIC, STRUCTURE'},
+                Time = 20,
+            },
+        },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian T2 Engineer Find Low Shield',
+        PlatoonTemplate = 'T2EngineerBuilderSorian',
+        PlatoonAIPlan = 'ManagerEngineerFindLowShield',
+        Priority = 1801,
+        InstanceCount = 3,
+        BuilderConditions = {
+                { SBC, 'ShieldDamaged', { 'LocationType'}},
+            },
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                BeingBuiltCategories = {'STRUCTURE SHIELD TECH2, STRUCTURE SHIELD TECH3'},
+                Time = 20,
+            },
+        },
+        BuilderType = 'Any',
+    },
+    Builder {
         BuilderName = 'Sorian T2 Engineer Repair',
         PlatoonTemplate = 'T2EngineerRepairSorian',
         PlatoonAIPlan = 'RepairAI',
@@ -1200,6 +1272,42 @@ BuilderGroup {
             },
         BuilderData = {
             LocationType = 'LocationType',
+        },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Engineer Find Unfinished',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        PlatoonAIPlan = 'ManagerEngineerFindUnfinished',
+        Priority = 1800,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { SBC, 'UnfinishedUnits', { 'LocationType', categories.STRUCTURE}},
+            },
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                BeingBuiltCategories = {'EXPERIMENTAL, STRUCTURE STRATEGIC, STRUCTURE ECONOMIC, STRUCTURE'},
+                Time = 20,
+            },
+        },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Engineer Find Low Shield',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        PlatoonAIPlan = 'ManagerEngineerFindLowShield',
+        Priority = 1801,
+        InstanceCount = 3,
+        BuilderConditions = {
+                { SBC, 'ShieldDamaged', { 'LocationType'}},
+            },
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                BeingBuiltCategories = {'STRUCTURE SHIELD TECH2, STRUCTURE SHIELD TECH3'},
+                Time = 20,
+            },
         },
         BuilderType = 'Any',
     },
@@ -1730,7 +1838,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Power Engineer',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 980,
+        Priority = 1000,
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH2, ENGINEER TECH3' } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 0.5 }},

@@ -124,9 +124,30 @@ BuilderGroup {
         }
     },
     Builder {
+        BuilderName = 'Sorian T1 Land Factory Higher Pri - Init',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 1001,
+        BuilderConditions = {                        
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
+            { UCBC, 'FactoryCapCheck', { 'LocationType', 'Land' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 3, 'LAND FACTORY'}},
+			{ MIBC, 'GreaterThanGameTime', { 165 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildStructures = {
+                    'T1LandFactory',
+                },
+            }
+        }
+    },
+    Builder {
         BuilderName = 'Sorian T1 Land Factory Higher Pri',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 905,
+        Priority = 1001,
         BuilderConditions = {                        
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Land' } },
@@ -134,7 +155,7 @@ BuilderGroup {
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'LAND FACTORY'}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'AIR FACTORY'}},
-			{ MIBC, 'GreaterThanGameTime', { 255 } },
+			{ MIBC, 'GreaterThanGameTime', { 165 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -148,14 +169,14 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Air Factory Higher Pri',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 905,
+        Priority = 1001,
         BuilderConditions = {
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Air' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'LAND FACTORY'}},
-			{ MIBC, 'GreaterThanGameTime', { 255 } },
+			{ MIBC, 'GreaterThanGameTime', { 165 } },
         },
         BuilderType = 'Any',
         BuilderData = {
