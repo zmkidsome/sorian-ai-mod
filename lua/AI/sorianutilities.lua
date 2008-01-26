@@ -16,6 +16,25 @@ function CanRespondEffectively(aiBrain, location, platoon)
 	return false
 end
 
+function GetGuards(aiBrain, Unit)
+	local engs = aiBrain:GetUnitsAroundPoint( categories.ENGINEER, Unit:GetPosition(), 20, 'Ally' )
+	local count = 0
+	local UpgradesFrom = Unit:GetBlueprint().General.UpgradesFrom
+	for k,v in engs do
+		if v:GetUnitBeingBuilt() == Unit then
+			count = count + 1
+		end
+	end
+	if UpgradesFrom and UpgradesFrom != 'none' then -- Used to filter out upgrading units
+		local oldCat = ParseEntityCategory(UpgradesFrom)
+		local oldUnit = aiBrain:GetUnitsAroundPoint( oldCat, Unit:GetPosition(), 0, 'Ally' )
+		if oldUnit then
+			count = count + 1
+		end
+	end
+	return count
+end
+
 function Nuke(aiBrain)
     local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'SPECIALLOWPRI', 'ALLUNITS' }
 	local maxFire = false
@@ -69,6 +88,36 @@ function Nuke(aiBrain)
 			#WaitSeconds(15)
 		until nukeCount <= 0 or target == false
 	end
+end
+
+function FindUnfinishedUnits(aiBrain, locationType, buildCat)
+	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+	local unfinished = aiBrain:GetUnitsAroundPoint( buildCat, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius(), 'Ally' )
+	local retUnfinished = false
+	for num, unit in unfinished do
+		donePercent = unit:GetFractionComplete()
+		if donePercent < 1 and GetGuards(aiBrain, unit) < 1 and not unit:IsUnitState('Upgrading') then
+			retUnfinished = unit
+			break
+		end
+	end
+	return retUnfinished
+end
+
+function FindDamagedShield(aiBrain, locationType, buildCat)
+	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+	local shields = aiBrain:GetUnitsAroundPoint( buildCat, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius(), 'Ally' )
+	local retShield = false
+	for num, unit in shields do
+		if not unit:IsDead() and unit:ShieldIsOn() then
+			shieldPercent = (unit.MyShield:GetHealth() / unit.MyShield:GetMaxHealth())
+			if shieldPercent < 1 and GetGuards(aiBrain, unit) < 3 then
+				retShield = unit
+				break
+			end
+		end
+	end
+	return retShield
 end
 
 function DestinationBetweenPoints(destination, start, finish)

@@ -1,4 +1,5 @@
 do
+local SUtils = import('/lua/AI/sorianutilities.lua')
 
 sorianoldPlatoon = Platoon
 
@@ -927,6 +928,124 @@ Platoon = Class(sorianoldPlatoon) {
 			if not eng:IsIdleState() then allIdle = false end
         until allIdle or count >= 30
         self:PlatoonDisband()
+    end,
+	
+    ManagerEngineerFindUnfinished = function(self)
+        local aiBrain = self:GetBrain()
+		local beingBuilt = false
+        self:EconUnfinishedBody()
+		WaitSeconds(20)
+		local eng = self:GetPlatoonUnits()[1]
+		if eng:GetUnitBeingBuilt() then
+			beingBuilt = eng:GetUnitBeingBuilt()
+		end
+		if beingBuilt then
+			while beingBuilt:GetFractionComplete() < 1 do
+				WaitSeconds(5)
+			end
+		end
+        if not aiBrain:PlatoonExists(self) then
+            return
+        end
+        #self.AssistPlatoon = nil
+        self:PlatoonDisband()
+    end,
+
+    EconUnfinishedBody = function(self)
+        local eng = self:GetPlatoonUnits()[1]
+        if not eng then
+            self:PlatoonDisband()
+            return
+        end
+        local aiBrain = self:GetBrain()
+        local assistData = self.PlatoonData.Assist
+        local assistee = false
+        
+        #eng.AssistPlatoon = self
+        
+        if not assistData.AssistLocation then
+            WARN('*AI WARNING: Disbanding EconUnfinishedBody platoon that does not have either AssistLocation')
+            self:PlatoonDisband()
+        end
+        
+        local beingBuilt = assistData.BeingBuiltCategories or { 'ALLUNITS' }
+        
+        # loop through different categories we are looking for
+        for _,catString in beingBuilt do
+            # Track all valid units in the assist list so we can load balance for factories
+            
+            local category = ParseEntityCategory( catString )
+        
+            local assistList = SUtils.FindUnfinishedUnits( aiBrain, assistData.AssistLocation, category )
+
+			if assistList then
+				assistee = assistList
+				break
+            end
+        end
+        # assist unit
+        if assistee then
+            self:Stop()
+            eng.AssistSet = true
+            IssueGuard( {eng}, assistee )
+        else
+            #self.AssistPlatoon = nil
+            self:PlatoonDisband()
+        end
+    end,
+	
+    ManagerEngineerFindLowShield = function(self)
+        local aiBrain = self:GetBrain()
+        self:EconDamagedShield()
+		WaitSeconds(60)
+        if not aiBrain:PlatoonExists(self) then
+            return
+        end
+        #self.AssistPlatoon = nil
+        self:PlatoonDisband()
+    end,
+
+    EconDamagedShield = function(self)
+        local eng = self:GetPlatoonUnits()[1]
+        if not eng then
+            self:PlatoonDisband()
+            return
+        end
+        local aiBrain = self:GetBrain()
+        local assistData = self.PlatoonData.Assist
+        local assistee = false
+        
+        #eng.AssistPlatoon = self
+        
+        if not assistData.AssistLocation then
+            WARN('*AI WARNING: Disbanding ManagerEngineerFindLowShield platoon that does not have either AssistLocation')
+            self:PlatoonDisband()
+        end
+        
+        local beingBuilt = assistData.BeingBuiltCategories or { 'ALLUNITS' }
+        
+        # loop through different categories we are looking for
+        for _,catString in beingBuilt do
+            # Track all valid units in the assist list so we can load balance for factories
+            
+            local category = ParseEntityCategory( catString )
+        
+            local assistList = SUtils.FindDamagedShield( aiBrain, assistData.AssistLocation, category )
+
+			if assistList then
+				assistee = assistList
+				break
+            end
+        end
+        # assist unit
+        if assistee then
+            self:Stop()
+            eng.AssistSet = true
+            IssueGuard( {eng}, assistee )
+        else
+            #self.AssistPlatoon = nil
+            self:PlatoonDisband()
+        end
     end,
 	
     LandScoutingAISorian = function(self)

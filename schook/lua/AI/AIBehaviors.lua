@@ -1,4 +1,5 @@
 do
+local UCBC = import('/lua/editor/UnitCountBuildConditions.lua')
 
 function NukeCheck(aiBrain)
 	local SUtils = import('/lua/AI/sorianutilities.lua')
@@ -475,7 +476,7 @@ function CommanderThreadSorian(cdr, platoon)
 		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Loop')
         WaitTicks(2)
         # Overcharge
-        if not cdr:IsDead() and GetGameTimeSeconds() > Delay then CDROverChargeSorian( aiBrain, cdr, Mult ) end
+        if not cdr:IsDead() and GetGameTimeSeconds() > Delay and UCBC.HaveGreaterThanUnitsWithCategory(aiBrain,  1, 'FACTORY') then CDROverChargeSorian( aiBrain, cdr, Mult ) end
         WaitTicks(1)
         # Run away (not really useful right now, without teleport ability kicking in... might as well just go home)
         if not cdr:IsDead() then CDRRunAwaySorian( aiBrain, cdr ) end

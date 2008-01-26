@@ -164,3 +164,74 @@ function LessThanThreatAtEnemyBase(aiBrain, ttype, number)
     end
     return false
 end
+
+##############################################################################################################
+# function: GreaterThanEnemyUnitsAroundBase = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: integer  numUnits        = "Number of Units"
+# parameter 2: integer  radius          = "radius"
+# parameter 3: integer  unitCat         = "Unit Category"
+#
+##############################################################################################################
+function GreaterThanEnemyUnitsAroundBase(aiBrain, locationtype, numUnits, unitCat, radius)
+	local engineerManager = aiBrain.BuilderManagers[locationtype].EngineerManager
+    if not engineerManager then
+        return false
+    end
+    if type(unitCat) == 'string' then
+        unitCat = ParseEntityCategory(unitCat)
+    end
+	local Units = aiBrain:GetNumUnitsAroundPoint(unitCat, engineerManager:GetLocationCoords(), radius, 'Enemy')
+	if Units > numUnits then
+		return true
+    end
+	return false
+end
+
+##############################################################################################################
+# function: UnfinishedUnits = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: integer  radius          = "radius"
+# parameter 2: string   category        = "Unit category"
+#
+##############################################################################################################
+function UnfinishedUnits(aiBrain, locationType, category)	
+	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+    if not engineerManager then
+        return false
+    end
+	local unfinished = aiBrain:GetUnitsAroundPoint( category, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius(), 'Ally' )
+	for num, unit in unfinished do
+		donePercent = unit:GetFractionComplete()
+		if donePercent < 1 and SUtils.GetGuards(aiBrain, unit) < 1 then
+			return true
+		end
+	end
+	return false
+end
+
+##############################################################################################################
+# function: ShieldDamaged = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: integer  radius          = "radius"
+#
+##############################################################################################################
+function ShieldDamaged(aiBrain, locationType)	
+	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+    if not engineerManager then
+        return false
+    end
+	local shields = aiBrain:GetUnitsAroundPoint( categories.STRUCTURE * categories.SHIELD, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius(), 'Ally' )
+	for num, unit in shields do
+		if not unit:IsDead() and unit:ShieldIsOn() then
+			shieldPercent = (unit.MyShield:GetHealth() / unit.MyShield:GetMaxHealth())
+			if shieldPercent < 1 and SUtils.GetGuards(aiBrain, unit) < 3 then
+				return true
+			end
+		end
+	end
+	return false
+end

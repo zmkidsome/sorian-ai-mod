@@ -54,7 +54,7 @@ BuilderGroup {
             { MIBC, 'LessThanGameTime', { 300 } },
             #{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'MOBILE LAND DIRECTFIRE' } },
             #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.05 }},
-            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Land',
     },
