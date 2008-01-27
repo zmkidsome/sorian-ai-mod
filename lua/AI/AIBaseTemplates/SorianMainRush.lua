@@ -53,6 +53,7 @@ BaseBuilderTemplate {
 		'SorianEngineerFirebaseBuilders',
         
         # ==== DEFENSES ==== #
+		'SorianT1BaseDefenses',
 		'SorianT2BaseDefenses',
 		'SorianT3BaseDefenses',
 		

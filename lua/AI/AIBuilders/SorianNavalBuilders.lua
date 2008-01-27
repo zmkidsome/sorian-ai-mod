@@ -21,7 +21,7 @@ local EBC = '/lua/editor/EconomyBuildConditions.lua'
 local PCBC = '/lua/editor/PlatoonCountBuildConditions.lua'
 local SAI = '/lua/ScenarioPlatoonAI.lua'
 local PlatoonFile = '/lua/platoon.lua'
-
+local SBC = '/lua/editor/SorianBuildConditions.lua'
 
 # For everything but Naval Rush
 BuilderGroup {
@@ -36,6 +36,7 @@ BuilderGroup {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 250, -1000, 10, 1, 'AntiSurface' } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ SBC, 'LessThanNavalBases', { 3 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
@@ -67,6 +68,7 @@ BuilderGroup {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 250, -1000, 10, 1, 'AntiSurface' } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ SBC, 'LessThanNavalBases', { 3 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
@@ -98,6 +100,7 @@ BuilderGroup {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 250, -1000, 10, 1, 'AntiSurface' } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ SBC, 'LessThanNavalBases', { 3 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
