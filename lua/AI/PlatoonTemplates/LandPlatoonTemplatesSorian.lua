@@ -48,7 +48,7 @@ PlatoonTemplate {
     Plan = 'GuardMarkerSorian',
     GlobalSquads = {
         { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 15, 25, 'Attack', 'none' },
-        { categories.ENGINEER, 1, 1, 'Attack', 'none' },
+        { categories.ENGINEER - categories.COMMAND, 1, 1, 'Attack', 'none' },
     },
 }
 PlatoonTemplate {
