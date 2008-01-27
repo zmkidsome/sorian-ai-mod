@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.6b:* No Rush Fix, Sim Speed Fix (credits to Duncane), More Economy adjustments to make the AI a bit more aggressive.
+
 *0.9.6:* Engineers will finish unfinished Experimentals and Structures, Engineers will assist damaged Shields, More aggressive early game, Minor Commander tweaks, AI will build TMD if it sees a close TML.
 
 *0.9.5:* AI will detect if an enemy has a lack of anti-air and take advantage of it, More commander behavior fine-tuning, Fighters will no longer attempt to attack Air units as they are being built, More economy changes, AI wont clutter its base with land units, If an enemy has a lack of land defense the AI will take advantage of it, Hydro plant will be built earlier, Strikeforces will now path, Fix for T4's getting stuck, AI will respond better to Air units in its base, AI will build more defenses.
