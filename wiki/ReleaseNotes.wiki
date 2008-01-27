@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.6c:* Fix for Commander being picked up by a transport.
+
 *0.9.6b:* No Rush Fix, Sim Speed Fix (credits to Duncane), More Economy adjustments to make the AI a bit more aggressive.
 
 *0.9.6:* Engineers will finish unfinished Experimentals and Structures, Engineers will assist damaged Shields, More aggressive early game, Minor Commander tweaks, AI will build TMD if it sees a close TML.
