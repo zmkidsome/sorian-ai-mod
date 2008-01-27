@@ -235,3 +235,50 @@ function ShieldDamaged(aiBrain, locationType)
 	end
 	return false
 end
+
+function NoRushTimeCheck(aiBrain, timeLeft)
+	if ScenarioInfo.Options.NoRushOption and ScenarioInfo.Options.NoRushOption != 'Off' then
+		if tonumber(ScenarioInfo.Options.NoRushOption) * 60 < GetGameTimeSeconds() + timeLeft then
+			return true
+		else
+			return false
+		end
+	elseif ScenarioInfo.Options.NoRushOption and ScenarioInfo.Options.NoRushOption == 'Off' then
+		return true
+	end
+	return true
+end
+
+function NoRush(aiBrain)
+	if ScenarioInfo.Options.NoRushOption and ScenarioInfo.Options.NoRushOption != 'Off' then
+		if tonumber(ScenarioInfo.Options.NoRushOption) * 60 > GetGameTimeSeconds() then
+			return true
+		else
+			return false
+		end
+	elseif ScenarioInfo.Options.NoRushOption and ScenarioInfo.Options.NoRushOption == 'Off' then
+		return false
+	end
+	return false
+end
+
+function LessThanExpansionBases(aiBrain, checkNum)
+		local expBasecount = 0
+		expBaseCount = aiBrain:GetManagerCount('Start Location')
+		expBaseCount = expBaseCount + aiBrain:GetManagerCount('Expansion Area')
+		return expBaseCount < checkNum
+end
+
+function GreaterThanExpansionBases(aiBrain, checkNum)
+		return not LessThanExpansionBases(aiBrain, checkNum)
+end
+
+function LessThanNavalBases(aiBrain, checkNum)
+		local expBasecount = 0
+		expBaseCount = aiBrain:GetManagerCount('Naval Area')
+		return expBaseCount < checkNum
+end
+
+function GreaterThanNavalBases(aiBrain, checkNum)
+		return not LessThanNavalBases(aiBrain, checkNum)
+end
