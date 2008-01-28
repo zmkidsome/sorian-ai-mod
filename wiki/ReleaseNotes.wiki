@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.6d:* T4 response defenses, Fix for TMD, strikeforce break off to go after priority target, Adjusted T4 priorities, Adjusted Commander priorities, Changed the way the Commander Attacks, Changed the way T4s attack, Adjusted Naval priorities.
+
 *0.9.6c:* Fix for Commander being picked up by a transport.
 
 *0.9.6b:* No Rush Fix, Sim Speed Fix (credits to Duncane), More Economy adjustments to make the AI a bit more aggressive.
