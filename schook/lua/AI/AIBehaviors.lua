@@ -56,14 +56,18 @@ local SurfacePrioritiesSorian = {
     'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
 	'EXPERIMENTAL STRATEGIC STRUCTURE',
 	'TECH3 STRATEGIC STRUCTURE',
+	'TECH2 STRATEGIC STRUCTURE',
+	'TECH3 DEFENSE STRUCTURE',
+	'TECH2 DEFENSE STRUCTURE',
     'TECH3 ENERGYPRODUCTION STRUCTURE',
+	'TECH3 MASSFABRICATION STRUCTURE',
     'TECH2 ENERGYPRODUCTION STRUCTURE',
     'TECH3 MASSEXTRACTION STRUCTURE',
+    'TECH3 SHIELD STRUCTURE',
+    'TECH2 SHIELD STRUCTURE',
     'TECH3 INTELLIGENCE STRUCTURE',
     'TECH2 INTELLIGENCE STRUCTURE',
     'TECH1 INTELLIGENCE STRUCTURE',
-    'TECH3 SHIELD STRUCTURE',
-    'TECH2 SHIELD STRUCTURE',
     'TECH2 MASSEXTRACTION STRUCTURE',
     'TECH3 FACTORY LAND STRUCTURE',
     'TECH3 FACTORY AIR STRUCTURE',
@@ -186,9 +190,11 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
     local distressRange = 100
     local beingBuilt = false
     local maxRadius = weapon.MaxRadius * 4.5 * Mult
+	local weapRange = weapon.MaxRadius
     cdr.UnitBeingBuiltBehavior = false
 	
     local cdrPos = cdr.CDRHome
+	
 	local numUnits1 = aiBrain:GetNumUnitsAroundPoint( categories.LAND * categories.TECH1 - categories.SCOUT - categories.ENGINEER, cdrPos, maxRadius, 'Enemy' )
 	local numUnits2 = aiBrain:GetNumUnitsAroundPoint( categories.LAND * categories.TECH2 - categories.SCOUT - categories.ENGINEER, cdrPos, maxRadius, 'Enemy' )
 	local numUnits3 = aiBrain:GetNumUnitsAroundPoint( categories.LAND * categories.TECH3 - categories.SCOUT - categories.ENGINEER, cdrPos, maxRadius, 'Enemy' )
@@ -250,10 +256,12 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
         local plat = aiBrain:MakePlatoon( '', '' )
         aiBrain:AssignUnitsToPlatoon( plat, {cdr}, 'support', 'None' )
         plat:Stop()
-        local priList = { categories.TECH3 * categories.INDIRECTFIRE,
+        local priList = { categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.TECH3 * categories.INDIRECTFIRE,
             categories.TECH3 * categories.MOBILE, categories.TECH2 * categories.INDIRECTFIRE, categories.MOBILE * categories.TECH2,
             categories.TECH1 * categories.INDIRECTFIRE, categories.TECH1 * categories.MOBILE, categories.CONSTRUCTION * categories.STRUCTURE, categories.ECONOMIC * categories.STRUCTURE, categories.ALLUNITS }
         #LOG('*AI DEBUG: ARMY ' .. aiBrain.Nickname .. ': CDR AI ACTIVATE - Commander go fight stuff! -- ' .. totalUnits)
+		plat:SetPrioritizedTargetList( 'support', priList )
+		cdr:SetTargetPriorities( priList )
         local target
         local continueFighting = true
         local counter = 0
@@ -263,6 +271,7 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
         repeat
             #LOG("*AI DEBUG: " .. aiBrain.Nickname .. " overcharging")
             overCharging = false
+			local cdrCurrentPos = cdr:GetPosition()
             if counter >= 5 or not target or target:IsDead() or Utilities.XZDistanceTwoVectors(cdrPos, target:GetPosition()) > maxRadius then
                 counter = 0
                 for k,v in priList do
@@ -285,7 +294,7 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
                     if enemyThreat - enemyCdrThreat >= friendlyThreat + (cdrThreat / 2) then
                         return
                     end
-                    if aiBrain:GetEconomyStored('ENERGY') >= weapon.EnergyRequired and target and not target:IsDead() then
+                    if aiBrain:GetEconomyStored('ENERGY') >= weapon.EnergyRequired and target and not target:IsDead() and Utilities.XZDistanceTwoVectors(cdrCurrentPos, target:GetPosition()) <= weapRange then
 					#LOG("*AI DEBUG: " .. aiBrain.Nickname .. " issue OC")
                         overCharging = true
                         IssueClearCommands({cdr})
@@ -468,15 +477,16 @@ function CommanderThreadSorian(cdr, platoon)
 	Delay = platoon.PlatoonData.Delay or 0
     
     SetCDRHome(cdr, platoon)
-    
+	
 	aiBrain:BuildScoutLocations()
 	moveOnNext = false
 	moveWait = 0
     while not cdr:IsDead() do
 		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Loop')
+		#AIAttackUtils.DrawPathGraph()
         WaitTicks(2)
         # Overcharge
-        if not cdr:IsDead() and GetGameTimeSeconds() > Delay and UCBC.HaveGreaterThanUnitsWithCategory(aiBrain,  1, 'FACTORY') then CDROverChargeSorian( aiBrain, cdr, Mult ) end
+        if not cdr:IsDead() and GetGameTimeSeconds() > Delay and UCBC.HaveGreaterThanUnitsWithCategory(aiBrain,  1, 'FACTORY') and aiBrain:GetNoRushTicks() <= 0 then CDROverChargeSorian( aiBrain, cdr, Mult ) end
         WaitTicks(1)
         # Run away (not really useful right now, without teleport ability kicking in... might as well just go home)
         if not cdr:IsDead() then CDRRunAwaySorian( aiBrain, cdr ) end
@@ -502,7 +512,7 @@ function CommanderThreadSorian(cdr, platoon)
         #call platoon resume building deal...
         if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr:IsUnitState("Building")
 		and not cdr:IsUnitState("Attacking") and not cdr:IsUnitState("Repairing") and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading") 
-		and not ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) > 250 ) then
+		and not ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) > 150 ) then
             if not cdr.EngineerBuildQueue or table.getn(cdr.EngineerBuildQueue) == 0 then
                 local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
                 aiBrain:AssignUnitsToPlatoon( pool, {cdr}, 'Unassigned', 'None' )
@@ -872,6 +882,74 @@ TickBehaviorSorian = function(self)
     end
 end
 
+function ScathisBehaviorSorian(self)   
+    AssignExperimentalPrioritiesSorian(self)
+    
+    local experimental = GetExperimentalUnit(self)
+    local targetUnit = false
+    local lastBase = false
+    local airUnit = EntityCategoryContains(categories.AIR, experimental)
+    
+    #Find target loop
+    while experimental and not experimental:IsDead() do
+        if lastBase then
+            targetUnit, lastBase = WreckBaseSorian(self, lastBase)
+        end
+        if not lastBase then
+            targetUnit, lastBase = FindExperimentalTargetSorian(self)
+        end
+        
+        if targetUnit then
+            IssueClearCommands({experimental})
+            #IssueAttack({experimental}, targetUnit)
+			IssueAggressiveMove({experimental}, targetUnit:GetPosition())
+        end
+        
+        #Walk to and kill target loop
+        while not experimental:IsDead() and not experimental:IsIdleState() do
+            local nearCommander = CommanderOverrideCheck(self)
+            
+            if nearCommander and nearCommander ~= targetUnit then
+                IssueClearCommands({experimental})
+                #IssueAttack({experimental}, nearCommander)
+				IssueAggressiveMove({experimental}, nearCommander:GetPosition())
+                targetUnit = nearCommander
+            end
+            
+            #Check if we or the target are under a shield
+            local closestBlockingShield = false
+            if not airUnit then
+                closestBlockingShield = GetClosestShieldProtectingTarget(experimental, experimental) 
+            end
+            closestBlockingShield = closestBlockingShield or GetClosestShieldProtectingTarget(experimental, targetUnit)
+            
+            #Kill shields loop
+            while closestBlockingShield do
+                IssueClearCommands({experimental})
+                #IssueAttack({experimental}, closestBlockingShield)
+				IssueAggressiveMove({experimental}, closestBlockingShield:GetPosition())
+                
+                #Wait for shield to die loop
+                while not closestBlockingShield:IsDead() and not experimental:IsDead() do
+                    WaitSeconds(1)
+                end             
+
+                closestBlockingShield = false
+                if not airUnit then
+                    closestBlockingShield = GetClosestShieldProtectingTarget(experimental, experimental) 
+                end
+                closestBlockingShield = closestBlockingShield or GetClosestShieldProtectingTarget(experimental, targetUnit)
+                
+                WaitTicks(1)
+            end
+            
+            WaitSeconds(1)
+        end
+    
+        WaitSeconds(1)
+    end
+end
+
 function BehemothBehaviorSorian(self)   
     AssignExperimentalPrioritiesSorian(self)
     
@@ -891,7 +969,8 @@ function BehemothBehaviorSorian(self)
         
         if targetUnit then
             IssueClearCommands({experimental})
-            IssueAttack({experimental}, targetUnit)
+            #IssueAttack({experimental}, targetUnit)
+			IssueMove({experimental}, targetUnit:GetPosition())
         end
         
         #Walk to and kill target loop
@@ -900,7 +979,8 @@ function BehemothBehaviorSorian(self)
             
             if nearCommander and nearCommander ~= targetUnit then
                 IssueClearCommands({experimental})
-                IssueAttack({experimental}, nearCommander)
+                #IssueAttack({experimental}, nearCommander)
+				IssueMove({experimental}, nearCommander:GetPosition())
                 targetUnit = nearCommander
             end
             
@@ -914,7 +994,8 @@ function BehemothBehaviorSorian(self)
             #Kill shields loop
             while closestBlockingShield do
                 IssueClearCommands({experimental})
-                IssueAttack({experimental}, closestBlockingShield)
+                #IssueAttack({experimental}, closestBlockingShield)
+				IssueMove({experimental}, closestBlockingShield:GetPosition())
                 
                 #Wait for shield to die loop
                 while not closestBlockingShield:IsDead() and not experimental:IsDead() do

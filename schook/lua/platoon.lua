@@ -26,6 +26,8 @@ Platoon = Class(sorianoldPlatoon) {
             return behaviors.AhwassaBehaviorSorian(self)
         elseif ID == 'ura0401' then
             return behaviors.TickBehaviorSorian(self)
+        elseif ID == 'url0401' then
+            return behaviors.ScathisBehaviorSorian(self)
         end
         
         return behaviors.BehemothBehaviorSorian(self)
@@ -1397,11 +1399,23 @@ Platoon = Class(sorianoldPlatoon) {
         table.insert( categoryList, categories.ALLUNITS )
         self:SetPrioritizedTargetList( 'Attack', categoryList )
         local target
+		local oldTarget = false
         local blip = false
         local maxRadius = data.SearchRadius or 50
         local movingToScout = false
 		AIAttackUtils.GetMostRestrictiveLayer(self)
         while aiBrain:PlatoonExists(self) do
+			if target then
+				local targetCheck = true
+				for k,v in atkPri do
+					local category = ParseEntityCategory( v )
+					if EntityCategoryContains(category, target) then 
+						targetCheck = false
+						break
+					end
+				end
+				if targetCheck then target = false end
+			end
             if not target or target:IsDead() then
                 if aiBrain:GetCurrentEnemy() and aiBrain:GetCurrentEnemy():IsDefeated() then
                     aiBrain:PickEnemyLogic()
@@ -1418,7 +1432,8 @@ Platoon = Class(sorianoldPlatoon) {
                     end
                 end
                 #target = self:FindPrioritizedUnit('Attack', 'Enemy', true, self:GetPlatoonPosition(), maxRadius)
-				if target then
+				if target and target != oldTarget then
+					oldTarget = target
 					local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, self.MovementLayer, self:GetPlatoonPosition(), target:GetPosition(), 10 )
 					self:Stop()
 					if not path then

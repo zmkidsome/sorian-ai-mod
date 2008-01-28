@@ -1015,16 +1015,6 @@ BuilderGroup {
             PrioritizedCategories = {
                 'EXPERIMENTAL LAND',
                 'EXPERIMENTAL NAVAL',
-                'COMMAND',
-                'MASSEXTRACTION',
-                'ENERGYPRODUCTION DRAGBUILD',
-                'MASSFABRICATION',
-                'SHIELD',
-                'ANTIAIR STRUCTURE',
-                'DEFENSE STRUCTURE',
-                'STRUCTURE',
-                'MOBILE ANTIAIR',
-                'ALLUNITS',
             },
         },
         BuilderConditions = {
@@ -1042,8 +1032,6 @@ BuilderGroup {
 			SearchRadius = 6000,
             PrioritizedCategories = {
                 'EXPERIMENTAL AIR',
-                'MOBILE AIR BOMBER',
-                'MOBILE AIR',
             },
         },
         BuilderConditions = {

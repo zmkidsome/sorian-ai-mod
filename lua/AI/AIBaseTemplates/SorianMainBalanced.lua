@@ -57,8 +57,8 @@ BaseBuilderTemplate {
 		'SorianT2BaseDefenses',
 		'SorianT3BaseDefenses',
 
-		#'SorianT2PerimeterDefenses',
-		#'SorianT3PerimeterDefenses',
+		'SorianT2PerimeterDefenses',
+		'SorianT3PerimeterDefenses',
 		
         'SorianT1DefensivePoints',
         'SorianT2DefensivePoints',

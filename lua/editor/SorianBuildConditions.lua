@@ -266,19 +266,19 @@ function LessThanExpansionBases(aiBrain, checkNum)
 		local expBasecount = 0
 		expBaseCount = aiBrain:GetManagerCount('Start Location')
 		expBaseCount = expBaseCount + aiBrain:GetManagerCount('Expansion Area')
-		return expBaseCount < checkNum
+		return true #expBaseCount < checkNum
 end
 
 function GreaterThanExpansionBases(aiBrain, checkNum)
-		return not LessThanExpansionBases(aiBrain, checkNum)
+		return true #not LessThanExpansionBases(aiBrain, checkNum)
 end
 
 function LessThanNavalBases(aiBrain, checkNum)
 		local expBasecount = 0
 		expBaseCount = aiBrain:GetManagerCount('Naval Area')
-		return expBaseCount < checkNum
+		return true #expBaseCount < checkNum
 end
 
 function GreaterThanNavalBases(aiBrain, checkNum)
-		return not LessThanNavalBases(aiBrain, checkNum)
+		return true #not LessThanNavalBases(aiBrain, checkNum)
 end
