@@ -154,9 +154,7 @@ BuilderGroup {
             Construction = {
                 BuildClose = true,
                 BuildStructures = {
-                    'T2AADefense',
                     'T2GroundDefense',
-                    'T2MissileDefense',
                 },
                 Location = 'LocationType',
             }
@@ -168,7 +166,7 @@ BuilderGroup {
         Priority = 925,
         BuilderConditions = {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 10, 'ANTIMISSILE TECH2' }},
-            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Artillery' } },
+            #{ TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Artillery' } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH2 - categories.SHIELD } },
@@ -302,6 +300,54 @@ BuilderGroup {
                 BuildClose = true,
                 BuildStructures = {
                     'T3AADefense',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Base D Engineer AA - Exp Response',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 1000,
+        BuilderConditions = {
+            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 20, 'DEFENSE TECH3 ANTIAIR'}},
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.2 }},
+            { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, categories.DEFENSE * categories.TECH3 - categories.SHIELD } },
+            { UCBC, 'UnitCapCheckLess', { .9 } },
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'EXPERIMENTAL AIR', 'Enemy'}},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            NumAssistees = 2,
+            Construction = {
+                BuildClose = true,
+                BuildStructures = {
+                    'T3AADefense',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T2TMLEngineer - Exp Response',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 1000,
+        BuilderConditions = {
+            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 10, categories.TACTICALMISSILEPLATFORM}},
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.2 }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'EXPERIMENTAL LAND', 'Enemy'}},
+            #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T2StrategicMissile', categories.STRUCTURE + ( categories.LAND * ( categories.TECH2 + categories.TECH3 ) ) } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = true,
+                BuildStructures = {
+                    'T2StrategicMissile',
                 },
                 Location = 'LocationType',
             }

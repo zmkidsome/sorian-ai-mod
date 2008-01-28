@@ -49,7 +49,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
         BuilderType = 'Sea',
     },
@@ -61,18 +61,18 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
     },
     Builder {
         BuilderName = 'Sorian T1 Naval Anti-Air',
         PlatoonTemplate = 'T1SeaAntiAir',
-        Priority = 500,
+        Priority = 0,
         BuilderConditions = {
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 10, 'Air' } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH1 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
         BuilderType = 'Sea',
     },
@@ -89,7 +89,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
     },
     Builder {
@@ -100,7 +100,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
         BuilderType = 'Sea',
     },
@@ -112,7 +112,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
     },
     Builder {
@@ -124,7 +124,7 @@ BuilderGroup {
             { UCBC, 'PoolLessAtLocation', { 'LocationType', 1, 'SHIELD NAVAL MOBILE' } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
     },
     Builder {
@@ -136,7 +136,7 @@ BuilderGroup {
             { UCBC, 'PoolLessAtLocation', { 'LocationType', 1, 'COUNTERINTELLIGENCE NAVAL MOBILE' } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH2 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
     },
 }
@@ -152,17 +152,17 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
     },
     Builder {
         BuilderName = 'Sorian T3 Naval Nuke Sub',
         PlatoonTemplate = 'T3SeaNukeSub',
-        Priority = 700,
+        Priority = 0,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
         BuilderType = 'Sea',
     },
@@ -174,7 +174,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
     },
     Builder {
@@ -185,7 +185,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH3 } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
     },
 }
