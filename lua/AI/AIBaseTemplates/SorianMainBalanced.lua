@@ -126,6 +126,8 @@ BaseBuilderTemplate {
         'SorianMobileNavalExperimentalEngineers',
         'SorianMobileNavalExperimentalForm',
 		
+		'SorianEconomicExperimentalEngineers',
+		
         # ==== ARTILLERY BUILDERS ==== #
         'SorianT3ArtilleryGroup',
         
@@ -157,7 +159,7 @@ BaseBuilderTemplate {
             SCU = 4,
         },
         FactoryCount = {
-            Land = 4,
+            Land = 5,
             Air = 3,
             Sea = 0,
             Gate = 1,

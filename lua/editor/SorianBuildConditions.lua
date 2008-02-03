@@ -262,6 +262,26 @@ function NoRush(aiBrain)
 	return false
 end
 
+function HaveComparativeUnitsWithCategoryAndAlliance(aiBrain, greater, myCategory, eCategory, alliance)
+    if type(eCategory) == 'string' then
+        eCategory = ParseEntityCategory(eCategory)
+    end
+    if type(myCategory) == 'string' then
+        myCategory = ParseEntityCategory(myCategory)
+    end
+	local myUnits = aiBrain:GetCurrentUnits(myCategory)
+    local numUnits = aiBrain:GetNumUnitsAroundPoint( eCategory, Vector(0,0,0), 100000, alliance )
+	if alliance == 'Ally' then
+		numUnits = numUnits - aiBrain:GetCurrentUnits(myCategory)
+	end
+    if numUnits > myUnits and greater then
+        return true
+    elseif numUnits < myUnits and not greater then
+        return true
+    end
+    return false
+end
+
 function LessThanExpansionBases(aiBrain, checkNum)
 		local expBasecount = 0
 		expBaseCount = aiBrain:GetManagerCount('Start Location')
