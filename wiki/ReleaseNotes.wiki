@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.7:* Fighters will patrol their bases, Fix for Cybran early scouts using stealth, Engineers will look for nearby projects to assist before starting a new project of the same type, AI will try to keep enough anti-nikes to stop enemy nukes, AI will group later game T4s, AI will build Paragon, New EngineerNeedsAssistance() function, New Air AI, AI will use Paragon.
+
 *0.9.6d:* T4 response defenses, Fix for TMD, strikeforce break off to go after priority target, Adjusted T4 priorities, Adjusted Commander priorities, Changed the way the Commander Attacks, Changed the way T4s attack, Adjusted Naval priorities.
 
 *0.9.6c:* Fix for Commander being picked up by a transport.
