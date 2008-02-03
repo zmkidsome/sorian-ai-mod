@@ -30,11 +30,12 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Artillery Engineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 940,
         BuilderConditions = {
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE, 'LocationType', }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {15, 750}},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -55,11 +56,12 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian Rapid T3 Artillery Engineer',
         PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 940,
         BuilderConditions = {
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE, 'LocationType', }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {15, 750}},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -107,7 +109,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T4 Artillery Engineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 940,
         BuilderConditions = {
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.STRUCTURE}},
@@ -187,7 +189,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian Seraphim Exp Nuke Engineer',
         PlatoonTemplate = 'SeraphimT3EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 940,
         BuilderConditions = {
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.NUKE * categories.STRUCTURE * categories.TECH3}},
@@ -213,7 +215,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Nuke Engineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 940,
         BuilderConditions = {
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.NUKE * categories.STRUCTURE}},

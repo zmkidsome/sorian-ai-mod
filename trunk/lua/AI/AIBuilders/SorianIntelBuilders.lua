@@ -220,13 +220,32 @@ BuilderGroup {
     BuilderGroupName = 'SorianLandScoutFormBuilders',
     BuildersType = 'PlatoonFormBuilder',
     Builder {
-        BuilderName = 'Sorian T1 Land Scout Form',
+        BuilderName = 'Sorian T1 Land Scout Form init',
         BuilderConditions = {
             #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.FACTORY * categories.LAND - categories.TECH1 }},
+			{ MIBC, 'LessThanGameTime', { 300 } },
         },
         PlatoonTemplate = 'T1LandScoutFormSorian',
         Priority = 725,
         InstanceCount = 3,
+        BuilderData = {
+			UseCloak = false,
+        },
+        LocationType = 'LocationType',
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Land Scout Form',
+        BuilderConditions = {
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.FACTORY * categories.LAND - categories.TECH1 }},
+			{ MIBC, 'GreaterThanGameTime', { 300 } },
+        },
+        PlatoonTemplate = 'T1LandScoutFormSorian',
+        Priority = 725,
+        InstanceCount = 3,
+        BuilderData = {
+			UseCloak = true,
+        },
         LocationType = 'LocationType',
         BuilderType = 'Any',
     },

@@ -46,6 +46,98 @@ function AIGetEconomyNumbers(aiBrain)
     return econ
 end
 
+function IsMex(building)
+	return building == 'uab1103' or building == 'uab1202' or building == 'uab1302' or
+	 building == 'urb1103' or building == 'urb1202' or building == 'urb1302' or
+	  building == 'ueb1103' or building == 'ueb1202' or building == 'ueb1302' or
+	   building == 'xsb1103' or building == 'xsb1202' or building == 'xsb1302'
+end
+
+function LayerCheckPosition( pos, layer )
+    if pos[1] > 0 and pos[1] < ScenarioInfo.size[1] and pos[3] > 0 and pos[3] < ScenarioInfo.size[2] then
+        local surf = GetSurfaceHeight( pos[1], pos[3] )
+        local terr = GetTerrainHeight( pos[1], pos[3] )
+        if layer == 'Air' then
+			return true
+		elseif surf > terr and layer == 'Sea' then
+            return true
+        elseif terr >= surf and layer == 'Land' then
+            return true
+        else
+            return false
+        end
+    else
+        return false
+    end
+end
+
+# used by engineers to move to a safe location
+function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
+    if not destination then
+        return false
+    end
+    local pos = unit:GetPosition()
+    local result, bestPos = unit:CanPathTo( destination )
+
+    local bUsedTransports = false
+    if not result or VDist2Sq(pos[1], pos[3], destination[1], destination[3]) > 256*256 and unit.PlatoonHandle then
+        # if we can't path to our destination, we need, rather than want, transports
+        local needTransports = not result
+        if VDist2Sq( pos[1], pos[3], destination[1], destination[3] ) > 512*512 then
+            needTransports = true
+        end
+        # skip the last move... we want to return and do a build
+        bUsedTransports = AIAttackUtils.SendPlatoonWithTransports(aiBrain, unit.PlatoonHandle, destination, needTransports, true)
+        
+        if bUsedTransports then
+            return true
+        end
+    end
+    
+    # if we're here, we haven't used transports and we can path to the destination
+    if result then
+        local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Amphibious', unit:GetPosition(), destination)
+        if path then
+            local pathSize = table.getn(path)
+            # move to way points (but not to destination... leave that for the final command)
+            for widx,waypointPath in path do
+                if pathSize != widx then
+                    IssueMove({unit},waypointPath)
+                end
+            end  
+        end
+        # if there wasn't a *safe* path (but dest was pathable), then the last move would have been to go there directly
+        # so don't bother... the build/capture/reclaim command will take care of that after we return
+        return true
+    end
+    
+    return false
+end   
+
+function EngineerTryRepairSorian(aiBrain, eng, whatToBuild, pos)
+    if not pos then 
+        return false 
+    end
+	local checkRange = 50
+    local structureCat = ParseEntityCategory( whatToBuild )
+
+	if IsMex(whatToBuild) then
+		checkRange = 1
+	end
+	
+    local checkUnits = aiBrain:GetUnitsAroundPoint(structureCat, pos, checkRange, 'Ally' )
+    if checkUnits and table.getn(checkUnits) > 0 then
+		for num,unit in checkUnits do
+			if unit:IsBeingBuilt() then
+				IssueRepair( {eng}, unit )
+				return true
+			end
+		end
+    end
+    
+    return false
+end
+
 function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPri )
     local position = platoon:GetPlatoonPosition()
     if not aiBrain or not position or not maxRange then

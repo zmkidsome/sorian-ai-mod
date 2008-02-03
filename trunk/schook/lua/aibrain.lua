@@ -41,7 +41,7 @@ AIBrain = Class(oldAIBrain) {
         # Begin the base monitor process
 		local per = ScenarioInfo.ArmySetup[self.Brain.Name].AIPersonality
 		
-		if per == 'sorian' or per == 'sorianrush' then
+		if per == 'sorian' or per == 'sorianrush' or per == 'sorianair' then
 			local spec = {
 				DefaultDistressRange = 200,
 			}
@@ -54,6 +54,88 @@ AIBrain = Class(oldAIBrain) {
         plat:ForkThread( plat.BaseManagersDistressAI )
         
         self.EnemyPickerThread = self:ForkThread( self.PickEnemy )
+    end,
+	
+    BaseMonitorAlertTimeout = function(self, pos)
+        local timeout = self.BaseMonitor.DefaultAlertTimeout
+        local threat
+        local threshold = self.BaseMonitor.AlertLevel
+        repeat
+            WaitSeconds(timeout)
+            threat = self:GetThreatAtPosition( pos, 0, true, 'AntiSurface' )
+        until threat <= threshold
+        for k,v in self.BaseMonitor.AlertsTable do
+            if pos[1] == v.Position[1] and pos[3] == v.Position[3] then
+                self.BaseMonitor.AlertsTable[k] = nil
+                break
+            end
+        end
+        for k,v in self.BaseMonitor.BaseMonitorPoints do
+            if pos[1] == v.Position[1] and pos[3] == v.Position[3] then
+                v.Alert = false
+                break
+            end
+        end
+        self.BaseMonitor.ActiveAlerts = self.BaseMonitor.ActiveAlerts - 1
+        if self.BaseMonitor.ActiveAlerts == 0 then
+            self.BaseMonitor.AlertSounded = false
+            #LOG('*AI DEBUG: ARMY ' .. self:GetArmyIndex() .. ': --- ALERTS DEACTIVATED ---')
+        end
+    end,
+	
+    BaseMonitorCheck = function(self)
+        local vecs = self:GetStructureVectors()
+        if table.getn(vecs) > 0 then
+            # Find new points to monitor
+            for k,v in vecs do
+                local found = false
+                for subk, subv in self.BaseMonitor.BaseMonitorPoints do
+                    if v[1] == subv.Position[1] and v[3] == subv.Position[3] then
+                        continue
+                    end
+                end
+                table.insert( self.BaseMonitor.BaseMonitorPoints,
+                             {
+                                Position = v,
+                                Threat = self:GetThreatAtPosition( v, 0, true, 'AntiSurface' ),
+                                Alert = false
+                             }
+                         )
+            end
+            # Remove any points that we dont monitor anymore
+            for k,v in self.BaseMonitor.BaseMonitorPoints do
+                local found = false
+                for subk, subv in vecs do
+                    if v.Position[1] == subv[1] and v.Position[3] == subv[3] then
+                        found = true
+                        break
+                    end
+                end
+                # If point not in list and the num units around the point is small
+                if not found and not self:GetNumUnitsAroundPoint( categories.STRUCTURE, v.Position, 16, 'Ally' ) > 1 then
+                    self.BaseMonitor.BaseMonitorPoints[k] = nil
+                end
+            end
+            # Check monitor points for change
+            local alertThreat = self.BaseMonitor.AlertLevel
+            for k,v in self.BaseMonitor.BaseMonitorPoints do
+                if not v.Alert then
+                    v.Threat = self:GetThreatAtPosition( v.Position, 0, true, 'AntiSurface' )
+                    if v.Threat > alertThreat then
+                        v.Alert = true
+                        table.insert( self.BaseMonitor.AlertsTable,
+                            {
+                                Position = v.Position,
+                                Threat = v.Threat,
+                            }
+                        )
+                        self.BaseMonitor.AlertSounded = true
+                        self:ForkThread(self.BaseMonitorAlertTimeout, v.Position)
+                        self.BaseMonitor.ActiveAlerts = self.BaseMonitor.ActiveAlerts + 1
+                    end
+                end
+            end
+        end
     end,
 
     PickEnemy = function(self)
@@ -92,7 +174,7 @@ AIBrain = Class(oldAIBrain) {
         else
 			local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
             local findEnemy = false
-            if not self:GetCurrentEnemy() or ((per == 'sorian' or per == 'sorianrush') and brainbool) then
+            if not self:GetCurrentEnemy() or ((per == 'sorian' or per == 'sorianrush' or per == 'sorianair') and brainbool) then
                 findEnemy = true
             else
                 local cIndex = self:GetCurrentEnemy():GetArmyIndex()

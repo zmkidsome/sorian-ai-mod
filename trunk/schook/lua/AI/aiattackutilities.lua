@@ -153,7 +153,13 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     
     local maxRange = false
     if platoon.MovementLayer == 'Water' then
-        maxRange, selectedWeaponArc = GetNavalPlatoonMaxRange(aiBrain, platoon)
+		local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
+		
+		if per == 'sorian' or per == 'sorianrush' or per == 'sorianair' then
+			maxRange, selectedWeaponArc = GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
+		else        
+			maxRange, selectedWeaponArc = GetNavalPlatoonMaxRange(aiBrain, platoon)
+		end
     end
     
     for tIndex,threat in threatTable do 
@@ -280,6 +286,49 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     
 end
 
+function GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
+    local maxRange = 0
+    local platoonUnits = platoon:GetPlatoonUnits()
+    for _,unit in platoonUnits do
+        if unit:IsDead() then
+            continue
+        end
+        
+        for _,weapon in unit:GetBlueprint().Weapon do
+            if not weapon.FireTargetLayerCapsTable or not weapon.FireTargetLayerCapsTable.Water then
+                continue
+            end
+        
+            #Check if the weapon can hit land from water
+            local canAttackLand = string.find(weapon.FireTargetLayerCapsTable.Water, 'Land', 1, true)
+            
+            if canAttackLand and weapon.MaxRadius > maxRange then 
+                isTech1 = EntityCategoryContains(categories.TECH1, unit)
+                maxRange = weapon.MaxRadius
+                
+                if weapon.BallisticArc == 'RULEUBA_LowArc' then
+                    selectedWeaponArc = 'low'
+                elseif weapon.BallisticArc == 'RULEUBA_HighArc' then
+                    selectedWeaponArc = 'high'
+                else 
+                    selectedWeaponArc = 'none'
+                end
+            end
+        end
+    end
+    
+    if maxRange == 0 then
+        return false
+    end
+    
+    #T1 naval units don't hit land targets very well. Bail out!
+    #if isTech1 then
+    #    return false
+    #end
+    
+    return maxRange, selectedWeaponArc
+end
+
 function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, optThreatWeight, optMaxMarkerDist)   
         
     local location = start
@@ -290,7 +339,7 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	
 	local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
 	
-	if per == 'sorian' or per == 'sorianrush' then testPath = true end
+	if per == 'sorian' or per == 'sorianrush' or per == 'sorianair' then testPath = true end
 	
 	if VDist2Sq( start[1], start[3], destination[1], destination[3] ) <= 10000 and testPath then
 		table.insert(finalPath, destination)    

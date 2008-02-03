@@ -1,6 +1,6 @@
 #***************************************************************************
 #*
-#**  File     :  /lua/ai/AIBaseTemplates/SorianMainRush.lua
+#**  File     :  /lua/ai/AIBaseTemplates/SorianMainBalanced.lua
 #**
 #**  Summary  : Manage engineers for a location
 #**
@@ -8,7 +8,7 @@
 #****************************************************************************
 
 BaseBuilderTemplate {
-    BaseTemplateName = 'SorianMainRush',
+    BaseTemplateName = 'SorianMainAir',
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
@@ -20,7 +20,7 @@ BaseBuilderTemplate {
         'SorianT1EngineerBuilders',
         'SorianT2EngineerBuilders',
         'SorianT3EngineerBuilders',
-        'SorianEngineerFactoryConstructionLandHigherPriority',
+        'SorianEngineerFactoryConstruction Balance',
         'SorianEngineerFactoryConstruction',
         
         # Engineer Support buildings
@@ -36,7 +36,7 @@ BaseBuilderTemplate {
         'SorianTime Exempt Extractor Upgrades',
         
         # ACU Builders
-        'Sorian Rush Initial ACU Builders',
+        'Sorian Initial ACU Builders',
         'SorianACUBuilders',
         'SorianACUUpgrades',
         
@@ -56,6 +56,9 @@ BaseBuilderTemplate {
 		'SorianT1BaseDefenses',
 		'SorianT2BaseDefenses',
 		'SorianT3BaseDefenses',
+
+		'SorianT2PerimeterDefenses',
+		'SorianT3PerimeterDefenses',
 		
         'SorianT1DefensivePoints',
         'SorianT2DefensivePoints',
@@ -152,12 +155,12 @@ BaseBuilderTemplate {
         EngineerCount = {
             Tech1 = 15,
             Tech2 = 10,
-            Tech3 = 15,
-            SCU = 2,
+            Tech3 = 20,
+            SCU = 4,
         },
         FactoryCount = {
-            Land = 5,
-            Air = 2,
+            Land = 2,
+            Air = 8,
             Sea = 0,
             Gate = 1,
         },
@@ -173,11 +176,11 @@ BaseBuilderTemplate {
     FirstBaseFunction = function(aiBrain)
         local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
         if not per then 
-            return 1, 'sorianrush'
+            return 1, 'sorianair'
         end
         
-        if per != 'sorianrush' and per != 'bleh' and per != '' then
-            return 1, 'sorianrush'
+        if per != 'sorianair' and per != 'bleh' and per != '' then
+            return 1, 'sorianair'
         end
 
         local mapSizeX, mapSizeZ = GetMapSize()
@@ -189,21 +192,22 @@ BaseBuilderTemplate {
             isIsland = true
         end
         
-        if per == 'sorianrush' then
-            return 1000, 'sorianrush'
+        if per == 'sorianair' then
+            return 1000, 'sorianair'
         end
         
-        if mapSizeX < 500 and mapSizeZ < 500 then
-            return 100, 'sorianrush'
-        
-        elseif mapSizeX >= 512 and mapSizeZ >= 512 and mapSizeX < 1024 and mapSizeZ < 1024 then
-            return Random(75, 100), 'sorianrush'
-        
-        elseif mapSizeX <= 1024 and mapSizeZ <= 1024 then
-            return 50, 'sorianrush'
-           
+        #If we're playing on an island map, do not use this plan often
+        if isIsland and mapSizeX > 1024 and mapSizeZ > 1024 then
+            return Random(25, 50), 'sorianair'
+
+        elseif mapSizeX < 512 and mapSizeZ < 512 then
+            return Random(98, 100), 'sorianair'
+
+        elseif mapSizeX >= 512 and mapSizeZ >= 512 and mapSizeX <= 1024 and mapSizeZ <= 1024 then
+            return Random(50, 100), 'sorianair'
+
         else
-            return 20, 'sorianrush'
+            return Random(25, 75), 'sorianair'
         end
     end,
 }

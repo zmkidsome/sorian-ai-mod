@@ -132,3 +132,34 @@ function LessThanEconIncomeOverTime(aiBrain, MassIncome, EnergyIncome)
     end
     return false
 end
+
+##############################################################################################################
+# function: EngineerNeedsAssistance = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: bool    doesbool        = "true: Engineer does need assistance false: Engineer does not need assistance"
+# parameter 2: string   LocationType   = "LocationType"
+# parameter 3: string   category        = "Being built category"
+#
+##############################################################################################################
+function EngineerNeedsAssistance(aiBrain, doesbool, locationType, category)
+	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+	if not engineerManager then
+		return false
+	end
+    if type(category) == 'string' then
+        category = ParseEntityCategory(category)
+    end
+	local engs = engineerManager:GetEngineersBuildingCategory(category, categories.ALLUNITS )
+	local numFound = 0
+	for k,v in engs do
+		if v.DesiresAssist == true then
+			if v.NumAssistees and table.getn( v:GetGuards() ) < v.NumAssistees then
+				numFound = numFound + 1
+			end
+		end
+		if numFound > 0 and doesbool then return true end
+	end
+	if numFound == 0 and not doesbool then return true end
+	return false
+end

@@ -33,7 +33,25 @@ Platoon = Class(sorianoldPlatoon) {
         return behaviors.BehemothBehaviorSorian(self)
     end,
 	
-    DistressResponseAI = function(self)
+    PlatoonCallForHelpAISorian = function(self)
+        local aiBrain = self:GetBrain()
+        local checkTime = self.PlatoonData.DistressCheckTime or 7
+        local pos = self:GetPlatoonPosition()
+        while aiBrain:PlatoonExists(self) and pos do
+            if not self.DistressCall then
+                local threat = aiBrain:GetThreatAtPosition( pos, 0, true, 'AntiSurface' )
+				 local myThreat = AIAttackUtils.GetSurfaceThreatOfUnits(self)
+                if threat and myThreat > 0 and threat > (myThreat / 2) then
+                    #LOG('*AI DEBUG: Platoon Calling for help')
+                    aiBrain:BaseMonitorPlatoonDistress(self, threat)
+                    self.DistressCall = true
+                end
+            end
+            WaitSeconds(checkTime)
+        end
+    end,
+	
+    DistressResponseAISorian = function(self)
         local aiBrain = self:GetBrain()
         while aiBrain:PlatoonExists(self) do
             # In the loop so they may be changed by other platoon things
@@ -92,7 +110,7 @@ Platoon = Class(sorianoldPlatoon) {
 								prevpos = poscheck
 								poscounter = 0
 							end
-                        until not self:IsCommandsActive(cmd) or breakResponse or aiBrain:GetThreatAtPosition(moveLocation, 0, true, 'Overall') <= threatThreshold
+                        until not self:IsCommandsActive(cmd) or breakResponse or aiBrain:GetThreatAtPosition(moveLocation, 0, true, 'AntiSurface') <= threatThreshold
                         
                         
                         platoonPos = self:GetPlatoonPosition()
@@ -317,19 +335,12 @@ Platoon = Class(sorianoldPlatoon) {
                     self:Stop()
                     self:AggressiveMoveToLocation( table.copy(target:GetPosition()) )
 					hadtarget = true
-				elseif not target and hadtarget then
-					local x,z = aiBrain:GetArmyStartPos()
-					local position = AIUtils.RandomLocation(x,z)
-					local safePath, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Air', self:GetPlatoonPosition(), position, 200)
-					if safePath then
-						for _,p in safePath do
-							self:MoveToLocation( p, false )
-						end
-					else
-						self:MoveToLocation( position, false )
-					end
-					hadtarget = false
-                end
+			elseif not target and hadtarget then
+				for k,v in AIUtils.GetBasePatrolPoints(aiBrain, self.PlatoonData.Location or 'MAIN', self.PlatoonData.Radius or 100, 'Air') do
+					self:Patrol(v)
+				end
+				hadtarget = false
+			end
             end
             WaitSeconds(17)
         end
@@ -1059,7 +1070,7 @@ Platoon = Class(sorianoldPlatoon) {
         aiBrain:BuildScoutLocations()
         
         #If we have cloaking (are cybran), then turn on our cloaking
-        if scout:TestToggleCaps('RULEUTC_CloakToggle') then
+        if scout:TestToggleCaps('RULEUTC_CloakToggle') and self.PlatoonData.UseCloak then
 			scout:SetScriptBit('RULEUTC_CloakToggle', false)
         end
                
@@ -1398,7 +1409,7 @@ Platoon = Class(sorianoldPlatoon) {
         table.insert( atkPri, 'ALLUNITS' )
         table.insert( categoryList, categories.ALLUNITS )
         self:SetPrioritizedTargetList( 'Attack', categoryList )
-        local target
+        local target = false
 		local oldTarget = false
         local blip = false
         local maxRadius = data.SearchRadius or 50
@@ -1409,12 +1420,14 @@ Platoon = Class(sorianoldPlatoon) {
 				local targetCheck = true
 				for k,v in atkPri do
 					local category = ParseEntityCategory( v )
-					if EntityCategoryContains(category, target) then 
+					if EntityCategoryContains(category, target) and v != 'ALLUNITS' then
 						targetCheck = false
 						break
 					end
+				end  
+				if targetCheck then
+					target = false
 				end
-				if targetCheck then target = false end
 			end
             if not target or target:IsDead() then
                 if aiBrain:GetCurrentEnemy() and aiBrain:GetCurrentEnemy():IsDefeated() then
@@ -1455,7 +1468,7 @@ Platoon = Class(sorianoldPlatoon) {
 						end   
 					end
 					movingToScout = false
-                elseif not movingToScout then
+                elseif not movingToScout and not target then
                     movingToScout = true
                     self:Stop()
                     for k,v in AIUtils.AIGetSortedMassLocations(aiBrain, 10, nil, nil, nil, nil, self:GetPlatoonPosition()) do
@@ -1881,7 +1894,7 @@ Platoon = Class(sorianoldPlatoon) {
             local buildRelative = eng.EngineerBuildQueue[1][3]
 			local threadStarted = false
             # see if we can move there first        
-            if AIUtils.EngineerMoveWithSafePath(aiBrain, eng, buildLocation) then
+            if AIUtils.EngineerMoveWithSafePathSorian(aiBrain, eng, buildLocation) then
                 if not eng or eng:IsDead() or not eng.PlatoonHandle or not aiBrain:PlatoonExists(eng.PlatoonHandle) then
                     if eng then eng.ProcessBuild = nil end
                     return
@@ -1889,7 +1902,7 @@ Platoon = Class(sorianoldPlatoon) {
                 # check to see if we need to reclaim or capture...
                 if not AIUtils.EngineerTryReclaimCaptureArea(aiBrain, eng, buildLocation) then
                     # check to see if we can repair
-                    if not AIUtils.EngineerTryRepair(aiBrain, eng, whatToBuild, buildLocation) then
+                    if not AIUtils.EngineerTryRepairSorian(aiBrain, eng, whatToBuild, buildLocation) then
                         # otherwise, go ahead and build the next structure there
                         aiBrain:BuildStructure( eng, whatToBuild, NormalToBuildLocation(buildLocation), buildRelative )
                         if not eng.NotBuildingThread then
