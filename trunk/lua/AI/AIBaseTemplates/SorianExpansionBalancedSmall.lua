@@ -32,8 +32,8 @@ BaseBuilderTemplate {
         'SorianT3LightDefenses',
 		
 		'SorianT2ArtilleryFormBuilders',
-		'SorianT3ArtilleryFormBuilders',
-		'SorianT4ArtilleryFormBuilders',
+		#'SorianT3ArtilleryFormBuilders',
+		#'SorianT4ArtilleryFormBuilders',
         
         # ==== LAND UNIT BUILDERS ==== #
         'SorianT1LandFactoryBuilders',
@@ -74,47 +74,33 @@ BaseBuilderTemplate {
     },
     BaseSettings = {
         EngineerCount = {
-            Tech1 = 8,
-            Tech2 = 8,
-            Tech3 = 8,
+            Tech1 = 15,
+            Tech2 = 10,
+            Tech3 = 10,
             SCU = 1,
         },
         
         FactoryCount = {
-            Land = 2,
-            Air = 1,
+            Land = 3,
+            Air = 0,
             Sea = 0,
-            Gate = 1,
+            Gate = 0,
         },
         
         MassToFactoryValues = {
-            T1Value = 6,
-            T2Value = 15,
-            T3Value = 22.5
+            T1Value = 7,
+            T2Value = 18,
+            T3Value = 25,
         },
-
-        NoGuards = true,
     },
     ExpansionFunction = function(aiBrain, location, markerType)
-        if markerType != 'Start Location' then
+        if markerType != 'Start Location' and markerType != 'Expansion Area' then
             return 0
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if not personality == 'sorianrush' then
-            return 0
-        end
-
-        local threatCutoff = 10 # value of overall threat that determines where enemy bases are
-        local distance = import('/lua/ai/AIUtilities.lua').GetThreatDistance( aiBrain, location, threatCutoff )
-        if not distance or distance > 1000 then
-            return 50
-        elseif distance > 500 then
-            return 75
-        elseif distance > 250 then
-            return 100
-        else # within 250
-            return 25
+        if personality == 'sorianrush' then
+            return 200
         end
         
         return 0

@@ -118,7 +118,7 @@ function EngineerTryRepairSorian(aiBrain, eng, whatToBuild, pos)
     if not pos then 
         return false 
     end
-	local checkRange = 50
+	local checkRange = 75
     local structureCat = ParseEntityCategory( whatToBuild )
 
 	if IsMex(whatToBuild) then

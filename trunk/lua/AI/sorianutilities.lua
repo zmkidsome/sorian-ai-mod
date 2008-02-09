@@ -17,7 +17,7 @@ function CanRespondEffectively(aiBrain, location, platoon)
 end
 
 function GetGuards(aiBrain, Unit)
-	local engs = aiBrain:GetUnitsAroundPoint( categories.ENGINEER, Unit:GetPosition(), 20, 'Ally' )
+	local engs = aiBrain:GetUnitsAroundPoint( categories.ENGINEER, Unit:GetPosition(), 10, 'Ally' )
 	local count = 0
 	local UpgradesFrom = Unit:GetBlueprint().General.UpgradesFrom
 	for k,v in engs do

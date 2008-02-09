@@ -60,43 +60,43 @@ function UnitCapWatchThreadSorian(aiBrain)
 			end
 		end
         while GetArmyUnitCostTotal(aiBrain:GetArmyIndex()) > (GetArmyUnitCap(aiBrain:GetArmyIndex()) - 20) and not Reset do
-            if not KillPD and aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENERGYPRODUCTION) > 1 then
+            if not KillPD and aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENERGYPRODUCTION) > 3 then
 				local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.ENERGYPRODUCTION * categories.STRUCTURE, true)
 				for k, v in units do
 					v:Kill()
 				end
                 KillPD = true
 				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed T1 Pgens')
-            elseif not KillDF and aiBrain:GetCurrentUnits(categories.TECH3 * categories.DEFENSE * categories.STRUCTURE) > 1 then            
+            elseif not KillDF and aiBrain:GetCurrentUnits(categories.TECH3 * categories.DEFENSE * categories.STRUCTURE) > 15 then            
                 local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.DEFENSE * categories.STRUCTURE, true)
                 for k, v in units do
                     v:Kill()
                 end
 				KillDF = true
 				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed T1 Defenses')
-			elseif not KillEng and (aiBrain:GetCurrentUnits(categories.TECH2 * categories.ENGINEER) > 1 or aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENGINEER) > 1) then
+			elseif not KillEng and (aiBrain:GetCurrentUnits(categories.TECH2 * categories.ENGINEER) > 6 or aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENGINEER) > 6) then
 				if aiBrain:GetCurrentUnits(categories.TECH2 * categories.ENGINEER) > 1 or aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENGINEER) > 1 then
 					local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.ENGINEER, true)
 					for k, v in units do
 						v:Kill()						
 					end
 				end
-				if aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENGINEER) > 1 then
-					local units = aiBrain:GetListOfUnits(categories.TECH2 * categories.ENGINEER, true)
+				if aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENGINEER) > 6 then
+					local units = aiBrain:GetListOfUnits(categories.TECH2 * categories.ENGINEER - categories.ENGINEERSTATION, true)
 					for k, v in units do
 						v:Kill()
 					end
 				end				
 				KillEng = true
 				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed Engies')
-			elseif not KillT1Land and aiBrain:GetCurrentUnits(categories.TECH3 * categories.MOBILE * categories.LAND - categories.ENGINEER) > 1 then
+			elseif not KillT1Land and aiBrain:GetCurrentUnits(categories.TECH3 * categories.MOBILE * categories.LAND - categories.ENGINEER) > 50 then
 				local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.MOBILE * categories.LAND, true)
 				for k, v in units do
 					v:Kill()
 				end				
 				KillT1Land = true
 				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed T1 Land')
-			elseif not KillT1Air and aiBrain:GetCurrentUnits(categories.TECH3 * categories.MOBILE * categories.AIR - categories.INTELLIGENCE) > 1 then
+			elseif not KillT1Air and aiBrain:GetCurrentUnits(categories.TECH3 * categories.MOBILE * categories.AIR - categories.INTELLIGENCE) > 10 then
 				local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.MOBILE * categories.AIR - categories.SCOUT, true)
 				for k, v in units do
 					v:Kill()
@@ -104,7 +104,7 @@ function UnitCapWatchThreadSorian(aiBrain)
 				KillT1Air = true
 				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed T1 Air')
             else        
-				if aiBrain:GetCurrentUnits(categories.TECH3 * categories.DEFENSE * categories.ANTIAIR) > 1 then
+				if aiBrain:GetCurrentUnits(categories.TECH3 * categories.DEFENSE * categories.ANTIAIR) > 10 then
 					local units = aiBrain:GetListOfUnits(categories.TECH2 * categories.DEFENSE * categories.ANTIAIR, true)
 					for k, v in units do
 						v:Kill()

@@ -102,13 +102,13 @@ function CDRRunAwaySorian( aiBrain, cdr )
 	end
 	local nmeHardcore = aiBrain:GetNumUnitsAroundPoint( categories.EXPERIMENTAL, cdrPos, 130, 'Enemy' )
 	local nmeT3 = aiBrain:GetNumUnitsAroundPoint( categories.LAND * categories.TECH3 - categories.ENGINEER, cdrPos, 50, 'Enemy' )
-    if cdr:GetHealthPercent() < .80 or shieldPercent < .30 or nmeHardcore > 0 or nmeT3 > 4 then
+    if cdr:GetHealthPercent() < .70 or shieldPercent < .30 or nmeHardcore > 0 or nmeT3 > 4 then
         #AIUtils.AIFindDefensiveArea( aiBrain, cdr, categories.DEFENSE * categories.ANTIAIR, 10000 )
         #LOG('*AI DEBUG: ARMY ' .. aiBrain.Nickname .. ': CDR AI ACTIVATE - CDR RUNNING AWAY' )
         local nmeAir = aiBrain:GetNumUnitsAroundPoint( categories.AIR - categories.SCOUT - categories.INTELLIGENCE, cdrPos, 30, 'Enemy' )
         local nmeLand = aiBrain:GetNumUnitsAroundPoint( categories.COMMAND + categories.LAND - categories.ENGINEER - categories.SCOUT - categories.TECH1, cdrPos, 40, 'Enemy' )
 		local nmaShield = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE, cdrPos, 100, 'Ally' )
-        if nmeAir > 4 or nmeLand > 9 or nmeT3 > 4 or nmeHardcore > 0 or cdr:GetHealthPercent() < .80 or shieldPercent < .30 then
+        if nmeAir > 4 or nmeLand > 9 or nmeT3 > 4 or nmeHardcore > 0 or cdr:GetHealthPercent() < .70 or shieldPercent < .30 then
 			if cdr:GetUnitBeingBuilt() then
 				cdr.UnitBeingBuiltBehavior = cdr:GetUnitBeingBuilt()
 			end
@@ -166,7 +166,7 @@ function CDRRunAwaySorian( aiBrain, cdr )
 						#LOG('*AI DEBUG: No Shield')
 					end
                 end
-            until cdr:IsDead() or (cdr:GetHealthPercent() > .85 and shieldPercent > .35 and nmeAir < 5 and nmeLand < 10 and nmeHardcore == 0 and nmeT3 < 5)
+            until cdr:IsDead() or (cdr:GetHealthPercent() > .75 and shieldPercent > .35 and nmeAir < 5 and nmeLand < 10 and nmeHardcore == 0 and nmeT3 < 5)
 			#LOG("*AI DEBUG: " .. aiBrain.Nickname .. " done running")
             cdr.GoingHome = false
 			IssueClearCommands( {cdr} )
@@ -257,7 +257,7 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
         local plat = aiBrain:MakePlatoon( '', '' )
         aiBrain:AssignUnitsToPlatoon( plat, {cdr}, 'support', 'None' )
         plat:Stop()
-        local priList = { categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.TECH3 * categories.INDIRECTFIRE,
+        local priList = { categories.ENERGYPRODUCTION * categories.STRUCTURE * categories.DRAGBUILD, categories.TECH3 * categories.INDIRECTFIRE,
             categories.TECH3 * categories.MOBILE, categories.TECH2 * categories.INDIRECTFIRE, categories.MOBILE * categories.TECH2,
             categories.TECH1 * categories.INDIRECTFIRE, categories.TECH1 * categories.MOBILE, categories.CONSTRUCTION * categories.STRUCTURE, categories.ECONOMIC * categories.STRUCTURE, categories.ALLUNITS }
         #LOG('*AI DEBUG: ARMY ' .. aiBrain.Nickname .. ': CDR AI ACTIVATE - Commander go fight stuff! -- ' .. totalUnits)
@@ -482,9 +482,32 @@ function CommanderThreadSorian(cdr, platoon)
 	aiBrain:BuildScoutLocations()
 	moveOnNext = false
 	moveWait = 0
+	local tickCount = 0
     while not cdr:IsDead() do
 		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Loop')
 		#AIAttackUtils.DrawPathGraph()
+		
+		#local expCount = 0
+		#local navCount = 0
+		#local manCount = 0
+		#tickCount = tickCount + 1
+		#local managers = aiBrain.BuilderManagers
+		#if tickCount > 14 then
+		#	tickCount = 0
+		#	for k,v in managers do
+		#		if string.find(k, 'ARMY_') or string.find(k, 'Large Expansion') or string.find(k, 'Expansion Area') or string.find(k, 'EXPANSION_AREA') then
+		#			expCount = expCount + 1
+		#		elseif string.find(k, 'Naval Area') then
+		#			navCount = navCount + 1
+		#		elseif not string.find(k, 'MAIN') then
+		#			LOG('*AI DEBUG: Found an unidentifiable base')
+		#		end
+		#		manCount = manCount + 1
+		#	end
+		#	LOG('*AI DEBUG: '.. aiBrain.Nickname ..': Managers = '..manCount..' Expansions = '..expCount..' Naval = '..navCount)
+		#end
+		
+		if GetGameTimeSeconds() > 600 then Mult = 1 end
         WaitTicks(2)
         # Overcharge
         if not cdr:IsDead() and GetGameTimeSeconds() > Delay and UCBC.HaveGreaterThanUnitsWithCategory(aiBrain,  1, 'FACTORY') and aiBrain:GetNoRushTicks() <= 0 then CDROverChargeSorian( aiBrain, cdr, Mult ) end

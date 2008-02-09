@@ -247,7 +247,7 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderData = {
             Construction = {
-                BuildClose = true,
+                BuildClose = false,
                 BuildStructures = {
                     'T2StrategicMissile',
                 },
@@ -345,7 +345,7 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderData = {
             Construction = {
-                BuildClose = true,
+                BuildClose = false,
                 BuildStructures = {
                     'T2StrategicMissile',
                 },
@@ -514,9 +514,10 @@ BuilderGroup {
                 MarkerUnitCount = 5,
                 MarkerUnitCategory = 'DEFENSE STRUCTURE',
                 BuildStructures = {
-                    'T1AADefense',
-                    'T1AADefense',
-                    'T1GroundDefense',
+				'T1GroundDefense',
+				'T1AADefense',
+				'T1GroundDefense',
+				'T1AADefense',
                 },
             },
         },
@@ -558,8 +559,8 @@ BuilderGroup {
                     'T2GroundDefense',
                     'T2AADefense',
                     'T2MissileDefense',
-					'T2Artillery',
 					'T2StrategicMissile',
+					'T2Artillery',
 					'T2ShieldDefense',
 					'T2EngineerSupport',
                 }
@@ -598,8 +599,8 @@ BuilderGroup {
                     'T2GroundDefense',
                     'T2AADefense',
                     'T2MissileDefense',
-					'T2Artillery',
 					'T2StrategicMissile',
+					'T2Artillery',
 					'T2ShieldDefense',
 					'T2EngineerSupport',
                 }
@@ -638,8 +639,8 @@ BuilderGroup {
                     'T2GroundDefense',
                     'T2AADefense',
                     'T2MissileDefense',
-					'T2Artillery',
 					'T2StrategicMissile',
+					'T2Artillery',
 					'T2ShieldDefense',
                 }
             }
@@ -682,8 +683,8 @@ BuilderGroup {
                     'T3GroundDefense',
                     'T3AADefense',
                     'T2MissileDefense',
-					'T2Artillery',
 					'T2StrategicMissile',
+					'T2Artillery',
 					'T2ShieldDefense',
 					'T2EngineerSupport',
                 }
@@ -722,8 +723,8 @@ BuilderGroup {
                     'T2GroundDefense',
                     'T3AADefense',
                     'T2MissileDefense',
-					'T2Artillery',
 					'T2StrategicMissile',
+					'T2Artillery',
 					'T2ShieldDefense',
 					'T2EngineerSupport',
                 }
@@ -762,8 +763,8 @@ BuilderGroup {
                     'T2GroundDefense',
                     'T3AADefense',
                     'T2MissileDefense',
-					'T2Artillery',
 					'T2StrategicMissile',
+					'T2Artillery',
 					'T2ShieldDefense',
                 }
             }
@@ -999,7 +1000,7 @@ BuilderGroup {
 			{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 6, categories.SHIELD * categories.TECH2 * categories.STRUCTURE }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiency', { 0.85, 1.3 } },
+            { EBC, 'GreaterThanEconEfficiency', { 0.85, 1.2 } },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, 'SHIELD STRUCTURE TECH2' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
         },
@@ -1031,7 +1032,7 @@ BuilderGroup {
 			{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, categories.SHIELD * categories.TECH2 * categories.STRUCTURE }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiency', { 0.85, 1.3 } },
+            { EBC, 'GreaterThanEconEfficiency', { 0.85, 1.2 } },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, 'SHIELD STRUCTURE TECH2' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
         },
@@ -1139,7 +1140,7 @@ BuilderGroup {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 10, categories.SHIELD * categories.TECH3 * categories.STRUCTURE} },
             { MIBC, 'FactionIndex', {1, 2, 4}},
 			{ UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, 'SHIELD STRUCTURE TECH3' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.3 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'UnitCapCheckLess', { .8 } },
         },
@@ -1167,7 +1168,7 @@ BuilderGroup {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 16, categories.SHIELD * categories.TECH2 * categories.STRUCTURE} },
             { MIBC, 'FactionIndex', {3}},
 			{ UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, 'SHIELD STRUCTURE TECH2' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.3 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'UnitCapCheckLess', { .8 } },
         },

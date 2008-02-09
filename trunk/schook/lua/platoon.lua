@@ -247,13 +247,11 @@ Platoon = Class(sorianoldPlatoon) {
         local maxRadius = weapon.MaxRadius
         local minRadius = weapon.MinRadius
         unit:SetAutoMode(true)
-        #local atkPri = { 'COMMAND', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE', 'CONSTRUCTION', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MOBILE LAND',
-        #    'TECH2 MOBILE LAND', 'TECH1 MOBILE LAND', 'ALLUNITS' }
-        self:SetPrioritizedTargetList( 'Attack', { categories.COMMAND, categories.STRUCTURE * categories.STRATEGIC * categories.TECH3, categories.STRUCTURE * categories.STRATEGIC * categories.TECH2, categories.STRUCTURE * categories.DEFENSE * categories.TECH3,
-            categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.DEFENSE * categories.TECH1, categories.STRUCTURE * categories.CONSTRUCTION * categories.TECH3, categories.STRUCTURE * categories.CONSTRUCTION * categories.TECH2,
-			categories.STRUCTURE * categories.CONSTRUCTION * categories.TECH1, categories.EXPERIMENTAL * categories.MOBILE, categories.STRUCTURE * categories.ECONOMIC * categories.TECH3,
-			categories.STRUCTURE * categories.ECONOMIC * categories.TECH2, categories.STRUCTURE * categories.ECONOMIC * categories.TECH1, categories.TECH3 * categories.MOBILE, categories.TECH2 * categories.MOBILE,
-            categories.TECH1 * categories.MOBILE, categories.ALLUNITS } )
+		local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 
+		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'ALLUNITS' }
+        self:SetPrioritizedTargetList( 'Attack', { categories.STRUCTURE * categories.ARTILLERY * categories.EXPERIMENTAL, categories.STRUCTURE * categories.NUKE * categories.EXPERIMENTAL, categories.EXPERIMENTAL * categories.ORBITALSYSTEM, categories.STRUCTURE * categories.ARTILLERY * categories.TECH3, 
+		categories.STRUCTURE * categories.NUKE * categories.TECH3, categories.EXPERIMENTAL * categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.COMMAND, categories.EXPERIMENTAL * categories.MOBILE * categories.LAND, categories.TECH3 * categories.MASSFABRICATION,
+		categories.TECH3 * categories.ENERGYPRODUCTION, categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.ALLUNITS } )
         while aiBrain:PlatoonExists(self) do
             local target = false
             local blip = false
@@ -265,7 +263,7 @@ Platoon = Class(sorianoldPlatoon) {
                     #    aiBrain:PickEnemyLogic()
                     #end
 
-                    #target = AIUtils.AIFindBrainTargetInRange( aiBrain, self, 'Attack', maxRadius, atkPri, aiBrain:GetCurrentEnemy() )
+                    target = AIUtils.AIFindBrainTargetInRangeSorian( aiBrain, self, 'Attack', maxRadius, atkPri )
 
                     if not target then
                         target = self:FindPrioritizedUnit('Attack', 'Enemy', true, unit:GetPosition(), maxRadius)
@@ -1219,6 +1217,27 @@ Platoon = Class(sorianoldPlatoon) {
             return self:AirScoutingAISorian() 
         else 
             return self:LandScoutingAISorian()
+        end
+    end,
+	
+    HuntAISorian = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        local armyIndex = aiBrain:GetArmyIndex()
+        local target
+        local blip
+        local PlatoonFormation = self.PlatoonData.UseFormation or 'NoFormation'
+        self:SetPlatoonFormationOverride(PlatoonFormation)
+        while aiBrain:PlatoonExists(self) do
+            if self:IsOpponentAIRunning() then
+                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL)
+                if target then
+                    blip = target:GetBlip(armyIndex)
+                    self:Stop()
+                    self:AggressiveMoveToLocation( table.copy(target:GetPosition()) )
+                end
+            end
+            WaitSeconds(17)
         end
     end,
 
