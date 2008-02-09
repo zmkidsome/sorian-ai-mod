@@ -118,25 +118,13 @@ BaseBuilderTemplate {
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)
-        if markerType != 'Start Location' then
+        if markerType != 'Start Location' and markerType != 'Expansion Area' then
             return 0
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if not personality == 'sorianair' then
-            return 0
-        end
-
-        local threatCutoff = 10 # value of overall threat that determines where enemy bases are
-        local distance = import('/lua/ai/AIUtilities.lua').GetThreatDistance( aiBrain, location, threatCutoff )
-        if not distance or distance > 1000 then
-            return 50
-        elseif distance > 500 then
-            return 75
-        elseif distance > 250 then
-            return 100
-        else # within 250
-            return 25
+        if personality == 'sorianair' then
+            return 200
         end
         
         return 0

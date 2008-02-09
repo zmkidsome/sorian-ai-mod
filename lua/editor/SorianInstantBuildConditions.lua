@@ -13,6 +13,70 @@ local ScenarioUtils = import('/lua/sim/ScenarioUtilities.lua')
 local Utils = import('/lua/utilities.lua')
 
 ##############################################################################################################
+# function: HaveGreaterThanUnitsWithCategory = BuildCondition	doc = "Please work function docs."
+#
+# parameter 0: string   aiBrain		    = "default_brain"
+# parameter 1: int      numReq     = 0					doc = "docs for param1"
+# parameter 2: expr   category        = categories.ALLUNITS		doc = "param2 docs"
+# parameter 3: expr   idleReq       = false         doc = "docs for param3"
+# parameter 4: bool		special		= "Whether numReq varies depending on game time"
+#
+##############################################################################################################
+function HaveGreaterThanUnitsWithCategory(aiBrain, numReq, category, idleReq)
+    local numUnits
+	local total = 0
+    if type(category) == 'string' then
+        category = ParseEntityCategory(category)
+    end
+    if not idleReq then
+        numUnits = aiBrain:GetListOfUnits(category, false)
+    else
+        numUnits = aiBrain:GetListOfUnits(category, true)
+    end
+	for k,v in numUnits do
+		if v:GetFractionComplete() == 1 then
+			total = total + 1
+			if total > numReq then
+				return true
+			end
+		end
+	end
+    return false
+end
+
+
+##############################################################################################################
+# function: HaveLessThanUnitsWithCategory = BuildCondition	doc = "Please work function docs."
+#
+# parameter 0: string	aiBrain		= "default_brain"
+# parameter 1: int	numReq          = 0				doc = "docs for param1"
+# parameter 2: expr   category        = categories.ALLUNITS		doc = "param2 docs"
+# parameter 3: expr   idleReq       = false         doc = "docs for param3"
+#
+##############################################################################################################
+function HaveLessThanUnitsWithCategory(aiBrain, numReq, category, idleReq)
+    local numUnits
+	local total = 0
+    if type(category) == 'string' then
+        category = ParseEntityCategory(category)
+    end
+    if not idleReq then
+        numUnits = aiBrain:GetListOfUnits(category, false)
+    else
+        numUnits = aiBrain:GetListOfUnits(category, true)
+    end
+	for k,v in numUnits do
+		if v:GetFractionComplete() == 1 then
+			total = total + 1
+			if total > numReq then
+				return false
+			end
+		end
+	end
+    return true
+end
+
+##############################################################################################################
 # function: HaveLessThanUnitsInCategoryBeingBuilt = BuildCondition
 #
 # parameter 0: string   aiBrain         = "default_brain"
@@ -162,4 +226,44 @@ function EngineerNeedsAssistance(aiBrain, doesbool, locationType, category)
 	end
 	if numFound == 0 and not doesbool then return true end
 	return false
+end
+
+function LessThanExpansionBases(aiBrain, checkNum)
+	local expBaseCount = 0
+    local startX, startZ = aiBrain:GetArmyStartPos()
+	local isWaterMap = false
+    local navalMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Naval Area', startX, startZ)
+    if navalMarker then
+        isWaterMap = true
+    end
+	expBaseCount = aiBrain:GetManagerCount('Start Location')
+	#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanExpansionBases Starts = '..expBaseCount)
+	expBaseCount = expBaseCount + aiBrain:GetManagerCount('Expansion Area')
+	#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanExpansionBases Total = '..expBaseCount)
+	if isWaterMap and expBaseCount < checkNum then
+		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanExpansionBases Returned True')
+		return true
+	elseif not isWaterMap and expBaseCount < checkNum + 1 then
+		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanExpansionBases Returned True')
+		return true
+	end
+	return false
+end
+
+function GreaterThanExpansionBases(aiBrain, checkNum)
+	return not LessThanExpansionBases(aiBrain, checkNum)
+end
+
+function LessThanNavalBases(aiBrain, checkNum)
+	local expBaseCount = 0
+	expBaseCount = aiBrain:GetManagerCount('Naval Area')
+	#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanNavalBases Total = '..expBaseCount)
+	if expBaseCount < checkNum then
+		return true
+	end
+	return false
+end
+
+function GreaterThanNavalBases(aiBrain, checkNum)
+	return not LessThanNavalBases(aiBrain, checkNum)
 end

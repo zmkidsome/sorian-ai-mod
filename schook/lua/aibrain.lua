@@ -52,8 +52,52 @@ AIBrain = Class(oldAIBrain) {
         local plat = self:GetPlatoonUniquelyNamed('ArmyPool')
         
         plat:ForkThread( plat.BaseManagersDistressAI )
+		
+		self.DeadBaseThread = self:ForkThread( self.DeadBaseMonitor )
         
         self.EnemyPickerThread = self:ForkThread( self.PickEnemy )
+    end,
+	
+	DeadBaseMonitor = function(self)
+		while true do
+			WaitSeconds(5)
+			for k,v in self.BuilderManagers do
+				if v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
+					v.FactoryManager:Destroy()
+					v.PlatoonFormManager:Destroy()
+					v.EngineerManager:Destroy()
+					v.EngineerManager:SetEnabled(false)
+					v.FactoryManager:SetEnabled(false)
+					v.PlatoonFormManager:SetEnabled(false)
+					self.BuilderManagers[k] = nil
+					#LOG('*AI DEBUG: ********** DeadBaseMonitor found a dead base **********')
+				end
+			end
+		end
+	end,
+	
+    GetManagerCount = function(self, type)
+        local count = 0
+		local num = 0
+        for k,v in self.BuilderManagers do
+			num = num + 1
+            if type then
+                if type == 'Start Location' and not ( string.find(k, 'ARMY_') or string.find(k, 'Large Expansion') ) then
+                    continue
+                elseif type == 'Naval Area' and not ( string.find(k, 'Naval Area') ) then
+                    continue
+                elseif type == 'Expansion Area' and ( not (string.find(k, 'Expansion Area') or string.find(k, 'EXPANSION_AREA')) or string.find(k, 'Large Expansion') ) then
+                    continue
+                end
+            end
+        
+            if v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
+                continue
+            end
+            
+            count = count + 1
+        end
+        return count
     end,
 	
     BaseMonitorAlertTimeout = function(self, pos)
@@ -121,6 +165,12 @@ AIBrain = Class(oldAIBrain) {
             for k,v in self.BaseMonitor.BaseMonitorPoints do
                 if not v.Alert then
                     v.Threat = self:GetThreatAtPosition( v.Position, 0, true, 'AntiSurface' )
+					if v.Threat < 1 then
+						local eEngies = self:GetNumUnitsAroundPoint( categories.ENGINEER, v.Position, 10, 'Enemy' )
+						if eEngies > 0 then
+							v.Threat = v.Threat + eEngies
+						end
+					end						
                     if v.Threat > alertThreat then
                         v.Alert = true
                         table.insert( self.BaseMonitor.AlertsTable,

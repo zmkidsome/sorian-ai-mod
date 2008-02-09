@@ -24,7 +24,7 @@ function ReclaimablesInArea(aiBrain, locType)
     if aiBrain:GetEconomyStoredRatio('MASS') > .5 and aiBrain:GetEconomyStoredRatio('ENERGY') > .5 then
         return false
     end
-	
+
     local ents = AIUtils.AIGetReclaimablesAroundLocation( aiBrain, locType )
     if ents and table.getn( ents ) > 0 then
 		return true
@@ -280,25 +280,4 @@ function HaveComparativeUnitsWithCategoryAndAlliance(aiBrain, greater, myCategor
         return true
     end
     return false
-end
-
-function LessThanExpansionBases(aiBrain, checkNum)
-		local expBasecount = 0
-		expBaseCount = aiBrain:GetManagerCount('Start Location')
-		expBaseCount = expBaseCount + aiBrain:GetManagerCount('Expansion Area')
-		return true #expBaseCount < checkNum
-end
-
-function GreaterThanExpansionBases(aiBrain, checkNum)
-		return true #not LessThanExpansionBases(aiBrain, checkNum)
-end
-
-function LessThanNavalBases(aiBrain, checkNum)
-		local expBasecount = 0
-		expBaseCount = aiBrain:GetManagerCount('Naval Area')
-		return true #expBaseCount < checkNum
-end
-
-function GreaterThanNavalBases(aiBrain, checkNum)
-		return true #not LessThanNavalBases(aiBrain, checkNum)
 end

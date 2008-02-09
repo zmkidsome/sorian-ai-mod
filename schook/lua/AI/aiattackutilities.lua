@@ -286,6 +286,74 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     
 end
 
+function CheckNavalPathing(aiBrain, platoon, location, maxRange, selectedWeaponArc)    
+    local platoonUnits = platoon:GetPlatoonUnits()
+	local platoonPosition = platoon:GetPlatoonPosition()
+    selectedWeaponArc = selectedWeaponArc or 'none'
+    
+    local success, bestGoalPos
+    local threatTargetPos
+    local isTech1 = false
+
+    local inWater = GetTerrainHeight(location[1], location[2]) < GetSurfaceHeight(location[1], location[2]) - 2
+    
+    #if this threat is in the water, see if we can get to it
+    if inWater then
+        success, bestGoalPos = CheckPlatoonPathingEx(platoon, {location[1], 0, location[2]})
+    end
+    
+    #if it is not in the water or we can't get to it, then see if there is water within weapon range that we can get to
+    if not success and maxRange then
+        #Check vectors in 8 directions around the threat location at maxRange to see if they are in water.
+        local rootSaver = maxRange / 1.4142135623 #For diagonals. X and Z components of the vector will have length maxRange / sqrt(2)
+        local vectors = {
+            {location[1],             0, location[2] + maxRange},   #up
+            {location[1],             0, location[2] - maxRange},   #down
+            {location[1] + maxRange,  0, location[2]},              #right
+            {location[1] - maxRange,  0, location[2]},              #left
+            
+            {location[1] + rootSaver,  0, location[2] + rootSaver},   #right-up
+            {location[1] + rootSaver,  0, location[2] - rootSaver},   #right-down
+            {location[1] - rootSaver,  0, location[2] + rootSaver},   #left-up
+            {location[1] - rootSaver,  0, location[2] - rootSaver},   #left-down
+        }
+        
+        #Sort the vectors by their distance to us.
+        table.sort(vectors, function(a,b)
+            local distA = VDist2Sq(platoonPosition[1], platoonPosition[3], a[1], a[3])
+            local distB = VDist2Sq(platoonPosition[1], platoonPosition[3], b[1], b[3])
+            
+            return distA < distB
+        end)
+        
+        #Iterate through the vector list and check if each is in the water. Use the first one in the water that has enemy structures in range.
+        for _,vec in vectors do
+            inWater = GetTerrainHeight(vec[1], vec[3]) < GetSurfaceHeight(vec[1], vec[3]) - 2
+            
+            if inWater then
+                success, bestGoalPos = CheckPlatoonPathingEx(platoon, vec)
+            end
+            
+            if success then
+                success = not aiBrain:CheckBlockingTerrain(bestGoalPos, threatTargetPos, selectedWeaponArc)
+            end
+            
+            if success then 
+                #I hate having to do this check, but the influence map doesn't have enough resolution and without it the boats
+                #will just get stuck on the shore. The code hits this case about once every 5-10 seconds on a large map with 4 naval AIs
+                local numUnits = aiBrain:GetNumUnitsAroundPoint( categories.NAVAL + categories.STRUCTURE, bestGoalPos, maxRange, 'Enemy')
+                if numUnits > 0 then
+                    break
+                else
+                    success = false
+                end
+            end
+        end
+    end
+    
+    return bestGoalPos
+end
+
 function GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
     local maxRange = 0
     local platoonUnits = platoon:GetPlatoonUnits()

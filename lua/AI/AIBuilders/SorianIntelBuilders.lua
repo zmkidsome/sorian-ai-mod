@@ -34,6 +34,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 3, categories.SCOUT * categories.AIR}},
 			{ MIBC, 'LessThanGameTime', { 300 } },
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
             #{ UCBC, 'HaveLessThanUnitsWithCategory', { 3, categories.FACTORY }},
             #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.FACTORY * categories.AIR } },
             { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.AIR * categories.FACTORY * categories.TECH1 } },
@@ -48,7 +49,7 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirScout',
         Priority = 700,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 2, categories.SCOUT * categories.AIR}},
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.SCOUT * categories.AIR}},
             { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.AIR * categories.FACTORY * categories.TECH1 } },
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, categories.AIR * categories.FACTORY * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.SCOUT * categories.AIR } },
@@ -76,7 +77,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2AirScout',
         Priority = 600,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 2, categories.SCOUT * categories.AIR}},
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.SCOUT * categories.AIR}},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 2, categories.TECH3 * categories.FACTORY * categories.AIR } },
             { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.AIR * categories.FACTORY * categories.TECH2 } },
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, categories.AIR * categories.FACTORY * categories.TECH3 } },
@@ -108,7 +109,7 @@ BuilderGroup {
         PlatoonTemplate = 'T3AirScout',
         Priority = 700,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 2, categories.INTELLIGENCE * categories.AIR * categories.TECH3 }},
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.INTELLIGENCE * categories.AIR * categories.TECH3 }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.AIR * categories.FACTORY * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.INTELLIGENCE * categories.AIR } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
@@ -203,7 +204,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Land Scout Ratio Build',
         PlatoonTemplate = 'T1LandScout',
-        Priority = 700,
+        Priority = 827,
         BuilderConditions = {
             { UCBC, 'HaveUnitRatio', { 0.05, categories.LAND * categories.SCOUT, '<=', categories.LAND * categories.MOBILE - categories.ENGINEER }},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.SCOUT * categories.LAND } },
@@ -280,7 +281,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         Priority = 930,
         BuilderConditions = {
-            { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, categories.ENGINEER - categories.COMMAND - categories.TECH1 } },
+            { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, categories.ENGINEER * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, ( categories.RADAR + categories.OMNI ) * categories.STRUCTURE}},
             { EBC, 'GreaterThanEconIncome',  { 0.5, 15 } },
@@ -302,7 +303,6 @@ BuilderGroup {
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 930,
         BuilderConditions = {
-            { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, categories.ENGINEER - categories.COMMAND - categories.TECH1 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, ( categories.RADAR + categories.OMNI ) * categories.STRUCTURE}},
             { EBC, 'GreaterThanEconIncome',  { 0.5, 15 } },
@@ -375,6 +375,7 @@ BuilderGroup {
         BuilderConditions = {
             { EBC, 'GreaterThanEconIncome',  { 2, 100 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.RADAR * categories.STRUCTURE * categories.TECH2, 'RADAR STRUCTURE' }},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
@@ -491,6 +492,7 @@ BuilderGroup {
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.RADAR * categories.TECH2 * categories.STRUCTURE } },
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.RADAR * categories.STRUCTURE * categories.TECH2, 'RADAR STRUCTURE' }},
         },
         BuilderType = 'Any',
     },

@@ -22,6 +22,7 @@ local SAI = '/lua/ScenarioPlatoonAI.lua'
 local IBC = '/lua/editor/InstantBuildConditions.lua'
 local PlatoonFile = '/lua/platoon.lua'
 local SBC = '/lua/editor/SorianBuildConditions.lua'
+local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
 
 local ExtractorToFactoryRatio = 3
 
@@ -39,10 +40,10 @@ BuilderGroup {
         Priority = 985,
         InstanceCount = 2,
         BuilderConditions = {
-            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 5, 0, 'StructuresNotMex' } },
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
             { MIBC, 'LessThanGameTime', { 600 } },
-			{ SBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 14, '>=', 'FACTORY TECH2 STRUCTURE' } },
@@ -79,9 +80,9 @@ BuilderGroup {
         Priority = 932,
         InstanceCount = 2,
         BuilderConditions = {
-            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 100, 0, 'StructuresNotMex' } },
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-			{ SBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 14, '>=', 'FACTORY TECH2 STRUCTURE' } },
@@ -115,11 +116,11 @@ BuilderGroup {
         BuilderName = 'Sorian T2VacantStartingAreaEngineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         Priority = 922,
-        InstanceCount = 1,
+        InstanceCount = 2,
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-			{ SBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
@@ -158,7 +159,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-			{ SBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
@@ -204,10 +205,10 @@ BuilderGroup {
         Priority = 922,
         InstanceCount = 2,
         BuilderConditions = {
-            { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 100, 2, 'StructuresNotMex' } },
+            { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },   
-			{ SBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
             #{ EBC, 'MassIncomeToUnitRatio', { 10, '>=', 'FACTORY TECH1 STRUCTURE' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 20, '>=', 'FACTORY TECH2 STRUCTURE' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 30, '>=', 'FACTORY TECH3 STRUCTURE' } },
@@ -241,7 +242,7 @@ BuilderGroup {
         BuilderName = 'Sorian T1 Vacant Expansion Area Engineer(Fire base)',
         PlatoonTemplate = 'EngineerBuilderSorian',
         Priority = 850,
-        InstanceCount = 2,
+        InstanceCount = 4,
         BuilderConditions = {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             #{ UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
@@ -253,7 +254,7 @@ BuilderGroup {
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
-                ExpansionBase = true,
+                ExpansionBase = false, #true
                 NearMarkerType = 'Expansion Area',
                 LocationRadius = 350,
                 LocationType = 'LocationType',
@@ -280,7 +281,7 @@ BuilderGroup {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .7 } },
-			{ SBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
@@ -317,7 +318,7 @@ BuilderGroup {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .7 } },
-			{ SBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
@@ -358,7 +359,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Expansion Area Firebase Engineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 800,
+        Priority = 851,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 256, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
@@ -401,7 +402,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Cybran',
         PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
-        Priority = 800,
+        Priority = 851,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 700, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
@@ -446,7 +447,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Aeon',
         PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
-        Priority = 800,
+        Priority = 851,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 900, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
@@ -491,7 +492,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - UEF',
         PlatoonTemplate = 'UEFT3EngineerBuilderSorian',
-        Priority = 800,
+        Priority = 851,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 750, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
@@ -536,7 +537,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Seraphim',
         PlatoonTemplate = 'SeraphimT3EngineerBuilderSorian',
-        Priority = 800,
+        Priority = 851,
         InstanceCount = 1,
         BuilderConditions = {
             { MABC, 'CanBuildFirebase', { 'LocationType', 825, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },

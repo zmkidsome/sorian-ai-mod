@@ -54,20 +54,20 @@ BaseBuilderTemplate {
         
         # ==== DEFENSES ==== #
 		'SorianT1BaseDefenses',
-		'SorianT2BaseDefenses',
-		'SorianT3BaseDefenses',
+		#'SorianT2BaseDefenses',
+		#'SorianT3BaseDefenses',
 		
         'SorianT1DefensivePoints',
         'SorianT2DefensivePoints',
-        'SorianT3DefensivePoints',
+        #'SorianT3DefensivePoints',
 		
 		'SorianT2ArtilleryFormBuilders',
-		'SorianT3ArtilleryFormBuilders',
-		'SorianT4ArtilleryFormBuilders',
+		#'SorianT3ArtilleryFormBuilders',
+		#'SorianT4ArtilleryFormBuilders',
         'SorianT2MissileDefenses',
         'SorianT3NukeDefenses',
         'SorianT3NukeDefenseBehaviors',
-		'SorianMiscDefensesEngineerBuilders',
+		#'SorianMiscDefensesEngineerBuilders',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
@@ -156,7 +156,7 @@ BaseBuilderTemplate {
             SCU = 2,
         },
         FactoryCount = {
-            Land = 5,
+            Land = 8,
             Air = 2,
             Sea = 0,
             Gate = 1,

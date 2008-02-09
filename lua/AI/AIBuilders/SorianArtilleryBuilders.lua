@@ -220,6 +220,7 @@ BuilderGroup {
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.NUKE * categories.STRUCTURE}},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {22, 1000}},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },

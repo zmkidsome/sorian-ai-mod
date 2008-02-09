@@ -149,10 +149,15 @@ BrainConditionsMonitor = Class {
     ConditionMonitorThread = function(self)
         while true do
             local checks = 0
+			local numResults = 0
             local numChecks = table.getn(self.ResultTable)
             local numPerTick = math.ceil( numChecks / ( self.ThreadWaitDuration * 10 ) )
             
             for k,v in self.ResultTable do
+				if not v:LocationExists() then
+					continue
+				end
+				numResults = numResults + 1
                 v:CheckCondition()
                 
                 # Load balance per tick here
@@ -162,6 +167,7 @@ BrainConditionsMonitor = Class {
                     checks = 0
                 end
             end
+			#LOG('*AI DEBUG: '.. self.Brain.Nickname ..' ConditionMonitorThread checked: '..numResults)
             WaitTicks(1)
         end
     end,
@@ -188,6 +194,124 @@ BrainConditionsMonitor = Class {
             return nil
         end
     end,
+}
+
+ImportCondition = Class(Condition) {
+    Create = function(self,brain,key,filename,funcName,funcData)
+        Condition.Create(self,brain,key)
+        self.Filename = filename
+        self.FunctionName = funcName
+        self.FunctionData = funcData
+        self.CheckTime = false
+    end,
+    
+    CheckCondition = function(self)
+        if self.CheckTime != GetGameTimeSeconds() then
+            self.Status = import(self.Filename)[self.FunctionName](self.Brain, unpack(self.FunctionData))
+            self.CheckTime = GetGameTimeSeconds()
+        end
+        return self.Status
+    end,
+
+    GetStatus = function(self, reportFailure)
+        if reportFailure and not self.Status then
+            LOG('*AI DEBUG: Build Condition failed - ' .. self.FunctionName .. ' - Data: ' .. repr(self.FunctionData))
+        end
+        return self.Status
+    end,
+	
+	LocationExists = function(self)
+		local found = false
+		for k,v in self.FunctionData do
+			if type(v) == 'string' and not ( v == 'Naval Area' or v == 'Expansion Area' or v == 'Large Expansion Area') then 
+				if string.find(v, 'ARMY_') or string.find(v, 'Large Expansion') or string.find(v, 'Expansion Area') or string.find(v, 'EXPANSION_AREA') or string.find(v, 'Naval Area') then
+					found = true
+					if self.Brain.BuilderManagers[v] then
+						return true
+					end
+				end
+			end
+		end
+		if not found then return true end
+		return false
+	end,
+}
+
+InstantImportCondition = Class(Condition) {
+    Create = function(self,brain,key,filename,funcName,funcData)
+        Condition.Create(self,brain,key)
+        self.Filename = filename
+        self.FunctionName = funcName
+        self.FunctionData = funcData
+        self.CheckTime = false
+    end,
+    
+    # This class doesn't change when CheckCondition is called; Only changed when requested
+    CheckCondition = function(self)
+        #if self.CheckTime != GetGameTimeSeconds() then
+            #self.Status = import(self.Filename)[self.FunctionName](self.Brain, unpack(self.FunctionData))
+            #self.CheckTime = GetGameTimeSeconds()
+        #end
+        return self.Status
+    end,
+
+    # This class always performs the check when getting status (basically for stat checks)
+    GetStatus = function(self, reportFailure)
+        if self.CheckTime != GetGameTimeSeconds() then
+            self.Status = import(self.Filename)[self.FunctionName](self.Brain, unpack(self.FunctionData))
+            self.CheckTime = GetGameTimeSeconds()
+            #LOG('*AI LOG: Instant Check')
+        end
+        if reportFailure and not self.Status then
+            LOG('*AI DEBUG: Build Condition failed - ' .. self.FunctionName .. ' - Data: ' .. repr(self.FunctionData))
+        end
+        return self.Status
+    end,
+	
+	LocationExists = function(self)
+		local found = false
+		for k,v in self.FunctionData do
+			if type(v) == 'string' and not ( v == 'Naval Area' or v == 'Expansion Area' or v == 'Large Expansion Area') then 
+				if string.find(v, 'ARMY_') or string.find(v, 'Large Expansion') or string.find(v, 'Expansion Area') or string.find(v, 'EXPANSION_AREA') or string.find(v, 'Naval Area') then
+					found = true
+					if self.Brain.BuilderManagers[v] then
+						return true
+					end
+				end
+			end
+		end
+		if not found then return true end
+		return false
+	end,
+}
+
+FunctionCondition = Class(Condition) {
+    Create = function(self,brain,key,funcHandle,funcParams)
+        Condition.Create(self,brain,key)
+        self.FunctionHandle = funcHandle
+        self.FunctionParameters = funcParams or {}
+    end,
+    
+    CheckCondition = function(self)
+        self.Status = self.FunctionHandle( self.Brain, unpack(self.FunctionParameters) )
+        return self.Status
+    end,
+	
+	LocationExists = function(self)
+		local found = false
+		for k,v in self.FunctionParameters do
+			if type(v) == 'string' and not ( v == 'Naval Area' or v == 'Expansion Area' or v == 'Large Expansion Area') then 
+				if string.find(v, 'ARMY_') or string.find(v, 'Large Expansion') or string.find(v, 'Expansion Area') or string.find(v, 'EXPANSION_AREA') or string.find(v, 'Naval Area') then
+					found = true
+					if self.Brain.BuilderManagers[v] then
+						return true
+					end
+				end
+			end
+		end
+		if not found then return true end
+		return false
+	end,
 }
 
 end
