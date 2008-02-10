@@ -639,7 +639,7 @@ function FatBoyBehaviorSorian(self)
     local aiBrain = self:GetBrain()
     AssignExperimentalPrioritiesSorian(self)
     
-    local experimental = GetExperimentalUnit(self)
+    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
     local targetUnit = false
     local lastBase = false
     local airUnit = EntityCategoryContains(categories.AIR, experimental)
@@ -799,7 +799,7 @@ end
 
 CzarBehaviorSorian = function(self)
     local aiBrain = self:GetBrain()
-    local experimental = GetExperimentalUnit(self)
+    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
     if not experimental then
         return
     end
@@ -854,7 +854,7 @@ end
 
 AhwassaBehaviorSorian = function(self)
     local aiBrain = self:GetBrain()
-    local experimental = GetExperimentalUnit(self)
+    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
     if not experimental then
         return
     end
@@ -881,7 +881,7 @@ end
 
 TickBehaviorSorian = function(self)
     local aiBrain = self:GetBrain()
-    local experimental = GetExperimentalUnit(self)
+    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
     if not experimental then
         return
     end
@@ -909,7 +909,7 @@ end
 function ScathisBehaviorSorian(self)   
     AssignExperimentalPrioritiesSorian(self)
     
-    local experimental = GetExperimentalUnit(self)
+    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
     local targetUnit = false
     local lastBase = false
     local airUnit = EntityCategoryContains(categories.AIR, experimental)
@@ -977,7 +977,7 @@ end
 function BehemothBehaviorSorian(self)   
     AssignExperimentalPrioritiesSorian(self)
     
-    local experimental = GetExperimentalUnit(self)
+    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
     local targetUnit = false
     local lastBase = false
     local airUnit = EntityCategoryContains(categories.AIR, experimental)

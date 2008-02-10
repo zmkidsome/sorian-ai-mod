@@ -281,3 +281,22 @@ function HaveComparativeUnitsWithCategoryAndAlliance(aiBrain, greater, myCategor
     end
     return false
 end
+
+##############################################################################################################
+# function: CmdrHasUpgrade = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: string   upgrade         = "upgrade"
+#
+##############################################################################################################
+function CmdrHasUpgrade(aiBrain, upgrade, has)
+    local units = aiBrain:GetListOfUnits( categories.COMMAND, false )
+    for k,v in units do
+        if v:HasEnhancement( upgrade ) and has then
+            return true
+        elseif not v:HasEnhancement( upgrade ) and not has then
+            return true
+        end
+    end
+    return false
+end

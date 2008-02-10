@@ -83,13 +83,17 @@ function AINewExpansionBase( aiBrain, baseName, position, builder, constructionD
         import('/lua/ai/AIAddBuilderTable.lua').AddGlobalBaseTemplate(aiBrain, baseName, pick )
         
         # If air base switch to building an air factory rather than land
-        if string.find(pick, 'Air') and BaseBuilderTemplates[baseName].BaseSettings.FactoryCount.Land and BaseBuilderTemplates[baseName].BaseSettings.FactoryCount.Land == 0 then
-            if constructionData.BuildStructures[1] == 'T1LandFactory' then
-                constructionData.BuildStructures[1] = 'T1AirFactory'
-            end
+        if string.find(pick, 'Air') and BaseBuilderTemplates[pick].BaseSettings.FactoryCount.Land and BaseBuilderTemplates[pick].BaseSettings.FactoryCount.Land == 0 then
+            #if constructionData.BuildStructures[1] == 'T1LandFactory' then
+            #    constructionData.BuildStructures[1] = 'T1AirFactory'
+            #end
+			for k,v in constructionData.BuildStructures do
+				if constructionData.BuildStructures[k] == 'T1LandFactory' then
+					constructionData.BuildStructures[k] = 'T1AirFactory'
+				end
+			end
         end
-    end
-    
+    end    
 end
 
 function DoHackyLogic(buildingType, builder)

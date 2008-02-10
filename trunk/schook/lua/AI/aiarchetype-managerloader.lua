@@ -9,7 +9,7 @@ function ExecutePlan(aiBrain)
 		
 		local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
 		
-		if per == 'sorian' or per == 'sorianrush' or per == 'sorianair' then
+		if string.find(per, 'sorian') then
 			aiBrain:SetupUnderEnergyStatTriggerSorian(0.1)
 			aiBrain:SetupUnderMassStatTriggerSorian(0.1)		
 		else        
@@ -31,7 +31,7 @@ function ExecutePlan(aiBrain)
             end
         end
 
-		if per == 'sorian' or per == 'sorianrush' or per == 'sorianair' then
+		if string.find(per, 'sorian') then
 			ForkThread(UnitCapWatchThreadSorian, aiBrain)
 			ForkThread(behaviors.NukeCheck, aiBrain)
 		else

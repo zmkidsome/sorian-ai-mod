@@ -34,8 +34,8 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
     
-    local surThreat = pool:GetPlatoonThreat( 'Surface', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
-	local airThreat = pool:GetPlatoonThreat( 'Air', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
+    local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
+	local airThreat = pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
     if (surThreat + airThreat) > targetNumber then
         return true
     end
@@ -185,7 +185,7 @@ BuilderGroup {
         PlatoonTemplate = 'T1LandDFTank',
         Priority = 900,
         BuilderConditions = {
-            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'AntiSurface', 10 } },
+            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Land', 10 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH1 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY LAND TECH2, FACTORY LAND TECH3' }},
@@ -355,7 +355,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2AttackTankSorian',
         Priority = 925,
         BuilderConditions = {
-            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'AntiSurface', 2 } },
+            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Land', 2 } },
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY LAND TECH3' }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH2 } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -540,7 +540,7 @@ BuilderGroup {
         PlatoonTemplate = 'T3ArmoredAssaultSorian',
         Priority = 950,
         BuilderConditions = {
-            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'AntiSurface', 2 } },
+            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Land', 2 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH3 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -554,7 +554,7 @@ BuilderGroup {
         PlatoonTemplate = 'T3LandBot',
         Priority = 945,
         BuilderConditions = {
-            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'AntiSurface', 2 } },
+            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Land', 2 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH3 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -595,7 +595,7 @@ BuilderGroup {
         BuilderName = 'Sorian De-clutter Land Attack T1',
         PlatoonTemplate = 'LandAttackMediumSorian',
 		PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
-        Priority = 1,
+        Priority = 0,
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {
@@ -614,7 +614,7 @@ BuilderGroup {
         BuilderName = 'Sorian De-clutter Land Attack T2',
         PlatoonTemplate = 'LandAttackMediumSorian',
 		PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
-        Priority = 1,
+        Priority = 0,
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {
@@ -633,7 +633,7 @@ BuilderGroup {
         BuilderName = 'Sorian De-clutter Land Attack T3',
         PlatoonTemplate = 'LandAttackMediumSorian',
 		PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
-        Priority = 1,
+        Priority = 0,
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {

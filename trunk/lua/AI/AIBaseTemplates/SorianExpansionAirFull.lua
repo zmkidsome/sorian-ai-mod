@@ -49,18 +49,6 @@ BaseBuilderTemplate {
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
         
-        # ==== LAND UNIT BUILDERS ==== #
-        'SorianT1LandFactoryBuilders',
-        'SorianT2LandFactoryBuilders',
-        'SorianT3LandFactoryBuilders',
-        'SorianFrequentLandAttackFormBuilders',
-        'SorianMassHunterLandFormBuilders',
-        'SorianMiscLandFormBuilders',
-        
-        'SorianT1ReactionDF',
-        'SorianT2ReactionDF',
-        'SorianT3ReactionDF',
-
         # ==== AIR UNIT BUILDERS ==== #
         'SorianT1AirFactoryBuilders',
         'SorianT2AirFactoryBuilders',
@@ -90,9 +78,6 @@ BaseBuilderTemplate {
         'SorianAirScoutFactoryBuilders',
         'SorianAirScoutFormBuilders',
         
-        'SorianLandScoutFactoryBuilders',
-        'SorianLandScoutFormBuilders',
-        
         'SorianRadarEngineerBuilders',
         'SorianRadarUpgradeBuildersExpansion',
         
@@ -106,7 +91,7 @@ BaseBuilderTemplate {
             SCU = 2,
         },
         FactoryCount = {
-            Land = 1,
+            Land = 0,
             Air = 4,
             Sea = 0,
             Gate = 1,
@@ -123,7 +108,7 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if personality == 'sorianair' then
+        if personality == 'sorianair' or personality == 'sorianwater' then
             return 200
         end
         

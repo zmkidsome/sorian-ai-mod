@@ -181,6 +181,42 @@ Platoon = Class(sorianoldPlatoon) {
             WaitSeconds( aiBrain.BaseMonitor.PoolReactionTime )
         end
     end,
+	
+    EnhanceAI = function(self)
+        local aiBrain = self:GetBrain()
+        local unit
+        local data = self.PlatoonData
+		local numLoop = 0
+        for k,v in self:GetPlatoonUnits() do
+            unit = v
+            break
+        end
+        if unit then
+            IssueStop({unit})
+            IssueClearCommands({unit})
+            for k,v in data.Enhancement do
+                local order = {
+                    TaskName = "EnhanceTask",
+                    Enhancement = v
+                }
+                IssueScript({unit}, order)
+            end
+            WaitSeconds(data.TimeBetweenEnhancements or 1)
+            repeat
+                WaitSeconds(5)
+                if not aiBrain:PlatoonExists(self) then
+                    return
+                end
+				if not unit:IsUnitState('Upgrading') then
+					numLoop = numLoop + 1
+				else
+					numLoop = 0
+				end
+            until unit:IsDead() or numLoop > 1
+        end
+        if data.DoNotDisband then return end
+        self:PlatoonDisband()
+    end,
 
     ArtilleryAISorian = function(self)
         local aiBrain = self:GetBrain()
@@ -248,10 +284,10 @@ Platoon = Class(sorianoldPlatoon) {
         local minRadius = weapon.MinRadius
         unit:SetAutoMode(true)
 		local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 
-		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'ALLUNITS' }
+		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'MASSPRODUCTION', ' ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'ALLUNITS' }
         self:SetPrioritizedTargetList( 'Attack', { categories.STRUCTURE * categories.ARTILLERY * categories.EXPERIMENTAL, categories.STRUCTURE * categories.NUKE * categories.EXPERIMENTAL, categories.EXPERIMENTAL * categories.ORBITALSYSTEM, categories.STRUCTURE * categories.ARTILLERY * categories.TECH3, 
 		categories.STRUCTURE * categories.NUKE * categories.TECH3, categories.EXPERIMENTAL * categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.COMMAND, categories.EXPERIMENTAL * categories.MOBILE * categories.LAND, categories.TECH3 * categories.MASSFABRICATION,
-		categories.TECH3 * categories.ENERGYPRODUCTION, categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.ALLUNITS } )
+		categories.TECH3 * categories.ENERGYPRODUCTION, categories.MASSPRODUCTION, categories.ENERGYPRODUCTION, categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.ALLUNITS } )
         while aiBrain:PlatoonExists(self) do
             local target = false
             local blip = false
@@ -1873,7 +1909,7 @@ Platoon = Class(sorianoldPlatoon) {
     #       nil (tail calls into a behavior function)
     #-----------------------------------------------------
     ProcessBuildCommandSorian = function(eng, removeLastBuild)
-        if not eng or eng:IsDead() or not eng.PlatoonHandle or eng.GoingHome or eng.Fighting or eng.UnitBeingBuiltBehavior then
+        if not eng or eng:IsDead() or not eng.PlatoonHandle or eng:IsUnitState("Upgrading") or eng.GoingHome or eng.Fighting or eng.UnitBeingBuiltBehavior then
             if eng then eng.ProcessBuild = nil end
             return
         end
