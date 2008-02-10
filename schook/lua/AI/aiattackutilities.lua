@@ -155,7 +155,7 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     if platoon.MovementLayer == 'Water' then
 		local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
 		
-		if per == 'sorian' or per == 'sorianrush' or per == 'sorianair' then
+		if string.find(per, 'sorian') then
 			maxRange, selectedWeaponArc = GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
 		else        
 			maxRange, selectedWeaponArc = GetNavalPlatoonMaxRange(aiBrain, platoon)
@@ -292,7 +292,7 @@ function CheckNavalPathing(aiBrain, platoon, location, maxRange, selectedWeaponA
     selectedWeaponArc = selectedWeaponArc or 'none'
     
     local success, bestGoalPos
-    local threatTargetPos
+    local threatTargetPos = {location[1], 0, location[2]}
     local isTech1 = false
 
     local inWater = GetTerrainHeight(location[1], location[2]) < GetSurfaceHeight(location[1], location[2]) - 2
@@ -407,7 +407,7 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	
 	local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
 	
-	if per == 'sorian' or per == 'sorianrush' or per == 'sorianair' then testPath = true end
+	if string.find(per, 'sorian') then testPath = true end
 	
 	if VDist2Sq( start[1], start[3], destination[1], destination[3] ) <= 10000 and testPath then
 		table.insert(finalPath, destination)    
@@ -471,7 +471,7 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
 			local newPath = {
 				{
 					cost = 0,
-					path = {newNode = {position = destination} },
+					path = {newNode = {position = destination}, },
 					threat = 0
 				}
 			}

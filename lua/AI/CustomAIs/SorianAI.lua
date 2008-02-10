@@ -11,6 +11,10 @@ AIList = {
         key = 'sorianair',
         name = "AI: Sorian Air",
     },
+    {
+        key = 'sorianwater',
+        name = "AI: Sorian Water",
+    },
 }
 
 CheatAIList = {
@@ -25,5 +29,9 @@ CheatAIList = {
     {
         key = 'sorianaircheat',
         name = "AIx: Sorian Air",
+    },
+    {
+        key = 'sorianwatercheat',
+        name = "AIx: Sorian Water",
     },
 }

@@ -33,7 +33,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Land Exp1 Engineer 1',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 940,
+        Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
@@ -59,7 +59,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Land Exp2 Engineer 1',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 940,
+        Priority = 950,
 		InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
@@ -85,7 +85,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Land Exp3 Engineer 1',
         PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
-        Priority = 940,
+        Priority = 950,
 		InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.LAND }},
@@ -202,7 +202,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Air Exp1 Engineer 1',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 940,
+        Priority = 950,
 		InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.AIR }},
@@ -319,7 +319,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T4 Sea Exp1 Engineer',
         PlatoonTemplate = 'T3EngineerBuilder',
-        Priority = 940,
+        Priority = 950,
 		InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.NAVAL }},
@@ -414,7 +414,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Satellite Exp Engineer',
         PlatoonTemplate = 'UEFT3EngineerBuilderSorian',
-        Priority = 940,
+        Priority = 950,
 		InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENGINEER * categories.TECH3}},
@@ -506,11 +506,12 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian Econ Exper Engineer',
         PlatoonTemplate = 'AeonT3EngineerBuilder',
-        Priority = 940,
+        Priority = 950,
         BuilderConditions = {
 		{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.ECONOMIC }},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.EXPERIMENTAL * categories.ECONOMIC}},
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2}},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
 			{ IBC, 'BrainNotLowPowerMode', {} },

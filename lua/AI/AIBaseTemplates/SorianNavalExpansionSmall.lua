@@ -72,7 +72,7 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if personality == 'sorian' or personality == 'sorianrush' or personality == 'sorianair' then
+        if personality == 'sorian' or personality == 'sorianrush' or personality == 'sorianair' or personality == 'sorianwater' then
             return 200 #50
         end
         

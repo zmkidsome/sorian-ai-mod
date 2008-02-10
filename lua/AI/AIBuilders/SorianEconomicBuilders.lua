@@ -502,14 +502,15 @@ BuilderGroup {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3' }},
                 { EBC, 'GreaterThanEconStorageRatio', { 0.25, 0.25}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+				{ SBC, 'CmdrHasUpgrade', { 'AdvancedEngineering', false }},
                 { MIBC, 'FactionIndex', {1, 1}},
             },
         Priority = 900,
         BuilderType = 'Any',
+		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
             Enhancement = { 'LeftPod', 'RightPod', 'ResourceAllocation', 'AdvancedEngineering' },
         },
-		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
     Builder {
         BuilderName = 'Sorian UEF CDR Upgrade T3 Eng - Shields',
@@ -520,14 +521,15 @@ BuilderGroup {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
                 { EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+				{ SBC, 'CmdrHasUpgrade', { 'AdvancedEngineering', true }},
                 { MIBC, 'FactionIndex', {1, 1}},
             },
         Priority = 900,
         BuilderType = 'Any',
+		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
-            Enhancement = { 'RightPodRemove', 'LeftPodRemove', 'Shield', 'T3Engineering', 'ShieldGeneratorField' },
+            Enhancement = { 'RightPodRemove', 'Shield', 'T3Engineering', 'ShieldGeneratorField' },
         },
-        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
 
     # Aeon
@@ -540,14 +542,15 @@ BuilderGroup {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
                 { EBC, 'GreaterThanEconStorageRatio', { 0.25, 0.25}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+				{ SBC, 'CmdrHasUpgrade', { 'HeatSink', false }},
                 { MIBC, 'FactionIndex', {2, 2}},
             },
         Priority = 900,
         BuilderType = 'Any',
+		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
             Enhancement = { 'AdvancedEngineering', 'Shield', 'HeatSink' },
         },
-        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
     Builder {
         BuilderName = 'Sorian Aeon CDR Upgrade T3 Eng - ResourceAdv - EnhSensor',
@@ -558,14 +561,15 @@ BuilderGroup {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
                 { EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+				{ SBC, 'CmdrHasUpgrade', { 'HeatSink', true }},
                 { MIBC, 'FactionIndex', {2, 2}},
             },
         Priority = 900,
         BuilderType = 'Any',
+		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
             Enhancement = { 'T3Engineering', 'ShieldHeavy' },
         },
-        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
     
     # Cybran
@@ -578,14 +582,15 @@ BuilderGroup {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
                 { EBC, 'GreaterThanEconStorageRatio', { 0.25, 0.25}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+				{ SBC, 'CmdrHasUpgrade', { 'AdvancedEngineering', false }},
                 { MIBC, 'FactionIndex', {3, 3}},
             },
         Priority = 900,
         BuilderType = 'Any',
+		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
             Enhancement = { 'StealthGenerator', 'AdvancedEngineering' },
         },
-        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
     Builder {
         BuilderName = 'Sorian Cybran CDR Upgrade T3 Eng - Resource',
@@ -596,14 +601,15 @@ BuilderGroup {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
                 { EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+				{ SBC, 'CmdrHasUpgrade', { 'AdvancedEngineering', true }},
                 { MIBC, 'FactionIndex', {3, 3}},
             },
         Priority = 900,
         BuilderType = 'Any',
+		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
             Enhancement = { 'T3Engineering', 'CloakingGenerator' },
         },
-        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
 	
     # Seraphim
@@ -616,14 +622,15 @@ BuilderGroup {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
                 { EBC, 'GreaterThanEconStorageRatio', { 0.25, 0.25}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+				{ SBC, 'CmdrHasUpgrade', { 'DamageStabilization', false }},
                 { MIBC, 'FactionIndex', {4, 4}},
             },
         Priority = 900,
         BuilderType = 'Any',
+		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
             Enhancement = { 'AdvancedEngineering', 'DamageStabilization' },
         },
-        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
     Builder {
         BuilderName = 'Sorian Seraphim CDR Upgrade T3 Eng - ResourceAdv - EnhSensor',
@@ -634,14 +641,15 @@ BuilderGroup {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
                 { EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+				{ SBC, 'CmdrHasUpgrade', { 'DamageStabilization', true }},
                 { MIBC, 'FactionIndex', {4, 4}},
             },
         Priority = 900,
         BuilderType = 'Any',
+		PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
             Enhancement = { 'T3Engineering', 'DamageStabilizationAdvanced' },
         },
-        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
     },
 }
 

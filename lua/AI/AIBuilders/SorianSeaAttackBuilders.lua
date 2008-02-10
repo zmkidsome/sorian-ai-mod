@@ -34,8 +34,8 @@ function SeaAttackCondition(aiBrain, locationType, targetNumber)
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
     
-    local surfaceThreat = pool:GetPlatoonThreat( 'Surface', categories.MOBILE * categories.NAVAL, position, radius )
-    local subThreat = pool:GetPlatoonThreat( 'Sub', categories.MOBILE * categories.NAVAL, position, radius )
+    local surfaceThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.NAVAL, position, radius )
+    local subThreat = pool:GetPlatoonThreat( 'AntiSub', categories.MOBILE * categories.NAVAL, position, radius )
     if ( surfaceThreat + subThreat ) > targetNumber then
         return true
     end
@@ -216,7 +216,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, 'MOBILE TECH2 NAVAL, MOBILE TECH3 NAVAL' } },
+            { UCBC, 'PoolLessAtLocation', { 'LocationType', 1, 'MOBILE TECH2 NAVAL, MOBILE TECH3 NAVAL' } },
             { SeaAttackCondition, { 'LocationType', 20 } },
         },
     },
@@ -240,7 +240,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, 'MOBILE TECH3 NAVAL' } },
+            { UCBC, 'PoolLessAtLocation', { 'LocationType', 1, 'MOBILE TECH3 NAVAL' } },
             { SeaAttackCondition, { 'LocationType', 60 } },
         },
     },

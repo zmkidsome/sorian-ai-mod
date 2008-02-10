@@ -39,9 +39,9 @@ AIBrain = Class(oldAIBrain) {
         #self.BuilderManagers.MAIN.StrategyManager = StratManager.CreateStrategyManager(self, 'MAIN', self:GetStartVector3f(), 100)
 
         # Begin the base monitor process
-		local per = ScenarioInfo.ArmySetup[self.Brain.Name].AIPersonality
+		local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
 		
-		if per == 'sorian' or per == 'sorianrush' or per == 'sorianair' then
+		if string.find(per, 'sorian') then
 			local spec = {
 				DefaultDistressRange = 200,
 			}
@@ -224,7 +224,7 @@ AIBrain = Class(oldAIBrain) {
         else
 			local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
             local findEnemy = false
-            if not self:GetCurrentEnemy() or ((per == 'sorian' or per == 'sorianrush' or per == 'sorianair') and brainbool) then
+            if not self:GetCurrentEnemy() or (string.find(per, 'sorian') and brainbool) then
                 findEnemy = true
             else
                 local cIndex = self:GetCurrentEnemy():GetArmyIndex()
