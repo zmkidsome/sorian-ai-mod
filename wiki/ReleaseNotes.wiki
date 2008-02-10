@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.8b:* Fixed bug preventing the AI from building Air only expansions, Fixed bug with Naval platoons preventing them from pathing, Fix for Sim Speed fix bug after an enemy dies, Added Water AI.
+
 *0.9.8:* AI should tech faster, AI will use T2 engineer structures and not kill them off due to unit cap, AI should spread TMD out more, Fix for later game engineers not rebuilding Radar, Stopped late game T1, T2 Tactical will go after least protected highest priority target, AI will see enemy engineers as a threat to its structures, More T1 mobile arty, AI will mix scouts into platoons, Fix for Naval Units not doing anything, Fix for AI using the wrong expansion bases, Updated Sim Speed fixes.
 
 *0.9.7:* Fighters will patrol their bases, Fix for Cybran early scouts using stealth, Engineers will look for nearby projects to assist before starting a new project of the same type, AI will try to keep enough anti-nikes to stop enemy nukes, AI will group later game T4s, AI will build Paragon, New EngineerNeedsAssistance() function, New Air AI, AI will use Paragon.
