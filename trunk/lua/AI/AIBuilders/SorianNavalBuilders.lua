@@ -24,6 +24,49 @@ local PlatoonFile = '/lua/platoon.lua'
 local SBC = '/lua/editor/SorianBuildConditions.lua'
 local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
 
+
+BuilderGroup {
+    BuilderGroupName = 'SorianNavalExpansionBuildersFast',
+    BuildersType = 'EngineerBuilder',
+    Builder {
+        BuilderName = 'Sorian T1 Naval Builder Fast',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 985,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 250, -1000, 10, 1, 'AntiSurface' } },
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'NAVAL FACTORY'}},
+			{ SIBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'NAVAL FACTORY' } },
+            #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ SIBC, 'LessThanNavalBases', { 2 }},
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                NearMarkerType = 'Naval Area',
+                LocationRadius = 250,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 10,
+                ThreatRings = 0,
+                ThreatType = 'AntiSurface',
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                ExpansionRadius = 50,
+                BuildStructures = {
+                    'T1SeaFactory',
+				'T1NavalDefense',
+				'T1AADefense',
+				'T1Sonar',
+                }
+            }
+        }
+    },
+}
+
 # For everything but Naval Rush
 BuilderGroup {
     BuilderGroupName = 'SorianNavalExpansionBuilders',

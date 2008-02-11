@@ -164,7 +164,7 @@ BuilderGroup {
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
         },
         BuilderData = {
             ThreatWeights = {
@@ -175,10 +175,30 @@ BuilderGroup {
         },
     },
     Builder {
-        BuilderName = 'Sorian T4 Exp Land Late Game',
+        BuilderName = 'Sorian T4 Exp Land Late Game 1',
         PlatoonAddPlans = {'NameUnits', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         PlatoonTemplate = 'T4ExperimentalLandLate',
-        Priority = 10001,
+        Priority = 0,
+        FormRadius = 10000,
+        InstanceCount = 50,
+        BuilderType = 'Any',
+        BuilderConditions = {
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'FACTORY TECH3'}},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.LAND * categories.EXPERIMENTAL - categories.url0401}},
+        },
+        BuilderData = {
+            ThreatWeights = {
+                TargetThreatType = 'Commander',
+            },
+            UseMoveOrder = true,
+            PrioritizedCategories = { 'EXPERIMENTAL LAND', 'COMMAND', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'TECH3 STRATEGIC STRUCTURE', 'MASSFABRICATION', 'ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE ANTIAIR', 'STRUCTURE DEFENSE DIRECTFIRE', 'FACTORY AIR', 'FACTORY LAND' }, # list in order
+        },
+    },
+    Builder {
+        BuilderName = 'Sorian T4 Exp Land Late Game 2',
+        PlatoonAddPlans = {'NameUnits', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+        PlatoonTemplate = 'T4ExperimentalLandLate',
+        Priority = 0,
         FormRadius = 10000,
         InstanceCount = 50,
         BuilderType = 'Any',
@@ -281,7 +301,7 @@ BuilderGroup {
         FormRadius = 10000,
         BuilderType = 'Any',
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
         },
         BuilderData = {
             ThreatWeights = {
@@ -292,10 +312,30 @@ BuilderGroup {
         },
     },
     Builder {
-        BuilderName = 'Sorian T4 Exp Air Late Game',
+        BuilderName = 'Sorian T4 Exp Air Late Game 1',
         PlatoonTemplate = 'T4ExperimentalAirLate',
         PlatoonAddPlans = {'NameUnits', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
-        Priority = 801,
+        Priority = 0,
+        InstanceCount = 50,
+        FormRadius = 10000,
+        BuilderType = 'Any',
+        BuilderConditions = {
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'FACTORY TECH3'}},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.AIR * categories.EXPERIMENTAL}},
+        },
+        BuilderData = {
+            ThreatWeights = {
+                TargetThreatType = 'Commander',
+            },
+            UseMoveOrder = true,
+            PrioritizedCategories = { 'EXPERIMENTAL', 'COMMAND', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'TECH3 STRATEGIC STRUCTURE', 'ENERGYPRODUCTION', 'MASSFABRICATION', 'STRUCTURE' }, # list in order
+        },
+    },
+    Builder {
+        BuilderName = 'Sorian T4 Exp Air Late Game 2',
+        PlatoonTemplate = 'T4ExperimentalAirLate',
+        PlatoonAddPlans = {'NameUnits', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+        Priority = 0,
         InstanceCount = 50,
         FormRadius = 10000,
         BuilderType = 'Any',

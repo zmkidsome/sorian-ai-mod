@@ -145,36 +145,37 @@ Platoon = Class(sorianoldPlatoon) {
         end
     end,
 	
-    PoolDistressAI = function(self)
+    BaseManagersDistressAI = function(self)
         local aiBrain = self:GetBrain()
-        local distressRange = aiBrain.BaseMonitor.PoolDistressRange
-        local reactionTime = aiBrain.BaseMonitor.PoolReactionTime
         while aiBrain:PlatoonExists(self) do
+            local distressRange = aiBrain.BaseMonitor.PoolDistressRange
+            local reactionTime = aiBrain.BaseMonitor.PoolReactionTime
+
             local platoonUnits = self:GetPlatoonUnits()
-            if aiBrain:PBMHasPlatoonList() then
-                for locNum, locData in aiBrain.PBM.Locations do
-                    if not locData.DistressCall then
-                        local distressLocation = aiBrain:BaseMonitorDistressLocation( locData.Location, aiBrain.BaseMonitor.PoolDistressRange, aiBrain.BaseMonitor.PoolDistressThreshold )
-                        local moveLocation
-                        if distressLocation then
-                            #LOG('*AI DEBUG: ARMY '.. aiBrain:GetArmyIndex() ..': --- POOL DISTRESS RESPONSE ---')
-                            local group = {}
-                            for k,v in platoonUnits do
-                                vPos = table.copy(v:GetPosition())
-                                if VDist2( vPos[1], vPos[3], locData.Location[1], locData.Location[3] ) < locData.Radius and not EntityCategoryContains(categories.ENGINEER, v) and not EntityCategoryContains(categories.TRANSPORTATION - categories.uea0203, v) and not EntityCategoryContains(categories.daa0206, v) and not EntityCategoryContains(categories.urs0305 + categories.uas0305 + categories.ues0305, v) then
-                                    table.insert(group, v)
-                                end
-                            end
-                            IssueClearCommands( group )
-                            if distressLocation[1] <= 0 or distressLocation[3] <= 0 or distressLocation[1] >= ScenarioInfo.size[1] or
-                                    distressLocation[3] >= ScenarioInfo.size[2] then
-                                #LOG('*AI DEBUG: POOLDISTRESSAI SENDING UNITS TO WRONG LOCATION')
-                            end
-                            IssueAggressiveMove( group, distressLocation )
-                            IssueMove( group, aiBrain:PBMGetLocationCoords( locData.LocationType ) )
-                            locData.DistressCall = true
-                            self:ForkThread( self.UnlockPBMDistressLocation, locData )
-                        end
+            
+            for locName, locData in aiBrain.BuilderManagers do
+                if not locData.BaseSettings.DistressCall then
+                    local position = locData.EngineerManager:GetLocationCoords()
+				local retPos = AIUtils.RandomLocation(position[1],position[3])
+                    local radius = locData.EngineerManager:GetLocationRadius()
+                    local distressRange = locData.BaseSettings.DistressRange or aiBrain.BaseMonitor.PoolDistressRange
+                    local distressLocation = aiBrain:BaseMonitorDistressLocation( position, distressRange, aiBrain.BaseMonitor.PoolDistressThreshold )
+                    
+                    # Distress !
+                    if distressLocation then
+                        #LOG('*AI DEBUG: ARMY '.. aiBrain:GetArmyIndex() ..': --- POOL DISTRESS RESPONSE ---')
+                        
+                        # Grab the units at the location
+                        local group = self:GetUnitsAroundPoint( categories.MOBILE - categories.EXPERIMENTAL, position, radius )
+
+                        # Move the group to the distress location and then back to the location of the base
+                        IssueClearCommands( group )
+                        IssueAggressiveMove( group, distressLocation )
+                        IssueMove( group, retPos )
+                        
+                        # Set distress active for duration
+                        locData.BaseSettings.DistressCall = true
+                        self:ForkThread( self.UnlockBaseManagerDistressLocation, locData )
                     end
                 end
             end
@@ -914,7 +915,7 @@ Platoon = Class(sorianoldPlatoon) {
                 end
 			end
 			
-            if closest and (( entType == 'Mass' and massRatio < .9 ) or ( entType == 'Energy' and energyRatio < .9 )) then
+            if closest and eng:CanPathTo( closest:GetPosition() ) and (( entType == 'Mass' and massRatio < .9 ) or ( entType == 'Energy' and energyRatio < .9 )) then
                 oldClosest = closest
                 IssueClearCommands( self:GetPlatoonUnits() )
 				IssueReclaim( self:GetPlatoonUnits(), closest )

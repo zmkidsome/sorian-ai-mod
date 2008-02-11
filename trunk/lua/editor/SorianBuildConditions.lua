@@ -67,6 +67,10 @@ function MarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threat
     return false
 end
 
+function NoMarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threatMax, threatRings, threatType, startX, startZ)
+	return not MarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threatMax, threatRings, threatType, startX, startZ)
+end
+
 ##############################################################################################################
 # function: MapGreaterThan = BuildCondition
 #

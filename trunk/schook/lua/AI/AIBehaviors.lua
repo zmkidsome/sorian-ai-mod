@@ -639,7 +639,7 @@ function FatBoyBehaviorSorian(self)
     local aiBrain = self:GetBrain()
     AssignExperimentalPrioritiesSorian(self)
     
-    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
+    local experimental = GetExperimentalUnit(self)
     local targetUnit = false
     local lastBase = false
     local airUnit = EntityCategoryContains(categories.AIR, experimental)
@@ -799,7 +799,7 @@ end
 
 CzarBehaviorSorian = function(self)
     local aiBrain = self:GetBrain()
-    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
+    local experimental = GetExperimentalUnit(self)
     if not experimental then
         return
     end
@@ -819,6 +819,8 @@ CzarBehaviorSorian = function(self)
             IssueAttack({experimental}, experimental:GetPosition())
             WaitTicks(5)
             IssueMove({experimental}, targetUnit:GetPosition())
+            WaitTicks(5)
+            IssueAttack({experimental}, targetUnit)
 			attackedUnit = targetUnit
 		elseif targetUnit and oldTargetUnit != targetUnit then
 		    IssueClearCommands({experimental})
@@ -828,21 +830,26 @@ CzarBehaviorSorian = function(self)
         end        
         
         local nearCommander = CommanderOverrideCheck(self)
+		local nearCommanderPos = nearCommander:GetPosition()
         local oldCommander = nil
+		local oldCommanderPos = nil
         while nearCommander and not experimental:IsDead() and not experimental:IsIdleState() do
             
-            if nearCommander and nearCommander != oldCommander and nearCommander != targetUnit then
+            if nearCommander and (nearCommander != oldCommander or nearCommanderPos != oldCommanderPos) and nearCommander != targetUnit then
                 IssueClearCommands({experimental})
                 WaitTicks(5)
                 IssueAttack({experimental}, experimental:GetPosition())
                 WaitTicks(5)
                 IssueMove({experimental}, nearCommander:GetPosition())
+                WaitTicks(5)
+                IssueAttack({experimental}, nearCommander)
                 targetUnit = nearCommander
 				attackedUnit = nil
             end
             
             WaitSeconds(1)
             oldCommander = nearCommander
+			oldcommanderPos = nearCommanderPos
             nearCommander = CommanderOverrideCheck(self)
         end
     
@@ -854,7 +861,7 @@ end
 
 AhwassaBehaviorSorian = function(self)
     local aiBrain = self:GetBrain()
-    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
+    local experimental = GetExperimentalUnit(self)
     if not experimental then
         return
     end
@@ -881,7 +888,7 @@ end
 
 TickBehaviorSorian = function(self)
     local aiBrain = self:GetBrain()
-    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
+    local experimental = GetExperimentalUnit(self)
     if not experimental then
         return
     end
@@ -907,9 +914,10 @@ TickBehaviorSorian = function(self)
 end
 
 function ScathisBehaviorSorian(self)   
+	local aiBrain = self:GetBrain()
     AssignExperimentalPrioritiesSorian(self)
     
-    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
+    local experimental = GetExperimentalUnit(self)
     local targetUnit = false
     local lastBase = false
     local airUnit = EntityCategoryContains(categories.AIR, experimental)
@@ -975,9 +983,10 @@ function ScathisBehaviorSorian(self)
 end
 
 function BehemothBehaviorSorian(self)   
+	local aiBrain = self:GetBrain()
     AssignExperimentalPrioritiesSorian(self)
     
-    local experimental = self:GetPlatoonUnits() #GetExperimentalUnit(self)
+    local experimental = GetExperimentalUnit(self)
     local targetUnit = false
     local lastBase = false
     local airUnit = EntityCategoryContains(categories.AIR, experimental)
