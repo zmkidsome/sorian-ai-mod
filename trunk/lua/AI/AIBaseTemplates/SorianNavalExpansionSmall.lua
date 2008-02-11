@@ -16,7 +16,7 @@ BaseBuilderTemplate {
         'SorianT2BalancedUpgradeBuilders',
         
         # Engineer Builders
-        'SorianEngineerFactoryBuilders',
+        #'SorianEngineerFactoryBuilders',
         'SorianT1EngineerBuilders',
         'SorianT2EngineerBuilders',
         'SorianT3EngineerBuilders',
