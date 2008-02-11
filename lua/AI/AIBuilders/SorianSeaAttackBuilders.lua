@@ -203,6 +203,7 @@ BuilderGroup {
         InstanceCount = 5,
         BuilderType = 'Any',
         BuilderData = {
+		UseFormation = 'AttackFormation',
             ThreatWeights = {
                 #IgnoreStrongerTargetsRatio = 100.0,
                 PrimaryThreatTargetType = 'Naval',
@@ -227,6 +228,7 @@ BuilderGroup {
         InstanceCount = 5,
         BuilderType = 'Any',
         BuilderData = {
+		UseFormation = 'AttackFormation',
             ThreatWeights = {
                 #IgnoreStrongerTargetsRatio = 100.0,
                 PrimaryThreatTargetType = 'Naval',
@@ -251,6 +253,7 @@ BuilderGroup {
         InstanceCount = 5,
         BuilderType = 'Any',
         BuilderData = {
+		UseFormation = 'AttackFormation',
             ThreatWeights = {
                 #IgnoreStrongerTargetsRatio = 100.0,
                 PrimaryThreatTargetType = 'Naval',
