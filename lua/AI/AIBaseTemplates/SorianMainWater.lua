@@ -73,6 +73,7 @@ BaseBuilderTemplate {
 		'SorianMiscDefensesEngineerBuilders',
         
         # ==== NAVAL EXPANSION ==== #
+		'SorianNavalExpansionBuildersFast',
         'SorianNavalExpansionBuilders',
         
         # ==== LAND UNIT BUILDERS ==== #

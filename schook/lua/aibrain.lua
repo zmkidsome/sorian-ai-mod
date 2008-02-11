@@ -70,6 +70,7 @@ AIBrain = Class(oldAIBrain) {
 					v.FactoryManager:SetEnabled(false)
 					v.PlatoonFormManager:SetEnabled(false)
 					self.BuilderManagers[k] = nil
+					self.NumBases = self.NumBases - 1
 					#LOG('*AI DEBUG: ********** DeadBaseMonitor found a dead base **********')
 				end
 			end
@@ -78,9 +79,7 @@ AIBrain = Class(oldAIBrain) {
 	
     GetManagerCount = function(self, type)
         local count = 0
-		local num = 0
         for k,v in self.BuilderManagers do
-			num = num + 1
             if type then
                 if type == 'Start Location' and not ( string.find(k, 'ARMY_') or string.find(k, 'Large Expansion') ) then
                     continue
