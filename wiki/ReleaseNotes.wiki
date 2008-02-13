@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.8e:* Improved Distress Response, Improved Naval Pathing, Engineers will assist a T4 project before starting a new one (to a point), Naval Econ tweaks, Crash to desktop fix.
+
 *0.9.8d:* Version number will now be displayed in the lobby, Naval units will use formations.
 
 *0.9.8c:* Fixed T4 not moving bug, Fixed Czar behavior, Fixed Torp bombers, Fixed AI power crunch on maps with no nearby Hydro, Other minor changes.
