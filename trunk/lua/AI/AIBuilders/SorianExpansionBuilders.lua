@@ -193,6 +193,132 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'SorianEngineerExpansionBuildersFull - Naval',
+    BuildersType = 'EngineerBuilder',
+    
+    ########################################
+    ## Builds expansion bases
+    ########################################
+    ### Start the Factories in the expansion
+    Builder {
+        BuilderName = 'Sorian T1VacantStartingAreaEngineer - Naval',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 922,
+        InstanceCount = 2,
+        BuilderConditions = {
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
+            #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 14, '>=', 'FACTORY TECH2 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 19, '>=', 'FACTORY TECH3 STRUCTURE' } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                NearMarkerType = 'Start Location',
+                LocationRadius = 1500,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 100,
+                ThreatRings = 0,
+                ThreatType = 'StructuresNotMex',
+                BuildStructures = {                    
+                    'T1GroundDefense',                    
+					'T1AADefense',
+                    'T1LandFactory',
+					'T1Radar',
+                }
+            },
+            NeedGuard = true,
+        }
+    },       
+    Builder {
+        BuilderName = 'Sorian T2VacantStartingAreaEngineer - Naval',
+        PlatoonTemplate = 'T2EngineerBuilderSorian',
+        Priority = 922,
+        InstanceCount = 2,
+        BuilderConditions = {
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
+            #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 14, '>=', 'FACTORY TECH2 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 19, '>=', 'FACTORY TECH3 STRUCTURE' } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                NearMarkerType = 'Start Location',
+                LocationRadius = 1500,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 0,
+                ThreatRings = 2,
+                ThreatType = 'StructuresNotMex',
+                BuildStructures = {                    
+                    'T2GroundDefense',                    
+                    'T1LandFactory',
+					'T2AADefense',
+					'T2Radar',
+                }
+            },
+            NeedGuard = true,
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3VacantStartingAreaEngineer - Naval',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 922,
+        InstanceCount = 2,
+        BuilderConditions = {
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1500, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+            { UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                NearMarkerType = 'Start Location',
+                LocationRadius = 1500,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 0,
+                ThreatRings = 2,
+                ThreatType = 'StructuresNotMex',
+                BuildStructures = {                    
+                    'T1Resource',
+                    'T1Resource',
+                    'T1Resource',
+                    'T2GroundDefense',                    
+                    'T1LandFactory',
+					'T3AADefense',
+					'T2Radar',				
+                }
+            },
+            NeedGuard = true,
+        }
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianEngineerExpansionBuildersSmall',
     BuildersType = 'EngineerBuilder',
     

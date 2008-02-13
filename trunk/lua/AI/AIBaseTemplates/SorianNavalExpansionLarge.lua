@@ -8,12 +8,12 @@
 #****************************************************************************
 
 BaseBuilderTemplate {
-    BaseTemplateName = 'SorianNavalExpansionSmall',
+    BaseTemplateName = 'SorianNavalExpansionLarge',
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
-        'SorianT1BalancedUpgradeBuilders',
-        'SorianT2BalancedUpgradeBuilders',
+        'SorianT1NavalUpgradeBuilders',
+        'SorianT2NavalUpgradeBuilders',
         
         # Engineer Builders
         'SorianEngineerFactoryBuilders',
@@ -42,6 +42,10 @@ BaseBuilderTemplate {
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
+		
+        # ==== EXPERIMENTALS ==== #
+        'SorianMobileNavalExperimentalEngineers',
+        'SorianMobileNavalExperimentalForm',
     },
     NonCheatBuilders = {
         'SorianSonarEngineerBuilders',
@@ -57,7 +61,7 @@ BaseBuilderTemplate {
         FactoryCount = {
             Land = 0,
             Air = 0,
-            Sea = 3,
+            Sea = 5,
             Gate = 0,
         },
         MassToFactoryValues = {
@@ -72,7 +76,7 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if personality == 'sorian' or personality == 'sorianrush' or personality == 'sorianair' then
+        if personality == 'sorianwater' then
             return 200 #50
         end
         

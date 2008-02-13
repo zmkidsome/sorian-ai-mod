@@ -52,6 +52,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH1 } },
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY NAVAL TECH3' }},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
         BuilderType = 'Sea',
@@ -64,6 +65,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH1 } },
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY NAVAL TECH3' }},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
     },
@@ -75,6 +77,7 @@ BuilderGroup {
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 10, 'Air' } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH1 } },
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY NAVAL TECH3' }},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.75, 1.05 }},
         },
         BuilderType = 'Sea',
@@ -161,7 +164,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Naval Nuke Sub',
         PlatoonTemplate = 'T3SeaNukeSub',
-        Priority = 0,
+        Priority = 700,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH3 } },
@@ -198,7 +201,8 @@ BuilderGroup {
     BuildersType = 'PlatoonFormBuilder',
     Builder {
         BuilderName = 'Sorian Frequent Sea Attack T1',
-        PlatoonTemplate = 'SeaAttack',
+        PlatoonTemplate = 'SeaAttackSorian',
+		PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         Priority = 1,
         InstanceCount = 5,
         BuilderType = 'Any',
@@ -223,7 +227,8 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian Frequent Sea Attack T2',
-        PlatoonTemplate = 'SeaAttack',
+        PlatoonTemplate = 'SeaAttackSorian',
+		PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         Priority = 1,
         InstanceCount = 5,
         BuilderType = 'Any',
@@ -243,12 +248,13 @@ BuilderGroup {
         },
         BuilderConditions = {
             { UCBC, 'PoolLessAtLocation', { 'LocationType', 1, 'MOBILE TECH3 NAVAL' } },
-            { SeaAttackCondition, { 'LocationType', 60 } },
+            { SeaAttackCondition, { 'LocationType', 100 } },
         },
     },
     Builder {
         BuilderName = 'Sorian Frequent Sea Attack T3',
-        PlatoonTemplate = 'SeaAttack',
+        PlatoonTemplate = 'SeaAttackSorian',
+		PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         Priority = 1,
         InstanceCount = 5,
         BuilderType = 'Any',
@@ -267,7 +273,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { SeaAttackCondition, { 'LocationType', 180 } },
+            { SeaAttackCondition, { 'LocationType', 300 } },
         },
     },
 }

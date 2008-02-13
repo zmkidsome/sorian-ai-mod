@@ -12,8 +12,8 @@ BaseBuilderTemplate {
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
-        'SorianT1BalancedUpgradeBuilders',
-        'SorianT2BalancedUpgradeBuilders',
+        'SorianT1NavalUpgradeBuilders',
+        'SorianT2NavalUpgradeBuilders',
         
         # Engineer Builders
         'SorianEngineerFactoryBuilders',
@@ -48,8 +48,7 @@ BaseBuilderTemplate {
         'SorianT3ACUNukeDefenses',
         
         # ==== EXPANSION ==== #
-        'SorianEngineerExpansionBuildersFull',
-        'SorianEngineerExpansionBuildersSmall',
+        'SorianEngineerExpansionBuildersFull - Naval',
 		'SorianEngineerFirebaseBuilders',
         
         # ==== DEFENSES ==== #
@@ -105,7 +104,7 @@ BaseBuilderTemplate {
         'SorianMobileLandExperimentalEngineers',
         'SorianMobileLandExperimentalForm',
         
-        'SorianMobileAirExperimentalEngineers',
+        'SorianMobileAirExperimentalEngineersHigh',
         'SorianMobileAirExperimentalForm',
 		
         'SorianMobileNavalExperimentalEngineers',
@@ -142,7 +141,7 @@ BaseBuilderTemplate {
         },
         FactoryCount = {
             Land = 1,
-            Air = 8,
+            Air = 5,
             Sea = 0,
             Gate = 1,
         },

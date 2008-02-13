@@ -35,8 +35,8 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
     local radius = engineerManager:GetLocationRadius()
     
     local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
-	local airThreat = pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
-    if (surThreat + airThreat) > targetNumber then
+	#local airThreat = pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
+    if surThreat > targetNumber then
         return true
     end
     return false

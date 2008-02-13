@@ -292,14 +292,14 @@ function CheckNavalPathing(aiBrain, platoon, location, maxRange, selectedWeaponA
     selectedWeaponArc = selectedWeaponArc or 'none'
     
     local success, bestGoalPos
-    local threatTargetPos = {location[1], 0, location[2]}
+    local threatTargetPos = location
     local isTech1 = false
 
-    local inWater = GetTerrainHeight(location[1], location[2]) < GetSurfaceHeight(location[1], location[2]) - 2
+    local inWater = GetTerrainHeight(location[1], location[3]) < GetSurfaceHeight(location[1], location[3]) - 2
     
     #if this threat is in the water, see if we can get to it
     if inWater then
-        success, bestGoalPos = CheckPlatoonPathingEx(platoon, {location[1], 0, location[2]})
+        success, bestGoalPos = CheckPlatoonPathingEx(platoon, {location[1], 0, location[3]})
     end
     
     #if it is not in the water or we can't get to it, then see if there is water within weapon range that we can get to
@@ -307,15 +307,15 @@ function CheckNavalPathing(aiBrain, platoon, location, maxRange, selectedWeaponA
         #Check vectors in 8 directions around the threat location at maxRange to see if they are in water.
         local rootSaver = maxRange / 1.4142135623 #For diagonals. X and Z components of the vector will have length maxRange / sqrt(2)
         local vectors = {
-            {location[1],             0, location[2] + maxRange},   #up
-            {location[1],             0, location[2] - maxRange},   #down
-            {location[1] + maxRange,  0, location[2]},              #right
-            {location[1] - maxRange,  0, location[2]},              #left
+            {location[1],             0, location[3] + maxRange},   #up
+            {location[1],             0, location[3] - maxRange},   #down
+            {location[1] + maxRange,  0, location[3]},              #right
+            {location[1] - maxRange,  0, location[3]},              #left
             
-            {location[1] + rootSaver,  0, location[2] + rootSaver},   #right-up
-            {location[1] + rootSaver,  0, location[2] - rootSaver},   #right-down
-            {location[1] - rootSaver,  0, location[2] + rootSaver},   #left-up
-            {location[1] - rootSaver,  0, location[2] - rootSaver},   #left-down
+            {location[1] + rootSaver,  0, location[3] + rootSaver},   #right-up
+            {location[1] + rootSaver,  0, location[3] - rootSaver},   #right-down
+            {location[1] - rootSaver,  0, location[3] + rootSaver},   #left-up
+            {location[1] - rootSaver,  0, location[3] - rootSaver},   #left-down
         }
         
         #Sort the vectors by their distance to us.
@@ -407,7 +407,7 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	
 	local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
 	
-	if string.find(per, 'sorian') then testPath = true end
+	if string.find(per, 'sorian') and not platoonLayer == "Water" then testPath = true end
 	
 	if VDist2Sq( start[1], start[3], destination[1], destination[3] ) <= 10000 and testPath then
 		table.insert(finalPath, destination)    

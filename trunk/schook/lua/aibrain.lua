@@ -1,5 +1,5 @@
 do
-
+local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
 oldAIBrain = AIBrain
 
 AIBrain = Class(oldAIBrain) {
@@ -62,7 +62,7 @@ AIBrain = Class(oldAIBrain) {
 		while true do
 			WaitSeconds(5)
 			for k,v in self.BuilderManagers do
-				if v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
+				if not v == 'MAIN' and v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
 					v.FactoryManager:Destroy()
 					v.PlatoonFormManager:Destroy()
 					v.EngineerManager:Destroy()
@@ -99,6 +99,38 @@ AIBrain = Class(oldAIBrain) {
         return count
     end,
 	
+    BaseMonitorPlatoonDistressThread = function(self)
+        self.BaseMonitor.PlatoonAlertSounded = true
+        while true do
+            local numPlatoons = 0
+            for k,v in self.BaseMonitor.PlatoonDistressTable do
+                if self:PlatoonExists(v.Platoon) then
+                    local threat = self:GetThreatAtPosition( v.Platoon:GetPlatoonPosition(), 0, true, 'AntiSurface')
+					local myThreat = AIAttackUtils.GetSurfaceThreatOfUnits(v.Platoon)
+                    # Platoons still threatened
+				if threat and myThreat > 0 and threat > myThreat then
+                        v.Threat = threat
+                        numPlatoons = numPlatoons + 1
+                    # Platoon not threatened
+                    else
+                        self.BaseMonitor.PlatoonDistressTable[k] = nil
+                        v.Platoon.DistressCall = false
+                    end
+                else
+                    self.BaseMonitor.PlatoonDistressTable[k] = nil
+                end
+            end
+            
+            # If any platoons still want help; continue sounding
+            if numPlatoons > 0 then
+                self.BaseMonitor.PlatoonAlertSounded = true
+            else
+                self.BaseMonitor.PlatoonAlertSounded = false
+            end
+            WaitSeconds(self.BaseMonitor.BaseMonitorTime)
+        end
+    end,
+	
     BaseMonitorAlertTimeout = function(self, pos)
         local timeout = self.BaseMonitor.DefaultAlertTimeout
         local threat
@@ -106,6 +138,12 @@ AIBrain = Class(oldAIBrain) {
         repeat
             WaitSeconds(timeout)
             threat = self:GetThreatAtPosition( pos, 0, true, 'AntiSurface' )
+			if threat < 1 then
+				local eEngies = self:GetNumUnitsAroundPoint( categories.ENGINEER, pos, 10, 'Enemy' )
+				if eEngies > 0 then
+					threat = threat + eEngies
+				end
+			end	
         until threat <= threshold
         for k,v in self.BaseMonitor.AlertsTable do
             if pos[1] == v.Position[1] and pos[3] == v.Position[3] then

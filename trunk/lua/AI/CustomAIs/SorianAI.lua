@@ -1,37 +1,37 @@
 AIList = {
     {
         key = 'sorian',
-        name = "AI: Sorian 0.9.8d",
+        name = "AI: Sorian 0.9.8e",
     },
     {
         key = 'sorianrush',
-        name = "AI: Sorian Rush 0.9.8d",
+        name = "AI: Sorian Rush 0.9.8e",
     },
     {
         key = 'sorianair',
-        name = "AI: Sorian Air 0.9.8d",
+        name = "AI: Sorian Air 0.9.8e",
     },
     {
         key = 'sorianwater',
-        name = "AI: Sorian Water 0.9.8d",
+        name = "AI: Sorian Water 0.9.8e",
     },
 }
 
 CheatAIList = {
     {
         key = 'soriancheat',
-        name = "AIx: Sorian 0.9.8d",
+        name = "AIx: Sorian 0.9.8e",
     },
     {
         key = 'sorianrushcheat',
-        name = "AIx: Sorian Rush 0.9.8d",
+        name = "AIx: Sorian Rush 0.9.8e",
     },
     {
         key = 'sorianaircheat',
-        name = "AIx: Sorian Air 0.9.8d",
+        name = "AIx: Sorian Air 0.9.8e",
     },
     {
         key = 'sorianwatercheat',
-        name = "AIx: Sorian Water 0.9.8d",
+        name = "AIx: Sorian Water 0.9.8e",
     },
 }
