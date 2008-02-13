@@ -41,7 +41,7 @@ Platoon = Class(sorianoldPlatoon) {
             if not self.DistressCall then
                 local threat = aiBrain:GetThreatAtPosition( pos, 0, true, 'AntiSurface' )
 				 local myThreat = AIAttackUtils.GetSurfaceThreatOfUnits(self)
-                if threat and myThreat > 0 and threat > (myThreat / 2) then
+                if threat and myThreat > 0 and threat > myThreat then
                     #LOG('*AI DEBUG: Platoon Calling for help')
                     aiBrain:BaseMonitorPlatoonDistress(self, threat)
                     self.DistressCall = true
@@ -134,6 +134,8 @@ Platoon = Class(sorianoldPlatoon) {
 								oldPlan = 'AttackForceAISorian'
 							elseif not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.AIR - categories.EXPERIMENTAL, v) then
 								oldPlan = 'HuntAI'
+							elseif not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.NAVAL - categories.EXPERIMENTAL, v) then
+								oldPlan = 'NavalForceAISorian'
 							end
 							if oldPlan then break end
 						end
@@ -688,6 +690,120 @@ Platoon = Class(sorianoldPlatoon) {
         end
     end,
 	
+    NavalForceAISorian = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        
+        AIAttackUtils.GetMostRestrictiveLayer(self)
+        
+        local platoonUnits = self:GetPlatoonUnits()
+        local numberOfUnitsInPlatoon = table.getn(platoonUnits)
+        local oldNumberOfUnitsInPlatoon = numberOfUnitsInPlatoon
+        local stuckCount = 0
+        
+        self.PlatoonAttackForce = true
+        # formations have penalty for taking time to form up... not worth it here
+        # maybe worth it if we micro
+        #self:SetPlatoonFormationOverride('GrowthFormation')
+        local PlatoonFormation = self.PlatoonData.UseFormation or 'NoFormation'
+        self:SetPlatoonFormationOverride(PlatoonFormation)
+        
+        for k,v in self:GetPlatoonUnits() do
+            if v:IsDead() then
+                continue
+            end
+            
+            if v:GetCurrentLayer() != 'Sub' then
+                continue
+            end
+            
+            if v:TestCommandCaps('RULEUCC_Dive') then
+                IssueDive( {v} )
+            end
+        end
+
+        while aiBrain:PlatoonExists(self) do
+            local pos = self:GetPlatoonPosition() # update positions; prev position done at end of loop so not done first time  
+            
+            # if we can't get a position, then we must be dead
+            if not pos then
+                break
+            end
+            
+            # pick out the enemy
+            if aiBrain:GetCurrentEnemy() and aiBrain:GetCurrentEnemy():IsDefeated() then
+                aiBrain:PickEnemyLogic()
+            end
+
+            # merge with nearby platoons
+            self:MergeWithNearbyPlatoons('NavalForce', 20)
+
+            # rebuild formation
+            platoonUnits = self:GetPlatoonUnits()
+            numberOfUnitsInPlatoon = table.getn(platoonUnits)
+            # if we have a different number of units in our platoon, regather
+            if (oldNumberOfUnitsInPlatoon != numberOfUnitsInPlatoon) then
+                self:StopAttack()
+                self:SetPlatoonFormationOverride(PlatoonFormation)
+            end
+            oldNumberOfUnitsInPlatoon = numberOfUnitsInPlatoon
+
+            local cmdQ = {} 
+            # fill cmdQ with current command queue for each unit
+            for k,v in self:GetPlatoonUnits() do
+                if not v:IsDead() then
+                    local unitCmdQ = v:GetCommandQueue()
+                    for cmdIdx,cmdVal in unitCmdQ do
+                        table.insert(cmdQ, cmdVal)
+                        break
+                    end
+                end
+            end            
+            
+            # if we're on our final push through to the destination, and we find a unit close to our destination
+            local closestTarget = self:FindClosestUnit( 'attack', 'enemy', true, categories.ALLUNITS )
+            local nearDest = false
+            local oldPathSize = table.getn(self.LastAttackDestination)
+            local maxRange = AIAttackUtils.GetNavalPlatoonMaxRangeSorian(aiBrain, self)
+            if self.LastAttackDestination then
+                nearDest = oldPathSize == 0 or VDist3(self.LastAttackDestination[oldPathSize], pos) < maxRange
+            end
+            
+            # if we're near our destination and we have a unit closeby to kill, kill it
+            if table.getn(cmdQ) <= 1 and closestTarget and VDist3( closestTarget:GetPosition(), pos ) < maxRange and nearDest then
+                self:StopAttack()
+                if PlatoonFormation != 'No Formation' then
+                    self:AttackTarget(closestTarget)
+                    #IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
+                else
+                    self:AttackTarget(closestTarget)
+                    #IssueAttack(platoonUnits, closestTarget)
+                end
+                cmdQ = {1}
+            # if we have nothing to do, try finding something to do        
+            elseif table.getn(cmdQ) == 0 then
+                self:StopAttack()
+                cmdQ = AIAttackUtils.AIPlatoonNavalAttackVector( aiBrain, self )
+                stuckCount = 0
+            # if we've been stuck and unable to reach next marker? Ignore nearby stuff and pick another target  
+            elseif self.LastPosition and VDist2Sq(self.LastPosition[1], self.LastPosition[3], pos[1], pos[3]) < ( self.PlatoonData.StuckDistance or 100) then
+                stuckCount = stuckCount + 1
+                if stuckCount >= 2 then               
+                    self:StopAttack()
+                    cmdQ = AIAttackUtils.AIPlatoonNavalAttackVector( aiBrain, self )
+                    stuckCount = 0
+                end
+            else
+                stuckCount = 0
+            end
+            
+            self.LastPosition = pos
+            
+            #wait a while if we're stuck so that we have a better chance to move
+            WaitSeconds(Random(5,11) + 2 * stuckCount)
+        end
+    end,
+	
     AttackForceAI = function(self)
         self:Stop()
         local aiBrain = self:GetBrain()
@@ -915,7 +1031,7 @@ Platoon = Class(sorianoldPlatoon) {
                 end
 			end
 			
-            if closest and eng:CanPathTo( closest:GetPosition() ) and (( entType == 'Mass' and massRatio < .9 ) or ( entType == 'Energy' and energyRatio < .9 )) then
+            if closest and (( entType == 'Mass' and massRatio < .9 ) or ( entType == 'Energy' and energyRatio < .9 )) then
                 oldClosest = closest
                 IssueClearCommands( self:GetPlatoonUnits() )
 				IssueReclaim( self:GetPlatoonUnits(), closest )

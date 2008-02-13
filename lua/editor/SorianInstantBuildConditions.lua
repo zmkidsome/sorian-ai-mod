@@ -11,6 +11,7 @@ local AIUtils = import('/lua/ai/aiutilities.lua')
 local ScenarioFramework = import('/lua/scenarioframework.lua')
 local ScenarioUtils = import('/lua/sim/ScenarioUtilities.lua')
 local Utils = import('/lua/utilities.lua')
+local SUtils = import('/lua/AI/sorianutilities.lua')
 
 ##############################################################################################################
 # function: HaveGreaterThanUnitsWithCategory = BuildCondition	doc = "Please work function docs."
@@ -208,22 +209,32 @@ end
 ##############################################################################################################
 function EngineerNeedsAssistance(aiBrain, doesbool, locationType, category)
 	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
-	if not engineerManager then
+	if not engineerManager or not type(category) == 'string' then
 		return false
 	end
-    if type(category) == 'string' then
-        category = ParseEntityCategory(category)
-    end
-	local engs = engineerManager:GetEngineersBuildingCategory(category, categories.ALLUNITS )
+	local bCategory = ParseEntityCategory(category)
+
+	local engs = engineerManager:GetEngineersBuildingCategory(bCategory, categories.ALLUNITS )
 	local numFound = 0
 	for k,v in engs do
 		if v.DesiresAssist == true then
-			if v.NumAssistees and table.getn( v:GetGuards() ) < v.NumAssistees then
+			if v.NumAssistees and SUtils.GetGuards(aiBrain, v) < v.NumAssistees then
 				numFound = numFound + 1
 			end
 		end
 		if numFound > 0 and doesbool then return true end
 	end
+	
+	local engs = engineerManager:GetEngineersBuildQueue(category)
+	for k,v in engs do
+		if v.DesiresAssist == true then
+			if v.NumAssistees and SUtils.GetGuards(aiBrain, v) < v.NumAssistees then
+				numFound = numFound + 1
+			end
+		end
+		if numFound > 0 and doesbool then return true end
+	end
+	
 	if numFound == 0 and not doesbool then return true end
 	return false
 end

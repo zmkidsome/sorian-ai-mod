@@ -492,7 +492,7 @@ BuilderGroup {
         BuilderConditions = {
             # Most paramaters freaking ever Build Condition -- All the threat ones are optional
             ####                                   MarkerType   LocRadius  category markerRad unitMax tMin tMax Rings tType
-            { UCBC, 'DefensivePointNeedsStructure', { 'LocationType', 350, 'DEFENSE TECH1 STRUCTURE', 20,        5,     0,   1,   2, 'AntiSurface' } },
+            { UCBC, 'DefensivePointNeedsStructure', { 'LocationType', 350, 'DEFENSE TECH1 STRUCTURE', 20,        4,     0,   1,   2, 'AntiSurface' } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
@@ -511,8 +511,8 @@ BuilderGroup {
                 ThreatMax = 1,
                 ThreatRings = 2,
                 ThreatType = 'AntiSurface',
-                MarkerUnitCount = 5,
-                MarkerUnitCategory = 'DEFENSE STRUCTURE',
+                MarkerUnitCount = 4,
+                MarkerUnitCategory = 'DEFENSE TECH1 STRUCTURE',
                 BuildStructures = {
 				'T1GroundDefense',
 				'T1AADefense',
@@ -535,7 +535,7 @@ BuilderGroup {
         BuilderConditions = {
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.2 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
-            { UCBC, 'DefensivePointNeedsStructure', { 'LocationType', 1000, 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE', 20, 5, 0, 1, 2, 'AntiSurface' } },
+            { UCBC, 'DefensivePointNeedsStructure', { 'LocationType', 1000, 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE', 20, 4, 0, 1, 2, 'AntiSurface' } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
@@ -553,7 +553,7 @@ BuilderGroup {
                 ThreatMax = 1,
                 ThreatRings = 2,
                 ThreatType = 'AntiSurface',
-                MarkerUnitCount = 5,
+                MarkerUnitCount = 4,
                 MarkerUnitCategory = 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE',
                 BuildStructures = {
                     'T2GroundDefense',
@@ -575,7 +575,7 @@ BuilderGroup {
         BuilderConditions = {
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.2 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
-            { UCBC, 'DefensivePointNeedsStructure', { 'LocationType', 1000, 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE', 20, 5, 0, 1, 2, 'AntiSurface' } },
+            { UCBC, 'DefensivePointNeedsStructure', { 'LocationType', 1000, 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE', 20, 4, 0, 1, 2, 'AntiSurface' } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
@@ -593,7 +593,7 @@ BuilderGroup {
                 ThreatMax = 1,
                 ThreatRings = 2,
                 ThreatType = 'AntiSurface',
-                MarkerUnitCount = 5,
+                MarkerUnitCount = 4,
                 MarkerUnitCategory = 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE',
                 BuildStructures = {
                     'T2GroundDefense',
@@ -615,7 +615,7 @@ BuilderGroup {
         BuilderConditions = {
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.2 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
-            { UCBC, 'DefensivePointNeedsStructure', { 'LocationType', 1000, 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE', 20, 5, 0, 1, 2, 'AntiSurface' } },
+            { UCBC, 'DefensivePointNeedsStructure', { 'LocationType', 1000, 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE', 20, 4, 0, 1, 2, 'AntiSurface' } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
@@ -633,7 +633,7 @@ BuilderGroup {
                 ThreatMax = 1,
                 ThreatRings = 2,
                 ThreatType = 'AntiSurface',
-                MarkerUnitCount = 5,
+                MarkerUnitCount = 4,
                 MarkerUnitCategory = 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE',
                 BuildStructures = {
                     'T2GroundDefense',

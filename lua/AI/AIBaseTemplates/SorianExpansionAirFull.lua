@@ -71,7 +71,7 @@ BaseBuilderTemplate {
         'SorianMobileLandExperimentalEngineers',
         'SorianMobileLandExperimentalForm',
         
-        'SorianMobileAirExperimentalEngineers',
+        'SorianMobileAirExperimentalEngineersHigh',
         'SorianMobileAirExperimentalForm',
     },
     NonCheatBuilders = {

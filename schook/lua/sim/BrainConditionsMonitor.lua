@@ -224,7 +224,7 @@ ImportCondition = Class(Condition) {
 		local found = false
 		for k,v in self.FunctionData do
 			if type(v) == 'string' and not ( v == 'Naval Area' or v == 'Expansion Area' or v == 'Large Expansion Area') then 
-				if string.find(v, 'ARMY_') or string.find(v, 'Large Expansion') or string.find(v, 'Expansion Area') or string.find(v, 'EXPANSION_AREA') or string.find(v, 'Naval Area') then
+				if string.find(v, 'ARMY_') or string.find(v, 'Large Expansion') or string.find(v, 'Expansion Area') or string.find(v, 'EXPANSION_AREA') or string.find(v, 'Naval Area') or string.find(v, 'MAIN') then
 					found = true
 					if self.Brain.BuilderManagers[v] then
 						return true
@@ -272,7 +272,7 @@ InstantImportCondition = Class(Condition) {
 		local found = false
 		for k,v in self.FunctionData do
 			if type(v) == 'string' and not ( v == 'Naval Area' or v == 'Expansion Area' or v == 'Large Expansion Area') then 
-				if string.find(v, 'ARMY_') or string.find(v, 'Large Expansion') or string.find(v, 'Expansion Area') or string.find(v, 'EXPANSION_AREA') or string.find(v, 'Naval Area') then
+				if string.find(v, 'ARMY_') or string.find(v, 'Large Expansion') or string.find(v, 'Expansion Area') or string.find(v, 'EXPANSION_AREA') or string.find(v, 'Naval Area') or string.find(v, 'MAIN') then
 					found = true
 					if self.Brain.BuilderManagers[v] then
 						return true
