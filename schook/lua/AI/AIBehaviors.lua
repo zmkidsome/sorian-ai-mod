@@ -1,5 +1,6 @@
 do
 local UCBC = import('/lua/editor/UnitCountBuildConditions.lua')
+local SBC = import('/lua/editor/SorianBuildConditions.lua')
 
 function NukeCheck(aiBrain)
 	local SUtils = import('/lua/AI/sorianutilities.lua')
@@ -474,8 +475,8 @@ end
 
 function CommanderThreadSorian(cdr, platoon)
     local aiBrain = cdr:GetAIBrain()
-	Mult = platoon.PlatoonData.Mult or 1
-	Delay = platoon.PlatoonData.Delay or 0
+	local Mult = platoon.PlatoonData.Mult or 1
+	local Delay = platoon.PlatoonData.Delay or 0
     
     SetCDRHome(cdr, platoon)
 	
@@ -507,7 +508,9 @@ function CommanderThreadSorian(cdr, platoon)
 		#	LOG('*AI DEBUG: '.. aiBrain.Nickname ..': Managers = '..manCount..' Expansions = '..expCount..' Naval = '..navCount)
 		#end
 		
-		if GetGameTimeSeconds() > 600 then Mult = 1 end
+		if GetGameTimeSeconds() > 600 or aiBrain.NumOpponents > 1 or not SBC.ClosestEnemyLessThan(aiBrain, 256) then
+			Mult = 1
+		end
         WaitTicks(2)
         # Overcharge
         if not cdr:IsDead() and GetGameTimeSeconds() > Delay and UCBC.HaveGreaterThanUnitsWithCategory(aiBrain,  1, 'FACTORY') and aiBrain:GetNoRushTicks() <= 0 then CDROverChargeSorian( aiBrain, cdr, Mult ) end
@@ -536,7 +539,7 @@ function CommanderThreadSorian(cdr, platoon)
         #call platoon resume building deal...
         if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr:IsUnitState("Building")
 		and not cdr:IsUnitState("Attacking") and not cdr:IsUnitState("Repairing") and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading") 
-		and not ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) > 150 ) then
+		and not ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) > 100 ) then
             if not cdr.EngineerBuildQueue or table.getn(cdr.EngineerBuildQueue) == 0 then
                 local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
                 aiBrain:AssignUnitsToPlatoon( pool, {cdr}, 'Unassigned', 'None' )

@@ -71,6 +71,17 @@ function LayerCheckPosition( pos, layer )
     end
 end
 
+function AIGetSortedHydorLocations(aiBrain, maxNum, tMin, tMax, tRings, tType, position)
+    local markerList = AIGetMarkerLocations(aiBrain, 'Hydrocarbon')
+    local newList = {}
+    for k,v in markerList do
+        if aiBrain:CanBuildStructureAt( 'ueb1102', v.Position ) then
+            table.insert( newList, v )
+        end
+    end
+    return AISortMarkersFromLastPos(aiBrain, newList, maxNum, tMin, tMax, tRings, tType, position)
+end
+
 # used by engineers to move to a safe location
 function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
     if not destination then
@@ -83,11 +94,11 @@ function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
     if not result or VDist2Sq(pos[1], pos[3], destination[1], destination[3]) > 256*256 and unit.PlatoonHandle then
         # if we can't path to our destination, we need, rather than want, transports
         local needTransports = not result
-        if VDist2Sq( pos[1], pos[3], destination[1], destination[3] ) > 512*512 then
-            needTransports = true
-        end
+        #if VDist2Sq( pos[1], pos[3], destination[1], destination[3] ) > 512*512 then
+        #    needTransports = true
+        #end
         # skip the last move... we want to return and do a build
-        bUsedTransports = AIAttackUtils.SendPlatoonWithTransports(aiBrain, unit.PlatoonHandle, destination, needTransports, true)
+        bUsedTransports = AIAttackUtils.SendPlatoonWithTransports(aiBrain, unit.PlatoonHandle, destination, needTransports, true, false)
         
         if bUsedTransports then
             return true
@@ -152,7 +163,7 @@ function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkP
         for num, unit in targetUnits do
             if not unit:IsDead() and EntityCategoryContains( category, unit ) and platoon:CanAttackTarget( squad, unit ) then
                 local unitPos = unit:GetPosition()
-				local numShields = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.SHIELD * categories.STRUCTURE, unitPos, 40, 'Enemy' )
+				local numShields = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.SHIELD * categories.STRUCTURE, unitPos, 50, 'Enemy' )
                 if not retUnit or numShields < targetShields or (numShields == targetShields and Utils.XZDistanceTwoVectors( position, unitPos ) < distance) then
                     retUnit = unit
                     distance = Utils.XZDistanceTwoVectors( position, unitPos )
@@ -181,7 +192,7 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
         for num, unit in targetUnits do
             if not unit:IsDead() and EntityCategoryContains( category, unit ) then
                 local unitPos = unit:GetPosition()
-				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, unitPos, 80, 'Enemy' )
+				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, unitPos, 100, 'Enemy' )
 				local dupTarget = false
 				for x,z in oldTarget do
 					if unit == z or (not z:IsDead() and Utils.XZDistanceTwoVectors( z:GetPosition(), unitPos ) < 30) then
@@ -224,6 +235,28 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
         end
     end
     return false
+end
+
+function AIFindExpansionPointNeedsStructure( aiBrain, locationType, radius, category, markerRadius, unitMax, tMin, tMax, tRings, tType)
+    local pos = aiBrain:PBMGetLocationCoords( locationType )
+    if not pos then
+        return false
+    end
+    local positions = AIGetMarkersAroundLocation( aiBrain, 'Expansion Area', pos, radius, tMin, tMax, tRings, tType)
+    
+    local retPos, retName, lowest
+    for k,v in positions do
+        local numUnits = table.getn( GetOwnUnitsAroundPoint( aiBrain, ParseEntityCategory(category), v.Position, markerRadius ) )
+        if numUnits < unitMax then
+            if not retPos or numUnits < lowest then
+                lowest = numUnits
+                retName = v.Name
+                retPos = v.Position
+            end
+        end
+    end
+    
+    return retPos, retName
 end
 
 function AIFindDefensiveAreaSorian( aiBrain, unit, category, range, runShield )

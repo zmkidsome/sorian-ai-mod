@@ -1,6 +1,7 @@
 #***************************************************************************
 #*
 #**  File     :  /lua/ai/AIBaseTemplates/SorianNavalExpansionSmall.lua
+#**  Author(s): Michael Robbins aka Sorian
 #**
 #**  Summary  : Manage engineers for a location
 #**
@@ -65,9 +66,9 @@ BaseBuilderTemplate {
             Gate = 0,
         },
         MassToFactoryValues = {
-            T1Value = 6,
-            T2Value = 15,
-            T3Value = 22.5
+            T1Value = 8, #6
+            T2Value = 20, #15
+            T3Value = 27.5, #22.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)

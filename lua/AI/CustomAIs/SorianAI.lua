@@ -1,3 +1,11 @@
+#****************************************************************************
+#**
+#**  File     :  /lua/AI/CustomAIs/SorianAI.lua
+#**  Author(s): Michael Robbins aka Sorian
+#**
+#**  Summary  : Utility File to insert custom AI into the game.
+#**
+#****************************************************************************
 AIList = {
     {
         key = 'sorian',

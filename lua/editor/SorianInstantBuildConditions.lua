@@ -1,7 +1,7 @@
 #****************************************************************************
 #**
-#**  File     :  /lua/SorianBuildConditions.lua
-#**  Author(s): Mike Robbins
+#**  File     :  /lua/SorianInstantBuildConditions.lua
+#**  Author(s): Michael Robbins aka Sorian
 #**
 #**  Summary  : Generic AI Platoon Build Conditions
 #**             Build conditions always return true or false
@@ -69,7 +69,7 @@ function HaveLessThanUnitsWithCategory(aiBrain, numReq, category, idleReq)
 	for k,v in numUnits do
 		if v:GetFractionComplete() == 1 then
 			total = total + 1
-			if total > numReq then
+			if total >= numReq then
 				return false
 			end
 		end
@@ -241,6 +241,7 @@ end
 
 function LessThanExpansionBases(aiBrain, checkNum)
 	local expBaseCount = 0
+	local numberofAIs = SUtils.GetNumberOfAIs(aiBrain)
     local startX, startZ = aiBrain:GetArmyStartPos()
 	local isWaterMap = false
     local navalMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Naval Area', startX, startZ)
@@ -248,14 +249,11 @@ function LessThanExpansionBases(aiBrain, checkNum)
         isWaterMap = true
     end
 	expBaseCount = aiBrain:GetManagerCount('Start Location')
-	#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanExpansionBases Starts = '..expBaseCount)
 	expBaseCount = expBaseCount + aiBrain:GetManagerCount('Expansion Area')
-	#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanExpansionBases Total = '..expBaseCount)
+	checkNum = checkNum - numberofAIs
 	if isWaterMap and expBaseCount < checkNum then
-		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanExpansionBases Returned True')
 		return true
 	elseif not isWaterMap and expBaseCount < checkNum + 1 then
-		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanExpansionBases Returned True')
 		return true
 	end
 	return false

@@ -1,6 +1,7 @@
 #***************************************************************************
 #*
 #**  File     :  /lua/ai/AIBaseTemplates/SorianMainRush.lua
+#**  Author(s): Michael Robbins aka Sorian
 #**
 #**  Summary  : Manage engineers for a location
 #**
@@ -73,6 +74,7 @@ BaseBuilderTemplate {
         'SorianNavalExpansionBuilders',
         
         # ==== LAND UNIT BUILDERS ==== #
+		'SorianT1LandFactoryBuilders - Rush',
         'SorianT1LandFactoryBuilders',
         'SorianT2LandFactoryBuilders',
         'SorianT3LandFactoryBuilders',
@@ -93,6 +95,7 @@ BaseBuilderTemplate {
         'SorianT2Shields',
         'SorianShieldUpgrades',
         'SorianT3Shields',
+		'SorianEngineeringUpgrades',
 
         # ==== AIR UNIT BUILDERS ==== #
         'SorianT1AirFactoryBuilders',
@@ -157,7 +160,7 @@ BaseBuilderTemplate {
         },
         FactoryCount = {
             Land = 8,
-            Air = 2,
+            Air = 1,
             Sea = 0,
             Gate = 1,
         },

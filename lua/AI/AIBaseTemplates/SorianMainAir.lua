@@ -1,6 +1,7 @@
 #***************************************************************************
 #*
-#**  File     :  /lua/ai/AIBaseTemplates/SorianMainBalanced.lua
+#**  File     :  /lua/ai/AIBaseTemplates/SorianMainAir.lua
+#**  Author(s): Michael Robbins aka Sorian
 #**
 #**  Summary  : Manage engineers for a location
 #**
@@ -20,7 +21,7 @@ BaseBuilderTemplate {
         'SorianT1EngineerBuilders',
         'SorianT2EngineerBuilders',
         'SorianT3EngineerBuilders',
-        'SorianEngineerFactoryConstruction Balance',
+        'SorianEngineerFactoryConstruction Air',
         'SorianEngineerFactoryConstruction',
         
         # Engineer Support buildings
@@ -36,7 +37,7 @@ BaseBuilderTemplate {
         'SorianTime Exempt Extractor Upgrades',
         
         # ACU Builders
-        'Sorian Initial ACU Builders',
+        'Sorian Air Initial ACU Builders',
         'SorianACUBuilders',
         'SorianACUUpgrades',
         
@@ -96,6 +97,7 @@ BaseBuilderTemplate {
         'SorianT2Shields',
         'SorianShieldUpgrades',
         'SorianT3Shields',
+		'SorianEngineeringUpgrades',
 
         # ==== AIR UNIT BUILDERS ==== #
         'SorianT1AirFactoryBuilders',
@@ -107,7 +109,7 @@ BaseBuilderTemplate {
         'SorianUnitCapAirAttackFormBuilders',
         'SorianACUHunterAirFormBuilders',
         
-        'SorianTransportFactoryBuilders',
+        'SorianTransportFactoryBuilders - Air',
 		
 		'SorianExpResponseFormBuilders',
         
@@ -120,7 +122,7 @@ BaseBuilderTemplate {
         'SorianMobileLandExperimentalEngineers',
         'SorianMobileLandExperimentalForm',
         
-        'SorianMobileAirExperimentalEngineers',
+        'SorianMobileAirExperimentalEngineersHigh',
         'SorianMobileAirExperimentalForm',
 		
         'SorianMobileNavalExperimentalEngineers',
@@ -143,8 +145,8 @@ BaseBuilderTemplate {
         'SorianAirScoutFactoryBuilders',
         'SorianAirScoutFormBuilders',
         
-        'SorianLandScoutFactoryBuilders',
-        'SorianLandScoutFormBuilders',
+        #'SorianLandScoutFactoryBuilders',
+        #'SorianLandScoutFormBuilders',
         
         'SorianRadarEngineerBuilders',
         'SorianRadarUpgradeBuildersMain',
@@ -155,19 +157,19 @@ BaseBuilderTemplate {
         EngineerCount = {
             Tech1 = 15,
             Tech2 = 10,
-            Tech3 = 20,
-            SCU = 4,
+            Tech3 = 30,
+            SCU = 8,
         },
         FactoryCount = {
-            Land = 2,
+            Land = 1,
             Air = 8,
             Sea = 0,
             Gate = 1,
         },
         MassToFactoryValues = {
-            T1Value = 6,
-            T2Value = 15,
-            T3Value = 22.5
+            T1Value = 8, #6
+            T2Value = 20, #15
+            T3Value = 27.5, #22.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)

@@ -152,11 +152,12 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     local unitCapRatio = GetArmyUnitCostTotal(aiBrain:GetArmyIndex()) / GetArmyUnitCap(aiBrain:GetArmyIndex())
     
     local maxRange = false
+	local turretPitch = nil
     if platoon.MovementLayer == 'Water' then
 		local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
 		
 		if string.find(per, 'sorian') then
-			maxRange, selectedWeaponArc = GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
+			maxRange, selectedWeaponArc, turretPitch = GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
 		else        
 			maxRange, selectedWeaponArc = GetNavalPlatoonMaxRange(aiBrain, platoon)
 		end
@@ -184,7 +185,12 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
                     threat[2] = bestGoalPos[3]
                 end
             else
-                local bestPos = CheckNavalPathing(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc)
+			local bestPos
+			if turretPitch then
+				bestPos = CheckNavalPathingSorian(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc, turretPitch)
+			else
+				bestPos = CheckNavalPathing(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc)
+			end
                 if not bestPos then
                     continue
                 end
@@ -286,6 +292,74 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     
 end
 
+function CheckNavalPathingSorian(aiBrain, platoon, location, maxRange, selectedWeaponArc, turretPitch)
+    local platoonUnits = platoon:GetPlatoonUnits()
+	local platoonPosition = platoon:GetPlatoonPosition()
+    selectedWeaponArc = selectedWeaponArc or 'none'
+    
+    local success, bestGoalPos
+    local threatTargetPos = location
+    local isTech1 = false
+
+    local inWater = GetTerrainHeight(location[1], location[3]) < GetSurfaceHeight(location[1], location[3]) - 2
+    
+    #if this threat is in the water, see if we can get to it
+    if inWater then
+        success, bestGoalPos = CheckPlatoonPathingEx(platoon, {location[1], 0, location[3]})
+    end
+    
+    #if it is not in the water or we can't get to it, then see if there is water within weapon range that we can get to
+    if not success and maxRange then
+        #Check vectors in 8 directions around the threat location at maxRange to see if they are in water.
+        local rootSaver = maxRange / 1.4142135623 #For diagonals. X and Z components of the vector will have length maxRange / sqrt(2)
+        local vectors = {
+            {location[1],             0, location[3] + maxRange},   #up
+            {location[1],             0, location[3] - maxRange},   #down
+            {location[1] + maxRange,  0, location[3]},              #right
+            {location[1] - maxRange,  0, location[3]},              #left
+            
+            {location[1] + rootSaver,  0, location[3] + rootSaver},   #right-up
+            {location[1] + rootSaver,  0, location[3] - rootSaver},   #right-down
+            {location[1] - rootSaver,  0, location[3] + rootSaver},   #left-up
+            {location[1] - rootSaver,  0, location[3] - rootSaver},   #left-down
+        }
+        
+        #Sort the vectors by their distance to us.
+        table.sort(vectors, function(a,b)
+            local distA = VDist2Sq(platoonPosition[1], platoonPosition[3], a[1], a[3])
+            local distB = VDist2Sq(platoonPosition[1], platoonPosition[3], b[1], b[3])
+            
+            return distA < distB
+        end)
+        
+        #Iterate through the vector list and check if each is in the water. Use the first one in the water that has enemy structures in range.
+        for _,vec in vectors do
+            inWater = GetTerrainHeight(vec[1], vec[3]) < GetSurfaceHeight(vec[1], vec[3]) - 2
+            
+            if inWater then
+                success, bestGoalPos = CheckPlatoonPathingEx(platoon, vec)
+            end
+            
+            if success then
+                success = not SUtils.CheckBlockingTerrain(bestGoalPos, threatTargetPos, selectedWeaponArc, turretPitch)
+            end
+            
+            if success then 
+                #I hate having to do this check, but the influence map doesn't have enough resolution and without it the boats
+                #will just get stuck on the shore. The code hits this case about once every 5-10 seconds on a large map with 4 naval AIs
+                local numUnits = aiBrain:GetNumUnitsAroundPoint( categories.NAVAL + categories.STRUCTURE, bestGoalPos, maxRange, 'Enemy')
+                if numUnits > 0 then
+                    break
+                else
+                    success = false
+                end
+            end
+        end
+    end
+    
+    return bestGoalPos
+end
+
 function CheckNavalPathing(aiBrain, platoon, location, maxRange, selectedWeaponArc)    
     local platoonUnits = platoon:GetPlatoonUnits()
 	local platoonPosition = platoon:GetPlatoonPosition()
@@ -356,6 +430,8 @@ end
 
 function GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
     local maxRange = 0
+	local selectedWeaponArc = 'none'
+	local turretPitch = nil
     local platoonUnits = platoon:GetPlatoonUnits()
     for _,unit in platoonUnits do
         if unit:IsDead() then
@@ -368,19 +444,22 @@ function GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
             end
         
             #Check if the weapon can hit land from water
-            local canAttackLand = string.find(weapon.FireTargetLayerCapsTable.Water, 'Land', 1, true)
+            local notAttackAir = not string.find(weapon.FireTargetLayerCapsTable.Water, 'Air', 1, true)
             
-            if canAttackLand and weapon.MaxRadius > maxRange then 
-                isTech1 = EntityCategoryContains(categories.TECH1, unit)
-                maxRange = weapon.MaxRadius
-                
+            if notAttackAir and weapon.MaxRadius > maxRange then 
                 if weapon.BallisticArc == 'RULEUBA_LowArc' then
                     selectedWeaponArc = 'low'
+					turretPitch = weapon.TurretPitchRange
                 elseif weapon.BallisticArc == 'RULEUBA_HighArc' then
                     selectedWeaponArc = 'high'
-                else 
+					turretPitch = weapon.TurretPitchRange
+                elseif weapon.BallisticArc == 'RULEUBA_None' and weapon.TurretPitchRange > 0 then
                     selectedWeaponArc = 'none'
+					turretPitch = weapon.TurretPitchRange
+				else
+					continue
                 end
+                maxRange = weapon.MaxRadius
             end
         end
     end
@@ -388,13 +467,50 @@ function GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
     if maxRange == 0 then
         return false
     end
+	#LOG('*AI DEBUG: GetNavalPlatoonMaxRangeSorian maxRange: '..maxRange..' selectedWeaponArc: '..selectedWeaponArc..' turretPitch: '..turretPitch)
+    return maxRange, selectedWeaponArc, turretPitch
+end
+
+function GetLandPlatoonMaxRangeSorian(aiBrain, platoon)
+    local maxRange = 0
+	local selectedWeaponArc = 'none'
+	local turretPitch = nil
+    local platoonUnits = platoon:GetPlatoonUnits()
+    for _,unit in platoonUnits do
+        if unit:IsDead() then
+            continue
+        end
+        
+        for _,weapon in unit:GetBlueprint().Weapon do
+            if not weapon.FireTargetLayerCapsTable or not weapon.FireTargetLayerCapsTable.Land then
+                continue
+            end
+            
+            local notAttackAir = not string.find(weapon.FireTargetLayerCapsTable.Land, 'Air', 1, true)
+            
+            if notAttackAir and weapon.MaxRadius > maxRange then 
+                if weapon.BallisticArc == 'RULEUBA_LowArc' then
+                    selectedWeaponArc = 'low'
+					turretPitch = weapon.TurretPitchRange
+                elseif weapon.BallisticArc == 'RULEUBA_HighArc' then
+                    selectedWeaponArc = 'high'
+					turretPitch = weapon.TurretPitchRange
+                elseif weapon.BallisticArc == 'RULEUBA_None' and weapon.TurretPitchRange > 0 then
+                    selectedWeaponArc = 'none'
+					turretPitch = weapon.TurretPitchRange
+				else
+					continue
+                end
+                maxRange = weapon.MaxRadius
+            end
+        end
+    end
     
-    #T1 naval units don't hit land targets very well. Bail out!
-    #if isTech1 then
-    #    return false
-    #end
-    
-    return maxRange, selectedWeaponArc
+    if maxRange == 0 then
+        return false
+    end
+	#LOG('*AI DEBUG: GetLandPlatoonMaxRangeSorian maxRange: '..maxRange..' selectedWeaponArc: '..selectedWeaponArc..' turretPitch: '..turretPitch)
+    return maxRange, selectedWeaponArc, turretPitch
 end
 
 function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, optThreatWeight, optMaxMarkerDist)   
@@ -407,7 +523,9 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	
 	local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
 	
-	if string.find(per, 'sorian') and not platoonLayer == "Water" then testPath = true end
+	if string.find(per, 'sorian') and platoonLayer != "Water" then
+		testPath = true
+	end
 	
 	if VDist2Sq( start[1], start[3], destination[1], destination[3] ) <= 10000 and testPath then
 		table.insert(finalPath, destination)    
@@ -543,7 +661,171 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
     return false
 end
 
-function SendPlatoonWithTransports(aiBrain, platoon, destination, bRequired, bSkipLastMove)
+function AIPlatoonSquadAttackVectorSorian( aiBrain, platoon, bAggro )
+
+    --Engine handles whether or not we can occupy our vector now, so this should always be a valid, occupiable spot.
+    local attackPos = GetBestThreatTarget(aiBrain, platoon)
+    
+    local bNeedTransports = false
+    # if no pathable attack spot found
+    if not attackPos then
+        # try skipping pathability
+        attackPos = GetBestThreatTarget(aiBrain, platoon, true)
+        bNeedTransports = true
+        if not attackPos then
+            platoon:StopAttack()
+            return {}
+        end
+    end
+
+
+    # avoid mountains by slowly moving away from higher areas
+    GetMostRestrictiveLayer(platoon)
+#    if platoon.MovementLayer == 'Land' then
+#        local bestPos = attackPos
+#        local attackPosHeight = GetTerrainHeight(attackPos[1], attackPos[3])
+#        # if we're land
+#        if attackPosHeight >= GetSurfaceHeight(attackPos[1], attackPos[3]) then
+#            local lookAroundTable = {1,0,-2,-1,2}
+#            local squareRadius = (ScenarioInfo.size[1] / 16) / table.getn(lookAroundTable)
+#            for ix, offsetX in lookAroundTable do
+#                for iz, offsetZ in lookAroundTable do
+#                    local surf = GetSurfaceHeight( bestPos[1]+offsetX, bestPos[3]+offsetZ )
+#                    local terr = GetTerrainHeight( bestPos[1]+offsetX, bestPos[3]+offsetZ )
+#                    # is it lower land... make it our new position to continue searching around
+#                    if terr >= surf and terr < attackPosHeight then
+#                        bestPos[1] = bestPos[1] + offsetX
+#                        bestPos[3] = bestPos[3] + offsetZ
+#                        attackPosHeight = terr
+#                    end
+#                end
+#            end
+#        end
+#        attackPos = bestPos
+#    end
+        
+    local oldPathSize = table.getn(platoon.LastAttackDestination)
+    
+    # if we don't have an old path or our old destination and new destination are different
+    if oldPathSize == 0 or attackPos[1] != platoon.LastAttackDestination[oldPathSize][1] or
+    attackPos[3] != platoon.LastAttackDestination[oldPathSize][3] then
+        
+        GetMostRestrictiveLayer(platoon)
+        # check if we can path to here safely... give a large threat weight to sort by threat first
+        local path, reason = PlatoonGenerateSafePathTo(aiBrain, platoon.MovementLayer, platoon:GetPlatoonPosition(), attackPos, platoon.PlatoonData.NodeWeight or 10 )
+    
+        # clear command queue
+        platoon:Stop()    
+   
+        local usedTransports = false
+        local position = platoon:GetPlatoonPosition()
+        if (not path and reason == 'NoPath') or bNeedTransports then
+            usedTransports = SendPlatoonWithTransports(aiBrain, platoon, attackPos, true, false, true)
+        # Require transports over 500 away
+        elseif VDist2Sq( position[1], position[3], attackPos[1], attackPos[3] ) > 512*512 then
+            usedTransports = SendPlatoonWithTransports(aiBrain, platoon, attackPos, true, false, true)
+        # use if possible at 250
+        elseif VDist2Sq( position[1], position[3], attackPos[1], attackPos[3] ) > 256*256 then
+            usedTransports = SendPlatoonWithTransports(aiBrain, platoon, attackPos, false, false, true)
+        end
+        
+        if not usedTransports then
+            if not path then
+                if reason == 'NoStartNode' or reason == 'NoEndNode' then
+                    --Couldn't find a valid pathing node. Just use shortest path.
+                    platoon:AggressiveMoveToLocation(attackPos)
+                end
+                # force reevaluation
+                platoon.LastAttackDestination = {attackPos}
+            else
+                local pathSize = table.getn(path)
+                # store path
+                platoon.LastAttackDestination = path
+                # move to new location
+                for wpidx,waypointPath in path do
+                    if wpidx == pathSize or bAggro then
+                        platoon:MoveToLocation(waypointPath, false) #platoon:AggressiveMoveToLocation(waypointPath)
+                    else
+                        platoon:MoveToLocation(waypointPath, false)
+                    end
+                end   
+            end
+        end
+    end 
+    
+    # return current command queue 
+    local cmd = {}
+    for k,v in platoon:GetPlatoonUnits() do
+        if not v:IsDead() then
+            local unitCmdQ = v:GetCommandQueue()
+            for cmdIdx,cmdVal in unitCmdQ do
+                table.insert(cmd, cmdVal)
+                break
+            end
+        end
+    end
+    return cmd
+end
+
+function AIPlatoonNavalAttackVectorSorian( aiBrain, platoon )
+
+    GetMostRestrictiveLayer(platoon)
+    --Engine handles whether or not we can occupy our vector now, so this should always be a valid, occupiable spot.
+    local attackPos, targetPos = GetBestThreatTarget(aiBrain, platoon)
+    
+    # if no pathable attack spot found
+    if not attackPos then
+        return {}
+    end
+        
+    local oldPathSize = table.getn(platoon.LastAttackDestination)
+    
+    # if we don't have an old path or our old destination and new destination are different
+    if oldPathSize == 0 or attackPos[1] != platoon.LastAttackDestination[oldPathSize][1] or
+    attackPos[3] != platoon.LastAttackDestination[oldPathSize][3] then
+        
+        # check if we can path to here safely... give a large threat weight to sort by threat first
+        local path, reason = PlatoonGenerateSafePathTo(aiBrain, platoon.MovementLayer, platoon:GetPlatoonPosition(), attackPos, platoon.PlatoonData.NodeWeight or 10 )
+    
+        # clear command queue
+        platoon:Stop()    
+           
+        if not path then
+            path = AINavalPlanB(aiBrain, platoon)
+        end
+        
+        if path then
+            local pathSize = table.getn(path)
+            # store path
+            platoon.LastAttackDestination = path
+            # move to new location
+            for wpidx,waypointPath in path do
+                if wpidx == pathSize then
+                    #platoon:AggressiveMoveToLocation(waypointPath)
+                    platoon:MoveToLocation(waypointPath, false)
+                else
+                    #platoon:AggressiveMoveToLocation(waypointPath)
+                    platoon:MoveToLocation(waypointPath, false)
+                end
+            end  
+        end
+    end 
+    
+    # return current command queue 
+    local cmd = {}
+    for k,v in platoon:GetPlatoonUnits() do
+        if not v:IsDead() then
+            local unitCmdQ = v:GetCommandQueue()
+            for cmdIdx,cmdVal in unitCmdQ do
+                table.insert(cmd, cmdVal)
+                break
+            end
+        end
+    end
+    return cmd
+end
+
+function SendPlatoonWithTransports(aiBrain, platoon, destination, bRequired, bSkipLastMove, waitLonger)
 
     GetMostRestrictiveLayer(platoon)
     
@@ -573,6 +855,9 @@ function SendPlatoonWithTransports(aiBrain, platoon, destination, bRequired, bSk
             # we were told that transports are the only way to get where we want to go...
             # ask for a transport every 10 seconds
             local counter = 0
+			if waitLonger then
+				counter = -6
+			end
             local transportsNeeded = AIUtils.GetNumTransports(units)
             local numTransportsNeeded = math.ceil( ( transportsNeeded.Small + ( transportsNeeded.Medium * 2 ) + ( transportsNeeded.Large * 4 ) ) / 10 )
             if not aiBrain.NeedTransports then

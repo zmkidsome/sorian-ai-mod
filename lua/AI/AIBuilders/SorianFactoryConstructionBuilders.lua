@@ -22,6 +22,8 @@ local PCBC = '/lua/editor/PlatoonCountBuildConditions.lua'
 local SAI = '/lua/ScenarioPlatoonAI.lua'
 local TBC = '/lua/editor/ThreatBuildConditions.lua'
 local PlatoonFile = '/lua/platoon.lua'
+local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
+local SBC = '/lua/editor/SorianBuildConditions.lua'
 
 local ExtractorToFactoryRatio = 2.2
 
@@ -126,7 +128,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Land Factory Higher Pri - Init',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 905,
+        Priority = 950,
         BuilderConditions = {                        
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Land' } },
@@ -147,7 +149,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Land Factory Higher Pri',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 905,
+        Priority = 950,
         BuilderConditions = {                        
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Land' } },
@@ -169,7 +171,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Air Factory Higher Pri',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 905,
+        Priority = 950,
         BuilderConditions = {
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Air' } },
@@ -334,6 +336,54 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'SorianEngineerFactoryConstruction Air',
+    BuildersType = 'EngineerBuilder',
+    Builder {        
+        BuilderName = 'Sorian T1 Air Factory Builder - Air',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 900,
+        BuilderConditions = {
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { UCBC, 'FactoryCapCheck', { 'LocationType', 'Air' } },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 1.0, 1.1} },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildStructures = {
+                    'T1AirFactory',
+                },
+                Location = 'LocationType',
+                AdjacencyCategory = 'ENERGYPRODUCTION',
+            }
+        }
+    },
+
+    Builder {
+        BuilderName = 'Sorian CDR T1 Air Factory - Air',
+        PlatoonTemplate = 'CommanderBuilderSorian',
+        Priority = 900,
+        BuilderConditions = {
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
+            { UCBC, 'FactoryCapCheck', { 'LocationType', 'Air' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildClose = true,
+                BuildStructures = {
+                    'T1AirFactory',
+                },
+            }
+        }
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianEngineerFactoryConstruction',
     BuildersType = 'EngineerBuilder',
     # =============================
@@ -466,8 +516,9 @@ BuilderGroup {
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 900,
         BuilderConditions = {
-            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3' }},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'ENERGYPRODUCTION TECH3' }},
             { UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'GATE TECH3 STRUCTURE' }},
+			{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1} },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Gate' } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'UnitCapCheckLess', { .8 } },

@@ -1,6 +1,7 @@
 #***************************************************************************
 #*
-#**  File     :  /lua/ai/AIBaseTemplates/SorianMainBalanced.lua
+#**  File     :  /lua/ai/AIBaseTemplates/SorianMainWater.lua
+#**  Author(s): Michael Robbins aka Sorian
 #**
 #**  Summary  : Manage engineers for a location
 #**
@@ -20,7 +21,7 @@ BaseBuilderTemplate {
         'SorianT1EngineerBuilders',
         'SorianT2EngineerBuilders',
         'SorianT3EngineerBuilders',
-        'SorianEngineerFactoryConstruction Balance',
+        'SorianEngineerFactoryConstruction Air',
         'SorianEngineerFactoryConstruction',
         
         # Engineer Support buildings
@@ -36,7 +37,7 @@ BaseBuilderTemplate {
         'SorianTime Exempt Extractor Upgrades',
         
         # ACU Builders
-        'Sorian Initial ACU Builders',
+        'Sorian Air Initial ACU Builders',
         'SorianACUBuilders',
         'SorianACUUpgrades',
         
@@ -59,9 +60,9 @@ BaseBuilderTemplate {
 		'SorianT2PerimeterDefenses',
 		'SorianT3PerimeterDefenses',
 		
-        'SorianT1DefensivePoints',
-        'SorianT2DefensivePoints',
-        'SorianT3DefensivePoints',
+        #'SorianT1DefensivePoints',
+        #'SorianT2DefensivePoints',
+        #'SorianT3DefensivePoints',
 		
 		'SorianT2ArtilleryFormBuilders',
 		'SorianT3ArtilleryFormBuilders',
@@ -80,6 +81,7 @@ BaseBuilderTemplate {
         'SorianT2Shields',
         'SorianShieldUpgrades',
         'SorianT3Shields',
+		'SorianEngineeringUpgrades',
 
         # ==== AIR UNIT BUILDERS ==== #
         'SorianT1AirFactoryBuilders',
@@ -91,7 +93,7 @@ BaseBuilderTemplate {
         'SorianUnitCapAirAttackFormBuilders',
         'SorianACUHunterAirFormBuilders',
         
-        'SorianTransportFactoryBuilders',
+        'SorianTransportFactoryBuilders - Air',
 		
 		'SorianExpResponseFormBuilders',
         
@@ -136,19 +138,19 @@ BaseBuilderTemplate {
         EngineerCount = {
             Tech1 = 15,
             Tech2 = 10,
-            Tech3 = 20,
-            SCU = 4,
+            Tech3 = 30,
+            SCU = 8,
         },
         FactoryCount = {
-            Land = 1,
+            Land = 0,
             Air = 5,
             Sea = 0,
             Gate = 1,
         },
         MassToFactoryValues = {
-            T1Value = 6,
-            T2Value = 15,
-            T3Value = 22.5
+            T1Value = 8, #6
+            T2Value = 20, #15
+            T3Value = 27.5, #22.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)
