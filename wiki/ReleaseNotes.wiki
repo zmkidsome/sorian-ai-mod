@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*0.9.9:* Land units should not get stuck shooting into cliffs, Improved distress response, Many, many AI tweaks, Improved transport use, More PD and AA in perimeter defenses, Bigger Air groups, Less TML more Artillery, Greater response to major threats, Hives and Kennels will Upgrade, Fixed bug in distress response, Fixed Rush aggressiveness when playing multiple enemies, Fixed AI not building multiple Hydros when there is more than nearby, AI will reduce the number of expansion bases depending on the number of AIs in the game. (Duncane's idea).
+
 *0.9.8e:* Improved Distress Response, Improved Naval Pathing, Engineers will assist a T4 project before starting a new one (to a point), Naval Econ tweaks, Crash to desktop fix.
 
 *0.9.8d:* Version number will now be displayed in the lobby, Naval units will use formations.
