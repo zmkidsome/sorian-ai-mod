@@ -43,6 +43,19 @@ function ExecutePlan(aiBrain)
     end
 end
 
+function SetupMainBase(aiBrain)
+    local base, returnVal, baseType = GetHighestBuilder(aiBrain)
+
+    local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
+    if per != 'adaptive' then
+        ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality = baseType
+    end
+
+    LOG('*AI DEBUG: ARMY ', repr(aiBrain:GetArmyIndex()), ': Initiating Archetype using ' .. base)
+    AIAddBuilderTable.AddGlobalBaseTemplate(aiBrain, 'MAIN', base)
+    aiBrain:ForceManagerSort()
+end
+
 function UnitCapWatchThreadSorian(aiBrain)
 	#LOG('*AI DEBUG: UnitCapWatchThreadSorian started')
     KillPD = false

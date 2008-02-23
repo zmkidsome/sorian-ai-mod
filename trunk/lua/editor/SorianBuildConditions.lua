@@ -1,7 +1,7 @@
 #****************************************************************************
 #**
 #**  File     :  /lua/SorianBuildConditions.lua
-#**  Author(s): Mike Robbins
+#**  Author(s): Michael Robbins aka Sorian
 #**
 #**  Summary  : Generic AI Platoon Build Conditions
 #**             Build conditions always return true or false
@@ -12,6 +12,7 @@ local ScenarioFramework = import('/lua/scenarioframework.lua')
 local ScenarioUtils = import('/lua/sim/ScenarioUtilities.lua')
 local Utils = import('/lua/utilities.lua')
 local SUtils = import('/lua/AI/sorianutilities.lua')
+local MABC = import('/lua/editor/MarkerBuildConditions.lua')
 
 ##############################################################################################################
 # function: ReclaimablesInArea = BuildCondition   doc = "Please work function docs."
@@ -26,11 +27,41 @@ function ReclaimablesInArea(aiBrain, locType)
     end
 
     local ents = AIUtils.AIGetReclaimablesAroundLocation( aiBrain, locType )
-    if ents and table.getn( ents ) > 0 then
-		return true
-    end
+	for k,v in ents do
+		if not aiBrain.BadReclaimables[v] then
+			return true
+		end
+	end
+	#if ents and table.getn( ents ) > 0 then
+	#	return true
+	#end
 	
     return false
+end
+
+##############################################################################################################
+# function: ClosestEnemyLessThan = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: integer  distance        = "distance"
+#
+##############################################################################################################
+function ClosestEnemyLessThan(aiBrain, distance)
+	local startX, startZ = aiBrain:GetArmyStartPos()
+	local closest
+	for k,v in ArmyBrains do
+        if not v:IsDefeated() and not ArmyIsCivilian(v:GetArmyIndex()) and IsEnemy(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+			local estartX, estartZ = v:GetArmyStartPos()
+			local tempDistance = VDist2Sq(startX, startZ, estartX, estartZ)
+			if not closest or tempDistance < closest then
+				closest = tempDistance
+			end
+        end
+		if closest and closest < distance * distance then
+			return true
+		end
+    end
+	return false
 end
 
 function DamagedStructuresInArea(aiBrain, locationtype)
@@ -67,8 +98,31 @@ function MarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threat
     return false
 end
 
+function CanBuildOnHydroLessThanDistance(aiBrain, locationType, distance, threatMin, threatMax, threatRings, threatType, maxNum )
+    local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+    if not engineerManager then
+        WARN('*AI WARNING: Invalid location - ' .. locationType)
+        return false
+    end
+    local position = engineerManager:GetLocationCoords()
+    
+    local markerTable = AIUtils.AIGetSortedHydorLocations(aiBrain, maxNum, threatMin, threatMax, threatRings, threatType, position)
+    if markerTable[1] and VDist3( markerTable[1], position ) < distance then
+        return true
+    end
+    return false
+end
+
 function NoMarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threatMax, threatRings, threatType, startX, startZ)
-	return not MarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threatMax, threatRings, threatType, startX, startZ)
+	return not MABC.MarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threatMax, threatRings, threatType, startX, startZ)
+end
+
+function ExpansionPointNeedsStructure( aiBrain, locationType, locationRadius, category, markerRadius, unitMax, threatMin, threatMax, threatRings, threatType )
+    local pos, name = AIUtils.AIFindExpansionPointNeedsStructure( aiBrain, locationType, locationRadius, category, markerRadius, unitMax, threatMin, threatMax, threatRings, threatType )
+    if pos then
+        return true
+    end
+    return false    
 end
 
 ##############################################################################################################
@@ -303,4 +357,38 @@ function CmdrHasUpgrade(aiBrain, upgrade, has)
         end
     end
     return false
+end
+
+##############################################################################################################
+# function: EnemyInT3ArtilleryRange = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 0: boolean  inrange         = "true = in range, false = not in range"
+#
+##############################################################################################################
+function EnemyInT3ArtilleryRange(aiBrain, inrange)	
+	local startX, startZ = aiBrain:GetArmyStartPos()
+	local factionIndex = aiBrain:GetFactionIndex()
+	local radius = 0
+	local offset = 50
+	if factionIndex == 1 then
+		radius = 750 + offset
+	elseif factionIndex == 2 then
+		radius = 900 + offset
+	elseif factionIndex == 3 then
+		radius = 700 + offset
+	elseif factionIndex == 4 then
+		radius = 825 + offset
+	end
+	for k,v in ArmyBrains do
+        if not v:IsDefeated() and not ArmyIsCivilian(v:GetArmyIndex()) and IsEnemy(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+			local estartX, estartZ = v:GetArmyStartPos()
+			if (VDist2( startX, startZ, estartX, estartZ ) <= radius) and inrange then
+				return true
+			elseif (VDist2( startX, startZ, estartX, estartZ ) > radius) and not inrange then
+				return true
+			end
+        end
+    end
+	return false
 end

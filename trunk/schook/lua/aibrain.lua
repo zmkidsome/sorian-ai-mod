@@ -44,6 +44,7 @@ AIBrain = Class(oldAIBrain) {
 		if string.find(per, 'sorian') then
 			local spec = {
 				DefaultDistressRange = 200,
+				AlertLevel = 8,
 			}
 			self:BaseMonitorInitialization(spec)
 		else		
@@ -62,16 +63,34 @@ AIBrain = Class(oldAIBrain) {
 		while true do
 			WaitSeconds(5)
 			for k,v in self.BuilderManagers do
-				if not v == 'MAIN' and v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
-					v.FactoryManager:Destroy()
-					v.PlatoonFormManager:Destroy()
-					v.EngineerManager:Destroy()
-					v.EngineerManager:SetEnabled(false)
-					v.FactoryManager:SetEnabled(false)
-					v.PlatoonFormManager:SetEnabled(false)
-					self.BuilderManagers[k] = nil
-					self.NumBases = self.NumBases - 1
-					#LOG('*AI DEBUG: ********** DeadBaseMonitor found a dead base **********')
+				if not v == 'MAIN' and v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 3 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
+					if v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 then
+						v.FactoryManager:Destroy()
+						v.PlatoonFormManager:Destroy()
+						v.EngineerManager:Destroy()
+						v.EngineerManager:SetEnabled(false)
+						v.FactoryManager:SetEnabled(false)
+						v.PlatoonFormManager:SetEnabled(false)
+						self.BuilderManagers[k] = nil
+						self.NumBases = self.NumBases - 1
+					elseif table.getn(AIUtils.GetOwnUnitsAroundPoint( self, categories.ENGINEER, v.engineerManager:GetLocationCoords(), v.engineerManager:GetLocationRadius() )) < 1 then
+						local closest = false
+						local closeBase = false
+						for x,z in self.BuilderManagers do
+							local distance = VDist3( v.engineerManager:GetLocationCoords(), z.engineerManager:GetLocationCoords() )
+							if not closest or distance < closest then
+								closest = distance
+								closeBase = z
+							end
+						end
+						if closest and closeBase then
+							engies = closeBase.engineerManager:GetUnits( 'Engineers', categories.ALLUNITS )
+							for a,b in engies do
+								v.EngineerManager:RemoveUnit(b)
+								closeBase.EngineerManager:AddUnit(b, true)
+							end
+						end
+					end
 				end
 			end
 		end
@@ -106,9 +125,9 @@ AIBrain = Class(oldAIBrain) {
             for k,v in self.BaseMonitor.PlatoonDistressTable do
                 if self:PlatoonExists(v.Platoon) then
                     local threat = self:GetThreatAtPosition( v.Platoon:GetPlatoonPosition(), 0, true, 'AntiSurface')
-					local myThreat = AIAttackUtils.GetSurfaceThreatOfUnits(v.Platoon)
+					local myThreat = self:GetThreatAtPosition( v.Platoon:GetPlatoonPosition(), 0, true, 'AntiSurface', self:GetArmyIndex())
                     # Platoons still threatened
-				if threat and myThreat > 0 and threat > myThreat then
+				if threat and threat > (myThreat * 1.5) then
                         v.Threat = threat
                         numPlatoons = numPlatoons + 1
                     # Platoon not threatened
@@ -135,16 +154,18 @@ AIBrain = Class(oldAIBrain) {
         local timeout = self.BaseMonitor.DefaultAlertTimeout
         local threat
         local threshold = self.BaseMonitor.AlertLevel
+		local myThreat
         repeat
             WaitSeconds(timeout)
             threat = self:GetThreatAtPosition( pos, 0, true, 'AntiSurface' )
-			if threat < 1 then
+			myThreat = self:GetThreatAtPosition( pos, 0, true, 'AntiSurface', self:GetArmyIndex())
+			if threat - myThreat < 1 then
 				local eEngies = self:GetNumUnitsAroundPoint( categories.ENGINEER, pos, 10, 'Enemy' )
 				if eEngies > 0 then
-					threat = threat + eEngies
+					threat = threat + (eEngies * 10)
 				end
 			end	
-        until threat <= threshold
+        until threat - myThreat <= threshold
         for k,v in self.BaseMonitor.AlertsTable do
             if pos[1] == v.Position[1] and pos[3] == v.Position[3] then
                 self.BaseMonitor.AlertsTable[k] = nil
@@ -202,13 +223,14 @@ AIBrain = Class(oldAIBrain) {
             for k,v in self.BaseMonitor.BaseMonitorPoints do
                 if not v.Alert then
                     v.Threat = self:GetThreatAtPosition( v.Position, 0, true, 'AntiSurface' )
-					if v.Threat < 1 then
+					local myThreat = self:GetThreatAtPosition( v.Position, 0, true, 'AntiSurface', self:GetArmyIndex())
+					if v.Threat - myThreat < 1 then
 						local eEngies = self:GetNumUnitsAroundPoint( categories.ENGINEER, v.Position, 10, 'Enemy' )
 						if eEngies > 0 then
-							v.Threat = v.Threat + eEngies
+							v.Threat = v.Threat + (eEngies * 10)
 						end
 					end						
-                    if v.Threat > alertThreat then
+                    if v.Threat - myThreat > alertThreat then
                         v.Alert = true
                         table.insert( self.BaseMonitor.AlertsTable,
                             {

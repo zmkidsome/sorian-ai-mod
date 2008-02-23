@@ -40,3 +40,33 @@ PlatoonTemplate {
         { categories.ARTILLERY * categories.STRUCTURE * categories.EXPERIMENTAL, 1, 1, 'artillery', 'None' }
     }
 }
+
+PlatoonTemplate {
+    Name = 'T2Engineering',
+    Plan = 'UnitUpgradeAI',
+    FactionSquads = {
+        UEF = {
+            { 'xeb0104', 0, 1, 'support', 'None' }
+        },
+    }
+}
+
+PlatoonTemplate {
+    Name = 'T2Engineering1',
+    Plan = 'UnitUpgradeAI',
+    FactionSquads = {
+        Cybran = {
+            { 'xrb0104', 0, 1, 'support', 'None' }
+        },
+    }
+}
+
+PlatoonTemplate {
+    Name = 'T2Engineering2',
+    Plan = 'UnitUpgradeAI',
+    FactionSquads = {
+        Cybran = {
+            { 'xrb0204', 0, 1, 'support', 'None' }
+        },
+    }
+}

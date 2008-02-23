@@ -36,7 +36,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 250, -1000, 10, 1, 'AntiSurface' } },
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'NAVAL FACTORY'}},
-			{ SIBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'NAVAL FACTORY' } },
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'NAVAL FACTORY' } },
             #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},

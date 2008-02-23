@@ -1,6 +1,7 @@
 #***************************************************************************
 #*
 #**  File     :  /lua/ai/AIBaseTemplates/SorianMainBalanced.lua
+#**  Author(s): Michael Robbins aka Sorian
 #**
 #**  Summary  : Manage engineers for a location
 #**
@@ -57,8 +58,8 @@ BaseBuilderTemplate {
 		'SorianT2BaseDefenses',
 		'SorianT3BaseDefenses',
 
-		'SorianT2PerimeterDefenses',
-		'SorianT3PerimeterDefenses',
+		#'SorianT2PerimeterDefenses',
+		#'SorianT3PerimeterDefenses',
 		
         'SorianT1DefensivePoints',
         'SorianT2DefensivePoints',
@@ -96,6 +97,7 @@ BaseBuilderTemplate {
         'SorianT2Shields',
         'SorianShieldUpgrades',
         'SorianT3Shields',
+		'SorianEngineeringUpgrades',
 
         # ==== AIR UNIT BUILDERS ==== #
         'SorianT1AirFactoryBuilders',
@@ -120,7 +122,7 @@ BaseBuilderTemplate {
         'SorianMobileLandExperimentalEngineers',
         'SorianMobileLandExperimentalForm',
         
-        'SorianMobileAirExperimentalEngineers',
+        'SorianMobileAirExperimentalEngineersHigh',
         'SorianMobileAirExperimentalForm',
 		
         'SorianMobileNavalExperimentalEngineers',
@@ -155,8 +157,8 @@ BaseBuilderTemplate {
         EngineerCount = {
             Tech1 = 15,
             Tech2 = 10,
-            Tech3 = 20,
-            SCU = 4,
+            Tech3 = 30,
+            SCU = 8,
         },
         FactoryCount = {
             Land = 5,
@@ -165,9 +167,9 @@ BaseBuilderTemplate {
             Gate = 1,
         },
         MassToFactoryValues = {
-            T1Value = 6,
-            T2Value = 15,
-            T3Value = 22.5
+            T1Value = 8, #6
+            T2Value = 20, #15
+            T3Value = 27.5, #22.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)

@@ -88,3 +88,21 @@ PlatoonTemplate {
         { categories.AIR * categories.EXPERIMENTAL * categories.MOBILE, 2, 3, 'attack', 'none' },
     },
 }
+
+PlatoonTemplate {
+    Name = 'T2BomberSorian',
+    FactionSquads = {
+        UEF = {
+            { 'dea0202', 1, 1, 'attack', 'None' },
+        },
+        Aeon = {
+            { 'uaa0203', 1, 1, 'attack', 'None' },
+        },
+        Cybran = {
+            { 'dra0202', 1, 1, 'attack', 'None' },
+        },
+        Seraphim = {
+            { 'xsa0202', 1, 1, 'attack', 'None' },
+        },
+    },
+}
