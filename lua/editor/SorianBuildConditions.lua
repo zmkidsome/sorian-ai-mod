@@ -106,7 +106,7 @@ function CanBuildOnHydroLessThanDistance(aiBrain, locationType, distance, threat
     end
     local position = engineerManager:GetLocationCoords()
     
-    local markerTable = AIUtils.AIGetSortedHydorLocations(aiBrain, maxNum, threatMin, threatMax, threatRings, threatType, position)
+    local markerTable = AIUtils.AIGetSortedHydroLocations(aiBrain, maxNum, threatMin, threatMax, threatRings, threatType, position)
     if markerTable[1] and VDist3( markerTable[1], position ) < distance then
         return true
     end
@@ -340,6 +340,30 @@ function HaveComparativeUnitsWithCategoryAndAlliance(aiBrain, greater, myCategor
     return false
 end
 
+function HaveComparativeUnitsWithCategoryAndAllianceAtLocation(aiBrain, locationtype, greater, myCategory, eCategory, alliance)
+    if type(eCategory) == 'string' then
+        eCategory = ParseEntityCategory(eCategory)
+    end
+    if type(myCategory) == 'string' then
+        myCategory = ParseEntityCategory(myCategory)
+    end
+	local engineerManager = aiBrain.BuilderManagers[locationtype].EngineerManager
+    if not engineerManager then
+        return false
+    end
+	local myUnits = AIUtils.GetOwnUnitsAroundPoint( aiBrain, myCategory, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius() )
+    local numUnits = aiBrain:GetNumUnitsAroundPoint( eCategory, Vector(0,0,0), 100000, alliance )
+	if alliance == 'Ally' then
+		numUnits = numUnits - aiBrain:GetCurrentUnits(myCategory)
+	end
+    if numUnits > myUnits and greater then
+        return true
+    elseif numUnits < myUnits and not greater then
+        return true
+    end
+    return false
+end
+
 ##############################################################################################################
 # function: CmdrHasUpgrade = BuildCondition
 #
@@ -359,6 +383,33 @@ function CmdrHasUpgrade(aiBrain, upgrade, has)
     return false
 end
 
+function T4ThreatExists(aiBrain, t4types, t4cats)
+	for k,v in t4types do
+		if aiBrain.T4ThreatFound[v] then
+			return true
+		end
+	end
+    if type(t4cats) == 'string' then
+        t4cats = ParseEntityCategory(t4cats)
+    end
+	if aiBrain:GetNumUnitsAroundPoint( categories.EXPERIMENTAL * t4cats, Vector(0,0,0), 100000, 'Enemy' ) > 0 then
+		for k,v in t4types do
+			aiBrain.T4ThreatFound[v] = true
+		end
+		aiBrain:ForkThread(aiBrain.T4ThreatMonitorTimeout, t4types)
+		return true
+	end
+	return false
+end
+
+function CanBuildFirebase( aiBrain, locationType, radius, markerType, tMin, tMax, tRings, tType, maxUnits, unitCat, markerRadius)
+    local ref, refName = AIUtils.AIFindFirebaseLocationSorian( aiBrain, locationType, radius, markerType, tMin, tMax, tRings, tType, maxUnits, unitCat, markerRadius)
+    if not ref then
+        return false
+    end
+    return true
+end
+
 ##############################################################################################################
 # function: EnemyInT3ArtilleryRange = BuildCondition
 #
@@ -366,11 +417,16 @@ end
 # parameter 0: boolean  inrange         = "true = in range, false = not in range"
 #
 ##############################################################################################################
-function EnemyInT3ArtilleryRange(aiBrain, inrange)	
-	local startX, startZ = aiBrain:GetArmyStartPos()
+function EnemyInT3ArtilleryRange(aiBrain, locationtype, inrange)	
+	local engineerManager = aiBrain.BuilderManagers[locationtype].EngineerManager
+    if not engineerManager then
+        return false
+    end
+
+	local start = engineerManager:GetLocationCoords()
 	local factionIndex = aiBrain:GetFactionIndex()
 	local radius = 0
-	local offset = 50
+	local offset = 0
 	if factionIndex == 1 then
 		radius = 750 + offset
 	elseif factionIndex == 2 then
@@ -383,9 +439,9 @@ function EnemyInT3ArtilleryRange(aiBrain, inrange)
 	for k,v in ArmyBrains do
         if not v:IsDefeated() and not ArmyIsCivilian(v:GetArmyIndex()) and IsEnemy(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
 			local estartX, estartZ = v:GetArmyStartPos()
-			if (VDist2( startX, startZ, estartX, estartZ ) <= radius) and inrange then
+			if (VDist2Sq( start[1], start[3], estartX, estartZ ) <= radius * radius) and inrange then
 				return true
-			elseif (VDist2( startX, startZ, estartX, estartZ ) > radius) and not inrange then
+			elseif (VDist2Sq( start[1], start[3], estartX, estartZ ) > radius * radius) and not inrange then
 				return true
 			end
         end

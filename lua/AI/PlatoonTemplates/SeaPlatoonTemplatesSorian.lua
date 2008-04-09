@@ -19,12 +19,7 @@ PlatoonTemplate {
 PlatoonTemplate {
     Name = 'T4ExperimentalSeaSorian',
     Plan = 'NavalForceAISorian',
-    FactionSquads = {
-        UEF = {
-            { 'ues0401', 1, 1, 'attack', 'None' }
-        },
-        Aeon = {
-            { 'uas0401', 1, 1, 'attack', 'None' }
-        },
-    }
+    GlobalSquads = {
+        { categories.NAVAL * categories.EXPERIMENTAL * categories.MOBILE, 1, 1, 'attack', 'none' },
+    },
 }

@@ -1,6 +1,7 @@
 #***************************************************************************
 #*
 #**  File     :  /lua/ai/AIBaseTemplates/SorianExpansionBalancedFull.lua
+#**  Author(s): Michael Robbins aka Sorian
 #**
 #**  Summary  : Manage engineers for a location
 #**
@@ -8,12 +9,12 @@
 #****************************************************************************
 
 BaseBuilderTemplate {
-    BaseTemplateName = 'SorianExpansionBalancedFull',
+    BaseTemplateName = 'SorianExpansionWaterFull',
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
-        'SorianT1BalancedUpgradeBuildersExpansion',
-        'SorianT2BalancedUpgradeBuildersExpansion',
+        'SorianT1NavalUpgradeBuildersExpansions',
+        'SorianT2NavalUpgradeBuildersExpansions',
         
         # Engineer Builders
         'SorianEngineerFactoryBuilders',
@@ -49,18 +50,6 @@ BaseBuilderTemplate {
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
         
-        # ==== LAND UNIT BUILDERS ==== #
-        'SorianT1LandFactoryBuilders',
-        'SorianT2LandFactoryBuilders',
-        'SorianT3LandFactoryBuilders',
-        'SorianFrequentLandAttackFormBuilders',
-        'SorianMassHunterLandFormBuilders',
-        'SorianMiscLandFormBuilders',
-        
-        'SorianT1ReactionDF',
-        'SorianT2ReactionDF',
-        'SorianT3ReactionDF',
-
         # ==== AIR UNIT BUILDERS ==== #
         'SorianT1AirFactoryBuilders',
         'SorianT2AirFactoryBuilders',
@@ -93,9 +82,6 @@ BaseBuilderTemplate {
         'SorianAirScoutFactoryBuilders',
         'SorianAirScoutFormBuilders',
         
-        'SorianLandScoutFactoryBuilders',
-        'SorianLandScoutFormBuilders',
-        
         'SorianRadarEngineerBuilders',
         'SorianRadarUpgradeBuildersExpansion',
         
@@ -109,8 +95,8 @@ BaseBuilderTemplate {
             SCU = 2,
         },
         FactoryCount = {
-            Land = 3,
-            Air = 2,
+            Land = 0,
+            Air = 3,
             Sea = 0,
             Gate = 0, #1,
         },
@@ -126,22 +112,22 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if not (personality == 'sorian' or personality == 'sorianadaptive') then
+        if not (personality == 'sorianwater' or personality == 'sorianadaptive') then
             return 0
         end
-		
+        
         local threatCutoff = 10 # value of overall threat that determines where enemy bases are
         local distance = import('/lua/ai/AIUtilities.lua').GetThreatDistance( aiBrain, location, threatCutoff )
         if not distance or distance > 1000 then
-            return 500
+            return 1000
         elseif distance > 500 then
             return 750
         elseif distance > 250 then
-            return 1000
+            return 500
         else # within 250
-            return 250
+            return 100
         end
-
+		
         return 0
     end,
 }

@@ -45,7 +45,7 @@ PlatoonTemplate {
     Name = 'UEFT2EngineerBuilderSorian',
     Plan = 'EngineerBuildAISorian',
     GlobalSquads = {
-        { categories.UEF * categories.ENGINEER * categories.TECH2, 1, 1, 'support', 'None' }
+        { categories.UEF * categories.ENGINEER * categories.TECH2 - categories.ENGINEERSTATION, 1, 1, 'support', 'None' }
     },        
 }
 

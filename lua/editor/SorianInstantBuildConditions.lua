@@ -25,22 +25,25 @@ local SUtils = import('/lua/AI/sorianutilities.lua')
 ##############################################################################################################
 function HaveGreaterThanUnitsWithCategory(aiBrain, numReq, category, idleReq)
     local numUnits
-	local total = 0
+	#local total = 0
     if type(category) == 'string' then
         category = ParseEntityCategory(category)
     end
     if not idleReq then
-        numUnits = aiBrain:GetListOfUnits(category, false)
+        numUnits = table.getn(aiBrain:GetListOfUnits(category, false, true))
     else
-        numUnits = aiBrain:GetListOfUnits(category, true)
+        numUnits = table.getn(aiBrain:GetListOfUnits(category, true, true))
     end
-	for k,v in numUnits do
-		if v:GetFractionComplete() == 1 then
-			total = total + 1
-			if total > numReq then
-				return true
-			end
-		end
+	#for k,v in numUnits do
+	#	if v:GetFractionComplete() == 1 then
+	#		total = total + 1
+	#		if total > numReq then
+	#			return true
+	#		end
+	#	end
+	#end
+	if numUnits > numReq then
+		return true
 	end
     return false
 end
@@ -57,22 +60,25 @@ end
 ##############################################################################################################
 function HaveLessThanUnitsWithCategory(aiBrain, numReq, category, idleReq)
     local numUnits
-	local total = 0
+	#local total = 0
     if type(category) == 'string' then
         category = ParseEntityCategory(category)
     end
     if not idleReq then
-        numUnits = aiBrain:GetListOfUnits(category, false)
+        numUnits = table.getn(aiBrain:GetListOfUnits(category, false, true))
     else
-        numUnits = aiBrain:GetListOfUnits(category, true)
+        numUnits = table.getn(aiBrain:GetListOfUnits(category, true, true))
     end
-	for k,v in numUnits do
-		if v:GetFractionComplete() == 1 then
-			total = total + 1
-			if total >= numReq then
-				return false
-			end
-		end
+	#for k,v in numUnits do
+	#	if v:GetFractionComplete() == 1 then
+	#		total = total + 1
+	#		if total >= numReq then
+	#			return false
+	#		end
+	#	end
+	#end
+	if numUnits >= numReq then
+		return false
 	end
     return true
 end
@@ -275,4 +281,11 @@ end
 
 function GreaterThanNavalBases(aiBrain, checkNum)
 	return not LessThanNavalBases(aiBrain, checkNum)
+end
+
+function T4BuildingCheck(aiBrain)
+    if aiBrain.T4Building then
+        return false
+    end
+    return true
 end

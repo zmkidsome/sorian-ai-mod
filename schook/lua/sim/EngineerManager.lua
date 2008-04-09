@@ -553,10 +553,12 @@ EngineerManager = Class(BuilderManager) {
     end,
     
     UnitConstructionFinished = function(self, unit, finishedUnit)
-        if EntityCategoryContains( categories.FACTORY * categories.STRUCTURE, finishedUnit ) then
+        if EntityCategoryContains( categories.FACTORY * categories.STRUCTURE, finishedUnit ) and finishedUnit:GetAIBrain():GetArmyIndex() == self.Brain:GetArmyIndex() then
             self.Brain.BuilderManagers[self.LocationType].FactoryManager:AddFactory(finishedUnit)
         end
-        self:AddUnit(finishedUnit)
+		if finishedUnit:GetAIBrain():GetArmyIndex() == self.Brain:GetArmyIndex() then
+			self:AddUnit(finishedUnit)
+		end
         local guards = unit:GetGuards()
         for k,v in guards do
             if not v:IsDead() and v.AssistPlatoon then
@@ -612,6 +614,10 @@ EngineerManager = Class(BuilderManager) {
             local hndl = self.Brain:MakePlatoon( template[1], template[2] )
             self.Brain:AssignUnitsToPlatoon( hndl, {unit}, 'support', 'none' )
             unit.PlatoonHandle = hndl
+			
+			#if EntityCategoryContains( categories.COMMAND, unit ) then
+			#	LOG('*AI DEBUG: ARMY '..self.Brain.Nickname..': Engineer Manager Forming - '..builder.BuilderName..' - Priority: '..builder:GetPriority())
+			#end
 
             #LOG('*AI DEBUG: ARMY ', repr(self.Brain:GetArmyIndex()),': Engineer Manager Forming - ',repr(builder.BuilderName),' - Priority: ', builder:GetPriority())
             hndl.PlanName = template[2]

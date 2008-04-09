@@ -47,7 +47,8 @@ function SetupMainBase(aiBrain)
     local base, returnVal, baseType = GetHighestBuilder(aiBrain)
 
     local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-    if per != 'adaptive' then
+	ScenarioInfo.ArmySetup[aiBrain.Name].AIBase = base
+    if per != 'adaptive' and per != 'sorianadaptive' then
         ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality = baseType
     end
 

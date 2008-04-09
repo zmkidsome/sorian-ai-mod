@@ -46,6 +46,84 @@ function AIGetEconomyNumbers(aiBrain)
     return econ
 end
 
+function GetBasePatrolPointsSorian( aiBrain, location, radius, layer )
+    if type(location) == 'string' then
+        if aiBrain:PBMHasPlatoonList() then
+            for k,v in aiBrain.PBM.Locations do
+                if v.LocationType == location then
+                    radius = v.Radius
+                    location = v.Location
+                    break
+                end
+            end
+        elseif aiBrain.BuilderManagers[location] then
+            radius = aiBrain.BuilderManagers[location].FactoryManager:GetLocationRadius()
+            location = aiBrain.BuilderManagers[location].FactoryManager:GetLocationCoords()
+        end
+        if not radius then
+            error('*AI ERROR: Invalid locationType- '..location..' for army- '..aiBrain.Name, 2)
+        end
+    end
+    if not location or not radius then
+        error('*AI ERROR: Need location and radius or locationType for AIUtilities.GetBasePatrolPoints', 2)
+    end
+    local vecs = aiBrain:GetBaseVectors()
+    local locList = {}
+    if not layer then
+        layer = 'Land'
+    end
+    for k,v in vecs do
+        if LayerCheckPosition( v, layer) and VDist2( v[1], v[3], location[1], location[3] ) < radius then
+            table.insert(locList, v)
+        end
+    end
+    local sortedList = {}
+    local lastX = location[1]
+    local lastZ = location[3]
+    if table.getsize(locList) == 0 then return {} end
+    local num = table.getsize(locList)
+	local startX, startZ = aiBrain:GetArmyStartPos()
+	local tempdistance = false
+	local edistance
+	local closeX, closeZ
+    #Sort the locations from point to closest point, that way it  makes a nice patrol path
+	for k,v in ArmyBrains do
+        if IsEnemy(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+			local estartX, estartZ = v:GetArmyStartPos()
+			local tempdistance = VDist2(startX, startZ, estartX, estartZ)
+			if not edistance or tempdistance < edistance then
+				edistance = tempdistance
+				closeX = estartX
+				closeZ = estartZ
+			end
+		end
+	end
+    for i = 1, num do
+        local lowest
+        local czX, czZ, pos, distance, key
+        for k, v in locList do
+            local x = v[1]
+            local z = v[3]
+			if i == 1 then
+				distance = VDist2(closeX, closeZ, x, z)
+			else
+				distance = VDist2(lastX, lastZ, x, z)
+			end
+            if not lowest or distance < lowest then
+                pos = v
+                lowest = distance
+                key = k
+            end
+        end
+        if not pos then return {} end
+        sortedList[i] = pos
+        lastX = pos[1]
+        lastZ = pos[3]
+        table.remove(locList, key)
+    end
+    return sortedList
+end
+
 function IsMex(building)
 	return building == 'uab1103' or building == 'uab1202' or building == 'uab1302' or
 	 building == 'urb1103' or building == 'urb1202' or building == 'urb1302' or
@@ -71,7 +149,7 @@ function LayerCheckPosition( pos, layer )
     end
 end
 
-function AIGetSortedHydorLocations(aiBrain, maxNum, tMin, tMax, tRings, tType, position)
+function AIGetSortedHydroLocations(aiBrain, maxNum, tMin, tMax, tRings, tType, position)
     local markerList = AIGetMarkerLocations(aiBrain, 'Hydrocarbon')
     local newList = {}
     for k,v in markerList do
@@ -94,11 +172,11 @@ function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
     if not result or VDist2Sq(pos[1], pos[3], destination[1], destination[3]) > 256*256 and unit.PlatoonHandle then
         # if we can't path to our destination, we need, rather than want, transports
         local needTransports = not result
-        #if VDist2Sq( pos[1], pos[3], destination[1], destination[3] ) > 512*512 then
-        #    needTransports = true
-        #end
+        if VDist2Sq( pos[1], pos[3], destination[1], destination[3] ) > 512*512 then #and unit.PlatoonHandle.PlatoonData.RequireTransport then
+            needTransports = true
+        end
         # skip the last move... we want to return and do a build
-        bUsedTransports = AIAttackUtils.SendPlatoonWithTransports(aiBrain, unit.PlatoonHandle, destination, needTransports, true, false)
+        bUsedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, unit.PlatoonHandle, destination, needTransports, true, false)
         
         if bUsedTransports then
             return true
@@ -159,10 +237,18 @@ function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkP
         local category = ParseEntityCategory( v )
         local retUnit = false
         local distance = false
-		local targetShields = false
+		local targetShields = 9999
         for num, unit in targetUnits do
             if not unit:IsDead() and EntityCategoryContains( category, unit ) and platoon:CanAttackTarget( squad, unit ) then
                 local unitPos = unit:GetPosition()
+				for k,v in ArmyBrains do
+					if IsAlly(v:GetArmyIndex(), aiBrain:GetArmyIndex()) or (aiBrain:GetArmyIndex() == v:GetArmyIndex()) then
+						local estartX, estartZ = v:GetArmyStartPos()
+						if VDist2Sq(estartX, estartZ, unitPos[1], unitPos[3]) < 14400 then
+							continue
+						end
+					end
+				end
 				local numShields = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.SHIELD * categories.STRUCTURE, unitPos, 50, 'Enemy' )
                 if not retUnit or numShields < targetShields or (numShields == targetShields and Utils.XZDistanceTwoVectors( position, unitPos ) < distance) then
                     retUnit = unit
@@ -440,6 +526,66 @@ function GetTransports(platoon, units)
         platoon.UsingTransport = true
         return numTransports, 0, 0, 0
     end
+end
+
+function AIFindFirebaseLocationSorian( aiBrain, locationType, radius, markerType, tMin, tMax, tRings, tType, maxUnits, unitCat, markerRadius)
+    #Get location of commander
+    #local threatPos, threatVal = aiBrain:GetHighestThreatPosition(0, true, 'Commander', aiBrain:GetCurrentEnemy():GetArmyIndex())
+    #if threatVal == 0 then
+    #    local threatPos, threatVal = aiBrain:GetHighestThreatPosition(1, true, tType or 'Structures', aiBrain:GetCurrentEnemy():GetArmyIndex())
+    #end
+    local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+	local threatPos = {estartX, 0, estartZ}
+    #Get markers
+    local markerList = AIGetMarkerLocations(aiBrain, markerType)
+    
+    #For each marker, check against threatpos. Save markers that are within the FireBaseRange
+    local inRangeList = {}
+    for _,marker in markerList do
+        local distSq = VDist2Sq(marker.Position[1], marker.Position[3], threatPos[1], threatPos[3])
+        
+        if distSq < radius * radius  then
+            table.insert(inRangeList, marker)
+        end
+    end
+    
+    #Pick the closest, least-threatening position in range
+    local bestDistSq = 9999999999
+    local bestThreat = 9999999999
+    local bestMarker = false
+    
+    local maxThreat = tMax or 1
+    
+    local catCheck = ParseEntityCategory(unitCat) or categories.ALLUNITS
+    
+    local reference = false
+    local refName = false
+    
+    for _,marker in inRangeList do
+        local threat = aiBrain:GetThreatAtPosition(marker.Position, 1, true, 'AntiSurface')
+        if threat < maxThreat then
+            local numUnits = table.getn( GetOwnUnitsAroundPoint( aiBrain, catCheck, marker.Position, markerRadius or 20) )
+            if numUnits < maxUnits then
+                if threat < bestThreat and threat < maxThreat then
+                    bestDistSq = VDist2Sq(threatPos[1], threatPos[3], marker.Position[1], marker.Position[3])
+                    bestThreat = threat
+                    bestMarker = marker
+                elseif threat == bestThreat then
+                    local distSq = VDist2Sq(threatPos[1], threatPos[3], marker.Position[1], marker.Position[3])
+                    if distSq > bestDistSq then
+                        bestDistSq = distSq
+                        bestMarker = marker
+                    end
+                end
+            end
+        end
+    end
+    
+    if bestMarker then
+        reference = bestMarker.Position
+        refName = bestMarker.Name
+    end
+    return reference, refName
 end
 
 function UseTransports(units, transports, location, transportPlatoon)

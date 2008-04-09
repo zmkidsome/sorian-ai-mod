@@ -1,5 +1,6 @@
 do
 local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
+local SUtils = import('/lua/AI/sorianutilities.lua')
 oldAIBrain = AIBrain
 
 AIBrain = Class(oldAIBrain) {
@@ -46,7 +47,7 @@ AIBrain = Class(oldAIBrain) {
 				DefaultDistressRange = 200,
 				AlertLevel = 8,
 			}
-			self:BaseMonitorInitialization(spec)
+			self:BaseMonitorInitializationSorian(spec)
 		else		
 			self:BaseMonitorInitialization()
 		end
@@ -55,8 +56,11 @@ AIBrain = Class(oldAIBrain) {
         plat:ForkThread( plat.BaseManagersDistressAI )
 		
 		self.DeadBaseThread = self:ForkThread( self.DeadBaseMonitor )
-        
-        self.EnemyPickerThread = self:ForkThread( self.PickEnemy )
+        if string.find(per, 'sorian') then
+			self.EnemyPickerThread = self:ForkThread( self.PickEnemySorian )
+		else
+			self.EnemyPickerThread = self:ForkThread( self.PickEnemy )
+		end
     end,
 	
 	DeadBaseMonitor = function(self)
@@ -73,18 +77,18 @@ AIBrain = Class(oldAIBrain) {
 						v.PlatoonFormManager:SetEnabled(false)
 						self.BuilderManagers[k] = nil
 						self.NumBases = self.NumBases - 1
-					elseif table.getn(AIUtils.GetOwnUnitsAroundPoint( self, categories.ENGINEER, v.engineerManager:GetLocationCoords(), v.engineerManager:GetLocationRadius() )) < 1 then
+					elseif table.getn(AIUtils.GetOwnUnitsAroundPoint( self, categories.ENGINEER, v.EngineerManager:GetLocationCoords(), v.EngineerManager:GetLocationRadius() )) < 1 then
 						local closest = false
 						local closeBase = false
 						for x,z in self.BuilderManagers do
-							local distance = VDist3( v.engineerManager:GetLocationCoords(), z.engineerManager:GetLocationCoords() )
+							local distance = VDist3( v.EngineerManager:GetLocationCoords(), z.EngineerManager:GetLocationCoords() )
 							if not closest or distance < closest then
 								closest = distance
 								closeBase = z
 							end
 						end
 						if closest and closeBase then
-							engies = closeBase.engineerManager:GetUnits( 'Engineers', categories.ALLUNITS )
+							engies = closeBase.EngineerManager:GetUnits( 'Engineers', categories.ALLUNITS )
 							for a,b in engies do
 								v.EngineerManager:RemoveUnit(b)
 								closeBase.EngineerManager:AddUnit(b, true)
@@ -117,6 +121,89 @@ AIBrain = Class(oldAIBrain) {
         end
         return count
     end,
+	
+    BaseMonitorInitializationSorian = function(self, spec)
+        self.BaseMonitor = {
+            BaseMonitorStatus = 'ACTIVE',
+            BaseMonitorPoints = {},
+            AlertSounded = false,
+            AlertsTable = {},
+            AlertLocation = false,
+            AlertSoundedThreat = 0,
+            ActiveAlerts = 0,
+
+            PoolDistressRange = 75,
+            PoolReactionTime = 7,
+
+            # Variables for checking a radius for enemy units
+            UnitRadiusThreshold = spec.UnitRadiusThreshold or 3,
+            UnitCategoryCheck = spec.UnitCategoryCheck or ( categories.MOBILE - ( categories.SCOUT + categories.ENGINEER ) ),
+            UnitCheckRadius = spec.UnitCheckRadius or 40,
+
+            # Threat level must be greater than this number to sound a base alert
+            AlertLevel = spec.AlertLevel or 0,
+            # Delay time for checking base
+            BaseMonitorTime = spec.BaseMonitorTime or 11,
+            # Default distance a platoon will travel to help around the base
+            DefaultDistressRange = spec.DefaultDistressRange or 75,
+            # Default how often platoons will check if the base is under duress
+            PlatoonDefaultReactionTime = spec.PlatoonDefaultReactionTime or 5,
+            # Default duration for an alert to time out
+            DefaultAlertTimeout = spec.DefaultAlertTimeout or 10,
+            
+            PoolDistressThreshold = 1,
+
+
+            ## Monitor platoons for help
+            PlatoonDistressTable = {},
+            PlatoonDistressThread = false,
+            PlatoonAlertSounded = false,
+        }
+		self.SelfMonitor = {
+			CheckRadius = spec.SelfCheckRadius or 150,
+			ThreatRadiusThreshold = spec.SelfThreatRadiusThreshold or 8,
+		}
+        self:ForkThread( self.BaseMonitorThreadSorian )
+    end,
+	
+    BaseMonitorThreadSorian = function(self)
+        while true do
+            if self.BaseMonitor.BaseMonitorStatus == 'ACTIVE' then
+				self:SelfMonitorCheck()
+                self:BaseMonitorCheck()
+            end
+            WaitSeconds( self.BaseMonitor.BaseMonitorTime )
+        end
+    end,
+	
+	SelfMonitorCheck = function(self)
+		if not self.BaseMonitor.AlertSounded then
+			local startlocx, startlocz = self:GetArmyStartPos()
+			local threatTable = self:GetThreatsAroundPosition({startlocx, 0, startlocz}, 16, true, 'AntiSurface')
+			local highThreat
+			local highThreatPos
+			local radius = self.SelfMonitor.CheckRadius * self.SelfMonitor.CheckRadius
+			for tIndex,threat in threatTable do
+				local enemyThreat = self:GetThreatAtPosition( {threat[1], 0, threat[2]}, 0, true, 'AntiSurface')
+				local dist = VDist2Sq(threat[1], threat[2], startlocx, startlocz)
+				if (not highThreat or enemyThreat > highThreat) and enemyThreat > self.SelfMonitor.ThreatRadiusThreshold and dist < radius then
+					highThreat = enemyThreat
+					highThreatPos = {threat[1], 0, threat[2]}
+				end
+			end				
+			if highThreat then
+				table.insert( self.BaseMonitor.AlertsTable,
+					{
+					Position = highThreatPos,
+					Threat = highThreat,
+					}
+				)
+				self:ForkThread(self.BaseMonitorAlertTimeout, highThreatPos)
+				self.BaseMonitor.ActiveAlerts = self.BaseMonitor.ActiveAlerts + 1
+				self.BaseMonitor.AlertSounded = true
+			end
+		end
+	end,
 	
     BaseMonitorPlatoonDistressThread = function(self)
         self.BaseMonitor.PlatoonAlertSounded = true
@@ -246,15 +333,204 @@ AIBrain = Class(oldAIBrain) {
             end
         end
     end,
-
-    PickEnemy = function(self)
+	
+    ParseIntelThreadSorian = function(self)
+        if not self.InterestList or not self.InterestList.MustScout then
+            error('Scouting areas must be initialized before calling AIBrain:ParseIntelThread.',2)
+        end
+		if not self.T4ThreatFound then
+			self.T4ThreatFound = {}
+		end
         while true do
-            self:PickEnemyLogic(true)
+            local structures = self:GetThreatsAroundPosition(self.BuilderManagers.MAIN.Position, 16, true, 'StructuresNotMex')
+
+            for _,struct in structures do
+                local dupe = false
+                local newPos = {struct[1], 0, struct[2]}
+                
+                for _,loc in self.InterestList.HighPriority do
+                    if VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < 10000 then
+                        dupe = true
+                        break
+                    end
+                end
+                
+                if not dupe then
+                    #Is it in the low priority list?
+                    for i=1, table.getn(self.InterestList.LowPriority) do
+                        local loc = self.InterestList.LowPriority[i]
+                        if VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < 10000 then
+                            #Found it in the low pri list. Remove it so we can add it to the high priority list.
+                            table.remove(self.InterestList.LowPriority, i)
+                            break
+                        end
+                    end
+                    
+                    table.insert(self.InterestList.HighPriority,
+                        {
+                            Position = newPos,
+                            LastScouted = GetGameTimeSeconds(),
+                        }
+                    )
+                    
+                    #Sort the list based on low long it has been since it was scouted
+                    table.sort(self.InterestList.HighPriority, function(a,b) 
+                        if a.LastScouted == b.LastScouted then
+                            local MainPos = self.BuilderManagers.MAIN.Position
+                            local distA = VDist2(MainPos[1], MainPos[3], a.Position[1], a.Position[3])
+                            local distB = VDist2(MainPos[1], MainPos[3], b.Position[1], b.Position[3])
+                            
+                            return distA < distB
+                        else
+                            return a.LastScouted < b.LastScouted
+                        end
+                    end)
+                end
+            end
+            
+            WaitSeconds(5)
+        end
+    end,
+	
+	T4ThreatMonitorTimeout = function(self, threattypes)
+		WaitSeconds(180)
+		for k,v in threattypes do
+			self.T4ThreatFound[v] = false
+		end
+	end,
+	
+    BuildScoutLocationsSorian = function(self)
+        local aiBrain = self
+        
+        local opponentStarts = {}
+        local allyStarts = {}
+        
+        if not aiBrain.InterestList then
+            
+            aiBrain.InterestList = {}
+            aiBrain.IntelData.HiPriScouts = 0
+            aiBrain.IntelData.AirHiPriScouts = 0
+            aiBrain.IntelData.AirLowPriScouts = 0
+            
+            #Add each enemy's start location to the InterestList as a new sub table
+            aiBrain.InterestList.HighPriority = {}
+            aiBrain.InterestList.LowPriority = {}
+            aiBrain.InterestList.MustScout = {}
+            
+            local myArmy = ScenarioInfo.ArmySetup[self.Name]
+            
+            if ScenarioInfo.Options.TeamSpawn == 'fixed' then
+                #Spawn locations were fixed. We know exactly where our opponents are. 
+                #Don't scout areas owned by us or our allies.  
+                local numOpponents = 0
+                
+                for i=1,8 do
+                    local army = ScenarioInfo.ArmySetup['ARMY_' .. i]
+                    local startPos = ScenarioUtils.GetMarker('ARMY_' .. i).position
+                    
+                    if army then
+                        if army.ArmyIndex ~= myArmy.ArmyIndex and (army.Team ~= myArmy.Team or army.Team == 1) then
+                        #Add the army start location to the list of interesting spots.
+                        opponentStarts['ARMY_' .. i] = startPos
+                        numOpponents = numOpponents + 1
+                        table.insert(aiBrain.InterestList.HighPriority,
+                            {
+                                Position = startPos,
+                                LastScouted = 0,        
+                            }
+                        )
+                        else 
+                            allyStarts['ARMY_' .. i] = startPos
+                        end
+                    end
+                end
+                
+                aiBrain.NumOpponents = numOpponents
+                
+                #For each vacant starting location, check if it is closer to allied or enemy start locations (within 100 ogrids)
+                #If it is closer to enemy territory, flag it as high priority to scout.
+                local starts = AIUtils.AIGetMarkerLocations(aiBrain, 'Start Location')
+                for _,loc in starts do
+                    #if vacant
+                    if not opponentStarts[loc.Name] and not allyStarts[loc.Name] then
+                        local closestDistSq = 999999999
+                        local closeToEnemy = false
+                        
+                        for _,pos in opponentStarts do
+                            local distSq = VDist2Sq(pos[1], pos[3], loc.Position[1], loc.Position[3])
+                            #Make sure to scout for bases that are near equidistant by giving the enemies 100 ogrids
+                            if distSq-10000 < closestDistSq then
+                                closestDistSq = distSq-10000
+                                closeToEnemy = true
+                            end
+                        end 
+                        
+                        for _,pos in allyStarts do
+                            local distSq = VDist2Sq(pos[1],pos[3], loc.Position[1], loc.Position[3])
+                            if distSq < closestDistSq then
+                                closestDistSq = distSq
+                                closeToEnemy = false
+                                break
+                            end
+                        end
+                        
+                        if closeToEnemy then
+                            table.insert(aiBrain.InterestList.LowPriority,
+                                {
+                                    Position = loc.Position,
+                                    LastScouted = 0,
+                                }
+                            )
+                        end
+                    end
+                end
+                
+            else #Spawn locations were random. We don't know where our opponents are. Add all non-ally start locations to the scout list              
+                local numOpponents = 0
+                
+                for i=1,8 do
+                    local army = ScenarioInfo.ArmySetup['ARMY_' .. i]
+                    local startPos = ScenarioUtils.GetMarker('ARMY_' .. i).position
+                    
+                    if army then
+                        if army.ArmyIndex == myArmy.ArmyIndex or (army.Team == myArmy.Team and army.Team ~= 1) then
+                            allyStarts['ARMY_' .. i] = startPos
+                        else
+                            numOpponents = numOpponents + 1
+                        end
+                    end
+                end
+                
+                aiBrain.NumOpponents = numOpponents
+                
+                #If the start location is not ours or an ally's, it is suspicious
+                local starts = AIUtils.AIGetMarkerLocations(aiBrain, 'Start Location')
+                for _,loc in starts do
+                    #if vacant
+                    if not allyStarts[loc.Name] then
+                        table.insert(aiBrain.InterestList.LowPriority,
+                                {
+                                    Position = loc.Position,
+                                    LastScouted = 0,
+                                }
+                            )
+                    end
+                end
+            end
+            
+            aiBrain:ForkThread(self.ParseIntelThreadSorian)
+        end
+    end,
+
+    PickEnemySorian = function(self)
+		self.targetoveride = false
+        while true do
+            self:PickEnemyLogicSorian(true)
             WaitSeconds(120)
         end
     end,
 	
-    PickEnemyLogic = function(self, brainbool)
+    PickEnemyLogicSorian = function(self, brainbool)
         local armyStrengthTable = {}
         
         local selfIndex = self:GetArmyIndex()
@@ -278,12 +554,11 @@ AIBrain = Class(oldAIBrain) {
         end
         
         local allyEnemy = self:GetAllianceEnemy(armyStrengthTable)
-        if allyEnemy  then
+        if allyEnemy and not self.targetoveride then
             self:SetCurrentEnemy( allyEnemy )
         else
-			local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
             local findEnemy = false
-            if not self:GetCurrentEnemy() or (string.find(per, 'sorian') and brainbool) then
+            if not self:GetCurrentEnemy() or brainbool and not self.targetoveride then
                 findEnemy = true
             else
                 local cIndex = self:GetCurrentEnemy():GetArmyIndex()
@@ -324,6 +599,9 @@ AIBrain = Class(oldAIBrain) {
                 end
                 
                 if enemy then
+					if not self:GetCurrentEnemy() or self:GetCurrentEnemy() != enemy then
+						SUtils.AISendChat('allies', ArmyBrains[self:GetArmyIndex()].Nickname, 'targetchat', ArmyBrains[enemy:GetArmyIndex()].Nickname)
+					end
                     self:SetCurrentEnemy( enemy )
                     #LOG('*AI DEBUG: Choosing enemy - ' .. enemy:GetArmyIndex())
                 end

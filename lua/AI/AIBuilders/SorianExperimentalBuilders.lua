@@ -28,78 +28,6 @@ local SBC = '/lua/editor/SorianBuildConditions.lua'
 local AIAddBuilderTable = import('/lua/ai/AIAddBuilderTable.lua')
 
 BuilderGroup {
-    BuilderGroupName = 'SorianMobileAirExperimentalEngineersHigh',
-    BuildersType = 'EngineerBuilder',
-    Builder {
-        BuilderName = 'Sorian T3 Air Exp1 Engineer 1 High',
-        PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 951,
-		InstanceCount = 1,
-        BuilderConditions = {
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
-			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
-            { IBC, 'BrainNotLowPowerMode', {} },
-        },
-        BuilderType = 'Any',
-        BuilderData = {
-			NumAssistees = 2,
-            Construction = {
-                BuildClose = false,
-                NearMarkerType = 'Protected Experimental Construction',
-                BuildStructures = {
-                    'T4AirExperimental1',
-                },
-                Location = 'LocationType',
-            }
-        }
-    },
-    Builder {
-        BuilderName = 'Sorian T2 Engineer Assist Experimental Mobile Air High',
-        PlatoonTemplate = 'T2EngineerAssistSorian',
-        Priority = 800,
-        InstanceCount = 5,
-        BuilderConditions = {
-            { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.AIR * categories.MOBILE}},
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
-            { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
-        },
-        BuilderType = 'Any',
-        BuilderData = {
-            Assist = {
-                AssistLocation = 'LocationType',
-                AssisteeType = 'Engineer',
-                AssistRange = 80,
-                BeingBuiltCategories = {'EXPERIMENTAL MOBILE AIR'},
-                Time = 60,
-            },
-        }
-    },
-    Builder {
-        BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Air High',
-        PlatoonTemplate = 'T3EngineerAssist',
-        Priority = 950,
-        InstanceCount = 5,
-        BuilderConditions = {
-            { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.AIR * categories.MOBILE}},
-            { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
-        },
-        BuilderType = 'Any',
-        BuilderData = {
-            Assist = {
-                AssistLocation = 'LocationType',
-                AssisteeType = 'Engineer',
-                AssistRange = 80,
-                BeingBuiltCategories = {'EXPERIMENTAL MOBILE AIR'},
-                Time = 60,
-            },
-        }
-    },
-}
-
-BuilderGroup {
     BuilderGroupName = 'SorianMobileLandExperimentalEngineers',
     BuildersType = 'EngineerBuilder',
     Builder {
@@ -108,16 +36,19 @@ BuilderGroup {
         Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
-            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = false,
+				T4 = true,
                 BaseTemplate = ExBaseTmpl,
                 NearMarkerType = 'Rally Point',
                 BuildStructures = {
@@ -133,16 +64,20 @@ BuilderGroup {
         Priority = 950,
 		InstanceCount = 1,
         BuilderConditions = {
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
-            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = false,
+				T4 = true,
                 BaseTemplate = ExBaseTmpl,
                 NearMarkerType = 'Rally Point',
                 BuildStructures = {
@@ -155,19 +90,22 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Land Exp3 Engineer 1',
         PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 951,
 		InstanceCount = 1,
         BuilderConditions = {
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
-            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = false,
+				T4 = true,
                 BaseTemplate = ExBaseTmpl,
                 NearMarkerType = 'Rally Point',
                 BuildStructures = {
@@ -192,9 +130,9 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE LAND'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
@@ -213,9 +151,9 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE LAND'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
@@ -234,9 +172,10 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderConditions = {
             #{ UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
-			ThreatSupport = 200,
+			ThreatSupport = 100,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -254,10 +193,11 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'FACTORY TECH3'}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.LAND * categories.EXPERIMENTAL - categories.url0401}},
         },
         BuilderData = {
-			ThreatSupport = 200,
+			ThreatSupport = 100,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -275,10 +215,11 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'FACTORY TECH3'}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.LAND * categories.EXPERIMENTAL - categories.url0401}},
         },
         BuilderData = {
-			ThreatSupport = 200,
+			ThreatSupport = 100,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -294,19 +235,22 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Air Exp1 Engineer 1',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 951,
 		InstanceCount = 1,
         BuilderConditions = {
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = false,
+				T4 = true,
                 NearMarkerType = 'Protected Experimental Construction',
                 BuildStructures = {
                     'T4AirExperimental1',
@@ -322,7 +266,7 @@ BuilderGroup {
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.AIR * categories.MOBILE}},
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
@@ -331,16 +275,16 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE AIR'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Air',
         PlatoonTemplate = 'T3EngineerAssist',
-        Priority = 950,
+        Priority = 952,
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.AIR * categories.MOBILE}},
@@ -352,9 +296,9 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE AIR'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
@@ -373,9 +317,10 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderConditions = {
             #{ UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'FACTORY TECH3'}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
-			ThreatSupport = 200,
+			ThreatSupport = 100,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -393,10 +338,11 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'FACTORY TECH3'}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.AIR * categories.EXPERIMENTAL}},
         },
         BuilderData = {
-			ThreatSupport = 200,
+			ThreatSupport = 100,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -414,10 +360,11 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'FACTORY TECH3'}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.AIR * categories.EXPERIMENTAL}},
         },
         BuilderData = {
-			ThreatSupport = 200,
+			ThreatSupport = 100,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -437,16 +384,19 @@ BuilderGroup {
 		InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENGINEER * categories.TECH3}},
             { MABC, 'MarkerLessThanDistance',  { 'Naval Area', 400}},
-            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+			{ SIBC, 'T4BuildingCheck', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = false,
+				T4 = true,
                 NearMarkerType = 'Naval Area',
                 BuildStructures = {
                     'T4SeaExperimental1',
@@ -470,16 +420,16 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE NAVAL'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Naval',
         PlatoonTemplate = 'T3EngineerAssist',
-        Priority = 950,
+        Priority = 951,
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
@@ -491,9 +441,9 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE NAVAL'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
@@ -505,15 +455,18 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T4 Exp Sea',
         PlatoonTemplate = 'T4ExperimentalSeaSorian',
-        PlatoonAddBehaviors = { 'TempestBehaviorSorian' },
+        #PlatoonAddBehaviors = { 'TempestBehaviorSorian' },
         PlatoonAddPlans = {'NameUnits', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
-        PlatoonAIPlan = 'AttackForceAI',
+        #PlatoonAIPlan = 'AttackForceAI',
         Priority = 1300,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
         FormRadius = 10000,
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderData = {
-			ThreatSupport = 200,
+			ThreatSupport = 100,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -532,18 +485,22 @@ BuilderGroup {
 		InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENGINEER * categories.TECH3}},
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.ORBITALSYSTEM }},
-            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2 }},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 3, categories.EXPERIMENTAL * categories.ORBITALSYSTEM }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
+				T4 = true,
                 BuildStructures = {
                     'T4SatelliteExperimental',
                 },
@@ -557,7 +514,7 @@ BuilderGroup {
         Priority = 800,
         InstanceCount = 5,
         BuilderConditions = {
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.ORBITALSYSTEM }},
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
@@ -568,17 +525,17 @@ BuilderGroup {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
                 BeingBuiltCategories = {'EXPERIMENTAL ORBITALSYSTEM'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Experimental Satellite',
         PlatoonTemplate = 'T3EngineerAssist',
-        Priority = 950,
+        Priority = 951,
         InstanceCount = 5,
         BuilderConditions = {
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.ORBITALSYSTEM }},
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
@@ -589,7 +546,7 @@ BuilderGroup {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
                 BeingBuiltCategories = {'EXPERIMENTAL ORBITALSYSTEM'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
@@ -604,6 +561,9 @@ BuilderGroup {
         PlatoonAddPlans = {'NameUnits'},
         PlatoonAIPlan = 'StrikeForceAI',
         Priority = 800,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
         FormRadius = 10000,
         InstanceCount = 50,
         BuilderType = 'Any',
@@ -622,19 +582,22 @@ BuilderGroup {
         PlatoonTemplate = 'AeonT3EngineerBuilder',
         Priority = 950,
         BuilderConditions = {
-		{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
+		{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+		{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.ECONOMIC }},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.EXPERIMENTAL * categories.ECONOMIC}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
-            { SIBC, 'GreaterThanEconEfficiencyOverTimeExp', { 0.9, 1.2}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
 			{ IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = false,
+				T4 = true,
                 BuildStructures = {
                     'T4EconExperimental',
                 },
@@ -656,16 +619,16 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'EXPERIMENTAL ECONOMIC'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Economic',
         PlatoonTemplate = 'T3EngineerAssist',
-        Priority = 950,
+        Priority = 951,
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.ECONOMIC }},
@@ -676,9 +639,9 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'EXPERIMENTAL ECONOMIC'},
-                Time = 60,
+                Time = 120,
             },
         }
     },

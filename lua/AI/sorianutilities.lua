@@ -11,11 +11,47 @@ local AIUtils = import('/lua/ai/aiutilities.lua')
 local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
 local Utils = import('/lua/utilities.lua')
 
+local AIChatText = {
+	nukechat = { 
+		'Nuke volley headed for [target].', 
+		'Launching nukes at [target].', 
+		'Firing nukes at [target].', 
+		'Gonna make [target]\'s base glow in the dark.',
+		'I have nukes headed for [target].',
+	},
+	targetchat = { 
+		'Switching targets to [target].', 
+		'Focusing attacks on [target].', 
+		'Attacking [target].', 
+		'Sending units at [target].',
+		'Shifting focus to [target].',
+	},
+	tcrespond = {
+		'Copy that, targeting [target].',
+		'Roger, switching targets to [target].',
+		'Copy, let\'s get [target].',
+		'Roger that, focusing attacks on [target].',
+		'Copy, [target] is the new target.',
+	},
+	tcerrorally = {
+		'I cannot target [target], They are an ally.',
+		'Umm, [target] is our ally.',
+		'[target] is an ally! Sheesh, I\'m the computer player.',
+		'Since [target] is an ally attacking them would be a bad idea.',
+		'Wake up! [target] is an ally. Wow!',
+	},
+}
+
+function T4Timeout(aiBrain)
+	WaitSeconds(5)
+	aiBrain.T4Building = false
+end
+
 function CanRespondEffectively(aiBrain, location, platoon)
 	local targets = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, location, 32, 'Enemy' )
-	if aiBrain:GetThreatAtPosition(location, 0, true, 'Air') > 0 and AIAttackUtils.GetAirThreatOfUnits(platoon) > 0 then
+	if AIAttackUtils.GetAirThreatOfUnits(platoon) > 0 and aiBrain:GetThreatAtPosition(location, 0, true, 'Air') > 0 then
 		return true
-	elseif aiBrain:GetThreatAtPosition(location, 0, true, 'Land') > 0 and AIAttackUtils.GetSurfaceThreatOfUnits(platoon) > 0 then
+	elseif AIAttackUtils.GetSurfaceThreatOfUnits(platoon) > 0 and (aiBrain:GetThreatAtPosition(location, 0, true, 'Land') > 0 or aiBrain:GetThreatAtPosition(location, 0, true, 'Naval') > 0) then
 		return true
 	end
 	if table.getn(targets) == 0 then
@@ -26,18 +62,68 @@ function CanRespondEffectively(aiBrain, location, platoon)
 	return false
 end
 
-function FindClosestUnitToAttack( aiBrain, platoon, squad, maxRange, atkPri, selectedWeaponArc, turretPitch )
+function AISendPing(position, pingType, army)
+	local PingTypes = {
+       alert = {Lifetime = 6, Mesh = 'alert_marker', Ring = '/game/marker/ring_yellow02-blur.dds', ArrowColor = 'yellow', Sound = 'UEF_Select_Radar'},
+       move = {Lifetime = 6, Mesh = 'move', Ring = '/game/marker/ring_blue02-blur.dds', ArrowColor = 'blue', Sound = 'Cybran_Select_Radar'},
+       attack = {Lifetime = 6, Mesh = 'attack_marker', Ring = '/game/marker/ring_red02-blur.dds', ArrowColor = 'red', Sound = 'Aeon_Select_Radar'},
+       marker = {Lifetime = 5, Ring = '/game/marker/ring_yellow02-blur.dds', ArrowColor = 'yellow', Sound = 'UI_Main_IG_Click', Marker = true},
+   }
+	local data = {Owner = army - 1, Type = pingType, Location = position}
+	data = table.merged(data, PingTypes[pingType])
+	import('/lua/simping.lua').SpawnPing(data)
+end
+
+function AISendChat(aigroup, ainickname, aiaction, targetnickname)
+	if not GetArmyData(ainickname):IsDefeated() and AIHasAlly(GetArmyData(ainickname)) then
+		if aiaction and AIChatText[aiaction] then
+			local ranchat = Random(1, table.getn(AIChatText[aiaction]))
+			local chattext
+			if targetnickname then
+				if IsAIArmy(targetnickname) then
+					targetnickname = trim(string.gsub(targetnickname,'%b()', '' ))
+				end
+				chattext = string.gsub(AIChatText[aiaction][ranchat],'%[target%]', targetnickname )
+			else
+				chattext = AIChatText[aiaction][ranchat]
+			end
+			table.insert(Sync.AIChat, {group=aigroup, text=chattext, sender=ainickname} )
+		else
+			table.insert(Sync.AIChat, {group=aigroup, text=aiaction, sender=ainickname} )
+		end
+	end
+end
+
+function FinishAIChat(data)
+	if data.NewTarget then
+		if data.NewTarget == 'at will' then
+			ArmyBrains[data.Army].targetoveride = false
+			AISendChat('allies', ArmyBrains[data.Army].Nickname, 'Targeting at will')
+		else
+			if IsEnemy(data.NewTarget, data.Army) then
+				ArmyBrains[data.Army]:SetCurrentEnemy( ArmyBrains[data.NewTarget] )
+				ArmyBrains[data.Army].targetoveride = true
+				AISendChat('allies', ArmyBrains[data.Army].Nickname, 'tcrespond', ArmyBrains[data.NewTarget].Nickname)
+			elseif IsAlly(data.NewTarget, data.Army) then
+				AISendChat('allies', ArmyBrains[data.Army].Nickname, 'tcerrorally', ArmyBrains[data.NewTarget].Nickname)
+			end
+		end
+	end
+end
+
+function FindClosestUnitToAttack( aiBrain, platoon, squad, maxRange, atkCat, selectedWeaponArc, turretPitch )
     local position = platoon:GetPlatoonPosition()
     if not aiBrain or not position or not maxRange then
+		#LOG('*AI DEBUG: FindClosestUnitToAttack missing data')
         return false
     end
-    local targetUnits = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, position, maxRange, 'Enemy' )
+    local targetUnits = aiBrain:GetUnitsAroundPoint( atkCat, position, maxRange, 'Enemy' )
     local retUnit = false
-    local distance = false
+    local distance = 999999
     for num, unit in targetUnits do
-        if not unit:IsDead() and not EntityCategoryContains(categories.AIR, unit) then
+        if not unit:IsDead() then
             local unitPos = unit:GetPosition()
-            if (not retUnit or Utils.XZDistanceTwoVectors( position, unitPos ) < distance) and (not turretPitch or not CheckBlockingTerrain(position, unitPos, selectedWeaponArc, turretPitch)) then
+            if (not retUnit or Utils.XZDistanceTwoVectors( position, unitPos ) < distance) and platoon:CanAttackTarget( squad, unit ) and (not turretPitch or not CheckBlockingTerrain(position, unitPos, selectedWeaponArc, turretPitch)) then
                 retUnit = unit
                 distance = Utils.XZDistanceTwoVectors( position, unitPos )
             end
@@ -47,6 +133,61 @@ function FindClosestUnitToAttack( aiBrain, platoon, squad, maxRange, atkPri, sel
         return retUnit
     end
     return false
+end
+
+function LeadTarget(platoon, target)
+	position = platoon:GetPlatoonPosition()
+	pos = target:GetPosition()
+	Tpos1 = {pos[1], 0, pos[3]}
+	WaitSeconds(1)
+	pos = target:GetPosition()
+	Tpos2 = {pos[1], 0, pos[3]}
+	xmove = (Tpos1[1] - Tpos2[1])
+	ymove = (Tpos1[3] - Tpos2[3])
+	dist1 = VDist2Sq(position[1], position[3], Tpos1[1], Tpos1[3])
+	dist2 = VDist2Sq(position[1], position[3], Tpos2[1], Tpos2[3])
+	dist1 = math.sqrt(dist1)
+	dist2 = math.sqrt(dist2)
+	time1 = (dist1 / 12) 
+	time2 = (dist2 / 12)
+	newtime = time2 - (time1 - time2) + 5.82 #2.32 (time for missile to speed up) + 3.5 seconds for launch
+	newx = xmove * newtime
+	newy = ymove * newtime
+    if Tpos2[1] < 0 or Tpos2[3] < 0 or Tpos2[1] > ScenarioInfo.size[1] or Tpos2[3] > ScenarioInfo.size[2] then
+        return false
+    end
+	return {Tpos2[1] - newx, 0, Tpos2[3] - newy}
+end
+
+function LeadTargetArtillery(platoon, unit, target)
+	position = platoon:GetPlatoonPosition()
+	mainweapon = unit:GetBlueprint().Weapon[1]
+	pos = target:GetPosition()
+	Tpos1 = {pos[1], 0, pos[3]}
+	WaitSeconds(1)
+	pos = target:GetPosition()
+	Tpos2 = {pos[1], 0, pos[3]}
+	xmove = (Tpos1[1] - Tpos2[1])
+	ymove = (Tpos1[3] - Tpos2[3])
+	dist1 = VDist2Sq(position[1], position[3], Tpos1[1], Tpos1[3])
+	dist2 = VDist2Sq(position[1], position[3], Tpos2[1], Tpos2[3])
+	dist1 = math.sqrt(dist1)
+	dist2 = math.sqrt(dist2)
+	# get firing angle, gravity constant = 100m/s = 5.12 MU/s
+	firingangle1 = math.deg(math.asin((5.12 * dist1) / (mainweapon.MuzzleVelocity * mainweapon.MuzzleVelocity)) / 2)
+	firingangle2 = math.deg(math.asin((5.12 * dist2) / (mainweapon.MuzzleVelocity * mainweapon.MuzzleVelocity)) / 2)
+	# convert angle for high arc
+	if mainweapon.BallisticArc == 'RULEUBA_HighArc' then
+		firingangle1 = 90 - firingangle1
+		firingangle2 = 90 - firingangle2
+	end
+	# get flight time
+	time1 = mainweapon.MuzzleVelocity * math.deg(math.sin(firingangle1)) / 2.56
+	time2 = mainweapon.MuzzleVelocity * math.deg(math.sin(firingangle2)) / 2.56
+	newtime = time2 - (time1 - time2)
+	newx = xmove * newtime
+	newy = ymove * newtime
+	return {Tpos2[1] - newx, 0, Tpos2[3] - newy}
 end
 
 function CheckBlockingTerrain(pos, targetPos, firingArc, turretPitch)
@@ -70,7 +211,7 @@ function CheckBlockingTerrain(pos, targetPos, firingArc, turretPitch)
 			if GetSurfaceHeight( nextpos[1], nextpos[3] ) > nextposHeight then
 				nextposHeight = GetSurfaceHeight( nextpos[1], nextpos[3] )
 			end
-			if not GetSlope(lastPos, nextpos, lastPosHeight, nextposHeight) < turretPitch then
+			if GetSlope(lastPos, nextpos, lastPosHeight, nextposHeight) > turretPitch then
 				return true
 			end
 		end
@@ -103,6 +244,7 @@ function MajorLandThreatExists( aiBrain )
 	local numET4Art = aiBrain:GetNumUnitsAroundPoint( categories.STRUCTURE * categories.STRATEGIC * categories.EXPERIMENTAL, Vector(StartX,0,StartZ), 100000, 'Enemy' )
 	local numET4Sat = aiBrain:GetNumUnitsAroundPoint( categories.STRUCTURE * categories.ORBITALSYSTEM * categories.EXPERIMENTAL, Vector(StartX,0,StartZ), 100000, 'Enemy' )
 	local numET4Exp = aiBrain:GetNumUnitsAroundPoint( categories.EXPERIMENTAL * (categories.LAND + categories.NAVAL), Vector(StartX,0,StartZ), 100000, 'Enemy' )
+	local numET4AExp = aiBrain:GetNumUnitsAroundPoint( categories.EXPERIMENTAL * categories.AIR, Vector(StartX,0,StartZ), 100000, 'Enemy' )
 	local numEDef = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.STRUCTURE * (categories.DIRECTFIRE + categories.ANTIAIR), Vector(StartX,0,StartZ), 150, 'Enemy' )
 	local retcat = false
 	if numET4Art > 0 then
@@ -113,6 +255,8 @@ function MajorLandThreatExists( aiBrain )
 		retcat = categories.STRUCTURE * categories.NUKE * categories.SILO #'STRUCTURE NUKE SILO'
 	elseif numET4Exp > 0 then
 		retcat = categories.EXPERIMENTAL * (categories.LAND + categories.NAVAL) #'EXPERIMENTAL LAND + NAVAL'
+	elseif numET4AExp > 0 then
+		retcat = categories.EXPERIMENTAL * categories.AIR #'EXPERIMENTAL AIR'
 	elseif numET3Art > 0 then
 		retcat = categories.STRUCTURE * categories.ARTILLERY * categories.TECH3 #'STRUCTURE ARTILLERY TECH3'
 	elseif numET2 > 0 then
@@ -174,7 +318,7 @@ function Nuke(aiBrain)
 			launcher = v
 			maxFire = true
 		end
-		fired[k] = false
+		fired[v] = false
         if v:GetNukeSiloAmmoCount() > 0 then
 			nukeCount = nukeCount + 1
         end            
@@ -189,15 +333,15 @@ function Nuke(aiBrain)
 			target, tarPosition = AIUtils.AIFindBrainNukeTargetInRangeSorian( aiBrain, launcher, maxRadius, atkPri, nukeCount, oldTarget )
 			if target then
 				aitarget = target:GetAIBrain():GetArmyIndex()
-				#AISendChat('allies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'nukechat', ArmyBrains[aitarget].Nickname)
-				#AISendPing(tarPosition, 'attack', aiBrain:GetArmyIndex())
-				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, tarPosition, 80, 'Enemy' )
+				AISendChat('allies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'nukechat', ArmyBrains[aitarget].Nickname)
+				AISendPing(tarPosition, 'attack', aiBrain:GetArmyIndex())
+				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, tarPosition, 100, 'Enemy' )
 				for k, v in Nukes do
-					if v:GetNukeSiloAmmoCount() > 0 and not fired[k] then
+					if v:GetNukeSiloAmmoCount() > 0 and not fired[v] then
 						IssueNuke( {v}, tarPosition )
 						nukeCount = nukeCount - 1
 						fireCount = fireCount + 1
-						fired[k] = true
+						fired[v] = true
 					end
 					if fireCount > (antiNukes + 1) or nukeCount == 0 or (fireCount > 0 and antiNukes == 0) then
 						break
@@ -277,4 +421,45 @@ function Round(x, places)
 		result = math.floor( x + 0.5 )
 		return result
 	end
+end
+
+function trim(s)
+	return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
+end
+
+function GetArmyData(army)
+    local result
+    if type(army) == 'string' then
+        for i, v in ArmyBrains do
+            if v.Nickname == army then
+                result = v
+                break
+            end
+        end
+    end
+    return result
+end
+
+function IsAIArmy(army)
+    if type(army) == 'string' then
+        for i, v in ArmyBrains do
+			if v.Nickname == army and v.BrainType == 'AI' then
+				return true
+			end
+        end
+	elseif type(army) == 'number' then
+		if ArmyBrains[army].BrainType == 'AI' then
+			return true		
+		end
+	end
+    return false
+end
+
+function AIHasAlly(army)
+	for k, v in ArmyBrains do
+		if IsAlly(army:GetArmyIndex(), v:GetArmyIndex()) and army:GetArmyIndex() != v:GetArmyIndex() then
+			return true
+		end
+	end
+	return false
 end

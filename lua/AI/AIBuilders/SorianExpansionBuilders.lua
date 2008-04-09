@@ -52,6 +52,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -91,6 +92,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -130,6 +132,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -166,6 +169,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -217,6 +221,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -256,6 +261,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -292,6 +298,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -343,6 +350,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -367,16 +375,17 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Vacant Expansion Area Engineer(Fire base)',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 0, #850,
         InstanceCount = 2,
         BuilderConditions = {
-            { SBC, 'ExpansionPointNeedsStructure', { 'LocationType', 350, 'DEFENSE TECH1 STRUCTURE', 20, 4, 0, 1, 2, 'StructuresNotMex' } },
+            { SBC, 'ExpansionPointNeedsStructure', { 'LocationType', 350, 'DEFENSE TECH1 STRUCTURE', 20, 3, 0, 1, 2, 'StructuresNotMex' } },
             #{ UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .7 } },
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
 				MarkerRadius = 20,
@@ -386,7 +395,7 @@ BuilderGroup {
                 ThreatMin = 0,
                 ThreatMax = 1,
                 ThreatRings = 2,
-				MarkerUnitCount = 4,
+				MarkerUnitCount = 3,
                 ThreatType = 'StructuresNotMex',
 				MarkerUnitCategory = 'DEFENSE TECH1 STRUCTURE',
                 BuildStructures = {
@@ -415,6 +424,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -452,6 +462,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -496,6 +507,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -532,16 +544,17 @@ BuilderGroup {
         Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
-            { MABC, 'CanBuildFirebase', { 'LocationType', 700, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
-            { UCBC, 'UnitCapCheckLess', { .85 } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { false } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { SBC, 'CanBuildFirebase', { 'LocationType', 700, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            #{ UCBC, 'UnitCapCheckLess', { .85 } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -549,11 +562,11 @@ BuilderGroup {
                 FireBaseRange = 700,
                 NearMarkerType = 'Expansion Area',
                 LocationType = 'LocationType',
-                ThreatMin = -1000,
+                ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 MarkerUnitCount = 1,
-                MarkerUnitCategory = 'STRATEGIC',
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
                 MarkerRadius = 20,
                 BuildStructures = {
 					'T2RadarJammer',
@@ -578,16 +591,17 @@ BuilderGroup {
         Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
-            { MABC, 'CanBuildFirebase', { 'LocationType', 900, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
-            { UCBC, 'UnitCapCheckLess', { .85 } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { false } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { SBC, 'CanBuildFirebase', { 'LocationType', 900, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            #{ UCBC, 'UnitCapCheckLess', { .85 } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -595,11 +609,11 @@ BuilderGroup {
                 FireBaseRange = 900,
                 NearMarkerType = 'Expansion Area',
                 LocationType = 'LocationType',
-                ThreatMin = -1000,
+                ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 MarkerUnitCount = 1,
-                MarkerUnitCategory = 'STRATEGIC',
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
                 MarkerRadius = 20,
                 BuildStructures = {
 					'T2RadarJammer',
@@ -624,16 +638,17 @@ BuilderGroup {
         Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
-            { MABC, 'CanBuildFirebase', { 'LocationType', 750, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
-            { UCBC, 'UnitCapCheckLess', { .85 } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { false } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { SBC, 'CanBuildFirebase', { 'LocationType', 750, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            #{ UCBC, 'UnitCapCheckLess', { .85 } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -641,11 +656,11 @@ BuilderGroup {
                 FireBaseRange = 750,
                 NearMarkerType = 'Expansion Area',
                 LocationType = 'LocationType',
-                ThreatMin = -1000,
+                ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 MarkerUnitCount = 1,
-                MarkerUnitCategory = 'STRATEGIC',
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
                 MarkerRadius = 20,
                 BuildStructures = {
 					'T2RadarJammer',
@@ -670,16 +685,17 @@ BuilderGroup {
         Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
-            { MABC, 'CanBuildFirebase', { 'LocationType', 825, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
-            { UCBC, 'UnitCapCheckLess', { .85 } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { false } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { SBC, 'CanBuildFirebase', { 'LocationType', 825, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            #{ UCBC, 'UnitCapCheckLess', { .85 } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -687,11 +703,11 @@ BuilderGroup {
                 FireBaseRange = 825,
                 NearMarkerType = 'Expansion Area',
                 LocationType = 'LocationType',
-                ThreatMin = -1000,
+                ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 MarkerUnitCount = 1,
-                MarkerUnitCategory = 'STRATEGIC',
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
                 MarkerRadius = 20,
                 BuildStructures = {
 					'T2RadarJammer',
@@ -716,16 +732,17 @@ BuilderGroup {
         Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
-            { MABC, 'CanBuildFirebase', { 'LocationType', 700, 'Defensive Point', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
-            { UCBC, 'UnitCapCheckLess', { .85 } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { false } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { SBC, 'CanBuildFirebase', { 'LocationType', 700, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            #{ UCBC, 'UnitCapCheckLess', { .85 } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -733,11 +750,11 @@ BuilderGroup {
                 FireBaseRange = 700,
                 NearMarkerType = 'Defensive Point',
                 LocationType = 'LocationType',
-                ThreatMin = -1000,
+                ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 MarkerUnitCount = 1,
-                MarkerUnitCategory = 'STRATEGIC',
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
                 MarkerRadius = 20,
                 BuildStructures = {
 					'T2RadarJammer',
@@ -762,16 +779,17 @@ BuilderGroup {
         Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
-            { MABC, 'CanBuildFirebase', { 'LocationType', 900, 'Defensive Point', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
-            { UCBC, 'UnitCapCheckLess', { .85 } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { false } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { SBC, 'CanBuildFirebase', { 'LocationType', 900, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            #{ UCBC, 'UnitCapCheckLess', { .85 } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -779,11 +797,11 @@ BuilderGroup {
                 FireBaseRange = 900,
                 NearMarkerType = 'Defensive Point',
                 LocationType = 'LocationType',
-                ThreatMin = -1000,
+                ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 MarkerUnitCount = 1,
-                MarkerUnitCategory = 'STRATEGIC',
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
                 MarkerRadius = 20,
                 BuildStructures = {
 					'T2RadarJammer',
@@ -808,16 +826,17 @@ BuilderGroup {
         Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
-            { MABC, 'CanBuildFirebase', { 'LocationType', 750, 'Defensive Point', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
-            { UCBC, 'UnitCapCheckLess', { .85 } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { false } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { SBC, 'CanBuildFirebase', { 'LocationType', 750, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            #{ UCBC, 'UnitCapCheckLess', { .85 } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -825,11 +844,11 @@ BuilderGroup {
                 FireBaseRange = 750,
                 NearMarkerType = 'Defensive Point',
                 LocationType = 'LocationType',
-                ThreatMin = -1000,
+                ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 MarkerUnitCount = 1,
-                MarkerUnitCategory = 'STRATEGIC',
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
                 MarkerRadius = 20,
                 BuildStructures = {
 					'T2RadarJammer',
@@ -854,16 +873,17 @@ BuilderGroup {
         Priority = 950,
         InstanceCount = 1,
         BuilderConditions = {
-            { MABC, 'CanBuildFirebase', { 'LocationType', 825, 'Defensive Point', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
-            { UCBC, 'UnitCapCheckLess', { .85 } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { false } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { SBC, 'CanBuildFirebase', { 'LocationType', 825, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            #{ UCBC, 'UnitCapCheckLess', { .85 } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
         BuilderType = 'Any',
         BuilderData = {
+			RequireTransport = true,
             Construction = {
                 BuildClose = false,
                 BaseTemplate = ExBaseTmpl,
@@ -871,11 +891,11 @@ BuilderGroup {
                 FireBaseRange = 825,
                 NearMarkerType = 'Defensive Point',
                 LocationType = 'LocationType',
-                ThreatMin = -1000,
+                ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 MarkerUnitCount = 1,
-                MarkerUnitCategory = 'STRATEGIC',
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
                 MarkerRadius = 20,
                 BuildStructures = {
 					'T2RadarJammer',

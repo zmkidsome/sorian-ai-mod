@@ -15,6 +15,7 @@ BaseBuilderTemplate {
         # Factory upgrades
         'SorianT1BalancedUpgradeBuilders',
         'SorianT2BalancedUpgradeBuilders',
+		'SorianMassFabPause',
         
         # Engineer Builders
         'SorianEngineerFactoryBuilders',
@@ -58,8 +59,8 @@ BaseBuilderTemplate {
 		'SorianT2BaseDefenses',
 		'SorianT3BaseDefenses',
 
-		#'SorianT2PerimeterDefenses',
-		#'SorianT3PerimeterDefenses',
+		'SorianT2PerimeterDefenses',
+		'SorianT3PerimeterDefenses',
 		
         'SorianT1DefensivePoints',
         'SorianT2DefensivePoints',
@@ -122,7 +123,7 @@ BaseBuilderTemplate {
         'SorianMobileLandExperimentalEngineers',
         'SorianMobileLandExperimentalForm',
         
-        'SorianMobileAirExperimentalEngineersHigh',
+        'SorianMobileAirExperimentalEngineers',
         'SorianMobileAirExperimentalForm',
 		
         'SorianMobileNavalExperimentalEngineers',
@@ -162,14 +163,14 @@ BaseBuilderTemplate {
         },
         FactoryCount = {
             Land = 5,
-            Air = 3,
+            Air = 4,
             Sea = 0,
-            Gate = 1,
+            Gate = 0, #1,
         },
         MassToFactoryValues = {
-            T1Value = 8, #6
-            T2Value = 20, #15
-            T3Value = 27.5, #22.5 
+            T1Value = 6, #8
+            T2Value = 15, #20
+            T3Value = 22.5, #27.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)
@@ -181,7 +182,7 @@ BaseBuilderTemplate {
             return 1, 'sorian'
         end
         
-        if per != 'sorian' and per != 'bleh' and per != '' then
+        if per != 'sorian' and per != 'sorianadaptive' and per != 'bleh' and per != '' then
             return 1, 'sorian'
         end
 
@@ -199,11 +200,11 @@ BaseBuilderTemplate {
         end
         
         #If we're playing on an island map, do not use this plan often
-        if isIsland and mapSizeX > 1024 and mapSizeZ > 1024 then
+        if isIsland then
             return Random(25, 50), 'sorian'
 
-        elseif mapSizeX < 512 and mapSizeZ < 512 then
-            return Random(98, 100), 'sorian'
+        elseif mapSizeX > 256 and mapSizeZ > 256 and mapSizeX <= 512 and mapSizeZ <= 512 then
+            return Random(75, 100), 'sorian'
 
         elseif mapSizeX >= 512 and mapSizeZ >= 512 and mapSizeX <= 1024 and mapSizeZ <= 1024 then
             return Random(50, 100), 'sorian'
