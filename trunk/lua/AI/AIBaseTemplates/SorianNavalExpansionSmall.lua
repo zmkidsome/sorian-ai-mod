@@ -43,6 +43,10 @@ BaseBuilderTemplate {
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
+		
+        # ==== EXPERIMENTALS ==== #
+        'SorianMobileNavalExperimentalEngineers',
+        'SorianMobileNavalExperimentalForm',
     },
     NonCheatBuilders = {
         'SorianSonarEngineerBuilders',
@@ -50,9 +54,9 @@ BaseBuilderTemplate {
     },
     BaseSettings = {
         EngineerCount = {
-            Tech1 = 3,
-            Tech2 = 3,
-            Tech3 = 3,
+            Tech1 = 1,
+            Tech2 = 1,
+            Tech3 = 1,
             SCU = 0,
         },
         FactoryCount = {
@@ -62,9 +66,9 @@ BaseBuilderTemplate {
             Gate = 0,
         },
         MassToFactoryValues = {
-            T1Value = 8, #6
-            T2Value = 20, #15
-            T3Value = 27.5, #22.5 
+            T1Value = 6, #8
+            T2Value = 15, #20
+            T3Value = 22.5, #27.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)
@@ -73,8 +77,8 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if personality == 'sorian' or personality == 'sorianrush' or personality == 'sorianair' then
-            return 200 #50
+        if personality == 'sorian' or personality == 'sorianrush' or personality == 'sorianair' or personality == 'sorianadaptive' then
+            return 200
         end
         
         return 0

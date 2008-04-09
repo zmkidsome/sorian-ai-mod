@@ -34,15 +34,16 @@ BuilderGroup {
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 951,
         BuilderConditions = {
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE, 'LocationType', }},
-			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3 } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {15, 750}},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
             #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T3Artillery', categories.STRUCTURE } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { true } },
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', true } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -61,16 +62,17 @@ BuilderGroup {
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 949,
         BuilderConditions = {
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE, 'LocationType', }},
-			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.STRUCTURE * categories.TECH3 * categories.ARTILLERY}},
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {15, 750}},
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
             #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T3Artillery', categories.STRUCTURE } },
-			{ SBC, 'EnemyInT3ArtilleryRange', { false } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -89,14 +91,16 @@ BuilderGroup {
         PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
         Priority = 950,
         BuilderConditions = {
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE, 'LocationType', }},
-			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE * categories.PRODUCTSC1}},
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {15, 750}},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
             #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T3RapidArtillery', categories.STRUCTURE, 2 } },
         },
         BuilderType = 'Any',
@@ -104,6 +108,7 @@ BuilderGroup {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
+				T4 = true,
                 BuildStructures = {
                     'T3RapidArtillery',
                 },
@@ -126,10 +131,43 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'ARTILLERY TECH3 STRUCTURE'},
-                Time = 60,
+                Time = 120,
             },
+        }
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianT3ArtilleryGroupExp',
+    BuildersType = 'EngineerBuilder',
+    Builder {
+        BuilderName = 'Sorian T3 Artillery Engineer Expansion - In range',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 951,
+        BuilderConditions = {
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE, 'LocationType', }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+            { EBC, 'GreaterThanEconIncome', {15, 750}},
+            { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T3Artillery', categories.STRUCTURE } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', true } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			NumAssistees = 2,
+            Construction = {
+                BuildClose = true,
+                BuildStructures = {
+                    'T3Artillery',
+                },
+                Location = 'LocationType',
+            }
         }
     },
 }
@@ -141,16 +179,21 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T4 Artillery Engineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 949,
+		InstanceCount = 1,
         BuilderConditions = {
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.STRUCTURE}},
-			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3 } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ARTILLERY}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {30, 1000}},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
             { MIBC, 'FactionIndex', {1,4} },
             #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T4Artillery', categories.STRUCTURE } },
         },
@@ -159,6 +202,7 @@ BuilderGroup {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
+				T4 = true,
                 BuildStructures = {
                     'T4Artillery',
                 },
@@ -180,10 +224,10 @@ BuilderGroup {
         BuilderData = {
             Assist = {
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 AssistLocation = 'LocationType',
                 BeingBuiltCategories = {'EXPERIMENTAL STRUCTURE'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
@@ -222,23 +266,29 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian Seraphim Exp Nuke Engineer',
         PlatoonTemplate = 'SeraphimT3EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 949,
+		InstanceCount = 1,
         BuilderConditions = {
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE}},
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.NUKE * categories.STRUCTURE * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.NUKE * categories.STRUCTURE * categories.TECH3}},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.EXPERIMENTAL * categories.STRUCTURE * categories.NUKE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.NUKE * categories.STRUCTURE}},
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3 } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {22, 1000}},
+			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
+				T4 = true,
                 BuildStructures = {
                     'T4Artillery',
                 },
@@ -251,12 +301,13 @@ BuilderGroup {
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 950,
         BuilderConditions = {
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.NUKE * categories.STRUCTURE}},
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3 } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {22, 1000}},
             { EBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Any',
@@ -286,9 +337,9 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 80,
+                AssistRange = 150,
                 BeingBuiltCategories = {'STRUCTURE NUKE'},
-                Time = 60,
+                Time = 120,
             },
         }
     },
@@ -299,7 +350,14 @@ BuilderGroup {
     BuildersType = 'PlatoonFormBuilder',
     Builder {
         BuilderName = 'Sorian T3 Nuke Silo',
-        PlatoonTemplate = 'T3Nuke',
+        PlatoonTemplate = 'T3NukeSorian',
+        Priority = 1,
+        InstanceCount = 10,
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian T4 Nuke Silo',
+        PlatoonTemplate = 'T4Nuke',
         Priority = 1,
         InstanceCount = 10,
         BuilderType = 'Any',

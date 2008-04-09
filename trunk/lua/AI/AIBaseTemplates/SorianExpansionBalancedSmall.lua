@@ -35,6 +35,7 @@ BaseBuilderTemplate {
 		'SorianT2ArtilleryFormBuilders',
 		#'SorianT3ArtilleryFormBuilders',
 		#'SorianT4ArtilleryFormBuilders',
+		'SorianAirStagingExpansion',
         
         # ==== LAND UNIT BUILDERS ==== #
         'SorianT1LandFactoryBuilders',
@@ -100,10 +101,22 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if personality == 'sorianrush' then
-            return 200
+        if not (personality == 'sorianrush' or personality == 'sorianadaptive') then
+            return 0
         end
-        
+
+        local threatCutoff = 10 # value of overall threat that determines where enemy bases are
+        local distance = import('/lua/ai/AIUtilities.lua').GetThreatDistance( aiBrain, location, threatCutoff )
+        if not distance or distance > 1000 then
+            return 500
+        elseif distance > 500 then
+            return 750
+        elseif distance > 250 then
+            return 1000
+        else # within 250
+            return 250
+        end
+		
         return 0
     end,
 }

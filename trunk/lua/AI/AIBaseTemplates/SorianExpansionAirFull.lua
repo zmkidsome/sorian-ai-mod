@@ -42,10 +42,10 @@ BaseBuilderTemplate {
 		'SorianT2ArtilleryFormBuilders',
 		'SorianT3ArtilleryFormBuilders',
 		'SorianT4ArtilleryFormBuilders',
-        'SorianT2MissileDefenses',
-        'SorianT3NukeDefenses',
+        'SorianT3NukeDefensesExp',
         'SorianT3NukeDefenseBehaviors',
 		'SorianT2ShieldsExpansion',
+		'SorianAirStagingExpansion',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
@@ -72,8 +72,11 @@ BaseBuilderTemplate {
         'SorianMobileLandExperimentalEngineers',
         'SorianMobileLandExperimentalForm',
         
-        'SorianMobileAirExperimentalEngineersHigh',
+        'SorianMobileAirExperimentalEngineers',
         'SorianMobileAirExperimentalForm',
+		
+        # ==== ARTILLERY BUILDERS ==== #
+        'SorianT3ArtilleryGroupExp',
     },
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',
@@ -92,15 +95,15 @@ BaseBuilderTemplate {
             SCU = 2,
         },
         FactoryCount = {
-            Land = 0,
-            Air = 4,
+            Land = 1,
+            Air = 3,
             Sea = 0,
-            Gate = 1,
+            Gate = 0, #1,
         },
         MassToFactoryValues = {
-            T1Value = 8, #6
-            T2Value = 20, #15
-            T3Value = 27.5, #22.5 
+            T1Value = 6, #8
+            T2Value = 15, #20
+            T3Value = 22.5, #27.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)
@@ -109,10 +112,22 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if personality == 'sorianair' or personality == 'sorianwater' then
-            return 200
+        if not (personality == 'sorianair' or personality == 'sorianadaptive') then
+            return 0
         end
         
+        local threatCutoff = 10 # value of overall threat that determines where enemy bases are
+        local distance = import('/lua/ai/AIUtilities.lua').GetThreatDistance( aiBrain, location, threatCutoff )
+        if not distance or distance > 1000 then
+            return 750
+        elseif distance > 500 then
+            return 1000
+        elseif distance > 250 then
+            return 500
+        else # within 250
+            return 100
+        end
+		
         return 0
     end,
 }

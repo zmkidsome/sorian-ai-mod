@@ -15,6 +15,7 @@ BaseBuilderTemplate {
         # Factory upgrades
         'SorianT1BalancedUpgradeBuilders',
         'SorianT2BalancedUpgradeBuilders',
+		'SorianMassFabPause',
         
         # Engineer Builders
         'SorianEngineerFactoryBuilders',
@@ -55,20 +56,20 @@ BaseBuilderTemplate {
         
         # ==== DEFENSES ==== #
 		'SorianT1BaseDefenses',
-		#'SorianT2BaseDefenses',
-		#'SorianT3BaseDefenses',
+		'SorianT2BaseDefenses - Emerg',
+		'SorianT3BaseDefenses - Emerg',
 		
         'SorianT1DefensivePoints',
         'SorianT2DefensivePoints',
         #'SorianT3DefensivePoints',
 		
 		'SorianT2ArtilleryFormBuilders',
-		#'SorianT3ArtilleryFormBuilders',
-		#'SorianT4ArtilleryFormBuilders',
+		'SorianT3ArtilleryFormBuilders',
+		'SorianT4ArtilleryFormBuilders',
         'SorianT2MissileDefenses',
         'SorianT3NukeDefenses',
         'SorianT3NukeDefenseBehaviors',
-		#'SorianMiscDefensesEngineerBuilders',
+		'SorianMiscDefensesEngineerBuilders',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
@@ -106,9 +107,7 @@ BaseBuilderTemplate {
         
         'SorianUnitCapAirAttackFormBuilders',
         'SorianACUHunterAirFormBuilders',
-        
-        'SorianTransportFactoryBuilders',
-		
+
 		'SorianExpResponseFormBuilders',
         
         'SorianT1AntiAirBuilders',
@@ -162,7 +161,7 @@ BaseBuilderTemplate {
             Land = 8,
             Air = 1,
             Sea = 0,
-            Gate = 1,
+            Gate = 0, #1,
         },
         MassToFactoryValues = {
             T1Value = 6,
@@ -179,7 +178,7 @@ BaseBuilderTemplate {
             return 1, 'sorianrush'
         end
         
-        if per != 'sorianrush' and per != 'bleh' and per != '' then
+        if per != 'sorianrush' and per != 'sorianadaptive' and per != 'bleh' and per != '' then
             return 1, 'sorianrush'
         end
 
@@ -195,11 +194,14 @@ BaseBuilderTemplate {
         if per == 'sorianrush' then
             return 1000, 'sorianrush'
         end
+		
+		if isIsland then
+            return 1, 'sorianrush'
         
-        if mapSizeX < 500 and mapSizeZ < 500 then
+        elseif mapSizeX <= 256 and mapSizeZ <= 256 and not isIsland then
             return 100, 'sorianrush'
         
-        elseif mapSizeX >= 512 and mapSizeZ >= 512 and mapSizeX < 1024 and mapSizeZ < 1024 then
+        elseif mapSizeX >= 256 and mapSizeZ >= 256 and mapSizeX < 1024 and mapSizeZ < 1024 then
             return Random(75, 100), 'sorianrush'
         
         elseif mapSizeX <= 1024 and mapSizeZ <= 1024 then

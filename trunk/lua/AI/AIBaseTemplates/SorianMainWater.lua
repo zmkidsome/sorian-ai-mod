@@ -15,6 +15,7 @@ BaseBuilderTemplate {
         # Factory upgrades
         'SorianT1NavalUpgradeBuilders',
         'SorianT2NavalUpgradeBuilders',
+		'SorianMassFabPause',
         
         # Engineer Builders
         'SorianEngineerFactoryBuilders',
@@ -106,7 +107,7 @@ BaseBuilderTemplate {
         'SorianMobileLandExperimentalEngineers',
         'SorianMobileLandExperimentalForm',
         
-        'SorianMobileAirExperimentalEngineersHigh',
+        'SorianMobileAirExperimentalEngineers',
         'SorianMobileAirExperimentalForm',
 		
         'SorianMobileNavalExperimentalEngineers',
@@ -128,7 +129,7 @@ BaseBuilderTemplate {
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',
         'SorianAirScoutFormBuilders',
-        
+    
         'SorianRadarEngineerBuilders',
         'SorianRadarUpgradeBuildersMain',
         
@@ -145,12 +146,12 @@ BaseBuilderTemplate {
             Land = 0,
             Air = 5,
             Sea = 0,
-            Gate = 1,
+            Gate = 0, #1,
         },
         MassToFactoryValues = {
-            T1Value = 8, #6
-            T2Value = 20, #15
-            T3Value = 27.5, #22.5 
+            T1Value = 10, #6
+            T2Value = 25, #15
+            T3Value = 32.5, #22.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)
@@ -162,7 +163,7 @@ BaseBuilderTemplate {
             return 1, 'sorianwater'
         end
         
-        if per != 'sorianwater' and per != 'bleh' and per != '' then
+        if per != 'sorianwater' and per != 'sorianadaptive' and per != 'bleh' and per != '' then
             return 1, 'sorianwater'
         end
 
@@ -180,17 +181,10 @@ BaseBuilderTemplate {
         end
         
         #If we're playing on an island map, do not use this plan often
-        if isIsland and mapSizeX > 1024 and mapSizeZ > 1024 then
-            return Random(25, 50), 'sorianwater'
-
-        elseif mapSizeX < 512 and mapSizeZ < 512 then
+        if isIsland then
             return Random(98, 100), 'sorianwater'
-
-        elseif mapSizeX >= 512 and mapSizeZ >= 512 and mapSizeX <= 1024 and mapSizeZ <= 1024 then
-            return Random(50, 100), 'sorianwater'
-
         else
-            return Random(25, 75), 'sorianwater'
+            return 1, 'sorianwater'
         end
     end,
 }
