@@ -6,7 +6,7 @@ oldAIBrain = AIBrain
 AIBrain = Class(oldAIBrain) {
 	
     OnDefeat = function(self)
-		SUtils.AISendChat('enemies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'ilost')
+		SUtils.AISendChat('enemies', ArmyBrains[self:GetArmyIndex()].Nickname, 'ilost')
         SetArmyOutOfGame(self:GetArmyIndex())
         table.insert( Sync.GameResult, { self:GetArmyIndex(), "defeat" } )
         import('/lua/SimUtils.lua').UpdateUnitCap()

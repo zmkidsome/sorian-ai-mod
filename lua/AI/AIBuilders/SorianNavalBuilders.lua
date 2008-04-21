@@ -73,7 +73,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
 			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY NAVAL TECH2, FACTORY NAVAL TECH3' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -109,7 +109,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
 			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY NAVAL TECH2, FACTORY NAVAL TECH3' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -145,7 +145,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
 			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY NAVAL TECH2, FACTORY NAVAL TECH3' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -186,7 +186,7 @@ BuilderGroup {
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -221,7 +221,7 @@ BuilderGroup {
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -256,7 +256,7 @@ BuilderGroup {
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -296,7 +296,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, 'ENGINEER TECH2, ENGINEER TECH3' } },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Sea' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
         },
         BuilderType = 'Any',
@@ -318,7 +318,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, 'ENGINEER TECH3' } },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Sea' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
         },
         BuilderType = 'Any',
@@ -339,7 +339,7 @@ BuilderGroup {
         Priority = 905,
         BuilderConditions = {
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Sea' } },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
         },
         BuilderType = 'Any',

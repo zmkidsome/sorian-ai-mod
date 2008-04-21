@@ -203,6 +203,45 @@ function GreaterThanEconIncomeOverTime(aiBrain, MassIncome, EnergyIncome)
     return false
 end
 
+##############################################################################################################
+# function: GreaterThanEconEfficiency = BuildCondition	doc = "Please work function docs."
+# 
+# parameter 0: string	aiBrain		= "default_brain"				doc = "docs for param1"
+# parameter 1: int	MassEfficiency	= 1             doc = "docs for param1"
+# parameter 2: int	EnergyEfficiency	= 1             doc = "param2 docs"
+#
+##############################################################################################################
+function GreaterThanEconEfficiency(aiBrain, MassEfficiency, EnergyEfficiency)
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+		#LOG('*AI DEBUG: Found Paragon')
+		return true
+	end
+    local econ = AIUtils.AIGetEconomyNumbers(aiBrain)
+    if (econ.MassEfficiency >= MassEfficiency and econ.EnergyEfficiency >= EnergyEfficiency) then
+        return true
+    end
+    return false
+end
+
+##############################################################################################################
+# function: GreaterThanEconEfficiencyOverTime = BuildCondition	doc = "Please work function docs."
+# 
+# parameter 0: string	aiBrain		= "default_brain"				doc = "docs for param1"
+# parameter 1: int	MassEfficiency	= 1             doc = "docs for param1"
+# parameter 2: int	EnergyEfficiency	= 1             doc = "param2 docs"
+#
+##############################################################################################################
+function GreaterThanEconEfficiencyOverTime(aiBrain, MassEfficiency, EnergyEfficiency)
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+		#LOG('*AI DEBUG: Found Paragon')
+		return true
+	end
+    local econ = AIUtils.AIGetEconomyNumbers(aiBrain)
+    if (econ.MassEfficiencyOverTime >= MassEfficiency and econ.EnergyEfficiencyOverTime >= EnergyEfficiency) then
+        return true
+    end
+    return false
+end
 
 ##############################################################################################################
 # function: LessThanEconIncomeOverTime = BuildCondition	doc = "Please work function docs."
