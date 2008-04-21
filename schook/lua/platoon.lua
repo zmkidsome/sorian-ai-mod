@@ -27,12 +27,16 @@ Platoon = Class(sorianoldPlatoon) {
 	    if not experimental then
 		    return
 	    end
+		if Random(1,5) == 3 and (not aiBrain.LastTaunt or GetGameTimeSeconds() - aiBrain.LastTaunt > 90) then
+			local randelay = Random(60,180)
+			aiBrain.LastTaunt = GetGameTimeSeconds() + randelay
+			SUtils.AIDelayChat('enemies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 't4taunt', nil, randelay)
+		end
         local ID = experimental:GetUnitId()
         
-        #if ID == 'uel0401' then
-        #    return behaviors.FatBoyBehaviorSorian(self)
-        #elseif ID == 'uaa0310' then
-		if ID == 'uaa0310' then
+        if ID == 'uel0401' then
+            return behaviors.FatBoyBehaviorSorian(self)
+        elseif ID == 'uaa0310' then
             return behaviors.CzarBehaviorSorian(self)
         elseif ID == 'xsa0402' then
             return behaviors.AhwassaBehaviorSorian(self)
@@ -40,6 +44,10 @@ Platoon = Class(sorianoldPlatoon) {
             return behaviors.TickBehaviorSorian(self)
         elseif ID == 'url0401' then
             return behaviors.ScathisBehaviorSorian(self)
+        elseif ID == 'uas0401' then
+            return self:NavalHuntAI(self)
+        elseif ID == 'ues0401' then
+            return self:NavalHuntAI(self)
         end
         
         return behaviors.BehemothBehaviorSorian(self)
@@ -297,7 +305,14 @@ Platoon = Class(sorianoldPlatoon) {
         
         while aiBrain:PlatoonExists(self) do
 			if self:IsOpponentAIRunning() then                
-                target = AIUtils.AIFindBrainTargetInRangeSorian( aiBrain, self, 'Artillery', maxRadius, atkPri )
+                target = AIUtils.AIFindBrainTargetInRangeSorian( aiBrain, self, 'Artillery', maxRadius, atkPri, true )
+				local newtarget
+				if aiBrain.AttackPoints and table.getn(aiBrain.AttackPoints) > 0 then
+					newtarget = AIUtils.AIFindPingTargetInRangeSorian( aiBrain, self, 'Artillery', maxRadius, atkPri, true )
+					if newtarget then
+						target = newtarget
+					end
+				end
                 if target and not unit:IsDead() then
 					#self:Stop()
 					#self:AttackTarget(target)
@@ -351,8 +366,14 @@ Platoon = Class(sorianoldPlatoon) {
                     #    aiBrain:PickEnemyLogic()
                     #end
 
-                    target = AIUtils.AIFindBrainTargetInRangeSorian( aiBrain, self, 'Attack', maxRadius, atkPri )
-
+                    target = AIUtils.AIFindBrainTargetInRangeSorian( aiBrain, self, 'Attack', maxRadius, atkPri, true )
+					local newtarget
+					if aiBrain.AttackPoints and table.getn(aiBrain.AttackPoints) > 0 then
+						newtarget = AIUtils.AIFindPingTargetInRangeSorian( aiBrain, self, 'Artillery', maxRadius, atkPri, true )
+						if newtarget then
+							target = newtarget
+						end
+					end
                     if not target then
                         target = self:FindPrioritizedUnit('Attack', 'Enemy', true, unit:GetPosition(), maxRadius)
                     end
@@ -390,8 +411,12 @@ Platoon = Class(sorianoldPlatoon) {
         while aiBrain:PlatoonExists(self) do
             if self:IsOpponentAIRunning() then
                 target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL)
+				local newtarget
 				if aiBrain.T4ThreatFound['Land'] or aiBrain.T4ThreatFound['Naval'] or aiBrain.T4ThreatFound['Structure'] then
-					target = self:FindClosestUnit('Attack', 'Enemy', true, categories.EXPERIMENTAL * (categories.LAND + categories.NAVAL + categories.STRUCTURE))
+					newtarget = self:FindClosestUnit('Attack', 'Enemy', true, categories.EXPERIMENTAL * (categories.LAND + categories.NAVAL + categories.STRUCTURE))
+					if newtarget then
+						target = newtarget
+					end
 				end
                 if target then
                     blip = target:GetBlip(armyIndex)
@@ -426,8 +451,12 @@ Platoon = Class(sorianoldPlatoon) {
         while aiBrain:PlatoonExists(self) do
             if self:IsOpponentAIRunning() then
                 target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL)
+				local newtarget
 				if aiBrain.T4ThreatFound['Air'] then
-					target = self:FindClosestUnit('Attack', 'Enemy', true, categories.EXPERIMENTAL * categories.AIR)
+					newtarget = self:FindClosestUnit('Attack', 'Enemy', true, categories.EXPERIMENTAL * categories.AIR)
+					if newtarget then
+						target = newtarget
+					end
 				end
                 if target and target:GetFractionComplete() == 1 then
                     blip = target:GetBlip(armyIndex)
@@ -618,9 +647,9 @@ Platoon = Class(sorianoldPlatoon) {
             if path then
 				local position = self:GetPlatoonPosition()
 				if not success or VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 512 then
-					usedTransports = AIAttackUtils.SendPlatoonWithTransports(aiBrain, self, bestMarker.Position, true)
+					usedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, self, bestMarker.Position, true, false, true)
 				elseif VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 256 then
-					usedTransports = AIAttackUtils.SendPlatoonWithTransports(aiBrain, self, bestMarker.Position, false)
+					usedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, self, bestMarker.Position, false, false, false)
 				end
 				if not usedTransports then
 					local pathLength = table.getn(path)
@@ -633,7 +662,7 @@ Platoon = Class(sorianoldPlatoon) {
 					end 
 				end
             elseif (not path and reason == 'NoPath') then
-                usedTransports = AIAttackUtils.SendPlatoonWithTransports(aiBrain, self, bestMarker.Position, true)
+                usedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, self, bestMarker.Position, true, false, true)
             else
                 self:PlatoonDisband()
                 return
@@ -775,7 +804,7 @@ Platoon = Class(sorianoldPlatoon) {
                 continue
             end
             
-            if v:GetCurrentLayer() != 'Sub' then
+            if v:GetCurrentLayer() == 'Sub' then
                 continue
             end
             
@@ -846,13 +875,13 @@ Platoon = Class(sorianoldPlatoon) {
             # if we're near our destination and we have a unit closeby to kill, kill it
             if table.getn(cmdQ) <= 1 and closestTarget and nearDest then
                 self:StopAttack()
-                if PlatoonFormation != 'NoFormation' then
-					IssueAggressiveMove(platoonUnits, closestTarget)
-                    #self:AttackTarget(closestTarget)
+                if PlatoonFormation != 'No Formation' then
+					IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
+					#self:AttackTarget(closestTarget)
 					#IssueAttack(platoonUnits, closestTarget)
                 else
-					IssueAggressiveMove(platoonUnits, closestTarget)
-                    #self:AttackTarget(closestTarget)
+					IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
+					#self:AttackTarget(closestTarget)
 					#IssueAttack(platoonUnits, closestTarget)
                 end
                 cmdQ = {1}
@@ -860,14 +889,14 @@ Platoon = Class(sorianoldPlatoon) {
 			# if we have a target and can attack it, attack!
 			elseif closestTarget then
 				self:StopAttack()
-				if PlatoonFormation != 'NoFormation' then
-					IssueAggressiveMove(platoonUnits, closestTarget)
-                    #self:AttackTarget(closestTarget)
+				if PlatoonFormation != 'No Formation' then
+					IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
+					#self:AttackTarget(closestTarget)
 					#IssueAttack(platoonUnits, closestTarget)
 				else
-					IssueAggressiveMove(platoonUnits, closestTarget)
-                    #self:AttackTarget(closestTarget)
-					#IssueAttack(platoonUnits, closestTarget)
+					#IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
+					#self:AttackTarget(closestTarget)
+					IssueAttack(platoonUnits, closestTarget)
 				end
 				cmdQ = {1}
 #				quickReset = true
@@ -1499,6 +1528,67 @@ Platoon = Class(sorianoldPlatoon) {
         end
     end,
 	
+    NavalHuntAI = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        local armyIndex = aiBrain:GetArmyIndex()
+        local target
+        local blip
+		local cmd = false
+		local platoonUnits = self:GetPlatoonUnits()
+        local PlatoonFormation = self.PlatoonData.UseFormation or 'NoFormation'
+        self:SetPlatoonFormationOverride(PlatoonFormation)
+        local atkPri = { 'SPECIALHIGHPRI', 'STRUCTURE ANTINAVY', 'MOBILE NAVAL', 'STRUCTURE NAVAL', 'COMMAND', 'EXPERIMENTAL', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'STRUCTURE ANTIMISSILE SILO', 
+							'STRUCTURE DEFENSE DIRECTFIRE', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE - WALL', 'STRUCTURE', 'MOBILE', 'SPECIALLOWPRI', 'ALLUNITS - WALL' }
+        local atkPriTable = {}
+        for k,v in atkPri do
+            table.insert( atkPriTable, ParseEntityCategory( v ) )
+        end
+        self:SetPrioritizedTargetList( 'Attack', atkPriTable )
+        local maxRadius = 6000
+        for k,v in platoonUnits do
+
+            if v:IsDead() then
+                continue
+            end
+            
+            if v:GetCurrentLayer() == 'Sub' then
+                continue
+            end
+            
+            if v:TestCommandCaps('RULEUCC_Dive') and v:GetUnitId() != 'uas0401' then
+                IssueDive( {v} )
+            end
+        end
+		WaitSeconds(5)
+        while aiBrain:PlatoonExists(self) do
+            if self:IsOpponentAIRunning() then
+				target = AIUtils.AIFindBrainTargetInRangeSorian( aiBrain, self, 'Attack', maxRadius, atkPri)
+                if target then
+                    blip = target:GetBlip(armyIndex)
+                    self:Stop()
+					cmd = self:AggressiveMoveToLocation(target:GetPosition())
+				end
+				WaitSeconds(1)
+				if (not cmd or not self:IsCommandsActive( cmd )) then
+					target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL)
+					if target then
+						blip = target:GetBlip(armyIndex)
+						self:Stop()
+						cmd = self:AggressiveMoveToLocation(target:GetPosition())
+					else
+						local scoutPath = {}
+						scoutPath = AIUtils.AIGetSortedNavalLocations(self:GetBrain())
+						for k, v in scoutPath do
+							self:Patrol(v)
+						end
+					end
+				end
+            end
+            WaitSeconds(17)
+        end
+    end,
+	
     HuntAISorian = function(self)
         self:Stop()
         local aiBrain = self:GetBrain()
@@ -1661,9 +1751,9 @@ Platoon = Class(sorianoldPlatoon) {
 		# if we're near our destination and we have a unit closeby to kill, kill it
             if table.getn(cmdQ) <= 1 and closestTarget and nearDest then
                 self:StopAttack()
-                if PlatoonFormation != 'NoFormation' then
-                    #IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
-					IssueAggressiveMove(platoonUnits, closestTarget)
+                if PlatoonFormation != 'No Formation' then
+                    IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
+					#IssueAggressiveMove(platoonUnits, closestTarget)
                 else
                     #IssueAttack(platoonUnits, closestTarget)
 					IssueAggressiveMove(platoonUnits, closestTarget)
@@ -1673,9 +1763,9 @@ Platoon = Class(sorianoldPlatoon) {
 			# if we have a target and can attack it, attack!
 			elseif closestTarget then
 				self:StopAttack()
-				if PlatoonFormation != 'NoFormation' then
-					#IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
-					IssueAggressiveMove(platoonUnits, closestTarget)
+				if PlatoonFormation != 'No Formation' then
+					IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
+					#IssueAggressiveMove(platoonUnits, closestTarget)
 				else
 					#IssueAttack(platoonUnits, closestTarget)
 					IssueAggressiveMove(platoonUnits, closestTarget)
@@ -1786,10 +1876,14 @@ Platoon = Class(sorianoldPlatoon) {
                         return
                     end
                 end
+				local newtarget
 				if AIAttackUtils.GetSurfaceThreatOfUnits(self) > 0 and (aiBrain.T4ThreatFound['Land'] or aiBrain.T4ThreatFound['Naval'] or aiBrain.T4ThreatFound['Structure']) then
-					target = self:FindClosestUnit('Attack', 'Enemy', true, categories.EXPERIMENTAL * (categories.LAND + categories.NAVAL + categories.STRUCTURE))
+					newtarget = self:FindClosestUnit('Attack', 'Enemy', true, categories.EXPERIMENTAL * (categories.LAND + categories.NAVAL + categories.STRUCTURE))
 				elseif AIAttackUtils.GetAirThreatOfUnits(self) > 0 and aiBrain.T4ThreatFound['Air'] then
-					target = self:FindClosestUnit('Attack', 'Enemy', true, categories.EXPERIMENTAL * categories.AIR)
+					newtarget = self:FindClosestUnit('Attack', 'Enemy', true, categories.EXPERIMENTAL * categories.AIR)
+				end
+				if newtarget then
+					target = newtarget
 				end
 				if target and (target != oldTarget or movingToScout) then
 					oldTarget = target
@@ -1814,14 +1908,22 @@ Platoon = Class(sorianoldPlatoon) {
 						end   
 					end
 					movingToScout = false
-				elseif not movingToScout and not target then
+				elseif not movingToScout and not target and self.MovementLayer != 'Water' then
 					movingToScout = true
 					self:Stop()
 					for k,v in AIUtils.AIGetSortedMassLocations(aiBrain, 10, nil, nil, nil, nil, self:GetPlatoonPosition()) do
-					if v[1] < 0 or v[3] < 0 or v[1] > ScenarioInfo.size[1] or v[3] > ScenarioInfo.size[2] then
-						#LOG('*AI DEBUG: STRIKE FORCE SENDING UNITS TO WRONG LOCATION - ' .. v[1] .. ', ' .. v[3] )
-					end
+						if v[1] < 0 or v[3] < 0 or v[1] > ScenarioInfo.size[1] or v[3] > ScenarioInfo.size[2] then
+							#LOG('*AI DEBUG: STRIKE FORCE SENDING UNITS TO WRONG LOCATION - ' .. v[1] .. ', ' .. v[3] )
+						end
 						self:MoveToLocation( (v), false )
+					end
+				elseif not movingToScout and not target and self.MovementLayer == 'Water' then
+					movingToScout = true
+					self:Stop()
+					local scoutPath = {}
+					scoutPath = AIUtils.AIGetSortedNavalLocations(self:GetBrain())
+					for k, v in scoutPath do
+						self:Patrol(v)
 					end
 				end
 			end
@@ -1920,7 +2022,7 @@ Platoon = Class(sorianoldPlatoon) {
             local pos = aiBrain:PBMGetLocationCoords(cons.LocationType) or cons.Position or self:GetPlatoonPosition()
             local radius = cons.LocationRadius or aiBrain:PBMGetLocationRadius(cons.LocationType) or 100
             relative = false
-            reference = AIUtils.GetLocationNeedingWalls( aiBrain, 200, 4, 'STRUCTURE - WALLS', cons.ThreatMin, cons.ThreatMax, cons.ThreatRings )
+            reference = AIUtils.GetLocationNeedingWalls( aiBrain, 200, 5, 'DEFENSE', cons.ThreatMin, cons.ThreatMax, cons.ThreatRings )
             table.insert( baseTmplList, 'Blank' )
             buildFunction = AIBuildStructures.WallBuilder
         elseif cons.NearBasePatrolPoints then
@@ -2007,7 +2109,7 @@ Platoon = Class(sorianoldPlatoon) {
 
             relative = false
             local pos = self:GetPlatoonPosition()
-            reference, refName = AIUtils.AIFindDefensivePointNeedsStructure( aiBrain, cons.LocationType, (cons.LocationRadius or 100), 
+            reference, refName = AIUtils.AIFindDefensivePointNeedsStructureSorian( aiBrain, cons.LocationType, (cons.LocationRadius or 100), 
                             cons.MarkerUnitCategory, cons.MarkerRadius, cons.MarkerUnitCount, (cons.ThreatMin or 0), (cons.ThreatMax or 1), 
                             (cons.ThreatRings or 1), (cons.ThreatType or 'AntiSurface') )
 
@@ -2388,6 +2490,20 @@ Platoon = Class(sorianoldPlatoon) {
             self:StopAttack()
         end
 
+    end,
+	
+    NameUnitsSorian = function(self)
+        local units = self:GetPlatoonUnits()
+		local AINames = import('/lua/AI/sorianlang.lua').AINames
+        if units and table.getn(units) > 0 then
+            for k, v in units do
+                local ID = v:GetUnitId()
+                if AINames[ID] then
+                    local num = Random(1, table.getn(AINames[ID]))
+                    v:SetCustomName(AINames[ID][num])
+                end
+            end
+        end
     end,
 }
 

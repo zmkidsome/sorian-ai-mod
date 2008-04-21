@@ -38,6 +38,10 @@ BaseBuilderTemplate {
         'SorianT1SeaFactoryBuilders',
         'SorianT2SeaFactoryBuilders',
         'SorianT3SeaFactoryBuilders',
+		
+		'SorianT2SeaStrikeForceBuilders',
+		
+		'SorianSeaHunterFormBuilders',
         'SorianFrequentSeaAttackFormBuilders',
         'SorianMassHunterSeaFormBuilders',
         
@@ -77,7 +81,7 @@ BaseBuilderTemplate {
         end
         
         local personality = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-        if personality == 'sorian' or personality == 'sorianrush' or personality == 'sorianair' or personality == 'sorianadaptive' then
+        if personality == 'sorian' or personality == 'sorianrush' or personality == 'sorianair' or personality == 'sorianturtle' or personality == 'sorianadaptive' then
             return 200
         end
         

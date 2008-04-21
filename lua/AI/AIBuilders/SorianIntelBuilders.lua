@@ -442,7 +442,7 @@ BuilderGroup {
             { MABC, 'MarkerLessThanDistance',  { 'Naval Area', 200}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, categories.SONAR * categories.STRUCTURE } },
-            { EBC, 'GreaterThanEconIncome',  { 0.5, 15 } },
+            { EBC, 'GreaterThanEconIncome',  { 0.5, 150 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
@@ -521,6 +521,36 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'SorianSonarUpgradeBuilders',
+    BuildersType = 'PlatoonFormBuilder',
+    Builder {
+        BuilderName = 'Sorian T1 Sonar Upgrade',
+        PlatoonTemplate = 'T1SonarUpgrade',
+        Priority = 200,
+        BuilderConditions = {
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.SONAR * categories.TECH1}},
+            { EBC, 'GreaterThanEconIncome',  { 5, 15}},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian T2 Sonar Upgrade',
+        PlatoonTemplate = 'T2SonarUpgrade',
+        Priority = 300,
+        BuilderConditions = {
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.SONAR * categories.TECH2}},
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.SONAR * categories.TECH3}},
+            { EBC, 'GreaterThanEconIncome',  { 10, 600}},
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+        },
+        BuilderType = 'Any',
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianSonarUpgradeBuildersSmall',
     BuildersType = 'PlatoonFormBuilder',
     Builder {
@@ -545,7 +575,7 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.SONAR * categories.TECH3}},
             { EBC, 'GreaterThanEconIncome',  { 10, 600}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Any',

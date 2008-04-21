@@ -17,8 +17,24 @@ PlatoonTemplate {
 }
 
 PlatoonTemplate {
+    Name = 'SeaHuntSorian',
+    Plan = 'NavalHuntAI',
+    GlobalSquads = {
+        { categories.MOBILE * categories.NAVAL - categories.EXPERIMENTAL - categories.CARRIER, 1, 100, 'Attack', 'GrowthFormation' }
+    },
+}
+
+PlatoonTemplate {
+    Name = 'SeaStrikeSorian',
+    Plan = 'StrikeForceAISorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.NAVAL - categories.TECH1 - categories.EXPERIMENTAL - categories.CARRIER - categories.SUBMERSIBLE, 1, 100, 'Attack', 'GrowthFormation' }
+    },
+}
+
+PlatoonTemplate {
     Name = 'T4ExperimentalSeaSorian',
-    Plan = 'NavalForceAISorian',
+    Plan = 'ExperimentalAIHubSorian',
     GlobalSquads = {
         { categories.NAVAL * categories.EXPERIMENTAL * categories.MOBILE, 1, 1, 'attack', 'none' },
     },

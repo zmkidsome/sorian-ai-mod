@@ -13,11 +13,11 @@ BaseBuilderTemplate {
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
-        'SorianT1NavalUpgradeBuilders',
-        'SorianT2NavalUpgradeBuilders',
+        'SorianT1BalancedUpgradeBuildersExpansion',
+        'SorianT2BalancedUpgradeBuildersExpansion',
 		
         # Pass engineers to main as needed
-        'Engineer Transfers',
+        #'Engineer Transfers',
         
         # Engineer Builders
         'SorianEngineerFactoryBuilders',
@@ -41,11 +41,15 @@ BaseBuilderTemplate {
         'SorianT1SeaFactoryBuilders',
         'SorianT2SeaFactoryBuilders',
         'SorianT3SeaFactoryBuilders',
-        'SorianFrequentSeaAttackFormBuilders',
+		
+		'SorianT2SeaStrikeForceBuilders',
+		
+		'SorianSeaHunterFormBuilders',
+        'SorianBigSeaAttackFormBuilders',
         'SorianMassHunterSeaFormBuilders',
         
         # ==== NAVAL EXPANSION ==== #
-        'SorianNavalExpansionBuilders',
+        'SorianNavalExpansionBuildersFast',
 		
         # ==== EXPERIMENTALS ==== #
         'SorianMobileNavalExperimentalEngineers',
@@ -53,7 +57,7 @@ BaseBuilderTemplate {
     },
     NonCheatBuilders = {
         'SorianSonarEngineerBuilders',
-        'SorianSonarUpgradeBuildersSmall',
+        'SorianSonarUpgradeBuilders',
     },
     BaseSettings = {
         EngineerCount = {
@@ -69,9 +73,9 @@ BaseBuilderTemplate {
             Gate = 0,
         },
         MassToFactoryValues = {
-            T1Value = 6, #6
-            T2Value = 15, #15
-            T3Value = 22.5, #22.5 
+            T1Value = 6, #8
+            T2Value = 15, #20
+            T3Value = 22.5, #27.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)

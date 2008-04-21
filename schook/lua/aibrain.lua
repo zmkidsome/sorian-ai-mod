@@ -4,6 +4,37 @@ local SUtils = import('/lua/AI/sorianutilities.lua')
 oldAIBrain = AIBrain
 
 AIBrain = Class(oldAIBrain) {
+	
+    OnDefeat = function(self)
+		SUtils.AIDelayChat('enemies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'ilost')
+        SetArmyOutOfGame(self:GetArmyIndex())
+        table.insert( Sync.GameResult, { self:GetArmyIndex(), "defeat" } )
+        import('/lua/SimUtils.lua').UpdateUnitCap()
+        import('/lua/SimPing.lua').OnArmyDefeat(self:GetArmyIndex())
+        local function KillArmy()
+            WaitSeconds(20)
+            local units = self:GetListOfUnits(categories.ALLUNITS - categories.WALL, false)
+            for index,unit in units do
+                unit:Kill()
+            end
+        end
+        ForkThread(KillArmy)
+        if self.BuilderManagers then
+			self.ConditionsMonitor:Destroy()
+            for k,v in self.BuilderManagers do
+				v.EngineerManager:SetEnabled(false)
+				v.FactoryManager:SetEnabled(false)
+				v.PlatoonFormManager:SetEnabled(false)
+				v.FactoryManager:Destroy()
+                v.PlatoonFormManager:Destroy()
+                v.EngineerManager:Destroy()
+                #v.StrategyManager:Destroy()
+            end
+        end
+        if self.Trash then
+            self.Trash:Destroy()
+        end
+    end,
 
     InitializeSkirmishSystems = function(self)
     
@@ -69,12 +100,12 @@ AIBrain = Class(oldAIBrain) {
 			for k,v in self.BuilderManagers do
 				if not v == 'MAIN' and v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 3 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
 					if v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 then
-						v.FactoryManager:Destroy()
-						v.PlatoonFormManager:Destroy()
-						v.EngineerManager:Destroy()
 						v.EngineerManager:SetEnabled(false)
 						v.FactoryManager:SetEnabled(false)
 						v.PlatoonFormManager:SetEnabled(false)
+						v.FactoryManager:Destroy()
+						v.PlatoonFormManager:Destroy()
+						v.EngineerManager:Destroy()
 						self.BuilderManagers[k] = nil
 						self.NumBases = self.NumBases - 1
 					elseif table.getn(AIUtils.GetOwnUnitsAroundPoint( self, categories.ENGINEER, v.EngineerManager:GetLocationCoords(), v.EngineerManager:GetLocationRadius() )) < 1 then
@@ -687,6 +718,26 @@ AIBrain = Class(oldAIBrain) {
                 },
             }
         )
+    end,
+	
+	DoAIPing = function(self, pingData)
+		local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
+		
+		if string.find(per, 'sorian') then
+			if pingData.Type then
+				SUtils.AIHandlePing(self, pingData)
+			end
+		end
+    end,
+	
+    AttackPointsTimeout = function(self, pos)
+		WaitSeconds(300)
+        for k,v in self.AttackPoints do
+            if pos[1] == v.Position[1] and pos[3] == v.Position[3] then
+                self.AttackPoints[k] = nil
+                break
+            end
+        end
     end,
 }
 

@@ -31,6 +31,12 @@ BrainConditionsMonitor = Class {
         end
         self.Brain = brain
     end,
+	
+    Destroy = function(self)
+		KillThread(self.ConditionMonitor)
+		self.Active = false
+        self.Trash:Destroy()
+    end,
 
     # Gets result for the keyed condition
     CheckKeyedCondition = function(self, conditionKey, reportFailure)
@@ -176,7 +182,7 @@ BrainConditionsMonitor = Class {
     AddCondition = function(self, cFilename, cFunctionName, cData)
         if not self.Active then
             self.Active = true
-            self:ForkThread(self.ConditionMonitorThread)
+            self.ConditionMonitor = self:ForkThread(self.ConditionMonitorThread)
         end
         if type(cFilename) == 'function' then
             return self:GetConditionKeyFunction(cFilename, cFunctionName)

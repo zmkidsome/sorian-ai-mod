@@ -1,6 +1,6 @@
 #***************************************************************************
 #*
-#**  File     :  /lua/ai/AIBaseTemplates/SorianMainRush.lua
+#**  File     :  /lua/ai/AIBaseTemplates/SorianMainTurtle.lua
 #**  Author(s): Michael Robbins aka Sorian
 #**
 #**  Summary  : Manage engineers for a location
@@ -9,7 +9,7 @@
 #****************************************************************************
 
 BaseBuilderTemplate {
-    BaseTemplateName = 'SorianMainRush',
+    BaseTemplateName = 'SorianMainTurtle',
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
@@ -22,7 +22,7 @@ BaseBuilderTemplate {
         'SorianT1EngineerBuilders',
         'SorianT2EngineerBuilders',
         'SorianT3EngineerBuilders',
-        'SorianEngineerFactoryConstructionLandHigherPriority',
+        'SorianEngineerFactoryConstruction Balance',
         'SorianEngineerFactoryConstruction',
         
         # Engineer Support buildings
@@ -38,7 +38,7 @@ BaseBuilderTemplate {
         'SorianTime Exempt Extractor Upgrades',
         
         # ACU Builders
-        'Sorian Rush Initial ACU Builders',
+        'Sorian Initial ACU Builders',
         'SorianACUBuilders',
         'SorianACUUpgrades',
         
@@ -56,12 +56,15 @@ BaseBuilderTemplate {
         
         # ==== DEFENSES ==== #
 		'SorianT1BaseDefenses',
-		'SorianT2BaseDefenses - Emerg',
-		'SorianT3BaseDefenses - Emerg',
+		'SorianT2BaseDefenses',
+		'SorianT3BaseDefenses',
+
+		'SorianT2PerimeterDefenses',
+		'SorianT3PerimeterDefenses',
 		
-        'SorianT1DefensivePoints',
-        'SorianT2DefensivePoints',
-        #'SorianT3DefensivePoints',
+        'SorianT1DefensivePoints Turtle',
+        'SorianT2DefensivePoints Turtle',
+        'SorianT3DefensivePoints Turtle',
 		
 		'SorianT2ArtilleryFormBuilders',
 		'SorianT3ArtilleryFormBuilders',
@@ -75,9 +78,8 @@ BaseBuilderTemplate {
         'SorianNavalExpansionBuilders',
         
         # ==== LAND UNIT BUILDERS ==== #
-		'SorianT1LandFactoryBuilders - Rush',
-        'SorianT1LandFactoryBuilders',
-        'SorianT2LandFactoryBuilders',
+        #'SorianT1LandFactoryBuilders',
+        #'SorianT2LandFactoryBuilders',
         'SorianT3LandFactoryBuilders',
         
         'SorianFrequentLandAttackFormBuilders',
@@ -99,15 +101,17 @@ BaseBuilderTemplate {
 		'SorianEngineeringUpgrades',
 
         # ==== AIR UNIT BUILDERS ==== #
-        'SorianT1AirFactoryBuilders',
-        'SorianT2AirFactoryBuilders',
+        #'SorianT1AirFactoryBuilders',
+        #'SorianT2AirFactoryBuilders',
         'SorianT3AirFactoryBuilders',
         'SorianFrequentAirAttackFormBuilders',
         'SorianMassHunterAirFormBuilders',
         
         'SorianUnitCapAirAttackFormBuilders',
         'SorianACUHunterAirFormBuilders',
-
+        
+        #'SorianTransportFactoryBuilders',
+		
 		'SorianExpResponseFormBuilders',
         
         'SorianT1AntiAirBuilders',
@@ -154,19 +158,19 @@ BaseBuilderTemplate {
         EngineerCount = {
             Tech1 = 15,
             Tech2 = 10,
-            Tech3 = 15,
-            SCU = 2,
+            Tech3 = 30,
+            SCU = 8,
         },
         FactoryCount = {
-            Land = 8,
-            Air = 1,
+            Land = 3,
+            Air = 2,
             Sea = 0,
             Gate = 1,
         },
         MassToFactoryValues = {
-            T1Value = 6,
-            T2Value = 15,
-            T3Value = 22.5
+            T1Value = 6, #8
+            T2Value = 15, #20
+            T3Value = 22.5, #27.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)
@@ -175,11 +179,11 @@ BaseBuilderTemplate {
     FirstBaseFunction = function(aiBrain)
         local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
         if not per then 
-            return 1, 'sorianrush'
+            return 1, 'sorianturtle'
         end
         
-        if per != 'sorianrush' and per != 'sorianadaptive' and per != 'bleh' and per != '' then
-            return 1, 'sorianrush'
+        if per != 'sorianturtle' and per != 'sorianadaptive' and per != 'bleh' and per != '' then
+            return 1, 'sorianturtle'
         end
 
         local mapSizeX, mapSizeZ = GetMapSize()
@@ -191,24 +195,24 @@ BaseBuilderTemplate {
             isIsland = true
         end
         
-        if per == 'sorianrush' then
-            return 1000, 'sorianrush'
+        if per == 'sorianturtle' then
+            return 1000, 'sorianturtle'
         end
-		
-		if isIsland then
-            return 1, 'sorianrush'
         
-        elseif mapSizeX <= 256 and mapSizeZ <= 256 and not isIsland then
-            return 100, 'sorianrush'
-        
-        elseif mapSizeX >= 256 and mapSizeZ >= 256 and mapSizeX < 1024 and mapSizeZ < 1024 then
-            return Random(75, 100), 'sorianrush'
-        
-        elseif mapSizeX <= 1024 and mapSizeZ <= 1024 then
-            return 50, 'sorianrush'
-           
-        else
-            return 20, 'sorianrush'
+        #If we're playing on an island map,  use this plan
+        if isIsland then
+            return Random(50, 100), 'sorianturtle'
+        #If we're playing on a 256 map, do not turtle
+        elseif mapSizeX < 500 and mapSizeZ < 500 then
+            return 10, 'sorianturtle'
+        #If we're playing on a 512 map, possibly go rush, possibly go turtle
+        elseif mapSizeX > 500 and mapSizeZ > 500 and mapSizeX < 1000 and mapSizeZ < 1000 then
+            return 50, 'sorianturtle'
+        #If we're playing on a 1024 or bigger, turtling is best.
+        elseif mapSizeX > 1000 and mapSizeZ > 1000 then
+            return Random(60, 100), 'sorianturtle'
+        elseif mapSizeX > 2000 and mapSizeZ > 2000 then
+            return Random(70, 100), 'sorianturtle'
         end
     end,
 }

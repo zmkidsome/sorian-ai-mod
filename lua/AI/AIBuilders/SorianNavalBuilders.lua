@@ -29,15 +29,51 @@ BuilderGroup {
     BuilderGroupName = 'SorianNavalExpansionBuildersFast',
     BuildersType = 'EngineerBuilder',
     Builder {
-        BuilderName = 'Sorian T1 Naval Builder Fast',
+        BuilderName = 'Sorian T1 Naval Builder Fast - initial',
         PlatoonTemplate = 'EngineerBuilderSorian',
         Priority = 985,
         InstanceCount = 1,
         BuilderConditions = {
-            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 250, -1000, 10, 1, 'AntiSurface' } },
-			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'NAVAL FACTORY'}},
-			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'NAVAL FACTORY' } },
-            #{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY NAVAL TECH2, FACTORY NAVAL TECH3'}},
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY NAVAL TECH2, FACTORY NAVAL TECH3' } },
+			{ SIBC, 'LessThanNavalBases', { 2 }},
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                NearMarkerType = 'Naval Area',
+                LocationRadius = 600,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 10,
+                ThreatRings = 0,
+                ThreatType = 'AntiSurface',
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                ExpansionRadius = 50,
+                BuildStructures = {
+                'T1SeaFactory',
+				'T1NavalDefense',
+				'T1AADefense',
+				'T1Sonar',
+				'T1SeaFactory',
+				'T1SeaFactory',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Naval Builder Fast',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 850,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY NAVAL TECH2, FACTORY NAVAL TECH3' } },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
             { UCBC, 'UnitCapCheckLess', { .8 } },
@@ -46,7 +82,7 @@ BuilderGroup {
         BuilderData = {
             Construction = {
                 NearMarkerType = 'Naval Area',
-                LocationRadius = 250,
+                LocationRadius = 600,
                 LocationType = 'LocationType',
                 ThreatMin = -1000,
                 ThreatMax = 10,
@@ -65,6 +101,78 @@ BuilderGroup {
             }
         }
     },
+    Builder {
+        BuilderName = 'Sorian T2 Naval Builder Fast',
+        PlatoonTemplate = 'T2EngineerBuilderSorian',
+        Priority = 850,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY NAVAL TECH2, FACTORY NAVAL TECH3' } },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ SIBC, 'LessThanNavalBases', { 2 }},
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                NearMarkerType = 'Naval Area',
+                LocationRadius = 600,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 10,
+                ThreatRings = 0,
+                ThreatType = 'AntiSurface',
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                ExpansionRadius = 50,
+                BuildStructures = {
+                    'T1SeaFactory',
+				'T2NavalDefense',
+				'T2AADefense',
+				'T2Sonar',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Naval Builder Fast',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 850,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY NAVAL TECH2, FACTORY NAVAL TECH3' } },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+			{ SIBC, 'LessThanNavalBases', { 2 }},
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                NearMarkerType = 'Naval Area',
+                LocationRadius = 600,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 10,
+                ThreatRings = 0,
+                ThreatType = 'AntiSurface',
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                ExpansionRadius = 50,
+                BuildStructures = {
+                    'T1SeaFactory',
+				'T2NavalDefense',
+				'T3AADefense',
+				'T2Sonar',
+                }
+            }
+        }
+    },
 }
 
 # For everything but Naval Rush
@@ -77,7 +185,7 @@ BuilderGroup {
         Priority = 922,
         InstanceCount = 1,
         BuilderConditions = {
-            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 250, -1000, 10, 1, 'AntiSurface' } },
+            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
@@ -87,7 +195,7 @@ BuilderGroup {
         BuilderData = {
             Construction = {
                 NearMarkerType = 'Naval Area',
-                LocationRadius = 250,
+                LocationRadius = 600,
                 LocationType = 'LocationType',
                 ThreatMin = -1000,
                 ThreatMax = 10,
@@ -112,7 +220,7 @@ BuilderGroup {
         Priority = 922,
         InstanceCount = 1,
         BuilderConditions = {
-            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 250, -1000, 10, 1, 'AntiSurface' } },
+            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
@@ -122,7 +230,7 @@ BuilderGroup {
         BuilderData = {
             Construction = {
                 NearMarkerType = 'Naval Area',
-                LocationRadius = 250,
+                LocationRadius = 600,
                 LocationType = 'LocationType',
                 ThreatMin = -1000,
                 ThreatMax = 10,
@@ -147,7 +255,7 @@ BuilderGroup {
         Priority = 922,
         InstanceCount = 1,
         BuilderConditions = {
-            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 250, -1000, 10, 1, 'AntiSurface' } },
+            { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
 			{ SIBC, 'LessThanNavalBases', { 2 }},
@@ -157,7 +265,7 @@ BuilderGroup {
         BuilderData = {
             Construction = {
                 NearMarkerType = 'Naval Area',
-                LocationRadius = 250,
+                LocationRadius = 600,
                 LocationType = 'LocationType',
                 ThreatMin = -1000,
                 ThreatMax = 10,
@@ -184,7 +292,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Naval Factory Builder',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 905,
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, 'ENGINEER TECH2, ENGINEER TECH3' } },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Sea' } },
@@ -206,7 +314,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Naval Factory Builder',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 905,
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, 'ENGINEER TECH3' } },
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Sea' } },
@@ -228,7 +336,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Naval Factory Builder',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 905,
         BuilderConditions = {
             { UCBC, 'FactoryCapCheck', { 'LocationType', 'Sea' } },
             { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},

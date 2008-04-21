@@ -27,14 +27,14 @@ function ReclaimablesInArea(aiBrain, locType)
     end
 
     local ents = AIUtils.AIGetReclaimablesAroundLocation( aiBrain, locType )
+    if not ents or table.getn( ents ) == 0 then
+		return false
+    end
 	for k,v in ents do
 		if not aiBrain.BadReclaimables[v] then
 			return true
 		end
 	end
-	#if ents and table.getn( ents ) > 0 then
-	#	return true
-	#end
 	
     return false
 end
@@ -115,14 +115,6 @@ end
 
 function NoMarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threatMax, threatRings, threatType, startX, startZ)
 	return not MABC.MarkerLessThanDistance(aiBrain, markerType, distance, threatMin, threatMax, threatRings, threatType, startX, startZ)
-end
-
-function ExpansionPointNeedsStructure( aiBrain, locationType, locationRadius, category, markerRadius, unitMax, threatMin, threatMax, threatRings, threatType )
-    local pos, name = AIUtils.AIFindExpansionPointNeedsStructure( aiBrain, locationType, locationRadius, category, markerRadius, unitMax, threatMin, threatMax, threatRings, threatType )
-    if pos then
-        return true
-    end
-    return false    
 end
 
 ##############################################################################################################
