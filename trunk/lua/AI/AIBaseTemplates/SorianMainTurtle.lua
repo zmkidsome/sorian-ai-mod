@@ -130,6 +130,7 @@ BaseBuilderTemplate {
         'SorianMobileNavalExperimentalForm',
 		
 		'SorianEconomicExperimentalEngineers',
+		'SorianMobileExperimentalEngineersGroup',
 		
         # ==== ARTILLERY BUILDERS ==== #
         'SorianT3ArtilleryGroup',

@@ -28,6 +28,98 @@ local SBC = '/lua/editor/SorianBuildConditions.lua'
 local AIAddBuilderTable = import('/lua/ai/AIAddBuilderTable.lua')
 
 BuilderGroup {
+    BuilderGroupName = 'SorianMobileExperimentalEngineersGroup',
+    BuildersType = 'EngineerBuilder',
+    Builder {
+        BuilderName = 'Sorian T3 Land Exp1 Engineer 1 Group',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 951,
+        BuilderConditions = {
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 0, categories.EXPERIMENTAL * categories.LAND } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			NumAssistees = 2,
+            Construction = {
+                BuildClose = false,
+				T4 = true,
+                BaseTemplate = ExBaseTmpl,
+                NearMarkerType = 'Rally Point',
+                BuildStructures = {
+                    'T4LandExperimental1',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Land Exp2 Engineer 1 Group',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 951,
+        BuilderConditions = {
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 0, categories.EXPERIMENTAL * categories.LAND } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			NumAssistees = 2,
+            Construction = {
+                BuildClose = false,
+				T4 = true,
+                BaseTemplate = ExBaseTmpl,
+                NearMarkerType = 'Rally Point',
+                BuildStructures = {
+                    'T4LandExperimental2',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Air Exp1 Engineer 1 Group',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 951,
+        BuilderConditions = {
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 0, categories.EXPERIMENTAL * categories.AIR } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'T4BuildingCheck', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			NumAssistees = 2,
+            Construction = {
+                BuildClose = false,
+				T4 = true,
+                NearMarkerType = 'Protected Experimental Construction',
+                BuildStructures = {
+                    'T4AirExperimental1',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianMobileLandExperimentalEngineers',
     BuildersType = 'EngineerBuilder',
     Builder {
@@ -37,7 +129,7 @@ BuilderGroup {
         BuilderConditions = {
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
@@ -65,7 +157,7 @@ BuilderGroup {
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
@@ -92,7 +184,7 @@ BuilderGroup {
         BuilderConditions = {
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
@@ -120,7 +212,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.LAND * categories.MOBILE}},
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -141,7 +233,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.LAND * categories.MOBILE}},
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -168,8 +260,8 @@ BuilderGroup {
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderConditions = {
-            #{ SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY TECH1, FACTORY TECH2' } },
+            { SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY TECH1, FACTORY TECH2' } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -190,8 +282,8 @@ BuilderGroup {
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderConditions = {
-            #{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH1' } },
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH1' } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -215,7 +307,7 @@ BuilderGroup {
         BuilderConditions = {
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
@@ -243,7 +335,7 @@ BuilderGroup {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.AIR * categories.MOBILE}},
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -264,7 +356,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.AIR * categories.MOBILE}},
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -291,8 +383,8 @@ BuilderGroup {
         FormRadius = 10000,
         BuilderType = 'Any',
         BuilderConditions = {
-            #{ SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY TECH1, FACTORY TECH2' } },
+            { SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY TECH1, FACTORY TECH2' } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -313,8 +405,8 @@ BuilderGroup {
         FormRadius = 10000,
         BuilderType = 'Any',
         BuilderConditions = {
-            #{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH1' } },
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH1' } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -340,7 +432,7 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENGINEER * categories.TECH3}},
             { MABC, 'MarkerLessThanDistance',  { 'Naval Area', 400}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
 			{ SIBC, 'T4BuildingCheck', {} },
         },
@@ -366,7 +458,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.NAVAL * categories.MOBILE}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -387,7 +479,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.NAVAL * categories.MOBILE}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -442,7 +534,7 @@ BuilderGroup {
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.ORBITALSYSTEM }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 3, categories.EXPERIMENTAL * categories.ORBITALSYSTEM }},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
@@ -469,7 +561,7 @@ BuilderGroup {
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.ORBITALSYSTEM }},
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -490,7 +582,7 @@ BuilderGroup {
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.ORBITALSYSTEM }},
             { IBC, 'BrainNotLowPowerMode', {} },
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -540,7 +632,7 @@ BuilderGroup {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.ECONOMIC }},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.EXPERIMENTAL * categories.ECONOMIC}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
 			{ IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
@@ -565,7 +657,7 @@ BuilderGroup {
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.ECONOMIC}},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1} },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -585,7 +677,7 @@ BuilderGroup {
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.ECONOMIC }},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
         },
         BuilderType = 'Any',
         BuilderData = {
