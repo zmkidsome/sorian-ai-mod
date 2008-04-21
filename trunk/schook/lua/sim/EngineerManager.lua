@@ -523,7 +523,7 @@ EngineerManager = Class(BuilderManager) {
     end,
     
     TaskFinished = function(self, unit)
-        if VDist3( self.Location, unit:GetPosition() ) > self.Radius then
+        if VDist3( self.Location, unit:GetPosition() ) > self.Radius and not EntityCategoryContains( categories.COMMAND, unit ) then
             self:ReassignUnit(unit)
         else
             self:AssignEngineerTask(unit)

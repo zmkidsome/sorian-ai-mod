@@ -1,49 +1,6 @@
 do
 local UiUtilsS = import('/lua/UiUtilsSorian.lua')
 
-function FindClients(id, ai)
-    local t = GetArmiesTable()
-    local focus = t.focusArmy
-    local result = {}
-	if ai then
-		focus = id
-	end
-    if focus == -1 then
-        for index,client in GetSessionClients() do
-            if table.getn(client.authorizedCommandSources) == 0 then
-                table.insert(result, index)
-            end
-        end
-    else
-        local srcs = {}
-        for army,info in t.armiesTable do
-            if id and not ai then
-                if army == id then
-                    for k,cmdsrc in info.authorizedCommandSources do
-                        srcs[cmdsrc] = true
-                    end
-                    break
-                end
-            else
-                if IsAlly(focus, army) then
-                    for k,cmdsrc in info.authorizedCommandSources do
-                        srcs[cmdsrc] = true
-                    end
-                end
-            end
-        end
-        for index,client in GetSessionClients() do
-            for k,cmdsrc in client.authorizedCommandSources do
-                if srcs[cmdsrc] then
-                    table.insert(result, index)
-                    break
-                end
-            end
-        end
-    end
-    return result
-end
-
 function CreateChatList(parent)
     local armies = GetArmiesTable()
     local container = Group(GUI.chatEdit)
@@ -289,8 +246,8 @@ function CreateChat()
 end
 
 function ReceiveChat(sender, msg)
-	if msg.sender then
-		sender = msg.sender
+	if msg.aisender then
+		sender = msg.aisender
 	else
 		sender = sender or "nil sender"
 	end
@@ -307,7 +264,7 @@ function ReceiveChat(sender, msg)
     local armyData = GetArmyData(sender)
     local towho = LOC(ToStrings[msg.to].text) or LOC(ToStrings['private'].text)
     local tokey = ToStrings[msg.to].colorkey or ToStrings['private'].colorkey
-	if msg.sender then
+	if msg.aisender then
 		sender = UiUtilsS.trim(string.gsub(sender,'%b()', '' ))
 	end
     local name = sender .. ' ' .. towho
@@ -319,7 +276,7 @@ function ReceiveChat(sender, msg)
     if table.getn(tempText) == 0 then
         tempText = {""}
     end
-	if not msg.sender then
+	if not msg.aisender then
 		UiUtilsS.ProcessAIChat(msg.to, armyData.ArmyID, msg.text)
 	end
     local entry = {name = name,

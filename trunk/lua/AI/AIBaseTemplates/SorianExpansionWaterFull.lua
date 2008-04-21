@@ -13,8 +13,8 @@ BaseBuilderTemplate {
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
-        'SorianT1NavalUpgradeBuildersExpansions',
-        'SorianT2NavalUpgradeBuildersExpansions',
+        'SorianT1NavalUpgradeBuilders',
+        'SorianT2NavalUpgradeBuilders',
         
         # Engineer Builders
         'SorianEngineerFactoryBuilders',
@@ -45,6 +45,7 @@ BaseBuilderTemplate {
         'SorianT3NukeDefensesExp',
         'SorianT3NukeDefenseBehaviors',
 		'SorianT2ShieldsExpansion',
+		'SorianT3ShieldsExpansion',
 		'SorianAirStagingExpansion',
         
         # ==== NAVAL EXPANSION ==== #
@@ -58,6 +59,8 @@ BaseBuilderTemplate {
         'SorianMassHunterAirFormBuilders',
         
         'SorianACUHunterAirFormBuilders',
+		
+		'SorianAntiNavyAirFormBuilders',
         
         'SorianTransportFactoryBuilders',
 		
@@ -69,18 +72,18 @@ BaseBuilderTemplate {
         'SorianBaseGuardAirFormBuilders',
 
         # ==== EXPERIMENTALS ==== #
-        'SorianMobileLandExperimentalEngineers',
-        'SorianMobileLandExperimentalForm',
+        #'SorianMobileLandExperimentalEngineers',
+        #'SorianMobileLandExperimentalForm',
         
-        'SorianMobileAirExperimentalEngineers',
-        'SorianMobileAirExperimentalForm',
+        #'SorianMobileAirExperimentalEngineers',
+        #'SorianMobileAirExperimentalForm',
 		
         # ==== ARTILLERY BUILDERS ==== #
         'SorianT3ArtilleryGroupExp',
     },
     NonCheatBuilders = {
-        'SorianAirScoutFactoryBuilders',
-        'SorianAirScoutFormBuilders',
+        #'SorianAirScoutFactoryBuilders',
+        #'SorianAirScoutFormBuilders',
         
         'SorianRadarEngineerBuilders',
         'SorianRadarUpgradeBuildersExpansion',

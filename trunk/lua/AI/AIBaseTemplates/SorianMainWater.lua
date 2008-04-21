@@ -38,7 +38,7 @@ BaseBuilderTemplate {
         'SorianTime Exempt Extractor Upgrades',
         
         # ACU Builders
-        'Sorian Air Initial ACU Builders',
+        'Sorian Naval Initial ACU Builders',
         'SorianACUBuilders',
         'SorianACUUpgrades',
         
@@ -75,7 +75,6 @@ BaseBuilderTemplate {
         
         # ==== NAVAL EXPANSION ==== #
 		'SorianNavalExpansionBuildersFast',
-        'SorianNavalExpansionBuilders',
         
         # ==== LAND UNIT BUILDERS ==== #
         
@@ -85,14 +84,16 @@ BaseBuilderTemplate {
 		'SorianEngineeringUpgrades',
 
         # ==== AIR UNIT BUILDERS ==== #
-        'SorianT1AirFactoryBuilders',
-        'SorianT2AirFactoryBuilders',
+        #'SorianT1AirFactoryBuilders',
+        #'SorianT2AirFactoryBuilders',
         'SorianT3AirFactoryBuilders',
         'SorianFrequentAirAttackFormBuilders',
         'SorianMassHunterAirFormBuilders',
         
         'SorianUnitCapAirAttackFormBuilders',
         'SorianACUHunterAirFormBuilders',
+		
+		'SorianAntiNavyAirFormBuilders',
         
         'SorianTransportFactoryBuilders - Air',
 		
@@ -143,15 +144,15 @@ BaseBuilderTemplate {
             SCU = 8,
         },
         FactoryCount = {
-            Land = 0,
-            Air = 5,
+            Land = 1,
+            Air = 4,
             Sea = 0,
-            Gate = 0, #1,
+            Gate = 1,
         },
         MassToFactoryValues = {
-            T1Value = 10, #6
-            T2Value = 25, #15
-            T3Value = 32.5, #22.5 
+            T1Value = 6, #8
+            T2Value = 15, #20
+            T3Value = 22.5, #27.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)

@@ -13,6 +13,22 @@ local ScenarioUtils = import('/lua/sim/ScenarioUtilities.lua')
 local Utils = import('/lua/utilities.lua')
 local SUtils = import('/lua/AI/sorianutilities.lua')
 
+function DefensivePointNeedsStructure( aiBrain, locationType, locationRadius, category, markerRadius, unitMax, threatMin, threatMax, threatRings, threatType )
+    local pos, name = AIUtils.AIFindDefensivePointNeedsStructureSorian( aiBrain, locationType, locationRadius, category, markerRadius, unitMax, threatMin, threatMax, threatRings, threatType )
+    if pos then
+        return true
+    end
+    return false    
+end
+
+function ExpansionPointNeedsStructure( aiBrain, locationType, locationRadius, category, markerRadius, unitMax, threatMin, threatMax, threatRings, threatType )
+    local pos, name = AIUtils.AIFindExpansionPointNeedsStructure( aiBrain, locationType, locationRadius, category, markerRadius, unitMax, threatMin, threatMax, threatRings, threatType )
+    if pos then
+        return true
+    end
+    return false    
+end
+
 ##############################################################################################################
 # function: HaveGreaterThanUnitsWithCategory = BuildCondition	doc = "Please work function docs."
 #
@@ -25,24 +41,24 @@ local SUtils = import('/lua/AI/sorianutilities.lua')
 ##############################################################################################################
 function HaveGreaterThanUnitsWithCategory(aiBrain, numReq, category, idleReq)
     local numUnits
-	#local total = 0
+	local total = 0
     if type(category) == 'string' then
         category = ParseEntityCategory(category)
     end
     if not idleReq then
-        numUnits = table.getn(aiBrain:GetListOfUnits(category, false, true))
+        numUnits = aiBrain:GetListOfUnits(category, false)
     else
-        numUnits = table.getn(aiBrain:GetListOfUnits(category, true, true))
+        numUnits = aiBrain:GetListOfUnits(category, true)
     end
-	#for k,v in numUnits do
-	#	if v:GetFractionComplete() == 1 then
-	#		total = total + 1
-	#		if total > numReq then
-	#			return true
-	#		end
-	#	end
-	#end
-	if numUnits > numReq then
+	for k,v in numUnits do
+		if v:GetFractionComplete() == 1 then
+			total = total + 1
+			if total > numReq then
+				return true
+			end
+		end
+	end
+	if total > numReq then
 		return true
 	end
     return false
@@ -60,24 +76,24 @@ end
 ##############################################################################################################
 function HaveLessThanUnitsWithCategory(aiBrain, numReq, category, idleReq)
     local numUnits
-	#local total = 0
+	local total = 0
     if type(category) == 'string' then
         category = ParseEntityCategory(category)
     end
     if not idleReq then
-        numUnits = table.getn(aiBrain:GetListOfUnits(category, false, true))
+        numUnits = aiBrain:GetListOfUnits(category, false)
     else
-        numUnits = table.getn(aiBrain:GetListOfUnits(category, true, true))
+        numUnits = aiBrain:GetListOfUnits(category, true)
     end
-	#for k,v in numUnits do
-	#	if v:GetFractionComplete() == 1 then
-	#		total = total + 1
-	#		if total >= numReq then
-	#			return false
-	#		end
-	#	end
-	#end
-	if numUnits >= numReq then
+	for k,v in numUnits do
+		if v:GetFractionComplete() == 1 then
+			total = total + 1
+			if total >= numReq then
+				return false
+			end
+		end
+	end
+	if total >= numReq then
 		return false
 	end
     return true

@@ -331,6 +331,66 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'Sorian Naval Initial ACU Builders',
+    BuildersType = 'EngineerBuilder',
+    
+    # Initial builder
+    Builder {
+        BuilderName = 'Sorian CDR Initial Naval',
+        PlatoonAddBehaviors = { 'CommanderBehaviorSorian', },
+        PlatoonTemplate = 'CommanderBuilderSorian',
+        Priority = 1000,
+        BuilderConditions = {
+                { IBC, 'NotPreBuilt', {}},
+            },
+        InstantCheck = true,
+        BuilderType = 'Any',
+        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
+        BuilderData = {
+            Construction = {
+                BuildStructures = {
+                    'T1LandFactory',
+					'T1EnergyProduction',
+                    'T1EnergyProduction',
+					'T1Resource',
+                    'T1EnergyProduction',
+                    'T1EnergyProduction',
+					'T1EnergyProduction',
+					'T1EnergyProduction',
+                    'T1AirFactory',					
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian CDR Initial PreBuilt Naval',
+        PlatoonAddBehaviors = { 'CommanderBehaviorSorian', },
+		PlatoonTemplate = 'CommanderBuilderSorian',
+        Priority = 1000,
+        BuilderConditions = {
+                { IBC, 'PreBuiltBase', {}},
+            },
+        InstantCheck = true,
+        BuilderType = 'Any',
+        PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
+        BuilderData = {
+            Construction = {
+                BuildStructures = {
+                    'T1AirFactory',
+                    'T1AirFactory',
+                    'T1EnergyProduction',
+                    'T1EnergyProduction',
+					'T1EnergyProduction',
+                    'T1AirFactory',
+                    'T1AirFactory',
+                    'T1AirFactory',
+                }
+            }
+        }
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'Sorian Rush Initial ACU Builders',
     BuildersType = 'EngineerBuilder',
     
@@ -481,6 +541,7 @@ BuilderGroup {
             Assist = {
                 AssisteeType = 'Engineer',
                 AssistLocation = 'LocationType',
+				AssistRange = 100,
                 BeingBuiltCategories = {'ENERGYPRODUCTION TECH3', 'ENERGYPRODUCTION TECH2'},
                 Time = 20,
             },
@@ -493,13 +554,15 @@ BuilderGroup {
         Priority = 750,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingAssistanceGreater', { 'LocationType', 0, 'EXPERIMENTAL' }},
-            { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 } },
+			{ IBC, 'BrainNotLowPowerMode', {} },
+            { EBC, 'GreaterThanEconEfficiencyOverTime', { 1.2, 1.2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
             Assist = {
                 AssisteeType = 'Engineer',
                 AssistLocation = 'LocationType',
+				AssistRange = 100,
                 BeingBuiltCategories = {'EXPERIMENTAL'},
                 Time = 60,
             },
@@ -598,7 +661,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'FACTORY TECH2, FACTORY TECH3' }},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3' }},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3' }},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3' }},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.25, 0.25}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'AdvancedEngineering', false }},
@@ -618,7 +681,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'AdvancedEngineering', true }},
@@ -640,7 +703,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3' }},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.25, 0.25}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'HeatSink', false }},
@@ -660,7 +723,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'HeatSink', true }},
@@ -682,7 +745,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3' }},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.25, 0.25}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'AdvancedEngineering', false }},
@@ -702,7 +765,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'AdvancedEngineering', true }},
@@ -724,7 +787,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3' }},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.25, 0.25}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'DamageStabilization', false }},
@@ -744,7 +807,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'DamageStabilization', true }},
@@ -1731,7 +1794,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 T3Resource Engineer 1500 range',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 0, #850,
         BuilderConditions = {
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 1500, -500, 1, 0, 'AntiSurface', 1 }},
             },
@@ -1752,8 +1815,8 @@ BuilderGroup {
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'MASSFABRICATION' } },
                 { EBC, 'LessThanEconEfficiencyOverTime', { 0.95, 2.0}},
-                { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.4, 1.4}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'ENERGYPRODUCTION TECH3' } },
+                { EBC, 'GreaterThanEconEfficiencyOverTime', { 0.4, 1.25}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3' } },
 				{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'MASSPRODUCTION TECH3' } },
                 { IBC, 'BrainNotLowPowerMode', {} },
             },
@@ -2081,43 +2144,45 @@ BuilderGroup {
     #        }
     #    }
     #},
-    #Builder {
-    #    BuilderName = 'Sorian T2 Power Engineer Expansions',
-    #    PlatoonTemplate = 'T2EngineerBuilderSorian',
-    #    Priority = 950,
-    #    BuilderConditions = {
-    #            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, 'ENERGYPRODUCTION TECH2' } },
-    #            { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, 'TECH3 ENGINEER' }},
-    #            { EBC, 'LessThanEconEfficiencyOverTime', { 1.5, 1.1}},
-    #        },
-    #    BuilderType = 'Any',
-    #    BuilderData = {
-    #        Construction = {
-    #            BuildStructures = {
-    #                'T2EnergyProduction',
-    #            },
-    #            Location = 'LocationType',
-    #        }
-    #    }
-    #},
-    #Builder {
-    #    BuilderName = 'Sorian T3 Power Engineer Expansions',
-    #    PlatoonTemplate = 'T3EngineerBuilderSorian',
-    #    Priority = 1000,
-    #    BuilderType = 'Any',
-    #    BuilderConditions = {
-    #            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, 'ENERGYPRODUCTION TECH3' } },
-    #            { EBC, 'LessThanEconEfficiencyOverTime', { 1.5, 1.1}},
-    #        },
-    #    BuilderData = {
-    #        Construction = {
-    #            BuildStructures = {
-    #                'T3EnergyProduction',
-    #            },
-    #            Location = 'LocationType',
-    #        }
-    #    }
-    #},
+    Builder {
+        BuilderName = 'Sorian T2 Power Engineer Expansions',
+        PlatoonTemplate = 'T2EngineerBuilderSorian',
+        Priority = 950,
+        BuilderConditions = {
+                { UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, 'ENERGYPRODUCTION TECH2' } },
+                { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, 'TECH3 ENGINEER' }},
+				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.1 }},
+                { EBC, 'LessThanEconEfficiencyOverTime', { 2.0, 1.2}},
+            },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                BuildStructures = {
+                    'T2EnergyProduction',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Power Engineer Expansions',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 1000,
+        BuilderType = 'Any',
+        BuilderConditions = {
+                { UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, 'ENERGYPRODUCTION TECH3' } },
+				{ EBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.1 }},
+                { EBC, 'LessThanEconEfficiencyOverTime', { 2.0, 1.2}},
+            },
+        BuilderData = {
+            Construction = {
+                BuildStructures = {
+                   'T3EnergyProduction',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
 }
 
 BuilderGroup {

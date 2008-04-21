@@ -153,8 +153,8 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     
     local maxRange = false
 	local turretPitch = nil
+	local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
     if platoon.MovementLayer == 'Water' then
-		local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
 		
 		if string.find(per, 'sorian') then
 			maxRange, selectedWeaponArc, turretPitch = GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
@@ -186,7 +186,7 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
                 end
             else
 			local bestPos
-			if turretPitch then
+			if string.find(per, 'sorian') then
 				bestPos = CheckNavalPathingSorian(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc, turretPitch)
 			else
 				bestPos = CheckNavalPathing(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc)
@@ -340,7 +340,7 @@ function CheckNavalPathingSorian(aiBrain, platoon, location, maxRange, selectedW
                 success, bestGoalPos = CheckPlatoonPathingEx(platoon, vec)
             end
             
-            if success then
+            if success and turretPitch then
                 success = not SUtils.CheckBlockingTerrain(bestGoalPos, threatTargetPos, selectedWeaponArc, turretPitch)
             end
             
@@ -877,7 +877,7 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
                 if not bUsedTransports and overflowSm + overflowMd + overflowLg > 0 then
                     local goodunits, overflow = AIUtils.SplitTransportOverflow(units, overflowSm, overflowMd, overflowLg)
                     local numOverflow = table.getn(overflow)
-                    if table.getn(goodunits) > numOverflow and numOverflow > 0 then
+                    if table.getn(goodunits) > numOverflow * 2 and numOverflow > 0 then
                         local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
                         for _,v in overflow do
                             if not v:IsDead() then

@@ -169,10 +169,11 @@ function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
     local result, bestPos = unit:CanPathTo( destination )
 
     local bUsedTransports = false
-    if not result or VDist2Sq(pos[1], pos[3], destination[1], destination[3]) > 256*256 and unit.PlatoonHandle then
+    if not result or VDist2Sq(pos[1], pos[3], destination[1], destination[3]) > 65536 and unit.PlatoonHandle and not EntityCategoryContains(categories.COMMAND, unit) then
         # if we can't path to our destination, we need, rather than want, transports
         local needTransports = not result
-        if VDist2Sq( pos[1], pos[3], destination[1], destination[3] ) > 512*512 then #and unit.PlatoonHandle.PlatoonData.RequireTransport then
+		# if distance > 512
+        if VDist2Sq( pos[1], pos[3], destination[1], destination[3] ) > 262144 then #and unit.PlatoonHandle.PlatoonData.RequireTransport then
             needTransports = true
         end
         # skip the last move... we want to return and do a build
@@ -227,7 +228,64 @@ function EngineerTryRepairSorian(aiBrain, eng, whatToBuild, pos)
     return false
 end
 
-function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPri )
+function AIFindPingTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPri, avoidbases )
+    local position = platoon:GetPlatoonPosition()
+    if not aiBrain or not position or not maxRange then
+        return false
+    end
+	local AttackPositions = AIGetAttackPointsAroundLocation( aiBrain, position, maxRange )
+	for x,z in AttackPositions do
+		local targetUnits = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, z, 100, 'Enemy' )
+		for k,v in atkPri do
+			local category = ParseEntityCategory( v )
+			local retUnit = false
+			local distance = false
+			local targetShields = 9999
+			for num, unit in targetUnits do
+				if not unit:IsDead() and EntityCategoryContains( category, unit ) and platoon:CanAttackTarget( squad, unit ) then
+					local unitPos = unit:GetPosition()
+					if avoidbases then
+						for k,v in ArmyBrains do
+							if IsAlly(v:GetArmyIndex(), aiBrain:GetArmyIndex()) or (aiBrain:GetArmyIndex() == v:GetArmyIndex()) then
+								local estartX, estartZ = v:GetArmyStartPos()
+								if VDist2Sq(estartX, estartZ, unitPos[1], unitPos[3]) < 22500 then
+									continue
+								end
+							end
+						end
+					end
+					local numShields = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.SHIELD * categories.STRUCTURE, unitPos, 50, 'Enemy' )
+					if not retUnit or numShields < targetShields or (numShields == targetShields and Utils.XZDistanceTwoVectors( position, unitPos ) < distance) then
+						retUnit = unit
+						distance = Utils.XZDistanceTwoVectors( position, unitPos )
+						targetShields = numShields
+					end
+				end
+			end
+			if retUnit then
+				return retUnit
+			end
+		end
+	end
+	return false
+end
+
+function AIGetAttackPointsAroundLocation( aiBrain, pos, maxRange )
+    local markerList = {}
+
+	if aiBrain.AttackPoints then
+		for k,v in aiBrain.AttackPoints do
+			local dist = VDist2( pos[1], pos[3], v.Position[1], v.Position[3] )
+			if dist < maxRange then
+				table.insert( markerList, { Position = v.Position } )
+			end
+		end
+	end
+
+    return AISortMarkersFromStartPos(aiBrain, markerList, 100, nil, nil, nil, nil, nil, pos)
+end
+
+function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPri, avoidbases )
     local position = platoon:GetPlatoonPosition()
     if not aiBrain or not position or not maxRange then
         return false
@@ -241,11 +299,13 @@ function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkP
         for num, unit in targetUnits do
             if not unit:IsDead() and EntityCategoryContains( category, unit ) and platoon:CanAttackTarget( squad, unit ) then
                 local unitPos = unit:GetPosition()
-				for k,v in ArmyBrains do
-					if IsAlly(v:GetArmyIndex(), aiBrain:GetArmyIndex()) or (aiBrain:GetArmyIndex() == v:GetArmyIndex()) then
-						local estartX, estartZ = v:GetArmyStartPos()
-						if VDist2Sq(estartX, estartZ, unitPos[1], unitPos[3]) < 14400 then
-							continue
+				if avoidbases then
+					for k,v in ArmyBrains do
+						if IsAlly(v:GetArmyIndex(), aiBrain:GetArmyIndex()) or (aiBrain:GetArmyIndex() == v:GetArmyIndex()) then
+							local estartX, estartZ = v:GetArmyStartPos()
+							if VDist2Sq(estartX, estartZ, unitPos[1], unitPos[3]) < 22500 then
+								continue
+							end
 						end
 					end
 				end
@@ -528,6 +588,80 @@ function GetTransports(platoon, units)
     end
 end
 
+function AIGetPingMarkersAroundLocation( aiBrain, threatMin, threatMax, threatRings, threatType )
+    local returnMarkers = {}
+
+	if aiBrain.TacticalBases then
+		for k,v in aiBrain.TacticalBases do
+			if not threatMin then
+	            table.insert( returnMarkers, v )
+			else
+				local threat = aiBrain:GetThreatAtPosition( v.Position, threatRings, true, threatType or 'Overall' )
+				if threat >= threatMin and threat <= threatMax then
+					table.insert( returnMarkers, v )
+				end
+			end
+		end
+	end
+	
+    return returnMarkers
+end
+
+function AIGetMarkerLocationsSorian(aiBrain, markerType)
+    local markerList = {}
+    if aiBrain.TacticalBases then
+		for k,v in aiBrain.TacticalBases do
+			table.insert( markerList, { Position = v.Position, Name = k } )
+		end
+	end
+    local markers = ScenarioUtils.GetMarkers()
+    if markers then
+        for k, v in markers do
+            if v.type == markerType then
+                table.insert(markerList, { Position = v.position, Name = k } )
+            end
+        end
+    end
+    
+    return markerList
+end
+
+function AIFindDefensivePointNeedsStructureSorian( aiBrain, locationType, radius, category, markerRadius, unitMax, tMin, tMax, tRings, tType)
+    local pos = aiBrain:PBMGetLocationCoords( locationType )
+    if not pos then
+        return false
+    end
+	local primarkers = AIGetPingMarkersAroundLocation( aiBrain, tMin, tMax, tRings, tType )
+    local positions = AIGetMarkersAroundLocation( aiBrain, 'Defensive Point', pos, radius, tMin, tMax, tRings, tType)
+    
+    local retPos, retName, lowest
+	for k,v in primarkers do
+		local numUnits = table.getn( GetOwnUnitsAroundPoint( aiBrain, ParseEntityCategory(category), v.Position, markerRadius ) )
+        if numUnits < unitMax then
+            if not retPos or numUnits < lowest then
+                lowest = numUnits
+                retName = v.Name
+                retPos = v.Position
+            end
+        end
+	end
+	if retPos and retName then
+		return retPos, retName
+	end
+    for k,v in positions do
+        local numUnits = table.getn( GetOwnUnitsAroundPoint( aiBrain, ParseEntityCategory(category), v.Position, markerRadius ) )
+        if numUnits < unitMax then
+            if not retPos or numUnits < lowest then
+                lowest = numUnits
+                retName = v.Name
+                retPos = v.Position
+            end
+        end
+    end
+    
+    return retPos, retName
+end
+
 function AIFindFirebaseLocationSorian( aiBrain, locationType, radius, markerType, tMin, tMax, tRings, tType, maxUnits, unitCat, markerRadius)
     #Get location of commander
     #local threatPos, threatVal = aiBrain:GetHighestThreatPosition(0, true, 'Commander', aiBrain:GetCurrentEnemy():GetArmyIndex())
@@ -537,7 +671,7 @@ function AIFindFirebaseLocationSorian( aiBrain, locationType, radius, markerType
     local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
 	local threatPos = {estartX, 0, estartZ}
     #Get markers
-    local markerList = AIGetMarkerLocations(aiBrain, markerType)
+    local markerList = AIGetMarkerLocationsSorian(aiBrain, markerType)
     
     #For each marker, check against threatpos. Save markers that are within the FireBaseRange
     local inRangeList = {}

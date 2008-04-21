@@ -618,7 +618,7 @@ BuilderGroup {
         BuilderName = 'Sorian De-clutter Land Attack T1',
         PlatoonTemplate = 'LandAttackMediumSorian',
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian'},
-        Priority = 1,
+        Priority = 0,
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {
@@ -642,7 +642,7 @@ BuilderGroup {
         BuilderName = 'Sorian De-clutter Land Attack T2',
         PlatoonTemplate = 'LandAttackMediumSorian',
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian'},
-        Priority = 1,
+        Priority = 0,
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {
@@ -666,7 +666,7 @@ BuilderGroup {
         BuilderName = 'Sorian De-clutter Land Attack T3',
         PlatoonTemplate = 'LandAttackMediumSorian',
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian'},
-        Priority = 1,
+        Priority = 0,
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {

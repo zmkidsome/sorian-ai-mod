@@ -45,10 +45,23 @@ BaseBuilderTemplate {
         'SorianT3NukeDefensesExp',
         'SorianT3NukeDefenseBehaviors',
 		'SorianT2ShieldsExpansion',
+		'SorianT3ShieldsExpansion',
 		'SorianAirStagingExpansion',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
+		
+        # ==== LAND UNIT BUILDERS ==== #
+        'SorianT1LandFactoryBuilders',
+        'SorianT2LandFactoryBuilders',
+        'SorianT3LandFactoryBuilders',
+        'SorianFrequentLandAttackFormBuilders',
+        'SorianMassHunterLandFormBuilders',
+        'SorianMiscLandFormBuilders',
+        
+        'SorianT1ReactionDF',
+        'SorianT2ReactionDF',
+        'SorianT3ReactionDF',
         
         # ==== AIR UNIT BUILDERS ==== #
         'SorianT1AirFactoryBuilders',
@@ -59,7 +72,7 @@ BaseBuilderTemplate {
         
         'SorianACUHunterAirFormBuilders',
         
-        'SorianTransportFactoryBuilders',
+        #'SorianTransportFactoryBuilders',
 		
 		'SorianExpResponseFormBuilders',
         
@@ -69,18 +82,21 @@ BaseBuilderTemplate {
         'SorianBaseGuardAirFormBuilders',
 
         # ==== EXPERIMENTALS ==== #
-        'SorianMobileLandExperimentalEngineers',
-        'SorianMobileLandExperimentalForm',
+        #'SorianMobileLandExperimentalEngineers',
+        #'SorianMobileLandExperimentalForm',
         
-        'SorianMobileAirExperimentalEngineers',
-        'SorianMobileAirExperimentalForm',
+        #'SorianMobileAirExperimentalEngineers',
+        #'SorianMobileAirExperimentalForm',
 		
         # ==== ARTILLERY BUILDERS ==== #
         'SorianT3ArtilleryGroupExp',
     },
     NonCheatBuilders = {
-        'SorianAirScoutFactoryBuilders',
-        'SorianAirScoutFormBuilders',
+        #'SorianAirScoutFactoryBuilders',
+        #'SorianAirScoutFormBuilders',
+		
+        'SorianLandScoutFactoryBuilders',
+        'SorianLandScoutFormBuilders',
         
         'SorianRadarEngineerBuilders',
         'SorianRadarUpgradeBuildersExpansion',

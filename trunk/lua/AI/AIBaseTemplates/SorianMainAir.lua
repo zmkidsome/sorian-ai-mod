@@ -162,7 +162,7 @@ BaseBuilderTemplate {
             Land = 2,
             Air = 7,
             Sea = 0,
-            Gate = 0, #1,
+            Gate = 1,
         },
         MassToFactoryValues = {
             T1Value = 6, #8

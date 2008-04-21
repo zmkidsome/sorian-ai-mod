@@ -11,39 +11,17 @@ local AIUtils = import('/lua/ai/aiutilities.lua')
 local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
 local Utils = import('/lua/utilities.lua')
 
-local AIChatText = {
-	nukechat = { 
-		'Nuke volley headed for [target].', 
-		'Launching nukes at [target].', 
-		'Firing nukes at [target].', 
-		'Gonna make [target]\'s base glow in the dark.',
-		'I have nukes headed for [target].',
-	},
-	targetchat = { 
-		'Switching targets to [target].', 
-		'Focusing attacks on [target].', 
-		'Attacking [target].', 
-		'Sending units at [target].',
-		'Shifting focus to [target].',
-	},
-	tcrespond = {
-		'Copy that, targeting [target].',
-		'Roger, switching targets to [target].',
-		'Copy, let\'s get [target].',
-		'Roger that, focusing attacks on [target].',
-		'Copy, [target] is the new target.',
-	},
-	tcerrorally = {
-		'I cannot target [target], They are an ally.',
-		'Umm, [target] is our ally.',
-		'[target] is an ally! Sheesh, I\'m the computer player.',
-		'Since [target] is an ally attacking them would be a bad idea.',
-		'Wake up! [target] is an ally. Wow!',
-	},
+local AIChatText = import('/lua/AI/sorianlang.lua').AIChatText
+
+local AITaunts = {
+	{3,4,5,6,7,8,9,10,11,12,14,15,16},
+	{19,21,23,24,26,27,28,29,30,31,32},
+	{33,34,35,36,37,38,39,40,41,43,46,47,48},
+	{49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64},
 }
 
 function T4Timeout(aiBrain)
-	WaitSeconds(5)
+	WaitSeconds(30)
 	aiBrain.T4Building = false
 end
 
@@ -74,8 +52,13 @@ function AISendPing(position, pingType, army)
 	import('/lua/simping.lua').SpawnPing(data)
 end
 
+function AIDelayChat(aigroup, ainickname, aiaction, targetnickname, delaytime)
+	WaitSeconds(delaytime)
+	AISendChat(aigroup, ainickname, aiaction, targetnickname)
+end
+
 function AISendChat(aigroup, ainickname, aiaction, targetnickname)
-	if not GetArmyData(ainickname):IsDefeated() and AIHasAlly(GetArmyData(ainickname)) then
+	if aigroup and not GetArmyData(ainickname):IsDefeated() and (aigroup !='allies' or AIHasAlly(GetArmyData(ainickname))) then
 		if aiaction and AIChatText[aiaction] then
 			local ranchat = Random(1, table.getn(AIChatText[aiaction]))
 			local chattext
@@ -94,6 +77,13 @@ function AISendChat(aigroup, ainickname, aiaction, targetnickname)
 	end
 end
 
+function AIRandomizeTaunt(aiBrain)
+	local factionIndex = aiBrain:GetFactionIndex()
+	tauntid = Random(1,table.getn(AITaunts[factionIndex]))
+	aiBrain.LastVocTaunt = GetGameTimeSeconds()
+	AISendChat('all', aiBrain.Nickname, '/'..AITaunts[factionIndex][tauntid])
+end
+
 function FinishAIChat(data)
 	if data.NewTarget then
 		if data.NewTarget == 'at will' then
@@ -108,6 +98,44 @@ function FinishAIChat(data)
 				AISendChat('allies', ArmyBrains[data.Army].Nickname, 'tcerrorally', ArmyBrains[data.NewTarget].Nickname)
 			end
 		end
+	end
+end
+
+function AIHandlePing(aiBrain, pingData)
+	if pingData.Type == 'move' then
+		if not aiBrain.TacticalBases then
+			aiBrain.TacticalBases = {}
+		end
+		nextping = (table.getn(aiBrain.TacticalBases) + 1)
+		table.insert(aiBrain.TacticalBases,
+			{
+			Position = pingData.Location,
+			Name = 'BasePing'..nextping,
+			}
+		)
+		AISendChat('allies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'genericchat')
+	elseif pingData.Type == 'attack' then
+		if not aiBrain.AttackPoints then
+			aiBrain.AttackPoints = {}
+		end
+		table.insert(aiBrain.AttackPoints,
+			{
+			Position = pingData.Location,
+			}
+		)
+		aiBrain:ForkThread(aiBrain.AttackPointsTimeout, pingData.Location)
+		AISendChat('allies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'genericchat')
+	elseif pingData.Type == 'alert' then
+		table.insert(aiBrain.BaseMonitor.AlertsTable,
+			{
+			Position = pingData.Location,
+			Threat = 80,
+			}
+		)
+        aiBrain.BaseMonitor.AlertSounded = true
+		aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, pingData.Location)
+        aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
+		AISendChat('allies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'genericchat')
 	end
 end
 
@@ -335,6 +363,10 @@ function Nuke(aiBrain)
 				aitarget = target:GetAIBrain():GetArmyIndex()
 				AISendChat('allies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'nukechat', ArmyBrains[aitarget].Nickname)
 				AISendPing(tarPosition, 'attack', aiBrain:GetArmyIndex())
+				if Random(1,5) == 3 and (not aiBrain.LastTaunt or GetGameTimeSeconds() - aiBrain.LastTaunt > 90) then
+					aiBrain.LastTaunt = GetGameTimeSeconds()
+					AISendChat(aitarget, ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'nuketaunt')
+				end
 				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, tarPosition, 100, 'Enemy' )
 				for k, v in Nukes do
 					if v:GetNukeSiloAmmoCount() > 0 and not fired[v] then
@@ -457,7 +489,7 @@ end
 
 function AIHasAlly(army)
 	for k, v in ArmyBrains do
-		if IsAlly(army:GetArmyIndex(), v:GetArmyIndex()) and army:GetArmyIndex() != v:GetArmyIndex() then
+		if IsAlly(army:GetArmyIndex(), v:GetArmyIndex()) and army:GetArmyIndex() != v:GetArmyIndex() and not v:IsDefeated() then
 			return true
 		end
 	end
