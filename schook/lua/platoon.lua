@@ -21,6 +21,7 @@ Platoon = Class(sorianoldPlatoon) {
     end,
 
     ExperimentalAIHubSorian = function(self)
+		local aiBrain = self:GetBrain()
 	    local behaviors = import('/lua/ai/AIBehaviors.lua')
 	    
 	    local experimental = self:GetPlatoonUnits()[1]
