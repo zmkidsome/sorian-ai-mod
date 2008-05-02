@@ -2,6 +2,16 @@
 
 == Release Notes ==
 
+*1.1e:* Fixed bug that caused T4s to get stuck.
+
+*1.1d:* Improved T4 grouping, AI will go nuts when it has a paragon.
+
+*1.1c:* Fix end of game bug (really this time).
+
+*1.1b:* Fix end of game bug.
+
+*1.1:* Fixed duplicate chat bug, AI Commander will no longer get reassigned to a different base, AI commander will no longer be transported, Added more taunt abilities and situations, Fatboy will fire from range, Prepared AI Chat for localization, Added support for AI to react to ally markers, Better behaviors for the Tempest and Atlantis, T4 Grouping, T2 Engineering Support Structures in Firebases and Defensive points, Added NavalHuntAI, StrikeForce Naval Platoons, AI will upgrade sonar, AI will name its T4 Units, Made the Turtle AI seek defensive points more aggressively and build them up bigger than the regular AIs.
+
 *1.0:* The AI will build T3 Artillery in expansion bases that are in-range of the enemy, Fixed a default AI bug that was preventing the AI from building T2 and T3 Firebases. The AIFindFirebaseLocation() was messed up, also the threat map is far too inaccurate for this sort of thing, Lots of econ tweaks and pitfall fixes, AI will pause mass fabs when the energy gets low. Why they removed this I will never know, Fixed AI building lots and lots and lots of TMD in expansion bases, Fixed building tons of T1 defenses for no reason out in the middle of nowhere, Fixed AI keeping up with Anti-Nukes, it was counting all anti-nukes when it should just count the ones in the main base, Adjusted TML target leading. Better chance of hitting groups of units and the occasional solo one, Omni in expansion bases, Massive improvement to T4 reactions: Based on latent intel rather than vision, Fix for platoons not wanting to leave the base, Fix for platoons stopping in the middle of nowhere waiting for a transport, Fix for factories in the middle of nowhere, Build Defenses towards enemy, Stop focusing on walls, Near base alarm, Fixed land and water platoons, AI Chat, AI will not fire Tac Missiles or Artillery into their base or their allies bases, Fixed ACU Upgrades.
 
 *0.9.9:* Land units should not get stuck shooting into cliffs, Improved distress response, Many, many AI tweaks, Improved transport use, More PD and AA in perimeter defenses, Bigger Air groups, Less TML more Artillery, Greater response to major threats, Hives and Kennels will Upgrade, Fixed bug in distress response, Fixed Rush aggressiveness when playing multiple enemies, Fixed AI not building multiple Hydros when there is more than nearby, AI will reduce the number of expansion bases depending on the number of AIs in the game. (Duncane's idea).
