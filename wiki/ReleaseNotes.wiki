@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.2:* Novax will attack least defended first, Scouts will no longer stop, AI will build more artillery if the enemy has a lot of defense, Expansion bases will prioritize building TML and Artillery if there are enemy structures in range, T4s will group on-the-fly, Transports will check for anti-air defenses, Engineers and the ACU will no longer get caught up in base distress response, Another attempt to get Mobile Shields to stay in formation, Fatboy will no longer get stuck in water, Transports will now try and find the closest safe spot to unload, Fixed bug with UEF Satellite. By default it was using the Air T4 behavior, Artillery, TMLs, and the UEF Satellite will target defending shields first, Land and Air T4s should ignore ACUs under water, AI will scale land platoons based on enemy defenses up to a limit, Hint platoons will no longer target Air units, Fixed bug with PickEnemyLogic(), was not evaluating enemies properly.
+
 *1.1e:* Fixed bug that caused T4s to get stuck.
 
 *1.1d:* Improved T4 grouping, AI will go nuts when it has a paragon.
