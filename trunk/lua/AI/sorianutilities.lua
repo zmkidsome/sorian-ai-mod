@@ -139,7 +139,7 @@ function AIHandlePing(aiBrain, pingData)
 	end
 end
 
-function FindClosestUnitToAttack( aiBrain, platoon, squad, maxRange, atkCat, selectedWeaponArc, turretPitch )
+function FindClosestUnitPosToAttack( aiBrain, platoon, squad, maxRange, atkCat, selectedWeaponArc, turretPitch )
     local position = platoon:GetPlatoonPosition()
     if not aiBrain or not position or not maxRange then
 		#LOG('*AI DEBUG: FindClosestUnitToAttack missing data')
@@ -152,7 +152,7 @@ function FindClosestUnitToAttack( aiBrain, platoon, squad, maxRange, atkCat, sel
         if not unit:IsDead() then
             local unitPos = unit:GetPosition()
             if (not retUnit or Utils.XZDistanceTwoVectors( position, unitPos ) < distance) and platoon:CanAttackTarget( squad, unit ) and (not turretPitch or not CheckBlockingTerrain(position, unitPos, selectedWeaponArc, turretPitch)) then
-                retUnit = unit
+                retUnit = unit:GetPosition()
                 distance = Utils.XZDistanceTwoVectors( position, unitPos )
             end
         end

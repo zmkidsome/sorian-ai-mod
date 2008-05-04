@@ -1,5 +1,6 @@
 do
 local SUtils = import('/lua/AI/sorianutilities.lua')
+local AIBehaviors = import('/lua/ai/AIBehaviors.lua')
 
 function AIGetEconomyNumbers(aiBrain)
     #LOG('*AI DEBUG: RETURNING ECONOMY NUMBERS FROM AIBRAIN ', repr(aiBrain))
@@ -262,6 +263,19 @@ function AIFindPingTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPr
 					end
 				end
 			end
+			if retUnit and targetShields > 0 then
+				local platoonUnits = platoon:GetPlatoonUnits()
+				for k,v in platoonUnits do
+					if not v:IsDead() then
+						unit = v
+						break
+					end
+				end
+				local closestBlockingShield = AIBehaviors.GetClosestShieldProtectingTargetSorian(unit, retUnit)
+				if closestBlockingShield then
+					return closestBlockingShield
+				end
+			end
 			if retUnit then
 				return retUnit
 			end
@@ -317,6 +331,19 @@ function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkP
                 end
             end
         end
+		if retUnit and targetShields > 0 then
+			local platoonUnits = platoon:GetPlatoonUnits()
+			for k,v in platoonUnits do
+				if not v:IsDead() then
+					unit = v
+					break
+				end
+			end
+			local closestBlockingShield = AIBehaviors.GetClosestShieldProtectingTargetSorian(unit, retUnit)
+			if closestBlockingShield then
+				return closestBlockingShield
+			end
+		end
         if retUnit then
             return retUnit
         end

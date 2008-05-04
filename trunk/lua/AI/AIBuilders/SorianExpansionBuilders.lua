@@ -43,7 +43,7 @@ BuilderGroup {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
             { MIBC, 'LessThanGameTime', { 600 } },
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 14, '>=', 'FACTORY TECH2 STRUCTURE' } },
@@ -65,9 +65,10 @@ BuilderGroup {
                 ThreatRings = 0,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {                    
-                    'T1GroundDefense',                    
+					'T1GroundDefense',
+					'T1LandFactory',
+					'T1LandFactory',
 					'T1AADefense',
-                    'T1LandFactory',
 					'T1Radar',
                 }               
             },
@@ -83,7 +84,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 14, '>=', 'FACTORY TECH2 STRUCTURE' } },
@@ -105,9 +106,9 @@ BuilderGroup {
                 ThreatRings = 0,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {                    
-                    'T1GroundDefense',                    
+					'T1GroundDefense',
+					'T1LandFactory',
 					'T1AADefense',
-                    'T1LandFactory',
 					'T1Radar',
                 }
             },
@@ -122,7 +123,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
@@ -145,8 +146,8 @@ BuilderGroup {
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {                    
-                    'T2GroundDefense',                    
-                    'T1LandFactory',
+					'T2GroundDefense',
+					'T1LandFactory',
 					'T2AADefense',
 					'T2Radar',
                 }
@@ -162,7 +163,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
@@ -185,8 +186,8 @@ BuilderGroup {
                     'T1Resource',
                     'T1Resource',
                     'T1Resource',
-                    'T2GroundDefense',                    
                     'T1LandFactory',
+                    'T2GroundDefense',                    
 					'T3AADefense',
 					'T2Radar',				
                 }
@@ -212,7 +213,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 14, '>=', 'FACTORY TECH2 STRUCTURE' } },
@@ -234,9 +235,9 @@ BuilderGroup {
                 ThreatRings = 0,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {                    
-                    'T1GroundDefense',                    
+					'T1GroundDefense',
+					'T1LandFactory',
 					'T1AADefense',
-                    'T1LandFactory',
 					'T1Radar',
                 }
             },
@@ -251,7 +252,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
@@ -274,8 +275,8 @@ BuilderGroup {
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {                    
-                    'T2GroundDefense',                    
-                    'T1LandFactory',
+					'T2GroundDefense',
+					'T1LandFactory',
 					'T2AADefense',
 					'T2Radar',
                 }
@@ -291,7 +292,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
@@ -314,8 +315,8 @@ BuilderGroup {
                     'T1Resource',
                     'T1Resource',
                     'T1Resource',
-                    'T2GroundDefense',                    
                     'T1LandFactory',
+                    'T2GroundDefense',                    
 					'T3AADefense',
 					'T2Radar',				
                 }
@@ -341,7 +342,7 @@ BuilderGroup {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },   
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
             #{ EBC, 'MassIncomeToUnitRatio', { 10, '>=', 'FACTORY TECH1 STRUCTURE' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 20, '>=', 'FACTORY TECH2 STRUCTURE' } },
             #{ EBC, 'MassIncomeToUnitRatio', { 30, '>=', 'FACTORY TECH3 STRUCTURE' } },
@@ -363,9 +364,9 @@ BuilderGroup {
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {                    
-                    'T1GroundDefense',                    
+					'T1GroundDefense',
+					'T1LandFactory',
 					'T1AADefense',
-                    'T1LandFactory',  
 					'T1Radar',
                 }
             },
@@ -417,7 +418,7 @@ BuilderGroup {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .7 } },
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
@@ -437,9 +438,9 @@ BuilderGroup {
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {
-                    'T2GroundDefense',
-                    'T2AADefense',
+					'T2GroundDefense',
 					'T1LandFactory',
+                    'T2AADefense',
 					'T2Radar',				
                 }
             },
@@ -455,7 +456,7 @@ BuilderGroup {
             { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .7 } },
-			{ SIBC, 'LessThanExpansionBases', { 3 }},
+			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
@@ -475,9 +476,9 @@ BuilderGroup {
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
                 BuildStructures = {
-                    'T2GroundDefense',
-					'T3AADefense',
+					'T2GroundDefense',
 					'T1LandFactory',
+					'T3AADefense',
 					'T2Radar',				
                 }
             },
@@ -533,7 +534,7 @@ BuilderGroup {
                     'T2GroundDefense',
                     'T2StrategicMissile',
                     'T2Artillery',       
-					'T2ShieldDefense',					
+					'T2ShieldDefense',
                 }
             }
         }

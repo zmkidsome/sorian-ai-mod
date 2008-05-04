@@ -72,11 +72,11 @@ BaseBuilderTemplate {
         'SorianBaseGuardAirFormBuilders',
 
         # ==== EXPERIMENTALS ==== #
-        #'SorianMobileLandExperimentalEngineers',
-        #'SorianMobileLandExperimentalForm',
+        'SorianMobileLandExperimentalEngineers',
+        'SorianMobileLandExperimentalForm',
         
-        #'SorianMobileAirExperimentalEngineers',
-        #'SorianMobileAirExperimentalForm',
+        'SorianMobileAirExperimentalEngineers',
+        'SorianMobileAirExperimentalForm',
 		
         # ==== ARTILLERY BUILDERS ==== #
         'SorianT3ArtilleryGroupExp',

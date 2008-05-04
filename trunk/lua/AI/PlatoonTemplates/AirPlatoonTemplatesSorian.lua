@@ -77,7 +77,7 @@ PlatoonTemplate {
     Name = 'T4ExperimentalAirSorian',
     Plan = 'ExperimentalAIHubSorian', 
     GlobalSquads = {
-        { categories.AIR * categories.EXPERIMENTAL * categories.MOBILE, 1, 1, 'attack', 'none' },
+        { categories.AIR * categories.EXPERIMENTAL * categories.MOBILE - categories.SATELLITE, 1, 1, 'attack', 'none' },
     },
 }
 
@@ -85,7 +85,7 @@ PlatoonTemplate {
     Name = 'T4ExperimentalAirLate',
     Plan = 'ExperimentalAIHubSorian', 
     GlobalSquads = {
-        { categories.AIR * categories.EXPERIMENTAL * categories.MOBILE, 2, 5, 'attack', 'GrowthFormation' },
+        { categories.AIR * categories.EXPERIMENTAL * categories.MOBILE - categories.SATELLITE, 2, 5, 'attack', 'GrowthFormation' },
     },
 }
 

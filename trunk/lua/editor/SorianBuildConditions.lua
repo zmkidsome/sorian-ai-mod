@@ -215,6 +215,10 @@ function LessThanThreatAtEnemyBase(aiBrain, ttype, number)
     return false
 end
 
+function GreaterThanThreatAtEnemyBase(aiBrain, ttype, number)
+	return not LessThanThreatAtEnemyBase(aiBrain, ttype, number)
+end
+
 ##############################################################################################################
 # function: GreaterThanEnemyUnitsAroundBase = BuildCondition
 #

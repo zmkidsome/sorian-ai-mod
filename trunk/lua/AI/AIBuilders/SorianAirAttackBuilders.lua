@@ -27,17 +27,20 @@ local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
 
 function AirAttackCondition(aiBrain, locationType, targetNumber )
     local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
-
     local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
 	if not engineerManager then
         return false
     end
-
+	if aiBrain:GetCurrentEnemy() then
+		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+		targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiAir' )
+	end
+	
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
     
     local surfaceThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, position, radius )
-    local airThreat = pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, position, radius )
+    local airThreat = 0 #pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, position, radius )
     if ( surfaceThreat + airThreat ) > targetNumber then
         return true
     end
@@ -96,7 +99,7 @@ BuilderGroup {
         Priority = 500,
         BuilderConditions = {
             #{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 15, categories.AIR * categories.ANTIAIR } },
-            { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
+            { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -192,10 +195,10 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Interceptors - Two Factories',
         PlatoonTemplate = 'T1AirFighter',
-        Priority = 500,
+        Priority = 0,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
-            { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
+            { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR * categories.TECH1 } },
@@ -217,7 +220,7 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
@@ -230,7 +233,7 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
@@ -246,7 +249,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'LessThanThreatAtEnemyBase', { 'AntiAir', 18 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
         },
@@ -258,11 +261,27 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
         },
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Air Fighter - T2',
+        PlatoonTemplate = 'T1AirFighter',
+        Priority = 600,
+        BuilderConditions = {
+            #{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 15, categories.AIR * categories.ANTIAIR } },
+            { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'FACTORY AIR TECH3' }},
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
+        },
+        BuilderType = 'Air',
     },
     Builder {
         BuilderName = 'Sorian T2 Air Gunship2',
@@ -271,7 +290,7 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
@@ -284,7 +303,7 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
@@ -297,7 +316,7 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.BOMBER * categories.TECH2 } },
 			{ MIBC, 'FactionIndex', {1, 3, 4}},
@@ -313,7 +332,7 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.ANTIAIR * categories.TECH2 } },
 			{ UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
@@ -333,7 +352,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTINAVY * categories.TECH2 } },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Naval' } },
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
         },
@@ -352,10 +371,10 @@ BuilderGroup {
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'FACTORY AIR TECH3' }},
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
         },
         BuilderType = 'Air',
     },
@@ -369,10 +388,10 @@ BuilderGroup {
             #{ UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'FACTORY AIR TECH3' }},
-			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
+			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
         },
         BuilderType = 'Air',
     },
@@ -386,26 +405,26 @@ BuilderGroup {
             #{ UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR - categories.TECH1 } },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'FACTORY AIR TECH3' }},
-			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
+			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
         },
         BuilderType = 'Air',
     },
     Builder {
         BuilderName = 'Sorian T2AntiAirPlanes - Two Factories Higher Pri',
         PlatoonTemplate = 'T1AirFighter',
-        Priority = 600,
+        Priority = 0,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.FACTORY * categories.AIR - categories.TECH1 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'FACTORY AIR TECH3' }},
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY AIR TECH3' }},
+			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
         },
         BuilderType = 'Air',
     },
@@ -582,7 +601,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3AntiAirPlanes - Two Factories',
         PlatoonTemplate = 'T3AirFighter',
-        Priority = 700,
+        Priority = 0,
         BuilderConditions = {
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
@@ -622,7 +641,7 @@ BuilderGroup {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.ANTIAIR } },
-			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.TECH1 * (categories.BOMBER + categories.GROUNDATTACK)} },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * (categories.BOMBER + categories.GROUNDATTACK)} },
             { UCBC, 'HaveLessThanUnitsWithCategory', { 3, 'TRANSPORTFOCUS TECH1' } },
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -641,7 +660,7 @@ BuilderGroup {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.ANTIAIR} },
-			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.TECH2 * (categories.BOMBER + categories.GROUNDATTACK)} },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * (categories.BOMBER + categories.GROUNDATTACK) - categories.TECH1} },
             { UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'TRANSPORTFOCUS TECH2' } },
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -660,7 +679,7 @@ BuilderGroup {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.ANTIAIR * categories.TECH3} },
-			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.TECH3 * (categories.BOMBER + categories.GROUNDATTACK)} },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.TECH3 * (categories.BOMBER + categories.GROUNDATTACK)} },
             { UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'TRANSPORTFOCUS TECH2 TECH3' } },
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -683,7 +702,7 @@ BuilderGroup {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.ANTIAIR } },
-			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.TECH1 * (categories.BOMBER + categories.GROUNDATTACK)} },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * (categories.BOMBER + categories.GROUNDATTACK)} },
             { UCBC, 'HaveLessThanUnitsWithCategory', { 6, 'TRANSPORTFOCUS TECH1' } },
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -702,7 +721,7 @@ BuilderGroup {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.ANTIAIR} },
-			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.TECH2 * (categories.BOMBER + categories.GROUNDATTACK)} },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * (categories.BOMBER + categories.GROUNDATTACK) - categories.TECH1} },
             { UCBC, 'HaveLessThanUnitsWithCategory', { 8, 'TRANSPORTFOCUS TECH2' } },
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -721,7 +740,7 @@ BuilderGroup {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.ANTIAIR * categories.TECH3} },
-			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.TECH3 * (categories.BOMBER + categories.GROUNDATTACK)} },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MOBILE * categories.AIR * categories.TECH3 * (categories.BOMBER + categories.GROUNDATTACK)} },
             { UCBC, 'HaveLessThanUnitsWithCategory', { 10, 'TRANSPORTFOCUS TECH2 TECH3' } },
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'TRANSPORTFOCUS' } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -1327,7 +1346,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, 'AntiAir', 'AntiSurface', 0.67}},
+            { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, 'AntiAir', 'AntiSurface', 1}},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, 'FACTORY TECH2 AIR, FACTORY TECH3 AIR' }},
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 5, 'AIR MOBILE BOMBER TECH2 TECH3' } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
@@ -1361,7 +1380,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, 'AntiAir', 'AntiSurface', 0.67}},
+            { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, 'AntiAir', 'AntiSurface', 1}},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH2 AIR, FACTORY TECH3 AIR' }},
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 3, 'AIR MOBILE BOMBER TECH1' } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
@@ -1395,7 +1414,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, 'AntiAir', 'AntiSurface', 0.67}},
+            { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, 'AntiAir', 'AntiSurface', 1}},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, 'FACTORY TECH2 AIR, FACTORY TECH3 AIR' }},
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 5, 'AIR MOBILE GROUNDATTACK TECH2 TECH3' } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
@@ -1429,7 +1448,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, 'AntiAir', 'AntiSurface', 0.67}},
+            { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.AIR - categories.SCOUT - categories.INTELLIGENCE, 'AntiAir', 'AntiSurface', 1}},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH2 AIR, FACTORY TECH3 AIR' }},
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 3, 'AIR MOBILE GROUNDATTACK TECH1' } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
@@ -1508,6 +1527,7 @@ BuilderGroup {
         BuilderConditions = {  
                 #{ MIBC, 'LessThanGameTime', { 600 } },      	
                 #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.MOBILE * categories.LAND - categories.ENGINEER } },
+				{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 3, 'AIR MOBILE GROUNDATTACK' } },
 				{ SBC, 'NoRushTimeCheck', { 0 }},
             },
         BuilderData = {
