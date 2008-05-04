@@ -86,3 +86,11 @@ PlatoonTemplate {
         },
     }
 }
+
+PlatoonTemplate {
+    Name = 'T4SatelliteExperimentalSorian',
+    Plan = 'SatelliteAISorian',
+    GlobalSquads = {
+        { categories.SATELLITE, 1, 1, 'attack', 'none' },
+    }
+}

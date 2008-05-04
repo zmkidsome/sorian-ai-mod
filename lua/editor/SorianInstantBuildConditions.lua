@@ -300,11 +300,12 @@ function EngineerNeedsAssistance(aiBrain, doesbool, locationType, category)
 	return false
 end
 
-function LessThanExpansionBases(aiBrain, checkNum)
+function LessThanExpansionBases(aiBrain)
 	local expBaseCount = 0
 	local numberofAIs = SUtils.GetNumberOfAIs(aiBrain)
     local startX, startZ = aiBrain:GetArmyStartPos()
 	local isWaterMap = false
+	local checkNum = tonumber(ScenarioInfo.Options.LandExpansionsAllowed) or 5
     local navalMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Naval Area', startX, startZ)
     if navalMarker then
         isWaterMap = true
@@ -320,12 +321,13 @@ function LessThanExpansionBases(aiBrain, checkNum)
 	return false
 end
 
-function GreaterThanExpansionBases(aiBrain, checkNum)
-	return not LessThanExpansionBases(aiBrain, checkNum)
+function GreaterThanExpansionBases(aiBrain)
+	return not LessThanExpansionBases(aiBrain)
 end
 
-function LessThanNavalBases(aiBrain, checkNum)
+function LessThanNavalBases(aiBrain)
 	local expBaseCount = 0
+	local checkNum = tonumber(ScenarioInfo.Options.NavalExpansionsAllowed) or 2
 	expBaseCount = aiBrain:GetManagerCount('Naval Area')
 	#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanNavalBases Total = '..expBaseCount)
 	if expBaseCount < checkNum then
@@ -334,8 +336,8 @@ function LessThanNavalBases(aiBrain, checkNum)
 	return false
 end
 
-function GreaterThanNavalBases(aiBrain, checkNum)
-	return not LessThanNavalBases(aiBrain, checkNum)
+function GreaterThanNavalBases(aiBrain)
+	return not LessThanNavalBases(aiBrain)
 end
 
 function T4BuildingCheck(aiBrain)

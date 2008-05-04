@@ -6,7 +6,9 @@ oldAIBrain = AIBrain
 AIBrain = Class(oldAIBrain) {
 	
     OnDefeat = function(self)
-		SUtils.AISendChat('enemies', ArmyBrains[self:GetArmyIndex()].Nickname, 'ilost')
+		if self.BrainType == 'AI' then
+			SUtils.AISendChat('enemies', ArmyBrains[self:GetArmyIndex()].Nickname, 'ilost')
+		end
         SetArmyOutOfGame(self:GetArmyIndex())
         table.insert( Sync.GameResult, { self:GetArmyIndex(), "defeat" } )
         import('/lua/SimUtils.lua').UpdateUnitCap()
@@ -625,6 +627,7 @@ AIBrain = Class(oldAIBrain) {
                     
                     #LOG('*AI DEBUG: Army ' .. v.Brain:GetArmyIndex() .. ' - Weighted enemy threat = ' .. threatWeight)
                     if not enemy or threatWeight > enemyStrength then
+						enemyStrength = threatWeight
                         enemy = v.Brain
                     end
                 end

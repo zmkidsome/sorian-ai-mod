@@ -81,11 +81,11 @@ BaseBuilderTemplate {
         'SorianBaseGuardAirFormBuilders',
 
         # ==== EXPERIMENTALS ==== #
-        #'SorianMobileLandExperimentalEngineers',
-        #'SorianMobileLandExperimentalForm',
+        'SorianMobileLandExperimentalEngineers',
+        'SorianMobileLandExperimentalForm',
         
-        #'SorianMobileAirExperimentalEngineers',
-        #'SorianMobileAirExperimentalForm',
+        'SorianMobileAirExperimentalEngineers',
+        'SorianMobileAirExperimentalForm',
 		
         # ==== ARTILLERY BUILDERS ==== #
         'SorianT3ArtilleryGroupExp',
@@ -110,8 +110,8 @@ BaseBuilderTemplate {
             SCU = 2,
         },
         FactoryCount = {
-            Land = 3,
-            Air = 2,
+            Land = 2,
+            Air = 1,
             Sea = 0,
             Gate = 0, #1,
         },

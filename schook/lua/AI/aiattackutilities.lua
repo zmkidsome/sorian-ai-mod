@@ -935,10 +935,13 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
         end
         
 		if transportLocation then
-		    local minThreat = aiBrain:GetThreatAtPosition( transportLocation, 0, true )
+		    local minThreat = aiBrain:GetThreatAtPosition( transportLocation, 0, true, 'AntiAir' )
+			local pos = platoon:GetPlatoonPosition()
+			local closest = VDist2Sq(pos[1], pos[3], transportLocation[1], transportLocation[3])
 		    if minThreat > 0 then
-		        local threatTable = aiBrain:GetThreatsAroundPosition(transportLocation, 1, true, 'Overall' )
-		        for threatIdx,threatEntry in threatTable do
+		        local threatTable = aiBrain:GetThreatsAroundPosition(transportLocation, 1, true, 'AntiAir' )
+		        for threatIdx,threatEntry in threatTable do		
+					local distance = VDist2Sq(pos[1], pos[3], threatEntry[1], threatEntry[2])
 		            if threatEntry[3] < minThreat then
                         # if it's land...
                         local terrain = GetTerrainHeight(threatEntry[1], threatEntry[2])
@@ -946,7 +949,16 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
                         if terrain >= surface then
                            minThreat = threatEntry[3]
                            transportLocation = {threatEntry[1], 0, threatEntry[2]}
-                       end
+						   closest = distance
+						end
+					elseif threatEntry[3] == minThreat and distance < closest then
+                        local terrain = GetTerrainHeight(threatEntry[1], threatEntry[2])
+                        local surface = GetSurfaceHeight(threatEntry[1], threatEntry[2])
+                        if terrain >= surface then
+                           minThreat = threatEntry[3]
+                           transportLocation = {threatEntry[1], 0, threatEntry[2]}
+						   closest = distance
+						end
                     end
                 end
             end

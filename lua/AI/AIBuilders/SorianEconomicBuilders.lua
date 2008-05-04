@@ -938,7 +938,7 @@ BuilderGroup {
         PlatoonTemplate = 'EngineerBuilderSorian',
         PlatoonAIPlan = 'ReclaimAISorian',
         Priority = 1,
-        InstanceCount = 10,
+        InstanceCount = 50,
         BuilderConditions = {
                 { SBC, 'ReclaimablesInArea', { 'LocationType', }},
             },
@@ -1043,26 +1043,26 @@ BuilderGroup {
     #        },
     #    }
     #},
-    #Builder {
-    #    BuilderName = 'Sorian T1 Engineer Assist Engineer',
-    #    PlatoonTemplate = 'EngineerAssist',
-    #    Priority = 500,
-    #    InstanceCount = 50,
-    #    BuilderConditions = {
-    #        { IBC, 'BrainNotLowPowerMode', {} },
-    #        { UCBC, 'LocationEngineersBuildingAssistanceGreater', { 'LocationType', 0, 'ALLUNITS' } },
-    #        { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
-    #    },
-    #    BuilderType = 'Any',
-    #    BuilderData = {
-    #        Assist = {
-    #            AssistLocation = 'LocationType',
-    #            PermanentAssist = true,
-    #            AssisteeType = 'Engineer',
-    #            Time = 30,
-    #        },
-    #    }
-    #},
+    Builder {
+        BuilderName = 'Sorian T1 Engineer Assist Engineer',
+        PlatoonTemplate = 'EngineerAssist',
+        Priority = 500,
+        InstanceCount = 50,
+        BuilderConditions = {
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { UCBC, 'LocationEngineersBuildingAssistanceGreater', { 'LocationType', 0, 'ALLUNITS' } },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                PermanentAssist = true,
+                AssisteeType = 'Engineer',
+                Time = 30,
+            },
+        }
+    },
     #Builder {
     #    BuilderName = 'Sorian T1 Engineer Assist Shield',
     #    PlatoonTemplate = 'EngineerAssist',
@@ -1294,7 +1294,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         PlatoonAIPlan = 'ReclaimAISorian',
         Priority = 1,
-        InstanceCount = 10,
+        InstanceCount = 50,
         BuilderConditions = {
                 { SBC, 'ReclaimablesInArea', { 'LocationType', }},
             },
@@ -1492,7 +1492,7 @@ BuilderGroup {
         PlatoonTemplate = 'T3EngineerBuilderOnlySorian',
         PlatoonAIPlan = 'ReclaimAISorian',
         Priority = 1,
-        InstanceCount = 10,
+        InstanceCount = 50,
         BuilderConditions = {
                 { SBC, 'ReclaimablesInArea', { 'LocationType', }},
             },
@@ -1657,13 +1657,13 @@ BuilderGroup {
     BuilderGroupName = 'SorianEngineerMassBuildersHighPri',
     BuildersType = 'EngineerBuilder',
     Builder {
-        BuilderName = 'Sorian T1ResourceEngineer 150',
+        BuilderName = 'Sorian T1ResourceEngineer 100', #150
         PlatoonTemplate = 'EngineerBuilderSorian',
         Priority = 1000,
         InstanceCount = 4,
         BuilderConditions = {
                 { UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
-                { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 150, -500, 1, 0, 'AntiSurface', 1 }},
+                { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 100, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',
         BuilderData = {

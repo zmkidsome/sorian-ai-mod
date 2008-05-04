@@ -76,7 +76,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Air Scout',
         PlatoonTemplate = 'T2AirScout',
-        Priority = 600,
+        Priority = 601,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.SCOUT * categories.AIR}},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 2, categories.TECH3 * categories.FACTORY * categories.AIR } },
@@ -106,7 +106,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Air Scout',
         PlatoonTemplate = 'T3AirScout',
-        Priority = 700,
+        Priority = 701,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.INTELLIGENCE * categories.AIR * categories.TECH3 }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.AIR * categories.FACTORY * categories.TECH3 } },
