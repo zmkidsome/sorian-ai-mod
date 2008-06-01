@@ -489,6 +489,43 @@ function CommanderThreadSorian(cdr, platoon)
 	aiBrain:BuildScoutLocationsSorian()
 	moveOnNext = false
 	moveWait = 0
+	
+	local cmdrDamaged = function(cdr, instigator)
+		local aiBrain = cdr:GetAIBrain()
+		if not instigator:IsDead() and instigator:GetPosition() then
+			#LOG('*AI DEBUG: cmdrDamaged in action!')
+			local attackPos = instigator:GetPosition()
+		#Bombard area
+			if not aiBrain.AttackPoints then
+				aiBrain.AttackPoints = {}
+			end
+			table.insert(aiBrain.AttackPoints,
+				{
+				Position = attackPos,
+				}
+			)
+			aiBrain:ForkThread(aiBrain.AttackPointsTimeout, attackPos)
+		#Set off base alert
+			table.insert(aiBrain.BaseMonitor.AlertsTable,
+				{
+				Position = attackPos,
+				Threat = 150,
+				}
+			)
+			aiBrain.BaseMonitor.AlertSounded = true
+			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, attackPos)
+			aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
+		#Add area to high prio scout list
+			table.insert(aiBrain.InterestList.HighPriority,
+				{
+				Position = attackPos,
+				LastScouted = GetGameTimeSeconds(),
+				}
+			)
+		end
+	end
+	import('/lua/ScenarioTriggers.lua').CreateUnitDamagedTrigger(cmdrDamaged, cdr, .2, -1)
+	
     while not cdr:IsDead() do
 		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Loop')
 		#AIAttackUtils.DrawPathGraph()
@@ -1115,6 +1152,12 @@ function ScathisBehaviorSorian(self)
     end
 end
 
+function InWaterCheck(platoon)
+	local t4Pos = platoon:GetPlatoonPosition()
+	local inWater = GetTerrainHeight(t4Pos[1], t4Pos[3]) < GetSurfaceHeight(t4Pos[1], t4Pos[3])
+	return inWater
+end
+
 function FatBoyBehaviorSorian(self)   
 	local aiBrain = self:GetBrain()
 	local platoonUnits = self:GetPlatoonUnits()
@@ -1124,10 +1167,12 @@ function FatBoyBehaviorSorian(self)
     local targetUnit = false
     local lastBase = false
     local airUnit = false #EntityCategoryContains(categories.AIR, experimental)
+	local useMove = true
 	
     #Find target loop
     while aiBrain:PlatoonExists(self) do #experimental and not experimental:IsDead() do
 		self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
+		useMove = InWaterCheck(self)
 		
         if lastBase then
             targetUnit, lastBase = WreckBaseSorian(self, lastBase)
@@ -1138,20 +1183,26 @@ function FatBoyBehaviorSorian(self)
         
         if targetUnit then
             IssueClearCommands(platoonUnits)
-            #IssueAttack(platoonUnits, targetUnit)
-			IssueMove(platoonUnits, targetUnit:GetPosition())
+			if useMove then
+				IssueMove(platoonUnits, targetUnit:GetPosition())
+			else
+				IssueAggressiveMove(platoonUnits, targetUnit:GetPosition())
+			end
         end
         
         #Walk to and kill target loop
-        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() do #not experimental:IsDead() and not experimental:IsIdleState() do
+        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and useMove == InWaterCheck(self) do #not experimental:IsDead() and not experimental:IsIdleState() do
 			self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
-			
+			useMove = InWaterCheck(self)
             local nearCommander = CommanderOverrideCheckSorian(self)
             
             if nearCommander and nearCommander ~= targetUnit then
                 IssueClearCommands(platoonUnits)
-                #IssueAttack(platoonUnits, nearCommander)
-				IssueMove(platoonUnits, nearCommander:GetPosition())
+				if useMove then
+					IssueMove(platoonUnits, nearCommander:GetPosition())
+				else
+					IssueAggressiveMove(platoonUnits, nearCommander:GetPosition())
+				end
                 targetUnit = nearCommander
             end
             
@@ -1171,13 +1222,18 @@ function FatBoyBehaviorSorian(self)
             #Kill shields loop
             while closestBlockingShield and targetUnit and not targetUnit:IsDead() do
 				self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
+				useMove = InWaterCheck(self)
                 IssueClearCommands(platoonUnits)
-                #IssueAttack(platoonUnits, closestBlockingShield)
-				IssueMove(platoonUnits, closestBlockingShield:GetPosition())
+				if useMove then
+					IssueMove(platoonUnits, closestBlockingShield:GetPosition())
+				else
+					IssueAggressiveMove(platoonUnits, closestBlockingShield:GetPosition())
+				end
                 
                 #Wait for shield to die loop
-                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) do #not experimental:IsDead() do
+                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and useMove == InWaterCheck(self) do #not experimental:IsDead() do
 					self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
+					useMove = InWaterCheck(self)
                     WaitSeconds(1)
                 end             
 

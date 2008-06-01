@@ -10,6 +10,30 @@
 ### Engineer platoons to be formed
 
 PlatoonTemplate {
+    Name = 'CommanderAssistSorian',
+    Plan = 'SorianManagerEngineerAssistAI',
+    GlobalSquads = {
+        { categories.COMMAND, 1, 1, 'support', 'None' },
+    },        
+}
+
+PlatoonTemplate {
+    Name = 'EngineerAssistSorian',
+    Plan = 'SorianManagerEngineerAssistAI',
+    GlobalSquads = {
+        { categories.ENGINEER * categories.TECH1, 1, 1, 'support', 'None' }
+    },        
+}
+
+PlatoonTemplate {
+    Name = 'T3EngineerAssistSorian',
+    Plan = 'SorianManagerEngineerAssistAI',
+    GlobalSquads = {
+        { categories.ENGINEER * categories.TECH3 + categories.SUBCOMMANDER, 1, 1, 'support', 'None' }
+    },        
+}
+
+PlatoonTemplate {
     Name = 'CommanderBuilderSorian',
     Plan = 'EngineerBuildAISorian',
     GlobalSquads = {
@@ -27,7 +51,7 @@ PlatoonTemplate {
 
 PlatoonTemplate {
     Name = 'T2EngineerAssistSorian',
-    Plan = 'ManagerEngineerAssistAI',
+    Plan = 'SorianManagerEngineerAssistAI',
     GlobalSquads = {
         { categories.ENGINEER * categories.TECH2 - categories.ENGINEERSTATION, 1, 1, 'support', 'None' }
     },        

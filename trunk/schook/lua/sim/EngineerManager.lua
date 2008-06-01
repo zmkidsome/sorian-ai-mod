@@ -293,6 +293,19 @@ EngineerManager = Class(BuilderManager) {
                     end
                     
                     import('/lua/scenariotriggers.lua').CreateUnitDestroyedTrigger(deathFunction, unit )
+					
+                    local newlyCapturedFunction = function(unit, captor)
+                        local aiBrain = captor:GetAIBrain()
+						#LOG('*AI DEBUG: ENGINEER: I was Captured by '..aiBrain.Nickname..'!')
+						if aiBrain.BuilderManagers then
+							local engManager = aiBrain.BuilderManagers[captor.BuilderManagerData.LocationType].EngineerManager
+							if engManager then
+								engManager:AddUnit(unit)
+							end
+						end
+                    end
+                    
+                    import('/lua/scenariotriggers.lua').CreateUnitCapturedTrigger(nil, newlyCapturedFunction, unit )
 
                     if EntityCategoryContains( categories.ENGINEER, unit ) then
                         local unitConstructionFinished = function(unit, finishedUnit)
@@ -571,7 +584,7 @@ EngineerManager = Class(BuilderManager) {
         end
         self.Brain:RemoveConsumption(self.LocationType, unit)
     end,
-    
+	
     EngineerWaiting = function( self, unit )
         WaitSeconds(5)
         self:AssignEngineerTask( unit )
@@ -688,7 +701,7 @@ EngineerManager = Class(BuilderManager) {
     end,
     
     ManagerLoopBody = function(self,builder,bType)
-        if builder.OldPriority then
+        if builder.OldPriority and not builder.SetByStrat then
             builder:ResetPriority()
         end
         BuilderManager.ManagerLoopBody(self,builder,bType)

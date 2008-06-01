@@ -118,12 +118,34 @@ BuilderManager = Class {
         end
         return false
     end,
+	
+	GetActivePriority = function(self, builderName)
+        for _,bType in self.BuilderData do
+            for _,builder in bType.Builders do
+                if builder:GetBuilderName() == builderName then
+                    return builder:GetActivePriority()
+                end
+            end
+        end
+        return false
+    end,
     
     SetBuilderPriority = function(self,builderName,priority,temporary)
         for _,bType in self.BuilderData do
             for _,builder in bType.Builders do
                 if builder:GetBuilderName() == builderName then
                     builder:SetPriority(priority, temporary)
+                    return
+                end
+            end
+        end
+    end,
+	
+    ResetBuilderPriority = function(self,builderName)
+        for _,bType in self.BuilderData do
+            for _,builder in bType.Builders do
+                if builder:GetBuilderName() == builderName then
+                    builder:ResetPriority()
                     return
                 end
             end

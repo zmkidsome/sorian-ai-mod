@@ -1,6 +1,7 @@
 do
 local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
 local SUtils = import('/lua/AI/sorianutilities.lua')
+local StratManager = import('/lua/sim/StrategyManager.lua')
 oldAIBrain = AIBrain
 
 AIBrain = Class(oldAIBrain) {
@@ -27,10 +28,11 @@ AIBrain = Class(oldAIBrain) {
 				v.EngineerManager:SetEnabled(false)
 				v.FactoryManager:SetEnabled(false)
 				v.PlatoonFormManager:SetEnabled(false)
+				v.StrategyManager:SetEnabled(false)
 				v.FactoryManager:Destroy()
                 v.PlatoonFormManager:Destroy()
                 v.EngineerManager:Destroy()
-                #v.StrategyManager:Destroy()
+                v.StrategyManager:Destroy()
             end
         end
         if self.Trash then
@@ -96,6 +98,30 @@ AIBrain = Class(oldAIBrain) {
 		end
     end,
 	
+    AddBuilderManagers = function(self, position, radius, baseName, useCenter )
+        self.BuilderManagers[baseName] = {
+            FactoryManager = FactoryManager.CreateFactoryBuilderManager(self, baseName, position, radius, useCenter),
+            PlatoonFormManager = PlatoonFormManager.CreatePlatoonFormManager(self, baseName, position, radius, useCenter),
+            EngineerManager = EngineerManager.CreateEngineerManager(self, baseName, position, radius),
+			StrategyManager = StratManager.CreateStrategyManager(self, baseName, position, radius),
+
+            # Table to track consumption
+            MassConsumption = {
+                Resources = { Units = {}, Drain = 0, },
+                Units = { Units = {}, Drain = 0, },
+                Defenses = { Units = {}, Drain = 0, },
+                Upgrades = { Units = {}, Drain = 0, },
+                Engineers = { Units = {}, Drain = 0, },
+                TotalDrain = 0,
+            },
+
+            BuilderHandles = {},
+            
+            Position = position,
+        }
+        self.NumBases = self.NumBases + 1
+    end,
+	
 	DeadBaseMonitor = function(self)
 		while true do
 			WaitSeconds(5)
@@ -105,9 +131,11 @@ AIBrain = Class(oldAIBrain) {
 						v.EngineerManager:SetEnabled(false)
 						v.FactoryManager:SetEnabled(false)
 						v.PlatoonFormManager:SetEnabled(false)
+						v.StrategyManager:SetEnabled(false)
 						v.FactoryManager:Destroy()
 						v.PlatoonFormManager:Destroy()
 						v.EngineerManager:Destroy()
+						v.StrategyManager:Destroy()
 						self.BuilderManagers[k] = nil
 						self.NumBases = self.NumBases - 1
 					elseif table.getn(AIUtils.GetOwnUnitsAroundPoint( self, categories.ENGINEER, v.EngineerManager:GetLocationCoords(), v.EngineerManager:GetLocationRadius() )) < 1 then

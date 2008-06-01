@@ -238,6 +238,8 @@ function CheckBlockingTerrain(pos, targetPos, firingArc, turretPitch)
 			end
 			if GetSurfaceHeight( nextpos[1], nextpos[3] ) > nextposHeight then
 				nextposHeight = GetSurfaceHeight( nextpos[1], nextpos[3] )
+			else
+				nextposHeight = nextposHeight + .5
 			end
 			if GetSlope(lastPos, nextpos, lastPosHeight, nextposHeight) > turretPitch then
 				return true
@@ -329,7 +331,7 @@ function GetGuards(aiBrain, Unit)
 end
 
 function Nuke(aiBrain)
-    local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'SPECIALLOWPRI', 'ALLUNITS' }
+    local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE FACTORY TECH3', 'STRUCTURE STRATEGIC TECH2', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY TECH2', 'STRUCTURE', 'SPECIALLOWPRI', 'ALLUNITS' }
 	local maxFire = false
 	local Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE, true )
 	local nukeCount = 0
@@ -367,7 +369,7 @@ function Nuke(aiBrain)
 					aiBrain.LastTaunt = GetGameTimeSeconds()
 					AISendChat(aitarget, ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'nuketaunt')
 				end
-				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, tarPosition, 100, 'Enemy' )
+				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, tarPosition, 80, 'Enemy' )
 				for k, v in Nukes do
 					if v:GetNukeSiloAmmoCount() > 0 and not fired[v] then
 						IssueNuke( {v}, tarPosition )
@@ -494,4 +496,12 @@ function AIHasAlly(army)
 		end
 	end
 	return false
+end
+
+function TimeConvert(temptime)
+	hours = math.floor(temptime / 3600)
+	minutes = math.floor(temptime/60)
+	seconds = math.floor(math.mod(temptime, 60))
+	returntext = tostring(hours)..':'..tostring(minutes)..':'..tostring(seconds)
+	return returntext
 end

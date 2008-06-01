@@ -187,7 +187,7 @@ function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
     
     # if we're here, we haven't used transports and we can path to the destination
     if result then
-        local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Amphibious', unit:GetPosition(), destination)
+        local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Amphibious', unit:GetPosition(), destination, 50)
         if path then
             local pathSize = table.getn(path)
             # move to way points (but not to destination... leave that for the final command)
@@ -284,6 +284,44 @@ function AIFindPingTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPr
 	return false
 end
 
+# We use both Blank Marker that are army names as well as the new Large Expansion Area to determine big expansion bases
+function AIFindStartLocationNeedsEngineerSorian( aiBrain, locationType, radius, tMin, tMax, tRings, tType, eng)
+    local pos = aiBrain:PBMGetLocationCoords( locationType )
+    if not pos then
+        return false
+    end
+	local validStartPos = {}
+    local validPos = AIGetMarkersAroundLocation( aiBrain, 'Large Expansion Area', pos, radius, tMin, tMax, tRings, tType)
+
+    local positions = AIGetMarkersAroundLocation( aiBrain, 'Blank Marker', pos, radius, tMin, tMax, tRings, tType)
+    local startX, startZ = aiBrain:GetArmyStartPos()
+    for k,v in positions do
+        if string.sub(v.Name,1,5) == 'ARMY_' then
+            if startX != v.Position[1] and startZ != v.Position[3] then
+                table.insert( validStartPos, v )
+            end
+        end
+    end
+    
+    local retPos, retName
+    if eng then
+		if table.getn(validStartPos) > 0 then
+			retPos, retName = AIFindMarkerNeedsEngineer( aiBrain, eng:GetPosition(), radius, tMin, tMax, tRings, tType, validStartPos )
+		end
+		if not retPos then
+			retPos, retName = AIFindMarkerNeedsEngineer( aiBrain, eng:GetPosition(), radius, tMin, tMax, tRings, tType, validPos )
+		end
+    else
+		if table.getn(validStartPos) > 0 then
+			retPos, retName = AIFindMarkerNeedsEngineer( aiBrain, pos, radius, tMin, tMax, tRings, tType, validStartPos )
+		end
+		if not retPos then
+			retPos, retName = AIFindMarkerNeedsEngineer( aiBrain, pos, radius, tMin, tMax, tRings, tType, validPos )
+		end
+    end
+    return retPos, retName
+end
+
 function AIGetAttackPointsAroundLocation( aiBrain, pos, maxRange )
     local markerList = {}
 
@@ -365,7 +403,7 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
         for num, unit in targetUnits do
             if not unit:IsDead() and EntityCategoryContains( category, unit ) then
                 local unitPos = unit:GetPosition()
-				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, unitPos, 100, 'Enemy' )
+				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, unitPos, 80, 'Enemy' )
 				local dupTarget = false
 				for x,z in oldTarget do
 					if unit == z or (not z:IsDead() and Utils.XZDistanceTwoVectors( z:GetPosition(), unitPos ) < 30) then
@@ -388,7 +426,7 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
 					for i=-1,1 do
 						for j=-1,1 do
 							if i ~= 0 and j~= 0 then
-								local pos = {unitPos[1] + (i * 18), 0, unitPos[3] + (j * 18)}
+								local pos = {unitPos[1] + (i * 15), 0, unitPos[3] + (j * 15)}
 								antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, pos, 80, 'Enemy' )
 								if (antiNukes + 1 < nukeCount or antiNukes == 0) then
 									retUnit = unit
@@ -408,6 +446,33 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
         end
     end
     return false
+end
+
+function GetOwnUnitsAroundPointSorian( aiBrain, category, location, radius, min, max, rings, tType, minRadius )
+    local units = aiBrain:GetUnitsAroundPoint( category, location, radius, 'Ally' )
+    local index = aiBrain:GetArmyIndex()
+	local minDist = minRadius * minRadius
+    local retUnits = {}
+    local checkThreat = false
+    if min and max and rings then
+        checkThreat = true
+    end
+    for k,v in units do
+        if not v:IsDead() and not v:IsBeingBuilt() and v:GetAIBrain():GetArmyIndex() == index then
+			local loc = v:GetPosition()
+			if VDist2Sq(location[1], location[3], loc[1], loc[3]) > minDist then
+				if checkThreat then
+					local threat = aiBrain:GetThreatAtPosition( v:GetPosition(), rings, true, tType or 'Overall' )
+					if threat >= min and threat <= max then
+						table.insert(retUnits, v)
+					end
+				else
+					table.insert(retUnits, v)
+				end
+			end
+        end
+    end
+    return retUnits
 end
 
 function AIFindExpansionPointNeedsStructure( aiBrain, locationType, radius, category, markerRadius, unitMax, tMin, tMax, tRings, tType)

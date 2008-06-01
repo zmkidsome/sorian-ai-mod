@@ -14,6 +14,15 @@ local Utils = import('/lua/utilities.lua')
 local SUtils = import('/lua/AI/sorianutilities.lua')
 local MABC = import('/lua/editor/MarkerBuildConditions.lua')
 
+function IsWaterMap(aiBrain)
+	local startX, startZ = aiBrain:GetArmyStartPos()
+	local navalMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Naval Area', startX, startZ)
+	if navalMarker then
+		return true
+	end
+	return false
+end
+
 ##############################################################################################################
 # function: ReclaimablesInArea = BuildCondition   doc = "Please work function docs."
 #

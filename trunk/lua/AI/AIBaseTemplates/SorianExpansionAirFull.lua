@@ -47,6 +47,8 @@ BaseBuilderTemplate {
 		'SorianT2ShieldsExpansion',
 		'SorianT3ShieldsExpansion',
 		'SorianAirStagingExpansion',
+		
+		'SorianMassAdjacencyDefenses',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
@@ -112,7 +114,7 @@ BaseBuilderTemplate {
         },
         FactoryCount = {
             Land = 1,
-            Air = 2,
+            Air = 3,
             Sea = 0,
             Gate = 0, #1,
         },

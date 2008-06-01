@@ -13,8 +13,8 @@ BaseBuilderTemplate {
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
-        'SorianT1NavalUpgradeBuilders',
-        'SorianT2NavalUpgradeBuilders',
+        'SorianT1BalancedUpgradeBuildersExpansion',
+        'SorianT2BalancedUpgradeBuildersExpansion',
         
         # Engineer Builders
         'SorianEngineerFactoryBuilders',
@@ -47,6 +47,8 @@ BaseBuilderTemplate {
 		'SorianT2ShieldsExpansion',
 		'SorianT3ShieldsExpansion',
 		'SorianAirStagingExpansion',
+		
+		'SorianMassAdjacencyDefenses',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',

@@ -26,12 +26,17 @@ local SBC = '/lua/editor/SorianBuildConditions.lua'
 local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
 
 function SeaAttackCondition(aiBrain, locationType, targetNumber)
+	local UC = import('/lua/editor/UnitCountBuildConditions.lua')
     local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
-
     local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
 	if not engineerManager then
         return false
     end
+	if aiBrain:GetCurrentEnemy() then
+		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+		targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiSurface' )
+		targetNumber = targetNumber + aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiSub' )
+	end
 
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
@@ -40,6 +45,12 @@ function SeaAttackCondition(aiBrain, locationType, targetNumber)
     local subThreat = pool:GetPlatoonThreat( 'AntiSub', categories.MOBILE * categories.NAVAL, position, radius )
     if ( surfaceThreat + subThreat ) > targetNumber then
         return true
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH3) > 0 and ( surfaceThreat + subThreat ) > 1125 then #225
+		return true
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH2) > 0 and ( surfaceThreat + subThreat ) > 280 then #40
+		return true
+	elseif ( surfaceThreat + subThreat ) > 54 then #6
+		return true
     end
     return false
 end
@@ -207,7 +218,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Naval Nuke Sub',
         PlatoonTemplate = 'T3SeaNukeSub',
-        Priority = 700,
+        Priority = 0, #700,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
