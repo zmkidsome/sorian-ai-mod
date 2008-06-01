@@ -46,6 +46,8 @@ BaseBuilderTemplate {
 		'SorianT2ShieldsExpansion',
 		'SorianT3ShieldsExpansion',
 		'SorianAirStagingExpansion',
+		
+		'SorianMassAdjacencyDefenses',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',

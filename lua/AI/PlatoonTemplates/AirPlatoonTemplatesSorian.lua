@@ -2,7 +2,8 @@ PlatoonTemplate {
     Name = 'AirAttackSorian',
     Plan = 'StrikeForceAISorian',
     GlobalSquads = {
-        { categories.MOBILE * categories.AIR - categories.EXPERIMENTAL - categories.TRANSPORTFOCUS - categories.ANTINAVY, 1, 100, 'Attack', 'GrowthFormation' }
+        #{ categories.MOBILE * categories.AIR - categories.EXPERIMENTAL - categories.TRANSPORTFOCUS - categories.ANTINAVY, 1, 100, 'Attack', 'GrowthFormation' }
+        { categories.AIR * categories.MOBILE * categories.ANTIAIR * ( categories.TECH1 + categories.TECH2 + categories.TECH3 ) - categories.BOMBER - categories.TRANSPORTFOCUS - categories.EXPERIMENTAL, 1, 100, 'Attack', 'GrowthFormation' },
     },
 }
 
@@ -12,6 +13,15 @@ PlatoonTemplate {
     GlobalSquads = {
         { categories.MOBILE * categories.AIR * categories.BOMBER - categories.EXPERIMENTAL - categories.ANTINAVY, 1, 100, 'Attack', 'GrowthFormation' },
         #{ categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.EXPERIMENTAL - categories.BOMBER - categories.TRANSPORTFOCUS, 0, 10, 'Attack', 'GrowthFormation' },
+    }
+}
+
+PlatoonTemplate {
+    Name = 'BomberAttackSorianBig',
+    Plan = 'StrikeForceAISorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.AIR * (categories.BOMBER + categories.GROUNDATTACK) - categories.EXPERIMENTAL - categories.ANTINAVY, 10, 100, 'Attack', 'GrowthFormation' },
+        #{ categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.EXPERIMENTAL - categories.BOMBER - categories.TRANSPORTFOCUS, 1, 10, 'Attack', 'GrowthFormation' },
     }
 }
 
@@ -103,6 +113,24 @@ PlatoonTemplate {
         },
         Seraphim = {
             { 'xsa0202', 1, 1, 'attack', 'None' },
+        },
+    },
+}
+
+PlatoonTemplate {
+    Name = 'T3AirBomberSpecialSorian',
+    FactionSquads = {
+        UEF = {
+            { 'uea0304', 1, 1, 'attack', 'None' },
+        },
+        Aeon = {
+            { 'xaa0305', 1, 1, 'attack', 'None' },
+        },
+        Cybran = {
+            { 'ura0304', 1, 1, 'attack', 'None' },
+        },
+        Seraphim = {
+            { 'xsa0304', 1, 1, 'attack', 'None' },
         },
     },
 }

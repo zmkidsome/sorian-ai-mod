@@ -20,16 +20,43 @@ local Builder = import('/lua/sim/Builder.lua').Builder
 #}
 
 StrategyBuilder = Class(Builder) {
-    Create = function(self,brain,data)
-        Builder.Create(self,brain,data)
+    Create = function(self,brain,data,locationType)
+        Builder.Create(self,brain,data,locationType)
         return true
     end,
-    
+	
+	GetActivateBuilders = function(self)
+		if Builders[self.BuilderName].AddBuilders then
+			return Builders[self.BuilderName].AddBuilders
+		end
+		return false
+	end,
+	
+	GetRemoveBuilders = function(self)
+		if Builders[self.BuilderName].RemoveBuilders then
+			return Builders[self.BuilderName].RemoveBuilders
+		end
+		return false
+	end,
+	
+	GetStrategyTime = function(self)
+        if Builders[self.BuilderName].StrategyTime then
+            return Builders[self.BuilderName].StrategyTime
+        end
+        return false
+	end,
+	
+	IsInterruptStrategy = function(self)
+		if Builders[self.BuilderName].InterruptStrategy then
+			return true
+		end
+		return false
+	end,
 }
 
-function CreateStrategy(brain, data)
+function CreateStrategy(brain, data, locationType)
     local builder = StrategyBuilder()
-    if builder:Create(brain, data) then
+    if builder:Create(brain, data, locationType) then
         return builder
     end
     return false

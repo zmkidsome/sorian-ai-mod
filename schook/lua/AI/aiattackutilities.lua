@@ -712,7 +712,7 @@ function AIPlatoonSquadAttackVectorSorian( aiBrain, platoon, bAggro )
         
         GetMostRestrictiveLayer(platoon)
         # check if we can path to here safely... give a large threat weight to sort by threat first
-        local path, reason = PlatoonGenerateSafePathTo(aiBrain, platoon.MovementLayer, platoon:GetPlatoonPosition(), attackPos, platoon.PlatoonData.NodeWeight or 10 )
+        local path, reason = PlatoonGenerateSafePathTo(aiBrain, platoon.MovementLayer, platoon:GetPlatoonPosition(), attackPos, platoon.PlatoonData.NodeWeight or 50 )
     
         # clear command queue
         platoon:Stop()    

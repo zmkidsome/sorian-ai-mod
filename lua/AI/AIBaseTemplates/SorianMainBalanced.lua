@@ -73,6 +73,8 @@ BaseBuilderTemplate {
         'SorianT3NukeDefenses',
         'SorianT3NukeDefenseBehaviors',
 		'SorianMiscDefensesEngineerBuilders',
+		
+		'SorianMassAdjacencyDefenses',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',
@@ -142,6 +144,28 @@ BaseBuilderTemplate {
         
         'SorianSatelliteExperimentalEngineers',
         'SorianSatelliteExperimentalForm',
+		
+		# ======== Strategies ======== #
+		'SorianHeavyAirStrategy',
+		'SorianBigAirGroup',
+		'SorianJesterRush',
+		'SorianNukeRush',
+		'SorianT3ArtyRush',
+		'SorianT2ACUSnipe',
+		
+		# ===== Strategy Platoons ===== #
+		'SorianT1BomberHighPrio',
+		'SorianT2BomberHighPrio',
+		'SorianT3BomberHighPrio',
+		'SorianT3BomberSpecialHighPrio',
+		'SorianT1GunshipHighPrio',
+		
+		'SorianBomberLarge',
+		'SorianBomberBig',
+		'SorianGunShipLarge',
+		'SorianNukeBuildersHighPrio',
+		'SorianT3ArtyBuildersHighPrio',
+		'SorianT2FirebaseBuildersHighPrio',
     },
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',

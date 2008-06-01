@@ -32,7 +32,7 @@ BaseBuilderTemplate {
         'SorianEngineerEnergyBuilders',
         
         # Build Mass high pri at this base
-        'SorianEngineerMassBuildersHighPri',
+        'SorianEngineerMassBuilders - Naval',
         
         # Extractors
         'SorianTime Exempt Extractor Upgrades',
@@ -48,6 +48,8 @@ BaseBuilderTemplate {
         'SorianT2ACUShields',
         'SorianT3ACUShields',
         'SorianT3ACUNukeDefenses',
+		
+		'SorianMassAdjacencyDefenses',
         
         # ==== EXPANSION ==== #
         'SorianEngineerExpansionBuildersFull - Naval',
@@ -127,6 +129,28 @@ BaseBuilderTemplate {
         
         'SorianSatelliteExperimentalEngineers',
         'SorianSatelliteExperimentalForm',
+		
+		# ======== Strategies ======== #
+		'SorianHeavyAirStrategy',
+		'SorianBigAirGroup',
+		'SorianJesterRush',
+		'SorianNukeRush',
+		'SorianT3ArtyRush',
+		'SorianT2ACUSnipe',
+		
+		# ===== Strategy Platoons ===== #
+		'SorianT1BomberHighPrio',
+		'SorianT2BomberHighPrio',
+		'SorianT3BomberHighPrio',
+		'SorianT3BomberSpecialHighPrio',
+		'SorianT1GunshipHighPrio',
+		
+		'SorianBomberLarge',
+		'SorianBomberBig',
+		'SorianGunShipLarge',
+		'SorianNukeBuildersHighPrio',
+		'SorianT3ArtyBuildersHighPrio',
+		'SorianT2FirebaseBuildersHighPrio',
     },
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',
@@ -151,9 +175,9 @@ BaseBuilderTemplate {
             Gate = 1,
         },
         MassToFactoryValues = {
-            T1Value = 6, #8
-            T2Value = 15, #20
-            T3Value = 22.5, #27.5 
+            T1Value = 8, #6
+            T2Value = 20, #15
+            T3Value = 40, #22.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)

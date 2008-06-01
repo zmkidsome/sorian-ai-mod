@@ -27,6 +27,9 @@ BaseBuilderTemplate {
         # Extractor building        
         'SorianEngineerMassBuildersLowerPri',
 		
+        # Build some power, but not much
+        'SorianEngineerEnergyBuildersExpansions',
+		
         # ==== DEFENSES ==== #
         'SorianT1LightDefenses',
         'SorianT2LightDefenses',
@@ -36,6 +39,8 @@ BaseBuilderTemplate {
 		#'SorianT3ArtilleryFormBuilders',
 		#'SorianT4ArtilleryFormBuilders',
 		'SorianAirStagingExpansion',
+		
+		'SorianMassAdjacencyDefenses',
         
         # ==== LAND UNIT BUILDERS ==== #
         'SorianT1LandFactoryBuilders',

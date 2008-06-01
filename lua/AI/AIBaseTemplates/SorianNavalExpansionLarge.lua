@@ -13,8 +13,8 @@ BaseBuilderTemplate {
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
-        'SorianT1BalancedUpgradeBuildersExpansion',
-        'SorianT2BalancedUpgradeBuildersExpansion',
+        'SorianT1NavalUpgradeBuilders',
+        'SorianT2NavalUpgradeBuilders',
 		
         # Pass engineers to main as needed
         #'Engineer Transfers',
@@ -73,9 +73,9 @@ BaseBuilderTemplate {
             Gate = 0,
         },
         MassToFactoryValues = {
-            T1Value = 6, #8
-            T2Value = 15, #20
-            T3Value = 22.5, #27.5 
+            T1Value = 8, #6
+            T2Value = 20, #15
+            T3Value = 30, #22.5 
         },
     },
     ExpansionFunction = function(aiBrain, location, markerType)

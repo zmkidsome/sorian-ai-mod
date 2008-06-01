@@ -118,7 +118,7 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian T3EngineerAssistBuildHLRA',
-        PlatoonTemplate = 'T3EngineerAssist',
+        PlatoonTemplate = 'T3EngineerAssistSorian',
         Priority = 850,
         InstanceCount = 4,
         BuilderConditions = {
@@ -213,7 +213,7 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian T4EngineerAssistBuildHLRA',
-        PlatoonTemplate = 'T3EngineerAssist',
+        PlatoonTemplate = 'T3EngineerAssistSorian',
         Priority = 850,
         InstanceCount = 8,
         BuilderConditions = {
@@ -281,7 +281,7 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { EBC, 'GreaterThanEconIncome', {15, 750}},
 			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
-            { SIBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
         },
@@ -306,9 +306,10 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.NUKE * categories.STRUCTURE}},
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3 } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
-            { EBC, 'GreaterThanEconIncome', {15, 750}},
-            { SIBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+            #{ EBC, 'GreaterThanEconIncome', {15, 750}},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
 			{ SBC, 'MapGreaterThan', { 500, 500 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
@@ -326,12 +327,12 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Build Nuke',
-        PlatoonTemplate = 'T3EngineerAssist',
+        PlatoonTemplate = 'T3EngineerAssistSorian',
         Priority = 850,
         InstanceCount = 4,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.STRUCTURE * categories.NUKE}},
-            { SIBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Any',

@@ -394,7 +394,7 @@ Platoon = Class(sorianoldPlatoon) {
         local minRadius = weapon.MinRadius
         unit:SetAutoMode(true)
 		local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 
-		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'MASSPRODUCTION', ' ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'ALLUNITS' }
+		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'TECH3 MASSPRODUCTION', 'TECH2 ENERGYPRODUCTION', 'TECH2 MASSPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'ALLUNITS' }
         self:SetPrioritizedTargetList( 'Attack', { categories.STRUCTURE * categories.ARTILLERY * categories.EXPERIMENTAL, categories.STRUCTURE * categories.NUKE * categories.EXPERIMENTAL, categories.EXPERIMENTAL * categories.ORBITALSYSTEM, categories.STRUCTURE * categories.ARTILLERY * categories.TECH3, 
 		categories.STRUCTURE * categories.NUKE * categories.TECH3, categories.EXPERIMENTAL * categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.COMMAND, categories.EXPERIMENTAL * categories.MOBILE * categories.LAND, categories.TECH3 * categories.MASSFABRICATION,
 		categories.TECH3 * categories.ENERGYPRODUCTION, categories.MASSPRODUCTION, categories.ENERGYPRODUCTION, categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.ALLUNITS } )
@@ -488,6 +488,8 @@ Platoon = Class(sorianoldPlatoon) {
         self:Stop()
         local aiBrain = self:GetBrain()
         local armyIndex = aiBrain:GetArmyIndex()
+		local location = self.PlatoonData.LocationType or 'MAIN'
+		local radius = self.PlatoonData.Radius or 100
         local target
         local blip
 		local hadtarget = false
@@ -507,7 +509,7 @@ Platoon = Class(sorianoldPlatoon) {
                     self:AggressiveMoveToLocation( table.copy(target:GetPosition()) )
 					hadtarget = true
 				elseif not target and hadtarget then
-					for k,v in AIUtils.GetBasePatrolPoints(aiBrain, self.PlatoonData.Location or 'MAIN', self.PlatoonData.Radius or 100, 'Air') do
+					for k,v in AIUtils.GetBasePatrolPoints(aiBrain, location, radius, 'Air') do
 						self:Patrol(v)
 					end
 					hadtarget = false
@@ -1293,6 +1295,91 @@ Platoon = Class(sorianoldPlatoon) {
         self:PlatoonDisband()
     end,
 	
+    SorianManagerEngineerAssistAI = function(self)
+        local aiBrain = self:GetBrain()
+		local assistData = self.PlatoonData.Assist
+		local beingBuilt = false
+        self:SorianEconAssistBody()
+        WaitSeconds(self.PlatoonData.AssistData.Time or 60)
+		local eng = self:GetPlatoonUnits()[1]
+		if eng:GetGuardedUnit() then
+			beingBuilt = eng:GetGuardedUnit()
+		end
+		if beingBuilt and assistData.AssistUntilFinished then
+			while beingBuilt:IsUnitState('Building') or beingBuilt:IsUnitState('Upgrading') do
+				WaitSeconds(5)
+			end
+		end
+        if not aiBrain:PlatoonExists(self) then
+            return
+        end
+        self.AssistPlatoon = nil
+        self:PlatoonDisband()
+    end,
+    
+    SorianEconAssistBody = function(self)
+        local eng = self:GetPlatoonUnits()[1]
+        if not eng then
+            self:PlatoonDisband()
+            return
+        end
+        local aiBrain = self:GetBrain()
+        local assistData = self.PlatoonData.Assist
+        local assistee = false
+        
+        eng.AssistPlatoon = self
+        
+        if not assistData.AssistLocation or not assistData.AssisteeType then
+            WARN('*AI WARNING: Disbanding Assist platoon that does not have either AssistLocation or AssisteeType')
+            self:PlatoonDisband()
+        end
+        
+        local beingBuilt = assistData.BeingBuiltCategories or { 'ALLUNITS' }
+        
+        local assisteeCat = assistData.AssisteeCategory or categories.ALLUNITS
+        if type(assisteeCat) == 'string' then
+            assisteeCat = ParseEntityCategory( assisteeCat )
+        end
+
+        # loop through different categories we are looking for
+        for _,catString in beingBuilt do
+            # Track all valid units in the assist list so we can load balance for factories
+            
+            local category = ParseEntityCategory( catString )
+        
+            local assistList = AIUtils.GetAssistees( aiBrain, assistData.AssistLocation, assistData.AssisteeType, category, assisteeCat )
+
+            if table.getn(assistList) > 0 then
+                # only have one unit in the list; assist it
+                if table.getn(assistList) == 1 then
+                    assistee = assistList[1]
+                    break
+                else
+                    # Find the unit with the least number of assisters; assist it
+                    local lowNum = false
+                    local lowUnit = false
+                    for k,v in assistList do
+                        if not lowNum or table.getn( v:GetGuards() ) < lowNum then
+                            lowNum = v:GetGuards()
+                            lowUnit = v
+                        end
+                    end
+                    assistee = lowUnit
+                    break
+                end
+            end
+        end
+        # assist unit
+        if assistee  then
+            self:Stop()
+            eng.AssistSet = true
+            IssueGuard( {eng}, assistee )
+        else
+            self.AssistPlatoon = nil
+            self:PlatoonDisband()
+        end
+    end,
+	
     ManagerEngineerFindUnfinished = function(self)
         local aiBrain = self:GetBrain()
 		local beingBuilt = false
@@ -1603,7 +1690,7 @@ Platoon = Class(sorianoldPlatoon) {
         local PlatoonFormation = self.PlatoonData.UseFormation or 'NoFormation'
         self:SetPlatoonFormationOverride(PlatoonFormation)
         local atkPri = { 'SPECIALHIGHPRI', 'STRUCTURE ANTINAVY', 'MOBILE NAVAL', 'STRUCTURE NAVAL', 'COMMAND', 'EXPERIMENTAL', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'STRUCTURE ANTIMISSILE SILO', 
-							'STRUCTURE DEFENSE DIRECTFIRE', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE - WALL', 'STRUCTURE', 'MOBILE', 'SPECIALLOWPRI', 'ALLUNITS - WALL' }
+							'STRUCTURE DEFENSE DIRECTFIRE', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE', 'STRUCTURE', 'MOBILE', 'SPECIALLOWPRI', 'ALLUNITS' }
         local atkPriTable = {}
         for k,v in atkPri do
             table.insert( atkPriTable, ParseEntityCategory( v ) )
@@ -2184,7 +2271,7 @@ Platoon = Class(sorianoldPlatoon) {
                     self:PlatoonDisband()
                 end
             else
-                reference, refName = AIUtils.AIFindStartLocationNeedsEngineer( aiBrain, cons.LocationType, 
+                reference, refName = AIUtils.AIFindStartLocationNeedsEngineerSorian( aiBrain, cons.LocationType, 
                         (cons.LocationRadius or 100), cons.ThreatMin, cons.ThreatMax, cons.ThreatRings, cons.ThreatType )
                 # didn't find a location to build at
                 if not reference or not refName then
@@ -2296,8 +2383,8 @@ Platoon = Class(sorianoldPlatoon) {
                 self:PlatoonDisband()
                 return
             end
-            reference  = AIUtils.GetOwnUnitsAroundPoint( aiBrain, cat, pos, radius, cons.ThreatMin,
-                                                        cons.ThreatMax, cons.ThreatRings)
+            reference  = AIUtils.GetOwnUnitsAroundPointSorian( aiBrain, cat, pos, radius, cons.ThreatMin,
+                                                        cons.ThreatMax, cons.ThreatRings, 'Overall', cons.MinRadius or 0)
             buildFunction = AIBuildStructures.AIBuildAdjacency
             table.insert( baseTmplList, baseTmpl )
         else
