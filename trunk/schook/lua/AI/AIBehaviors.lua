@@ -20,7 +20,7 @@ function NukeCheck(aiBrain)
 			numNukes = aiBrain:GetCurrentUnits( categories.NUKE * categories.SILO * categories.STRUCTURE )
 			Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE, true )
 			for k, v in Nukes do
-				if k < 2 then
+				if v:GetWorkProgress() * 100 > waitcount then
 					waitcount = v:GetWorkProgress() * 100
 				end
 				if v:GetNukeSiloAmmoCount() > 0 then
@@ -33,7 +33,7 @@ function NukeCheck(aiBrain)
 				#LOG('*AI DEBUG: Moving on!')				
 				rollcount = 0
 			end
-		until numNukes > lastNukes and waitcount < 75 and rollcount < 2
+		until numNukes > lastNukes and waitcount < 65 and rollcount < 2
 		Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE, true )
 		rollcount = rollcount + (numNukes - lastNukes)
 		

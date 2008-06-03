@@ -1897,7 +1897,7 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3 } },
             { UCBC, 'BuildingLessAtLocation', { 'LocationType', 1, 'ANTIMISSILE TECH3 STRUCTURE' } },
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE}},
+            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 3, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE}},
             #{ EBC, 'GreaterThanEconIncome', { 2.5, 100}},
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},

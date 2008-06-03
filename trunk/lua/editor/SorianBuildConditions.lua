@@ -23,6 +23,14 @@ function IsWaterMap(aiBrain)
 	return false
 end
 
+function EnemyThreatLessThanValueAtBase(aiBrain, locationType, threatValue, threatType, rings)
+    local testRings = rings or 10
+    if aiBrain:GetThreatAtPosition( aiBrain.BuilderManagers[locationType].FactoryManager:GetLocationCoords(), testRings, true, threatType or 'Overall' ) < threatValue then
+        return true
+    end
+    return false
+end
+
 ##############################################################################################################
 # function: ReclaimablesInArea = BuildCondition   doc = "Please work function docs."
 #
