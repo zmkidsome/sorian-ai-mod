@@ -47,6 +47,29 @@ function AIGetEconomyNumbers(aiBrain)
     return econ
 end
 
+function EngineerTryReclaimCaptureAreaSorian(aiBrain, eng, pos)
+    if not pos then
+        return false
+    end
+    
+    # Check if enemy units are at location
+    local checkUnits = aiBrain:GetUnitsAroundPoint( categories.STRUCTURE + ( categories.MOBILE * categories.LAND), pos, 10, 'Enemy' )
+    #( Rect( pos[1] - 7, pos[3] - 7, pos[1] + 7, pos[3] + 7 ) )
+    if checkUnits and table.getn(checkUnits) > 0 then
+        for num,unit in checkUnits do
+            #if not unit:IsDead() and EntityCategoryContains( categories.ENGINEER, unit ) and ( unit:GetAIBrain():GetFactionIndex() ~= aiBrain:GetFactionIndex() ) then
+            #    IssueReclaim( {eng}, unit )
+            #elseif 
+			if not EntityCategoryContains( categories.COMMAND, eng ) then
+                IssueCapture( {eng}, unit )
+            end
+        end
+        return true
+    end
+    
+    return false
+end
+
 function GetAssisteesSorian(aiBrain, locationType, assisteeType, buildingCategory, assisteeCategory )
     if assisteeType == 'Factory' then
         # Sift through the factories in the location
@@ -71,7 +94,7 @@ function GetUnitsBeingBuilt(aiBrain, locationType, assisteeCategory)
     if not manager then
         return false
     end
-	local filterUnits = AIUtils.GetOwnUnitsAroundPoint( aiBrain, assisteeCategory, manager:GetLocationCoords(), manager:GetLocationRadius() )
+	local filterUnits = GetOwnUnitsAroundPoint( aiBrain, assisteeCategory, manager:GetLocationCoords(), manager:GetLocationRadius() )
 	
 	local retUnits = {}
 	
