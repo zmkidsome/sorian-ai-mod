@@ -408,7 +408,7 @@ BuilderGroup {
         PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
 			Delay = 165,
-			Mult = 3,
+			Mult = 2,
             Construction = {
                 BuildStructures = {
                     'T1LandFactory',
@@ -437,7 +437,7 @@ BuilderGroup {
         PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
 			Delay = 165,
-			Mult = 3,
+			Mult = 2,
             Construction = {
                 BuildStructures = {
                     'T1LandFactory',
@@ -1663,7 +1663,7 @@ BuilderGroup {
         InstanceCount = 4,
         BuilderConditions = {
                 #{ UCBC, 'EngineerLessAtLocation', { 'LocationType', 3, 'ENGINEER TECH3' }},
-                { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 150, -500, 1, 0, 'AntiSurface', 1 }},
+                { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 100, -500, 1, 0, 'AntiSurface', 1 }},
             },
         BuilderType = 'Any',
         BuilderData = {

@@ -1347,7 +1347,7 @@ Platoon = Class(sorianoldPlatoon) {
             
             local category = ParseEntityCategory( catString )
         
-            local assistList = AIUtils.GetAssistees( aiBrain, assistData.AssistLocation, assistData.AssisteeType, category, assisteeCat )
+            local assistList = AIUtils.GetAssisteesSorian( aiBrain, assistData.AssistLocation, assistData.AssisteeType, category, assisteeCat )
 
             if table.getn(assistList) > 0 then
                 # only have one unit in the list; assist it

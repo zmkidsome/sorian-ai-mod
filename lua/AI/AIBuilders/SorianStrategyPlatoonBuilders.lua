@@ -270,6 +270,349 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'SorianT3FBBuildersHighPrio',
+    BuildersType = 'EngineerBuilder',
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Cybran - HP',
+        PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
+        Priority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { SBC, 'CanBuildFirebase', { 'LocationType', 700, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 700,
+                NearMarkerType = 'Expansion Area',
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
+                MarkerRadius = 20,
+                BuildStructures = {
+					'T2RadarJammer',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2Radar',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2StrategicMissileDefense',
+					'T2ShieldDefense',
+					'T2EngineerSupport',
+					'T2ShieldDefense',
+					'T3Artillery',
+                    'T2Artillery',
+                    'T2StrategicMissile',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Aeon - HP',
+        PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
+        Priority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { SBC, 'CanBuildFirebase', { 'LocationType', 900, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 900,
+                NearMarkerType = 'Expansion Area',
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
+                MarkerRadius = 20,
+                BuildStructures = {
+					'T2RadarJammer',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2Radar',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2StrategicMissileDefense',
+					'T3ShieldDefense',
+					'T3ShieldDefense',
+					'T3Artillery',
+                    'T2Artillery',
+                    'T2StrategicMissile',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - UEF - HP',
+        PlatoonTemplate = 'UEFT3EngineerBuilderSorian',
+        Priority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { SBC, 'CanBuildFirebase', { 'LocationType', 750, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 750,
+                NearMarkerType = 'Expansion Area',
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
+                MarkerRadius = 20,
+                BuildStructures = {
+					'T2RadarJammer',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2Radar',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2StrategicMissileDefense',
+					'T3ShieldDefense',
+					'T2EngineerSupport',
+					'T3ShieldDefense',
+					'T3Artillery',
+                    'T2Artillery',
+                    'T2StrategicMissile',
+				}
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Seraphim - HP',
+        PlatoonTemplate = 'SeraphimT3EngineerBuilderSorian',
+        Priority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { SBC, 'CanBuildFirebase', { 'LocationType', 825, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 825,
+                NearMarkerType = 'Expansion Area',
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
+                MarkerRadius = 20,
+                BuildStructures = {
+					'T2RadarJammer',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2Radar',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2StrategicMissileDefense',
+					'T3ShieldDefense',
+					'T3ShieldDefense',
+					'T3Artillery',
+                    'T2Artillery',
+                    'T2StrategicMissile',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Cybran - DP - HP',
+        PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
+        Priority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { SBC, 'CanBuildFirebase', { 'LocationType', 700, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 700,
+                NearMarkerType = 'Defensive Point',
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
+                MarkerRadius = 20,
+                BuildStructures = {
+					'T2RadarJammer',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2Radar',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2StrategicMissileDefense',
+					'T3ShieldDefense',
+					'T3ShieldDefense',
+					'T3Artillery',
+                    'T2Artillery',
+                    'T2StrategicMissile',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Aeon - DP - HP',
+        PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
+        Priority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { SBC, 'CanBuildFirebase', { 'LocationType', 900, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 900,
+                NearMarkerType = 'Defensive Point',
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
+                MarkerRadius = 20,
+                BuildStructures = {
+					'T2RadarJammer',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2Radar',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2StrategicMissileDefense',
+					'T3ShieldDefense',
+					'T3ShieldDefense',
+					'T3Artillery',
+                    'T2Artillery',
+                    'T2StrategicMissile',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - UEF - DP - HP',
+        PlatoonTemplate = 'UEFT3EngineerBuilderSorian',
+        Priority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { SBC, 'CanBuildFirebase', { 'LocationType', 750, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 750,
+                NearMarkerType = 'Defensive Point',
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
+                MarkerRadius = 20,
+                BuildStructures = {
+					'T2RadarJammer',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2Radar',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2StrategicMissileDefense',
+					'T3ShieldDefense',
+					'T3ShieldDefense',
+					'T3Artillery',
+                    'T2Artillery',
+                    'T2StrategicMissile',
+				}
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Seraphim - DP - HP',
+        PlatoonTemplate = 'SeraphimT3EngineerBuilderSorian',
+        Priority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            { SBC, 'CanBuildFirebase', { 'LocationType', 825, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                FireBase = true,
+                FireBaseRange = 825,
+                NearMarkerType = 'Defensive Point',
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                MarkerUnitCount = 1,
+                MarkerUnitCategory = 'STRUCTURE ARTILLERY TECH3',
+                MarkerRadius = 20,
+                BuildStructures = {
+					'T2RadarJammer',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2Radar',
+                    'T3AADefense',
+                    'T2GroundDefense',
+					'T2StrategicMissileDefense',
+					'T3ShieldDefense',
+					'T3ShieldDefense',
+					'T3Artillery',
+                    'T2Artillery',
+                    'T2StrategicMissile',
+                }
+            }
+        }
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianT2FirebaseBuildersHighPrio',
     BuildersType = 'EngineerBuilder',
     Builder {
@@ -356,6 +699,27 @@ BuilderGroup {
 				AssistUntilFinished = true,
                 AssistRange = 150,
                 BeingBuiltCategories = {'STRUCTURE NUKE'},
+                Time = 120,
+            },
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Engineer Assist Build Nuke Missile - High Prio',
+        PlatoonTemplate = 'T3EngineerAssistSorian',
+        Priority = 0.1,
+        ActivePriority = 980,
+        InstanceCount = 3,
+        BuilderConditions = {
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                AssisteeType = 'NonUnitBuildingStructure',
+				AssistUntilFinished = true,
+                AssistRange = 150,
+                AssisteeCategory = {'STRUCTURE NUKE'},
                 Time = 120,
             },
         }

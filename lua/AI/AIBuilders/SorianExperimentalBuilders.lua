@@ -44,6 +44,7 @@ BuilderGroup {
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 0, categories.EXPERIMENTAL * categories.LAND } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -75,6 +76,7 @@ BuilderGroup {
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -105,6 +107,7 @@ BuilderGroup {
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -137,6 +140,7 @@ BuilderGroup {
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -166,6 +170,7 @@ BuilderGroup {
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -194,6 +199,7 @@ BuilderGroup {
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -319,6 +325,7 @@ BuilderGroup {
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -444,6 +451,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -547,6 +555,7 @@ BuilderGroup {
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -644,6 +653,7 @@ BuilderGroup {
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
 			{ IBC, 'BrainNotLowPowerMode', {} },
 			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
         BuilderData = {

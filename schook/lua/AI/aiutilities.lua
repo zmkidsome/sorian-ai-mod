@@ -47,6 +47,45 @@ function AIGetEconomyNumbers(aiBrain)
     return econ
 end
 
+function GetAssisteesSorian(aiBrain, locationType, assisteeType, buildingCategory, assisteeCategory )
+    if assisteeType == 'Factory' then
+        # Sift through the factories in the location
+        local manager = aiBrain.BuilderManagers[locationType].FactoryManager
+        return manager:GetFactoriesWantingAssistance(buildingCategory, assisteeCategory)
+    elseif assisteeType == 'Engineer' then
+        local manager = aiBrain.BuilderManagers[locationType].EngineerManager
+        return manager:GetEngineersWantingAssistance( buildingCategory, assisteeCategory )
+    elseif assisteeType == 'Structure' then
+        local manager = aiBrain.BuilderManagers[locationType].PlatoonFormManager
+        return manager:GetUnitsBeingBuilt(buildingCategory, assisteeCategory)
+    elseif assisteeType == 'NonUnitBuildingStructure' then
+        return GetUnitsBeingBuilt(aiBrain, locationType, assisteeCategory)
+    else
+        ERROR('*AI ERROR: Invalid assisteeType - ' .. assisteeType )
+    end
+    return false    
+end
+
+function GetUnitsBeingBuilt(aiBrain, locationType, assisteeCategory)
+	local manager = aiBrain.BuilderManagers[locationType].EngineerManager
+    if not manager then
+        return false
+    end
+	local filterUnits = AIUtils.GetOwnUnitsAroundPoint( aiBrain, assisteeCategory, manager:GetLocationCoords(), manager:GetLocationRadius() )
+	
+	local retUnits = {}
+	
+	for k,v in filterUnits do
+            
+		if not v:IsUnitState('Building') and not v:IsUnitState('Upgrading') then
+			continue
+		end
+		
+		table.insert( retUnits, v )
+	end
+	return retUnits
+end
+
 function GetBasePatrolPointsSorian( aiBrain, location, radius, layer )
     if type(location) == 'string' then
         if aiBrain:PBMHasPlatoonList() then

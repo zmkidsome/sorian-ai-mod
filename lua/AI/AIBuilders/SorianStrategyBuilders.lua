@@ -98,7 +98,7 @@ BuilderGroup {
 			{ MIBC, 'FactionIndex', {3, 3}},
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY AIR' }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 1, categories.AIR * categories.FACTORY, 'Enemy'}},
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 1, categories.AIR * (categories.FACTORY + categories.MOBILE), 'Enemy'}},
         },
         BuilderType = 'Any',		
         RemoveBuilders = {
@@ -106,14 +106,24 @@ BuilderGroup {
 				'Sorian T1 Air Bomber',
 				'Sorian T1 Air Bomber - Stomp Enemy',
 				'Sorian T1Gunship',
+				'Sorian T1 Air Fighter',
 				'Sorian T1 Air Bomber 2',
 				'Sorian T1Gunship2',
+				'Sorian T1 Interceptors',
+				'Sorian T1 Interceptors - Enemy Air',
+				'Sorian T1 Interceptors - Enemy Air Extra',
+				'Sorian T1 Interceptors - Enemy Air Extra 2',
 				'Sorian T2 Air Gunship',
 				'Sorian T2 Air Gunship - Anti Navy',
 				'Sorian T2 Air Gunship - Stomp Enemy',
 				'Sorian T2FighterBomber',
+				'Sorian T1 Air Fighter - T2',
 				'Sorian T2 Air Gunship2',
 				'Sorian T2FighterBomber2',
+				'Sorian T2AntiAirPlanes Initial Higher Pri',
+				'Sorian T2AntiAirPlanes - Enemy Air',
+				'Sorian T2AntiAirPlanes - Enemy Air Extra',
+				'Sorian T2AntiAirPlanes - Enemy Air Extra 2',
 				'Sorian T3 Air Gunship',
 				'Sorian T3 Air Gunship - Anti Navy',
 				'Sorian T3 Air Bomber',
@@ -159,7 +169,7 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'ENGINEER TECH3' }},
 			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 1, categories.SHIELD * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 6, categories.SHIELD * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
 			{ EBC, 'GreaterThanEconIncome',  { 100, 3000}},
 			{ SBC, 'MapGreaterThan', { 500, 500 }},
@@ -171,6 +181,42 @@ BuilderGroup {
 			EngineerManager = {
 				'Sorian T3 Arty Engineer - High Prio',
 				'Sorian T3 Engineer Assist Build Arty - High Prio',
+			}
+		}
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianT3FBRush',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian T3 FB Rush Strategy',
+        Priority = 100,
+        InstanceCount = 1,
+		StrategyTime = 300,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'ENGINEER TECH3' }},
+			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 6, categories.SHIELD * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
+			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
+			{ EBC, 'GreaterThanEconIncome',  { 100, 3000}},
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {},
+		AddBuilders = {
+			EngineerManager = {
+				'Sorian T3 Expansion Area Firebase Engineer - Cybran - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Aeon - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - UEF - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Seraphim - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Cybran - DP - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Aeon - DP - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - UEF - DP - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Seraphim - DP - HP',
 			}
 		}
     },
@@ -200,6 +246,7 @@ BuilderGroup {
 			EngineerManager = {
 				'Sorian T3 Nuke Engineer - High Prio',
 				'Sorian T3 Engineer Assist Build Nuke - High Prio',
+				'Sorian T3 Engineer Assist Build Nuke Missile - High Prio',
 			}
 		}
     },
