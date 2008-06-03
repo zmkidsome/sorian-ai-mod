@@ -2,7 +2,7 @@
 
 == Release Notes ==
 
-*1.3.1:* AI should not attempt to build T4s when its air space is not clear, Tweaked Jester Rush Strategy, Tweaked Nuke Rush Strategy, Added T3 FireBase Rush Strategy, Engineers are now able to assist Nuke Silos building Nukes.
+*1.3.1:* AI should not attempt to build T4s when its air space is not clear, Tweaked Jester Rush Strategy, Tweaked Nuke Rush Strategy, Added T3 !FireBase Rush Strategy, Engineers are now able to assist Nuke Silos building Nukes.
 
 *1.3:* Added Strategy Manager with an assortment of strategies, Nukes should be built sooner, Engineers will assist certain high priority projects until they are completed, AI will build more TMD, Transport bug has been fixed, T4 responses will no longer kill the AIs Air unit mix, The AI will build defenses around mexes away from its base, New Sim speed improvement, Land units will weigh threat higher when pathing, Fatboy will use attackmove on land and regular move under water, AI should react better to a commander under attack, The AI will use captured engineer and factories, Various other bug fixes and tweaks, Fighters should now circle their base when they have no targets like they should have been.
 
