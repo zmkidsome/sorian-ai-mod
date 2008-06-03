@@ -2589,7 +2589,7 @@ Platoon = Class(sorianoldPlatoon) {
                     return
                 end
                 # check to see if we need to reclaim or capture...
-                if not AIUtils.EngineerTryReclaimCaptureArea(aiBrain, eng, buildLocation) then
+                if not AIUtils.EngineerTryReclaimCaptureAreaSorian(aiBrain, eng, buildLocation) then
                     # check to see if we can repair
                     if not AIUtils.EngineerTryRepairSorian(aiBrain, eng, whatToBuild, buildLocation) then
                         # otherwise, go ahead and build the next structure there
