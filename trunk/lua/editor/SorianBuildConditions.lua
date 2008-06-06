@@ -461,3 +461,57 @@ function EnemyInT3ArtilleryRange(aiBrain, locationtype, inrange)
     end
 	return false
 end
+
+function AIOutnumbered(aiBrain, bool)
+	local cheatmult = tonumber(ScenarioInfo.Options.CheatMult)
+	local buildmult = tonumber(ScenarioInfo.Options.BuildMult)
+	local cheatAdjustment = (cheatmult + buildmult) * .75
+	local allies = 0
+	local largestEnemyTeam = 0
+	
+	local cheatAI = string.find( aiBrain.Nickname, 'AIx:')
+	if cheatAI then
+		allies = allies + (1 * cheatAdjustment)
+	else
+		allies = allies + 1
+	end
+	
+	for k,v in ArmyBrains do
+        if not v:IsDefeated() and aiBrain:GetArmyIndex() ~= v:GetArmyIndex() and not ArmyIsCivilian(v:GetArmyIndex()) and IsEnemy(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+			local eAllies = 0
+			cheatAI = string.find( v.Nickname, 'AIx:')
+			if cheatAI then
+				eAllies = eAllies + (1 * cheatAdjustment)
+			else
+				eAllies = eAllies + 1
+			end
+			for x,z in ArmyBrains do
+				if not z:IsDefeated() and z:GetArmyIndex() ~= v:GetArmyIndex() and not ArmyIsCivilian(z:GetArmyIndex()) and IsAlly(v:GetArmyIndex(), z:GetArmyIndex()) then
+					cheatAI = string.find( z.Nickname, 'AIx:')
+					if cheatAI then
+						eAllies = eAllies + (1 * cheatAdjustment)
+					else
+						eAllies = eAllies + 1
+					end
+				end
+			end
+			if eAllies > largestEnemyTeam then
+				largestEnemyTeam = eAllies
+			end
+		elseif not v:IsDefeated() and aiBrain:GetArmyIndex() ~= v:GetArmyIndex() and not ArmyIsCivilian(v:GetArmyIndex()) and IsAlly(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+			cheatAI = string.find( v.Nickname, 'AIx:')
+			if cheatAI then
+				allies = allies + (1 * cheatAdjustment)
+			else
+				allies = allies + 1
+			end
+        end
+    end
+	
+	if largestEnemyTeam > allies and bool then
+		return true
+	elseif largestEnemyTeam < allies and not bool then
+		return true
+	end
+	return false
+end

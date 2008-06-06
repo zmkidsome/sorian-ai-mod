@@ -111,7 +111,7 @@ FactoryBuilderManager = Class(BuilderManager) {
     end,
     
     AddFactory = function(self,unit)
-		if not self:FactoryAlreadyExists() then
+		if not self:FactoryAlreadyExists(unit) then
 			table.insert(self.FactoryList, unit)
 			unit.DesiresAssist = true
 			if EntityCategoryContains( categories.LAND, unit ) then

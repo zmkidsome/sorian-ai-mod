@@ -3,7 +3,7 @@ PlatoonTemplate {
     Plan = 'StrikeForceAISorian',
     GlobalSquads = {
         #{ categories.MOBILE * categories.AIR - categories.EXPERIMENTAL - categories.TRANSPORTFOCUS - categories.ANTINAVY, 1, 100, 'Attack', 'GrowthFormation' }
-        { categories.AIR * categories.MOBILE * categories.ANTIAIR * ( categories.TECH1 + categories.TECH2 + categories.TECH3 ) - categories.BOMBER - categories.TRANSPORTFOCUS - categories.EXPERIMENTAL, 1, 100, 'Attack', 'GrowthFormation' },
+        { categories.AIR * categories.MOBILE * categories.ANTIAIR * ( categories.TECH1 + categories.TECH2 + categories.TECH3 ) - categories.BOMBER - categories.TRANSPORTFOCUS - categories.EXPERIMENTAL, 1, 10, 'Attack', 'GrowthFormation' },
     },
 }
 
@@ -71,7 +71,7 @@ PlatoonTemplate {
     Name = 'AntiAirHuntSorian',
     Plan = 'FighterHuntAI',
     GlobalSquads = {
-        { categories.AIR * categories.MOBILE * categories.ANTIAIR * ( categories.TECH1 + categories.TECH2 + categories.TECH3 ) - categories.BOMBER - categories.TRANSPORTFOCUS - categories.EXPERIMENTAL, 1, 100, 'attack', 'none' },
+        { categories.AIR * categories.MOBILE * categories.ANTIAIR * ( categories.TECH1 + categories.TECH2 + categories.TECH3 ) - categories.BOMBER - categories.TRANSPORTFOCUS - categories.EXPERIMENTAL, 1, 10, 'attack', 'none' },
     }
 }
 
