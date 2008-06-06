@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.3.3:* Nukes and T3/T4 Artillery should be built near shields, Economy fixes, Bug fix, The AI will break platoons of fighters into smaller groups.
+
 *1.3.2:* Bug fix, AI will capture engineers and factories from all factions.
 
 *1.3.1:* AI should not attempt to build T4s when its air space is not clear, Tweaked Jester Rush Strategy, Tweaked Nuke Rush Strategy, Added T3 !FireBase Rush Strategy, Engineers are now able to assist Nuke Silos building Nukes.
