@@ -79,6 +79,7 @@ BuilderGroup {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T3Artillery',
                 },
@@ -109,6 +110,7 @@ BuilderGroup {
             Construction = {
                 BuildClose = true,
 				T4 = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T3RapidArtillery',
                 },
@@ -163,6 +165,7 @@ BuilderGroup {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T3Artillery',
                 },
@@ -204,6 +207,7 @@ BuilderGroup {
             Construction = {
                 BuildClose = true,
 				T4 = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T4Artillery',
                 },
@@ -291,6 +295,7 @@ BuilderGroup {
             Construction = {
                 BuildClose = true,
 				T4 = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T4Artillery',
                 },
@@ -318,6 +323,7 @@ BuilderGroup {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T3StrategicMissile',
                 },

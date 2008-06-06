@@ -153,6 +153,7 @@ BaseBuilderTemplate {
 		'SorianT3ArtyRush',
 		'SorianT2ACUSnipe',
 		'SorianT3ArtyRush',
+		#'SorianTeamLevelAdjustment',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',

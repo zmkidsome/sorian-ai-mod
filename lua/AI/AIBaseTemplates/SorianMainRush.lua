@@ -32,7 +32,7 @@ BaseBuilderTemplate {
         'SorianEngineerEnergyBuilders',
         
         # Build Mass high pri at this base
-        'SorianEngineerMassBuildersHighPri',
+        'SorianEngineerMassBuilders - Rush',
         
         # Extractors
         'SorianTime Exempt Extractor Upgrades',

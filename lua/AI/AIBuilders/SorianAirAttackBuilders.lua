@@ -1294,7 +1294,7 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirUnitRefitSorian' },
 		PlatoonAddPlans = { 'AirIntelToggle' },
         Priority = 1000,
-        InstanceCount = 5,
+        InstanceCount = 10,
         BuilderType = 'Any',
         BuilderData = {
 			SearchRadius = 6000,
@@ -1590,7 +1590,7 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirUnitRefitSorian' },
 		PlatoonAddPlans = { 'AirIntelToggle' },
         Priority = 1,
-        InstanceCount = 5,
+        InstanceCount = 10,
         BuilderType = 'Any',
         BuilderData = {
 			Location = 'LocationType',

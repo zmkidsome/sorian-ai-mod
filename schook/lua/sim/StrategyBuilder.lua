@@ -52,6 +52,13 @@ StrategyBuilder = Class(Builder) {
 		end
 		return false
 	end,
+	
+	GetStrategyType = function(self)
+		if Builders[self.BuilderName].StrategyType then
+			return Builders[self.BuilderName].StrategyType
+		end
+		return false
+	end,
 }
 
 function CreateStrategy(brain, data, locationType)

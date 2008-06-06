@@ -29,6 +29,7 @@ BuilderGroup {
     BuildersType = 'StrategyBuilder',
     Builder {
         BuilderName = 'Sorian Big Air Strategy',
+		StrategyType = 'Intermediate',
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
@@ -90,6 +91,7 @@ BuilderGroup {
     BuildersType = 'StrategyBuilder',
     Builder {
         BuilderName = 'Sorian Jester Rush Strategy',
+		StrategyType = 'Intermediate',
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
@@ -161,6 +163,7 @@ BuilderGroup {
     BuildersType = 'StrategyBuilder',
     Builder {
         BuilderName = 'Sorian T3 Arty Rush Strategy',
+		StrategyType = 'Intermediate',
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
@@ -191,6 +194,7 @@ BuilderGroup {
     BuildersType = 'StrategyBuilder',
     Builder {
         BuilderName = 'Sorian T3 FB Rush Strategy',
+		StrategyType = 'Intermediate',
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
@@ -227,6 +231,7 @@ BuilderGroup {
     BuildersType = 'StrategyBuilder',
     Builder {
         BuilderName = 'Sorian Nuke Rush Strategy',
+		StrategyType = 'Intermediate',
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
@@ -257,6 +262,7 @@ BuilderGroup {
     BuildersType = 'StrategyBuilder',
     Builder {
         BuilderName = 'Sorian T2 ACU Snipe Strategy',
+		StrategyType = 'Intermediate',
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
@@ -284,6 +290,7 @@ BuilderGroup {
     BuildersType = 'StrategyBuilder',
     Builder {
         BuilderName = 'Sorian T1 Heavy Air Strategy',
+		StrategyType = 'Intermediate',
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
@@ -342,6 +349,7 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian T2 Heavy Air Strategy',
+		StrategyType = 'Intermediate',
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
@@ -351,6 +359,7 @@ BuilderGroup {
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' }},
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 5, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, 'Enemy'}},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY AIR TECH3' }},
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, 'FACTORY AIR TECH2' }},
         },
         BuilderType = 'Any',		
         RemoveBuilders = {
@@ -400,6 +409,7 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian T3 Heavy Air Strategy',
+		StrategyType = 'Intermediate',
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
@@ -454,5 +464,60 @@ BuilderGroup {
 				'Sorian Bomber Attack - Large',
 			}
 		}
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianTeamLevelAdjustment',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian AI Outnumbered',
+		StrategyType = 'Overall',
+        Priority = 100,
+        InstanceCount = 1,
+        BuilderConditions = {
+			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
+			{ SBC, 'AIOutnumbered', { true }},
+        },
+        BuilderType = 'Any',
+        RemoveBuilders = {
+			FactoryManager = {
+				'Sorian T1 Air Bomber',
+				'Sorian T1 Air Bomber - Stomp Enemy',
+				'Sorian T1Gunship',
+				'Sorian T1 Air Fighter',
+				'Sorian T1 Air Bomber 2',
+				'Sorian T1Gunship2',
+				'Sorian T1 Bot - Early Game Rush',
+				'Sorian T1 Bot - Early Game',
+				'Sorian T1 Light Tank - Tech 1',
+				'Sorian T1 Mortar',
+				'Sorian T1 Mortar - tough def',
+			},
+			StrategyManager = {
+				'Sorian T1 Heavy Air Strategy',
+				'Sorian Jester Rush Strategy',
+			}
+		},
+		AddBuilders = {}
+    },
+    Builder {
+        BuilderName = 'Sorian AI Outnumbers Enemies',
+		StrategyType = 'Overall',
+        Priority = 100,
+        InstanceCount = 1,
+        BuilderConditions = {
+			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
+			{ SBC, 'AIOutnumbered', { false }},
+        },
+        BuilderType = 'Any',
+        RemoveBuilders = {
+			EngineerManager = {
+				'Sorian T1 Mass Adjacency Defense Engineer',
+				'Sorian T1 Base D Engineer - Perimeter',
+				'Sorian T1 Defensive Point Engineer',
+			}
+		},
+		AddBuilders = {}
     },
 }

@@ -182,10 +182,7 @@ BuilderGroup {
                 ThreatMax = 0,
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
-                BuildStructures = {                    
-                    'T1Resource',
-                    'T1Resource',
-                    'T1Resource',
+                BuildStructures = {
                     'T1LandFactory',
                     'T2GroundDefense',                    
 					'T3AADefense',
@@ -311,10 +308,7 @@ BuilderGroup {
                 ThreatMax = 0,
                 ThreatRings = 2,
                 ThreatType = 'StructuresNotMex',
-                BuildStructures = {                    
-                    'T1Resource',
-                    'T1Resource',
-                    'T1Resource',
+                BuildStructures = {
                     'T1LandFactory',
                     'T2GroundDefense',                    
 					'T3AADefense',
