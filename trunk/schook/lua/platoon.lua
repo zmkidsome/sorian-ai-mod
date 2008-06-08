@@ -138,8 +138,9 @@ Platoon = Class(sorianoldPlatoon) {
 								poscounter = 0
 							end
 							threatatPos = aiBrain:GetThreatAtPosition(moveLocation, 0, true, 'AntiSurface')
+							artyThreatatPos = aiBrain:GetThreatAtPosition(moveLocation, 0, true, 'Artillery')
 							myThreatatPos = aiBrain:GetThreatAtPosition(moveLocation, 0, true, 'AntiSurface', aiBrain:GetArmyIndex())
-                        until not self:IsCommandsActive(cmd) or breakResponse or (threatatPos - myThreatatPos) <= threatThreshold
+                        until not self:IsCommandsActive(cmd) or breakResponse or ((threatatPos + artyThreatatPos) - myThreatatPos) <= threatThreshold
                         
                         
                         platoonPos = self:GetPlatoonPosition()
@@ -1784,6 +1785,8 @@ Platoon = Class(sorianoldPlatoon) {
         local platoonUnits = self:GetPlatoonUnits()
         local numberOfUnitsInPlatoon = table.getn(platoonUnits)
         local oldNumberOfUnitsInPlatoon = numberOfUnitsInPlatoon
+		local platoonTechLevel = SUtils.GetPlatoonTechLevel(platoonUnits)
+		local platoonThreatTable = {4,28,80} 
         local stuckCount = 0
         
         self.PlatoonAttackForce = true
@@ -1956,7 +1959,7 @@ Platoon = Class(sorianoldPlatoon) {
             
             if table.getn(cmdQ) == 0 then #and mySurfaceThreat < 4 then
                 # if we have a low threat value, then go and defend an engineer or a base
-                if mySurfaceThreat < 4  
+                if mySurfaceThreat < platoonThreatTable[platoonTechLevel]
                     and mySurfaceThreat > 0 
                     and not self.PlatoonData.NeverGuard 
                     and not (self.PlatoonData.NeverGuardEngineers and self.PlatoonData.NeverGuardBases)

@@ -222,6 +222,7 @@ AIBrain = Class(oldAIBrain) {
         }
 		self.SelfMonitor = {
 			CheckRadius = spec.SelfCheckRadius or 150,
+			ArtyCheckRadius = spec.SelfArtyCheckRadius or 300,
 			ThreatRadiusThreshold = spec.SelfThreatRadiusThreshold or 8,
 		}
         self:ForkThread( self.BaseMonitorThreadSorian )
@@ -241,9 +242,11 @@ AIBrain = Class(oldAIBrain) {
 		if not self.BaseMonitor.AlertSounded then
 			local startlocx, startlocz = self:GetArmyStartPos()
 			local threatTable = self:GetThreatsAroundPosition({startlocx, 0, startlocz}, 16, true, 'AntiSurface')
-			local highThreat
-			local highThreatPos
+			local artyThreatTable = self:GetThreatsAroundPosition({startlocx, 0, startlocz}, 16, true, 'Artillery')
+			local highThreat = false
+			local highThreatPos = false
 			local radius = self.SelfMonitor.CheckRadius * self.SelfMonitor.CheckRadius
+			local artyRadius = self.SelfMonitor.ArtyCheckRadius * self.SelfMonitor.ArtyCheckRadius
 			for tIndex,threat in threatTable do
 				local enemyThreat = self:GetThreatAtPosition( {threat[1], 0, threat[2]}, 0, true, 'AntiSurface')
 				local dist = VDist2Sq(threat[1], threat[2], startlocx, startlocz)
@@ -251,7 +254,7 @@ AIBrain = Class(oldAIBrain) {
 					highThreat = enemyThreat
 					highThreatPos = {threat[1], 0, threat[2]}
 				end
-			end				
+			end
 			if highThreat then
 				table.insert( self.BaseMonitor.AlertsTable,
 					{
@@ -260,6 +263,27 @@ AIBrain = Class(oldAIBrain) {
 					}
 				)
 				self:ForkThread(self.BaseMonitorAlertTimeout, highThreatPos)
+				self.BaseMonitor.ActiveAlerts = self.BaseMonitor.ActiveAlerts + 1
+				self.BaseMonitor.AlertSounded = true
+			end
+			highThreat = false
+			highThreatPos = false
+			for tIndex,threat in artyThreatTable do
+				local enemyThreat = self:GetThreatAtPosition( {threat[1], 0, threat[2]}, 0, true, 'Artillery')
+				local dist = VDist2Sq(threat[1], threat[2], startlocx, startlocz)
+				if (not highThreat or enemyThreat > highThreat) and enemyThreat > self.SelfMonitor.ThreatRadiusThreshold and dist < artyRadius then
+					highThreat = enemyThreat
+					highThreatPos = {threat[1], 0, threat[2]}
+				end
+			end
+			if highThreat then
+				table.insert( self.BaseMonitor.AlertsTable,
+					{
+					Position = highThreatPos,
+					Threat = highThreat,
+					}
+				)
+				self:ForkThread(self.BaseMonitorAlertTimeout, highThreatPos, 'Artillery')
 				self.BaseMonitor.ActiveAlerts = self.BaseMonitor.ActiveAlerts + 1
 				self.BaseMonitor.AlertSounded = true
 			end
@@ -298,14 +322,14 @@ AIBrain = Class(oldAIBrain) {
         end
     end,
 	
-    BaseMonitorAlertTimeout = function(self, pos)
+    BaseMonitorAlertTimeout = function(self, pos, threattype)
         local timeout = self.BaseMonitor.DefaultAlertTimeout
         local threat
         local threshold = self.BaseMonitor.AlertLevel
 		local myThreat
         repeat
             WaitSeconds(timeout)
-            threat = self:GetThreatAtPosition( pos, 0, true, 'AntiSurface' )
+            threat = self:GetThreatAtPosition( pos, 0, true, threattype or 'AntiSurface' )
 			myThreat = self:GetThreatAtPosition( pos, 0, true, 'AntiSurface', self:GetArmyIndex())
 			if threat - myThreat < 1 then
 				local eEngies = self:GetNumUnitsAroundPoint( categories.ENGINEER, pos, 10, 'Enemy' )

@@ -35,8 +35,8 @@ BuilderGroup {
         PlatoonTemplate = 'EngineerBuilderSorian',
         Priority = 825,
         BuilderConditions = {
-            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'MASSEXTRACTION'}},
-            { MABC, 'MarkerLessThanDistance',  { 'Mass', 600, -2, 0, 0}},
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
+            { MABC, 'MarkerLessThanDistance',  { 'Mass', 600, -1, 0, 0}},
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'UnitCapCheckLess', { .8 } },
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -49,10 +49,10 @@ BuilderGroup {
                 AdjacencyCategory = 'MASSEXTRACTION',
                 AdjacencyDistance = 600,
                 BuildClose = false,
-                ThreatMin = -2,
+                ThreatMin = -1,
                 ThreatMax = 0,
                 ThreatRings = 0,
-				MinRadius = 200,
+				MinRadius = 250,
                 BuildStructures = {
                     'T1GroundDefense',
                     'T1AADefense',
@@ -65,8 +65,8 @@ BuilderGroup {
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         Priority = 825,
         BuilderConditions = {
-            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'MASSEXTRACTION'}},
-            { MABC, 'MarkerLessThanDistance',  { 'Mass', 600, -2, 0, 0}},
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
+            { MABC, 'MarkerLessThanDistance',  { 'Mass', 600, -1, 0, 0}},
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'UnitCapCheckLess', { .8 } },
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -79,10 +79,10 @@ BuilderGroup {
                 AdjacencyCategory = 'MASSEXTRACTION',
                 AdjacencyDistance = 600,
                 BuildClose = false,
-                ThreatMin = -2,
+                ThreatMin = -1,
                 ThreatMax = 0,
                 ThreatRings = 0,
-				MinRadius = 200,
+				MinRadius = 250,
                 BuildStructures = {
                     'T1GroundDefense',
                     'T1AADefense',
@@ -95,8 +95,8 @@ BuilderGroup {
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 825,
         BuilderConditions = {
-            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'MASSEXTRACTION'}},
-            { MABC, 'MarkerLessThanDistance',  { 'Mass', 600, -2, 0, 0}},
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
+            { MABC, 'MarkerLessThanDistance',  { 'Mass', 600, -1, 0, 0}},
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'UnitCapCheckLess', { .8 } },
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -109,10 +109,10 @@ BuilderGroup {
                 AdjacencyCategory = 'MASSEXTRACTION',
                 AdjacencyDistance = 600,
                 BuildClose = false,
-                ThreatMin = -2,
+                ThreatMin = -1,
                 ThreatMax = 0,
                 ThreatRings = 0,
-				MinRadius = 200,
+				MinRadius = 250,
                 BuildStructures = {
                     'T2GroundDefense',
                     'T2AADefense',
@@ -2031,7 +2031,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Base D Engineer - Light - Emerg AA',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 1001,
         BuilderConditions = {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, 'DEFENSE ANTIAIR STRUCTURE'}},
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -2053,7 +2053,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Base D Engineer - Light - Emerg PD',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 950,
+        Priority = 1001,
         BuilderConditions = {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, 'DEFENSE DIRECTFIRE STRUCTURE'}},
             { IBC, 'BrainNotLowPowerMode', {} },
