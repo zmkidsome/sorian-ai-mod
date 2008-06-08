@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.3.4:* More fighters, AI should react better to having a Paragon, AI should respond to TMLs near its base, AI should regroup platoons with low surface attack capability.
+
 *1.3.3:* Nukes and T3/T4 Artillery should be built near shields, Economy fixes, Bug fix, The AI will break platoons of fighters into smaller groups.
 
 *1.3.2:* Bug fix, AI will capture engineers and factories from all factions.
