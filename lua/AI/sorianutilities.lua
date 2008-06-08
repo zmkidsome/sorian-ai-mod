@@ -25,6 +25,21 @@ function T4Timeout(aiBrain)
 	aiBrain.T4Building = false
 end
 
+function GetPlatoonTechLevel(platoonUnits)
+	local highest = false
+	for k,v in platoonUnits do
+		if EntityCategoryContains(categories.TECH3, v) then
+			highest = 3
+		elseif EntityCategoryContains(categories.TECH2, v) and highest < 3 then
+			highest = 2
+		elseif EntityCategoryContains(categories.TECH1, v) and highest < 2 then
+			highest = 1
+		end
+		if highest == 3 then break end
+	end
+	return highest
+end
+
 function CanRespondEffectively(aiBrain, location, platoon)
 	local targets = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, location, 32, 'Enemy' )
 	if AIAttackUtils.GetAirThreatOfUnits(platoon) > 0 and aiBrain:GetThreatAtPosition(location, 0, true, 'Air') > 0 then

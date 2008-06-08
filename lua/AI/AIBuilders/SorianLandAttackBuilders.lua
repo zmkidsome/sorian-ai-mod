@@ -42,13 +42,13 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
     
     local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
 	local airThreat = 0 #pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
-    if surThreat > 4 and (surThreat + airThreat) > targetNumber then
+    if (surThreat + airThreat) > targetNumber then
         return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) > 0 and surThreat > 800 then
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) > 0 and surThreat > 800 then #20
 		return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH2 - categories.ENGINEER) > 0 and surThreat > 280 then
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH2 - categories.ENGINEER) > 0 and surThreat > 280 then #7
 		return true
-	elseif surThreat > 40 then
+	elseif surThreat > 40 then #1
 		return true
     end
     return false
@@ -621,7 +621,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Assault Enemy Nearby',
         PlatoonTemplate = 'T3ArmoredAssaultSorian',
-        Priority = 950,
+        Priority = 945,
         BuilderConditions = {
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Land', 2 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH3 } },
@@ -635,7 +635,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 SiegeBot Enemy Nearby',
         PlatoonTemplate = 'T3LandBot',
-        Priority = 945,
+        Priority = 935,
         BuilderConditions = {
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 0, 'Land', 2 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH3 } },

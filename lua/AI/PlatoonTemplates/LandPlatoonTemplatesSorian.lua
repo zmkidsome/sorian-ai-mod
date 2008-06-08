@@ -2,7 +2,7 @@ PlatoonTemplate {
     Name = 'LandAttackSorian',
     Plan = 'AttackForceAISorian',
     GlobalSquads = {
-        { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 1, 25, 'Attack', 'none' }
+        { categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER, 5, 25, 'Attack', 'none' }
     },
 }
 

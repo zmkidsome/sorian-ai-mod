@@ -223,6 +223,18 @@ function GreaterThanEconEfficiency(aiBrain, MassEfficiency, EnergyEfficiency)
     return false
 end
 
+function LessThanEconEfficiency(aiBrain, MassEfficiency, EnergyEfficiency)
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+		#LOG('*AI DEBUG: Found Paragon')
+		return false
+	end
+    local econ = AIUtils.AIGetEconomyNumbers(aiBrain)
+    if (econ.MassEfficiency <= MassEfficiency and econ.EnergyEfficiency <= EnergyEfficiency) then
+        return true
+    end
+    return false
+end
+
 ##############################################################################################################
 # function: GreaterThanEconEfficiencyOverTime = BuildCondition	doc = "Please work function docs."
 # 
@@ -238,6 +250,18 @@ function GreaterThanEconEfficiencyOverTime(aiBrain, MassEfficiency, EnergyEffici
 	end
     local econ = AIUtils.AIGetEconomyNumbers(aiBrain)
     if (econ.MassEfficiencyOverTime >= MassEfficiency and econ.EnergyEfficiencyOverTime >= EnergyEfficiency) then
+        return true
+    end
+    return false
+end
+
+function LessThanEconEfficiencyOverTime(aiBrain, MassEfficiency, EnergyEfficiency)
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+		#LOG('*AI DEBUG: Found Paragon')
+		return false
+	end
+    local econ = AIUtils.AIGetEconomyNumbers(aiBrain)
+    if (econ.MassEfficiencyOverTime <= MassEfficiency and econ.EnergyEfficiencyOverTime <= EnergyEfficiency) then
         return true
     end
     return false
