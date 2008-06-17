@@ -169,7 +169,7 @@ BuilderGroup {
 		StrategyTime = 300,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'ENGINEER TECH3' }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'ENGINEER TECH3' }},
 			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 6, categories.SHIELD * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
@@ -200,7 +200,7 @@ BuilderGroup {
 		StrategyTime = 300,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'ENGINEER TECH3' }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'ENGINEER TECH3' }},
 			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 6, categories.SHIELD * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
@@ -237,7 +237,7 @@ BuilderGroup {
 		StrategyTime = 300,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'ENGINEER TECH3' }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'ENGINEER TECH3' }},
 			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'NUKE SILO STRUCTURE TECH3' }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 1, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},

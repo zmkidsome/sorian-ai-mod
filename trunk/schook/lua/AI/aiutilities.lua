@@ -84,12 +84,16 @@ function GetAssisteesSorian(aiBrain, locationType, assisteeType, buildingCategor
     elseif assisteeType == 'NonUnitBuildingStructure' then
         return GetUnitsBeingBuilt(aiBrain, locationType, assisteeCategory)
     else
-        ERROR('*AI ERROR: Invalid assisteeType - ' .. assisteeType )
+        WARN('*AI ERROR: Invalid assisteeType - ' .. assisteeType )
     end
     return false    
 end
 
 function GetUnitsBeingBuilt(aiBrain, locationType, assisteeCategory)
+	if not aiBrain or not locationType or not assisteeCategory then
+		WARN('*AI ERROR: GetUnitsBeingBuilt missing data!')
+		return false
+	end
 	local manager = aiBrain.BuilderManagers[locationType].EngineerManager
     if not manager then
         return false

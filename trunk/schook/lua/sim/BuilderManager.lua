@@ -219,7 +219,7 @@ BuilderManager = Class {
         local found = false
         local possibleBuilders = {}
         for k,v in self.BuilderData[bType].Builders do
-            if v:GetBuilderStatus() and v:GetPriority() > 0 and ( not found or v:GetPriority() == found ) and self:BuilderParamCheck(v,params) then
+            if v:GetBuilderStatus() and v:GetPriority() >= 1 and ( not found or v:GetPriority() == found ) and self:BuilderParamCheck(v,params) then
                 found = v:GetPriority()
                 table.insert( possibleBuilders, k )
             elseif found and v:GetPriority() < found then

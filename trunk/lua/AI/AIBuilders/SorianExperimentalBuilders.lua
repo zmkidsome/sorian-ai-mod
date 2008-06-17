@@ -563,6 +563,7 @@ BuilderGroup {
             Construction = {
                 BuildClose = true,
 				T4 = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T4SatelliteExperimental',
                 },
@@ -661,6 +662,7 @@ BuilderGroup {
             Construction = {
                 BuildClose = false,
 				T4 = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T4EconExperimental',
                 },

@@ -50,6 +50,7 @@ BuilderGroup {
 			NumAssistees = 2,
             Construction = {
                 BuildClose = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T3Artillery',
                 },
@@ -358,7 +359,7 @@ BuilderGroup {
         Priority = 850,
         InstanceCount = 3,
         BuilderConditions = {
-			{ UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 10, 'NUKE STRUCTURE'}},
+			{ UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 0, 'NUKE STRUCTURE'}},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
@@ -368,7 +369,7 @@ BuilderGroup {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'NonUnitBuildingStructure',
                 AssistRange = 150,
-                AssisteeCategory = {'STRUCTURE NUKE'},
+                AssisteeCategory = 'STRUCTURE NUKE',
                 Time = 120,
             },
         }
