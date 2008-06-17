@@ -745,7 +745,7 @@ WreckBaseSorian = function(self, base)
     for _, priority in SurfacePrioritiesSorian do
         local numUnitsAtBase = 0
         local notDeadUnit = false
-        local unitsAtBase = self:GetBrain():GetUnitsAroundPoint(ParseEntityCategory(priority), base.Position, 100, 'Enemy')
+        local unitsAtBase = self:GetBrain():GetUnitsAroundPoint(ParseEntityCategory(priority), base.Position, 200, 'Enemy')
         
         for _,unit in unitsAtBase do
             if not unit:IsDead() then
@@ -758,6 +758,7 @@ WreckBaseSorian = function(self, base)
             return notDeadUnit, base
         end
     end
+	return false, false
 end
 
 FindExperimentalTargetSorian = function(self)
@@ -810,6 +811,7 @@ FindExperimentalTargetSorian = function(self)
             return bestUnit, bestBase
         end
     end
+	return false, false
 end
 
 CommanderOverrideCheckSorian = function(self)
@@ -989,7 +991,7 @@ CzarBehaviorSorian = function(self)
         local nearCommander = CommanderOverrideCheckSorian(self)
         local oldCommander = nil
         while nearCommander and aiBrain:PlatoonExists(self) do #not experimental:IsDead() and not experimental:IsIdleState() do            
-            if nearCommander and nearCommander != oldCommander and nearCommander != targetUnit then
+            if nearCommander and nearCommander != oldCommander then
                 IssueClearCommands(platoonUnits)
                 WaitTicks(5)
                 IssueAttack(platoonUnits, experimental:GetPosition())

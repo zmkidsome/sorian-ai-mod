@@ -649,7 +649,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Air Transport - Air',
         PlatoonTemplate = 'T1AirTransport',
-        Priority = 550,
+        Priority = 558,
         BuilderConditions = {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
@@ -668,7 +668,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Air Transport - Air',
         PlatoonTemplate = 'T2AirTransport',
-        Priority = 650,
+        Priority = 658,
         BuilderConditions = {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
@@ -687,7 +687,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Air Transport - Air',
         PlatoonTemplate = 'T3AirTransport',
-        Priority = 750,
+        Priority = 758,
         BuilderConditions = {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
@@ -710,7 +710,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Air Transport',
         PlatoonTemplate = 'T1AirTransport',
-        Priority = 550,
+        Priority = 558,
         BuilderConditions = {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
@@ -729,7 +729,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Air Transport',
         PlatoonTemplate = 'T2AirTransport',
-        Priority = 650,
+        Priority = 658,
         BuilderConditions = {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
@@ -748,7 +748,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Air Transport',
         PlatoonTemplate = 'T3AirTransport',
-        Priority = 750,
+        Priority = 758,
         BuilderConditions = {
             { MIBC, 'ArmyNeedsTransports', {} },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },

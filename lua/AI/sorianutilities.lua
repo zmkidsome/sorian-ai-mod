@@ -10,6 +10,7 @@
 local AIUtils = import('/lua/ai/aiutilities.lua')
 local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
 local Utils = import('/lua/utilities.lua')
+local Mods = import('/lua/mods.lua')
 
 local AIChatText = import('/lua/AI/sorianlang.lua').AIChatText
 
@@ -23,6 +24,35 @@ local AITaunts = {
 function T4Timeout(aiBrain)
 	WaitSeconds(30)
 	aiBrain.T4Building = false
+end
+
+function AddCustomUnitSupport(aiBrain)
+	aiBrain.CustomUnits = {}
+	for i, m in __active_mods do
+		#LOG('*AI DEBUG: Checking mod: '..m.name..' for custom units')
+		local CustomUnitFiles = DiskFindFiles(m.location..'/lua/CustomUnits', '*.lua')
+		#LOG('*AI DEBUG: Custom unit files found: '..repr(CustomUnitFiles))
+		for k, v in CustomUnitFiles do
+			local tempfile = import(v).UnitList
+			for plat, t in tempfile do
+				for fac, b in t do
+					if aiBrain.CustomUnits[plat] and aiBrain.CustomUnits[plat][fac] then
+						#LOG('*AI DEBUG: Adding to EXISTING template and EXISTING faction: '..plat..' faction = '..fac..' new ID = '..b[1]..' chance = '..b[2] )
+						table.insert(aiBrain.CustomUnits[plat][fac], { b[1], b[2] } )
+					elseif aiBrain.CustomUnits[plat] then
+						#LOG('*AI DEBUG: Adding to EXISTING template and NEW faction: '..plat..' faction = '..fac..' new ID = '..b[1]..' chance = '..b[2] )
+						aiBrain.CustomUnits[plat][fac] = {}
+						table.insert(aiBrain.CustomUnits[plat][fac], { b[1], b[2] } )
+					else
+						#LOG('*AI DEBUG: Adding to NEW template and NEW faction: '..plat..' faction = '..fac..' new ID = '..b[1]..' chance = '..b[2] )
+						aiBrain.CustomUnits[plat] = {}
+						aiBrain.CustomUnits[plat][fac] = {}
+						table.insert(aiBrain.CustomUnits[plat][fac], { b[1], b[2] } )
+					end
+				end
+			end
+		end
+	end
 end
 
 function GetPlatoonTechLevel(platoonUnits)
@@ -346,7 +376,7 @@ function GetGuards(aiBrain, Unit)
 end
 
 function Nuke(aiBrain)
-    local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE FACTORY TECH3', 'STRUCTURE STRATEGIC TECH2', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY TECH2', 'STRUCTURE', 'SPECIALLOWPRI', 'ALLUNITS' }
+    local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE FACTORY TECH3', 'STRUCTURE STRATEGIC TECH2', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY TECH2', 'STRUCTURE' }
 	local maxFire = false
 	local Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE, true )
 	local nukeCount = 0

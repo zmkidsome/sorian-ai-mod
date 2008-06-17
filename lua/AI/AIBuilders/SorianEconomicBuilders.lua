@@ -2445,7 +2445,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Power Engineer - init',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 1200,
+        Priority = 1500,
         BuilderConditions = {
 			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH2'}},
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.1 }},
@@ -2462,7 +2462,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Power Engineer - init',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 1200,
+        Priority = 1500,
         BuilderType = 'Any',
         BuilderConditions = {
 			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},

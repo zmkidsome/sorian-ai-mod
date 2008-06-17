@@ -719,7 +719,7 @@ BuilderGroup {
                 AssisteeType = 'NonUnitBuildingStructure',
 				AssistUntilFinished = true,
                 AssistRange = 150,
-                AssisteeCategory = {'STRUCTURE NUKE'},
+                AssisteeCategory = 'STRUCTURE NUKE',
                 Time = 120,
             },
         }

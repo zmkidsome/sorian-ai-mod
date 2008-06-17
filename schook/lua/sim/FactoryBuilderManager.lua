@@ -251,13 +251,49 @@ FactoryBuilderManager = Class(BuilderManager) {
         }
         
         local faction = self:GetFactoryFaction( factory )
+		local customData = self.Brain.CustomUnits[templateName]
         if faction and templateData.FactionSquads[faction] then
             for k,v in templateData.FactionSquads[faction] do
-                table.insert( template, v )
+				if self:GetCustomReplacement(v, templateName, faction) then
+					#LOG('*AI DEBUG: Replacement unit found!')
+					local replacement = self:GetCustomReplacement(v, templateName, faction)
+					table.insert( template, replacement )
+				else
+					table.insert( template, v )
+				end
             end
+		elseif faction and customData and customData[faction] then
+			if self:GetCustomReplacement(v, templateName, faction) then
+				#LOG('*AI DEBUG: New unit found!')
+				local replacement = self:GetCustomReplacement(v, templateName, faction)
+				table.insert( template, replacement )
+			end
         end
         return template
     end,
+	
+	GetCustomReplacement = function(self, template, templateName, faction)
+		local retTemplate = false
+		local templateData = self.Brain.CustomUnits[templateName]
+		if templateData and templateData[faction] then
+			LOG('*AI DEBUG: Replacement for '..templateName..' exists.')
+			local rand = Random(1,100)
+			local possibles = {}
+			for k,v in templateData[faction] do
+				if rand <= v[2] then
+					#LOG('*AI DEBUG: Insert possibility.')
+					table.insert(possibles, v[1])
+				end
+			end
+			if table.getn(possibles) > 0 then
+				rand = Random(1,table.getn(possibles))
+				local customUnitID = possibles[rand]
+				#LOG('*AI DEBUG: Replaced with '..customUnitID)
+				retTemplate = { customUnitID, template[2], template[3], template[4], template[5] }
+			end
+		end
+		return retTemplate
+	end,
     
     AssignBuildOrder = function(self,factory,bType)
         # Find a builder the factory can build
