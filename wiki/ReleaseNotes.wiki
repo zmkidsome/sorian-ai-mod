@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.4.1:* Fix for T3 Arty on small maps, AI will let you know if a map does not have the appropriate markers, More late game scouts, More changes to help AI take advantage of a Paragon, Overall strategies have been re-enabled, Optimized the function to check if the AI is outnumbered.
+
 *1.4:* Added support system for custom unit mods, Nukes should target better, Land units will respond to large threats, Fixed a bug with nuke missile assist engineers, Other various tweaks and adjustments.
 
 *1.3.4:* More fighters, AI should react better to having a Paragon, AI should respond to TMLs near its base, AI should regroup platoons with low surface attack capability.
