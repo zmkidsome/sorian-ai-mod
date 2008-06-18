@@ -487,6 +487,7 @@ function CommanderThreadSorian(cdr, platoon)
     SetCDRHome(cdr, platoon)
 	
 	aiBrain:BuildScoutLocationsSorian()
+	SUtils.CheckForMapMarkers(aiBrain)
 	moveOnNext = false
 	moveWait = 0
 	

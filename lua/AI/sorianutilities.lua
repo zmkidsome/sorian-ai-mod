@@ -26,6 +26,14 @@ function T4Timeout(aiBrain)
 	aiBrain.T4Building = false
 end
 
+function CheckForMapMarkers(aiBrain)
+	local startX, startZ = aiBrain:GetArmyStartPos()
+	local LandMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Land Path Node', startX, startZ)
+	if not LandMarker then
+		AISendChat('all', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'badmap')
+	end
+end
+
 function AddCustomUnitSupport(aiBrain)
 	aiBrain.CustomUnits = {}
 	for i, m in __active_mods do

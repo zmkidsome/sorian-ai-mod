@@ -275,7 +275,8 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Cybran - HP',
         PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
-        Priority = 980,
+        Priority = 0.1,
+        ActivePriority = 980,
         InstanceCount = 1,
         BuilderConditions = {
             { SBC, 'CanBuildFirebase', { 'LocationType', 700, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
@@ -318,7 +319,8 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Aeon - HP',
         PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
-        Priority = 980,
+        Priority = 0.1,
+        ActivePriority = 980,
         InstanceCount = 1,
         BuilderConditions = {
             { SBC, 'CanBuildFirebase', { 'LocationType', 900, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
@@ -360,7 +362,8 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - UEF - HP',
         PlatoonTemplate = 'UEFT3EngineerBuilderSorian',
-        Priority = 980,
+        Priority = 0.1,
+        ActivePriority = 980,
         InstanceCount = 1,
         BuilderConditions = {
             { SBC, 'CanBuildFirebase', { 'LocationType', 750, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
@@ -403,7 +406,8 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Seraphim - HP',
         PlatoonTemplate = 'SeraphimT3EngineerBuilderSorian',
-        Priority = 980,
+        Priority = 0.1,
+        ActivePriority = 980,
         InstanceCount = 1,
         BuilderConditions = {
             { SBC, 'CanBuildFirebase', { 'LocationType', 825, 'Expansion Area', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
@@ -445,7 +449,8 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Cybran - DP - HP',
         PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
-        Priority = 980,
+        Priority = 0.1,
+        ActivePriority = 980,
         InstanceCount = 1,
         BuilderConditions = {
             { SBC, 'CanBuildFirebase', { 'LocationType', 700, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
@@ -487,7 +492,8 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Aeon - DP - HP',
         PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
-        Priority = 980,
+        Priority = 0.1,
+        ActivePriority = 980,
         InstanceCount = 1,
         BuilderConditions = {
             { SBC, 'CanBuildFirebase', { 'LocationType', 900, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
@@ -529,7 +535,8 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - UEF - DP - HP',
         PlatoonTemplate = 'UEFT3EngineerBuilderSorian',
-        Priority = 980,
+        Priority = 0.1,
+        ActivePriority = 980,
         InstanceCount = 1,
         BuilderConditions = {
             { SBC, 'CanBuildFirebase', { 'LocationType', 750, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },
@@ -571,7 +578,8 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Expansion Area Firebase Engineer - Seraphim - DP - HP',
         PlatoonTemplate = 'SeraphimT3EngineerBuilderSorian',
-        Priority = 980,
+        Priority = 0.1,
+        ActivePriority = 980,
         InstanceCount = 1,
         BuilderConditions = {
             { SBC, 'CanBuildFirebase', { 'LocationType', 825, 'Defensive Point', -10000, 5, 1, 'AntiSurface', 1, 'STRUCTURE ARTILLERY TECH3', 20} },

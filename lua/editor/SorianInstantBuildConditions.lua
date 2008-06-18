@@ -188,6 +188,47 @@ function GreaterThanEconEfficiencyOverTimeExp(aiBrain, MassEfficiency, EnergyEff
 end
 
 ##############################################################################################################
+# function: GreaterThanEconIncome = BuildCondition	doc = "Please work function docs."
+# 
+# parameter 0: string	aiBrain		= "default_brain"				doc = "docs for param1"
+# parameter 1: int	MassIncome	= 0.1             doc = "docs for param1"
+# parameter 2: int	EnergyIncome	= 1             doc = "param2 docs"
+#
+##############################################################################################################
+function GreaterThanEconIncome(aiBrain, MassIncome, EnergyIncome)
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+		#LOG('*AI DEBUG: Found Paragon')
+		return true
+	end
+    local econ = AIUtils.AIGetEconomyNumbers(aiBrain)
+    if (econ.MassIncome >= MassIncome and econ.EnergyIncome >= EnergyIncome) then
+        return true
+    end
+    return false
+end
+
+
+##############################################################################################################
+# function: LessThanEconIncome = BuildCondition	doc = "Please work function docs."
+# 
+# parameter 0: string	aiBrain		= "default_brain"				doc = "docs for param1"
+# parameter 1: int	MassIncome	= 0.1             doc = "docs for param1"
+# parameter 2: int	EnergyIncome	= 1             doc = "param2 docs"
+#
+##############################################################################################################
+function LessThanEconIncome(aiBrain, MassIncome, EnergyIncome)
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+		#LOG('*AI DEBUG: Found Paragon')
+		return false
+	end
+    local econ = AIUtils.AIGetEconomyNumbers(aiBrain)
+    if (econ.MassIncome < MassIncome and econ.EnergyIncome < EnergyIncome) then
+        return true
+    end
+    return false
+end
+
+##############################################################################################################
 # function: GreaterThanEconIncomeOverTime = BuildCondition	doc = "Please work function docs."
 # 
 # parameter 0: string	aiBrain		= "default_brain"				doc = "docs for param1"
