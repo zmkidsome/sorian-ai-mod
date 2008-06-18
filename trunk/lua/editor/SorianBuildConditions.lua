@@ -466,51 +466,43 @@ function AIOutnumbered(aiBrain, bool)
 	local cheatmult = tonumber(ScenarioInfo.Options.CheatMult)
 	local buildmult = tonumber(ScenarioInfo.Options.BuildMult)
 	local cheatAdjustment = (cheatmult + buildmult) * .75
-	local allies = 0
-	local largestEnemyTeam = 0
+	local myTeam = ScenarioInfo.ArmySetup[aiBrain.Name].Team
+	#LOG('*AI DEBUG: '..aiBrain.Nickname..' I am on team '..myTeam)
+	local largestEnemyTeam = false
+	local teams = {0,0,0,0}
 	
 	local cheatAI = string.find( aiBrain.Nickname, 'AIx:')
 	if cheatAI then
-		allies = allies + (1 * cheatAdjustment)
+		teams[myTeam] = teams[myTeam] + (1 * cheatAdjustment)
 	else
-		allies = allies + 1
+		teams[myTeam] = teams[myTeam] + 1
 	end
-	
+			
 	for k,v in ArmyBrains do
-        if not v:IsDefeated() and aiBrain:GetArmyIndex() ~= v:GetArmyIndex() and not ArmyIsCivilian(v:GetArmyIndex()) and IsEnemy(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
-			local eAllies = 0
+        if not v:IsDefeated() and aiBrain:GetArmyIndex() ~= v:GetArmyIndex() and not ArmyIsCivilian(v:GetArmyIndex()) then
+			local armyTeam = ScenarioInfo.ArmySetup[v.Name].Team
+			#LOG('*AI DEBUG: '..v.Nickname..' is on team '..armyTeam)
 			cheatAI = string.find( v.Nickname, 'AIx:')
 			if cheatAI then
-				eAllies = eAllies + (1 * cheatAdjustment)
+				teams[armyTeam] = teams[armyTeam] + (1 * cheatAdjustment)
 			else
-				eAllies = eAllies + 1
-			end
-			for x,z in ArmyBrains do
-				if not z:IsDefeated() and z:GetArmyIndex() ~= v:GetArmyIndex() and not ArmyIsCivilian(z:GetArmyIndex()) and IsAlly(v:GetArmyIndex(), z:GetArmyIndex()) then
-					cheatAI = string.find( z.Nickname, 'AIx:')
-					if cheatAI then
-						eAllies = eAllies + (1 * cheatAdjustment)
-					else
-						eAllies = eAllies + 1
-					end
-				end
-			end
-			if eAllies > largestEnemyTeam then
-				largestEnemyTeam = eAllies
-			end
-		elseif not v:IsDefeated() and aiBrain:GetArmyIndex() ~= v:GetArmyIndex() and not ArmyIsCivilian(v:GetArmyIndex()) and IsAlly(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
-			cheatAI = string.find( v.Nickname, 'AIx:')
-			if cheatAI then
-				allies = allies + (1 * cheatAdjustment)
-			else
-				allies = allies + 1
+				teams[armyTeam] = teams[armyTeam] + 1
 			end
         end
     end
+	for x,z in teams do
+		if z ~= myTeam and not largestEnemyTeam or z > largestEnemyTeam then
+			largestEnemyTeam = z
+		end
+	end
 	
-	if largestEnemyTeam > allies and bool then
+	#LOG('*AI DEBUG: '..v.Nickname..' Larget enemy team is '..z..' strength')
+	
+	if largestEnemyTeam == 0 then
+		return false
+	elseif largestEnemyTeam > teams[myTeam] and bool then
 		return true
-	elseif largestEnemyTeam < allies and not bool then
+	elseif largestEnemyTeam < teams[myTeam] and not bool then
 		return true
 	end
 	return false

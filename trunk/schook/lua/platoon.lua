@@ -1752,7 +1752,7 @@ Platoon = Class(sorianoldPlatoon) {
         self:SetPlatoonFormationOverride(PlatoonFormation)
         while aiBrain:PlatoonExists(self) do
             if self:IsOpponentAIRunning() then
-                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR)
+                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR - categories.NAVAL)
                 if target then
                     blip = target:GetBlip(armyIndex)
                     self:Stop()
@@ -1896,7 +1896,7 @@ Platoon = Class(sorianoldPlatoon) {
 			
             # if we're on our final push through to the destination, and we find a unit close to our destination
             #local closestTarget = self:FindClosestUnit( 'attack', 'enemy', true, categories.ALLUNITS )
-			local closestTarget = SUtils.FindClosestUnitPosToAttack( aiBrain, self, 'attack', maxRange + 20, categories.ALLUNITS - categories.AIR - categories.WALL, selectedWeaponArc, turretPitch )
+			local closestTarget = SUtils.FindClosestUnitPosToAttack( aiBrain, self, 'attack', maxRange + 20, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.WALL, selectedWeaponArc, turretPitch )
             local nearDest = false
             local oldPathSize = table.getn(self.LastAttackDestination)
             if self.LastAttackDestination then

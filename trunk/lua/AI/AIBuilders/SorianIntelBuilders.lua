@@ -76,7 +76,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Air Scout',
         PlatoonTemplate = 'T2AirScout',
-        Priority = 601,
+        Priority = 700, #601,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.SCOUT * categories.AIR}},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 2, categories.TECH3 * categories.FACTORY * categories.AIR } },
@@ -106,7 +106,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Air Scout',
         PlatoonTemplate = 'T3AirScout',
-        Priority = 701,
+        Priority = 800, #701,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.INTELLIGENCE * categories.AIR * categories.TECH3 }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, categories.AIR * categories.FACTORY * categories.TECH3 } },
@@ -270,7 +270,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, categories.ENGINEER - categories.COMMAND - categories.TECH1 } },
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, ( categories.RADAR + categories.OMNI ) * categories.STRUCTURE}},
-            { EBC, 'GreaterThanEconIncome',  { 0.5, 15 } },
+            { SIBC, 'GreaterThanEconIncome',  { 0.5, 15 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
         },
@@ -292,7 +292,7 @@ BuilderGroup {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, categories.ENGINEER * categories.TECH3 } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, ( categories.RADAR + categories.OMNI ) * categories.STRUCTURE}},
-            { EBC, 'GreaterThanEconIncome',  { 0.5, 15 } },
+            { SIBC, 'GreaterThanEconIncome',  { 0.5, 15 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
         },
@@ -313,7 +313,7 @@ BuilderGroup {
         BuilderConditions = {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, ( categories.RADAR + categories.OMNI ) * categories.STRUCTURE}},
-            { EBC, 'GreaterThanEconIncome',  { 0.5, 15 } },
+            { SIBC, 'GreaterThanEconIncome',  { 0.5, 15 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
         },
@@ -335,7 +335,7 @@ BuilderGroup {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, categories.ENGINEER - categories.TECH3 } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, ( categories.RADAR + categories.OMNI ) * categories.STRUCTURE}},
-            { EBC, 'GreaterThanEconIncome',  { 7.5, 100}},
+            { SIBC, 'GreaterThanEconIncome',  { 7.5, 100}},
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
@@ -356,7 +356,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.OMNI * categories.STRUCTURE } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
-            { EBC, 'GreaterThanEconIncome',  { 15, 400}},
+            { SIBC, 'GreaterThanEconIncome',  { 15, 400}},
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.OMNI * categories.STRUCTURE, 'RADAR STRUCTURE' } },
@@ -381,7 +381,7 @@ BuilderGroup {
         PlatoonTemplate = 'T1RadarUpgrade',
         Priority = 200,
         BuilderConditions = {
-            { EBC, 'GreaterThanEconIncome',  { 2, 100 }},
+            { SIBC, 'GreaterThanEconIncome',  { 2, 100 }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
 			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.RADAR * categories.STRUCTURE * categories.TECH2, 'RADAR STRUCTURE' }},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
@@ -397,7 +397,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2RadarUpgrade',
         Priority = 300,
         BuilderConditions = {
-            { EBC, 'GreaterThanEconIncome',  { 9, 500}},
+            { SIBC, 'GreaterThanEconIncome',  { 9, 500}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.OMNI * categories.STRUCTURE } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -419,7 +419,7 @@ BuilderGroup {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 1, categories.ENGINEER - categories.COMMAND - categories.TECH1} },
             { MABC, 'MarkerLessThanDistance',  { 'Naval Area', 200} },
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, categories.SONAR * categories.STRUCTURE } },
-            { EBC, 'GreaterThanEconIncome',  { 0.5, 150 } },
+            { SIBC, 'GreaterThanEconIncome',  { 0.5, 150 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
@@ -442,7 +442,7 @@ BuilderGroup {
             { MABC, 'MarkerLessThanDistance',  { 'Naval Area', 200}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, categories.SONAR * categories.STRUCTURE } },
-            { EBC, 'GreaterThanEconIncome',  { 0.5, 150 } },
+            { SIBC, 'GreaterThanEconIncome',  { 0.5, 150 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
@@ -495,7 +495,7 @@ BuilderGroup {
         Priority = 200,
 		InstanceCount = 1,
         BuilderConditions = {
-            { EBC, 'GreaterThanEconIncome',  { 4, 100 }},
+            { SIBC, 'GreaterThanEconIncome',  { 4, 100 }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -509,7 +509,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2RadarUpgrade',
         Priority = 300,
         BuilderConditions = {
-            { EBC, 'GreaterThanEconIncome',  { 9, 500}},
+            { SIBC, 'GreaterThanEconIncome',  { 9, 500}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -529,7 +529,7 @@ BuilderGroup {
         Priority = 200,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.SONAR * categories.TECH1}},
-            { EBC, 'GreaterThanEconIncome',  { 5, 15}},
+            { SIBC, 'GreaterThanEconIncome',  { 5, 15}},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
@@ -542,7 +542,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.SONAR * categories.TECH2}},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.SONAR * categories.TECH3}},
-            { EBC, 'GreaterThanEconIncome',  { 10, 600}},
+            { SIBC, 'GreaterThanEconIncome',  { 10, 600}},
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
         },
@@ -560,7 +560,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.SONAR * categories.TECH2}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
-            { EBC, 'GreaterThanEconIncome',  { 5, 15}},
+            { SIBC, 'GreaterThanEconIncome',  { 5, 15}},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
@@ -574,7 +574,7 @@ BuilderGroup {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.SONAR * categories.TECH3}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.SONAR * categories.TECH3}},
-            { EBC, 'GreaterThanEconIncome',  { 10, 600}},
+            { SIBC, 'GreaterThanEconIncome',  { 10, 600}},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },

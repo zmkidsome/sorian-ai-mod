@@ -284,6 +284,14 @@ AIChatText = {
 		'I was going easy on you, noob.',
 		'I\'ll get you next time.',
 	},
+	badmap = {
+		'Ok. I give up. Where are the map markers?',
+		'Um, can we play on a map with markers?',
+		'OMG I\'m blind! There aren\'t any markers',
+		'There aren\'t any map markers. Is there a \\nextmap command?',
+		'New map please. Preferably one with markers.',
+	},
+		
 	genericchat = {
 		'Roger.',
 		'Copy.',
