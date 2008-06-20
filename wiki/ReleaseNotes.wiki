@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.4.2:* Fix for units not moving, Fix for Land units getting stuck at expansion bases, Fix for ACU under attack bug, Disabled my log messages (except for start of game one) and some leftover GPG ones.
+
 *1.4.1:* Fix for T3 Arty on small maps, AI will let you know if a map does not have the appropriate markers, More late game scouts, More changes to help AI take advantage of a Paragon, Overall strategies have been re-enabled, Optimized the function to check if the AI is outnumbered.
 
 *1.4:* Added support system for custom unit mods, Nukes should target better, Land units will respond to large threats, Fixed a bug with nuke missile assist engineers, Other various tweaks and adjustments.
