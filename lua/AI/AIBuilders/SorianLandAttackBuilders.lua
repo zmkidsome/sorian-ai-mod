@@ -44,11 +44,11 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
 	local airThreat = 0 #pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, position, radius )
     if (surThreat + airThreat) > targetNumber then
         return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) > 0 and surThreat > 800 then #20
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > 780 then #39 Units x 20
 		return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH2 - categories.ENGINEER) > 0 and surThreat > 280 then #7
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH2 - categories.ENGINEER) and surThreat > 273 then #39 Units x 7
 		return true
-	elseif surThreat > 40 then #1
+	elseif surThreat > 39 then #39 Units x 1
 		return true
     end
     return false
@@ -670,6 +670,7 @@ BuilderGroup {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
 			UseFormation = 'AttackFormation',
+			LocationType = 'LocationType',
 			AggressiveMove = false,
             ThreatWeights = {
 			#SecondaryTargetThreatType = 'StructuresNotMex',
@@ -695,6 +696,7 @@ BuilderGroup {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
 			UseFormation = 'AttackFormation',
+			LocationType = 'LocationType',
 			AggressiveMove = false,
             ThreatWeights = {
 			#SecondaryTargetThreatType = 'StructuresNotMex',
@@ -720,6 +722,7 @@ BuilderGroup {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
 			UseFormation = 'AttackFormation',
+			LocationType = 'LocationType',
 			AggressiveMove = false,
             ThreatWeights = {
 			#SecondaryTargetThreatType = 'StructuresNotMex',
@@ -745,6 +748,7 @@ BuilderGroup {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
 			UseFormation = 'AttackFormation',
+			LocationType = 'LocationType',
 			AggressiveMove = false,
             ThreatWeights = {
 			#SecondaryTargetThreatType = 'StructuresNotMex',
@@ -770,6 +774,7 @@ BuilderGroup {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
 			UseFormation = 'AttackFormation',
+			LocationType = 'LocationType',
 			AggressiveMove = false,
             ThreatWeights = {
 			#SecondaryTargetThreatType = 'StructuresNotMex',
@@ -793,6 +798,7 @@ BuilderGroup {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
 			UseFormation = 'AttackFormation',
+			LocationType = 'LocationType',
 			AggressiveMove = false,
             ThreatWeights = {
 			#SecondaryTargetThreatType = 'StructuresNotMex',
@@ -817,6 +823,7 @@ BuilderGroup {
             NeverGuardBases = true,
             NeverGuardEngineers = true,
 			UseFormation = 'AttackFormation',
+			LocationType = 'LocationType',
 			AggressiveMove = false,
             ThreatWeights = {
 			#SecondaryTargetThreatType = 'StructuresNotMex',
@@ -851,6 +858,7 @@ BuilderGroup {
             },
         BuilderData = {
 			ThreatSupport = 75,
+			LocationType = 'LocationType',
             MarkerType = 'Mass',            
             MoveFirst = 'Random',
             MoveNext = 'Threat',
@@ -883,7 +891,8 @@ BuilderGroup {
             },
         BuilderData = {
 			ThreatSupport = 75,
-            MarkerType = 'Mass',            
+            MarkerType = 'Mass',        
+			LocationType = 'LocationType',			
             MoveFirst = 'Random',
             MoveNext = 'Threat',
             ThreatType = 'Economy',			    # Type of threat to use for gauging attacks
@@ -921,6 +930,7 @@ BuilderGroup {
 			ThreatSupport = 75,
             MarkerType = 'Start Location',            
             MoveFirst = 'Closest',
+			LocationType = 'LocationType',
             MoveNext = 'Guard Base',
             #ThreatType = '',
             #SelfThreat = '',
@@ -952,6 +962,7 @@ BuilderGroup {
 			ThreatSupport = 75,
             NeverGuardBases = true,
             NeverGuardEngineers = true,
+			LocationType = 'LocationType',
 			#UseFormation = 'AttackFormation',
 			AggressiveMove = false,
 		ThreatWeights = {
@@ -978,6 +989,7 @@ BuilderGroup {
         BuilderData = {
 			ThreatSupport = 75,
             NeverGuardBases = true,
+			LocationType = 'LocationType',
             NeverGuardEngineers = true,
 			#UseFormation = 'AttackFormation',
 			AggressiveMove = false,
@@ -1037,6 +1049,7 @@ BuilderGroup {
 			ThreatSupport = 75,
 			SearchRadius = 6000,
             NeverGuardBases = true,
+			LocationType = 'LocationType',
             NeverGuardEngineers = true,
 			UseFormation = 'AttackFormation',
 			AggressiveMove = false,
@@ -1078,6 +1091,7 @@ BuilderGroup {
 			ThreatSupport = 75,
 			SearchRadius = 6000,
             NeverGuardBases = true,
+			LocationType = 'LocationType',
             NeverGuardEngineers = true,
 			UseFormation = 'AttackFormation',
 			AggressiveMove = false,
@@ -1121,6 +1135,7 @@ BuilderGroup {
             MarkerType = 'Expansion Area',            
             MoveFirst = 'Random',
             MoveNext = 'Random',
+			LocationType = 'LocationType',
             #ThreatType = '',
             #SelfThreat = '',
             #FindHighestThreat ='',
@@ -1150,6 +1165,7 @@ BuilderGroup {
             MarkerType = 'Expansion Area',            
             MoveFirst = 'Random',
             MoveNext = 'Random',
+			LocationType = 'LocationType',
             #ThreatType = '',
             #SelfThreat = '',
             #FindHighestThreat ='',
@@ -1175,6 +1191,7 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderData = {
 			ThreatSupport = 75,
+			LocationType = 'LocationType',
             NeverGuardBases = true,
             NeverGuardEngineers = true,
             #UseFormation = 'AttackFormation',
@@ -1201,6 +1218,7 @@ BuilderGroup {
         BuilderData = {
 			ThreatSupport = 75,
             NeverGuardBases = true,
+			LocationType = 'LocationType',
             NeverGuardEngineers = true,
             #UseFormation = 'AttackFormation',
             ThreatWeights = {
@@ -1227,6 +1245,7 @@ BuilderGroup {
         InstanceCount = 3,
         BuilderData = {
             NeverGuardBases = true,
+			LocationType = 'LocationType',
         },
         BuilderConditions = {
 			#{ UCBC, 'PoolLessAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND - categories.ENGINEER - categories.TECH1 } },
@@ -1244,6 +1263,7 @@ BuilderGroup {
         InstanceCount = 3,
         BuilderData = {
             NeverGuardBases = true,
+			LocationType = 'LocationType',
         },
         BuilderConditions = {
 			{ UCBC, 'PoolLessAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND - categories.ENGINEER - categories.TECH1 - categories.TECH2} },
@@ -1260,6 +1280,7 @@ BuilderGroup {
         InstanceCount = 3,
         BuilderData = {
             NeverGuardBases = true,
+			LocationType = 'LocationType',
         },
         BuilderConditions = {
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND - categories.ENGINEER * categories.TECH3} },

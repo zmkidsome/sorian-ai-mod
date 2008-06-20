@@ -442,11 +442,12 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T4 Sea Exp1 Engineer',
         PlatoonTemplate = 'T3EngineerBuilder',
-        Priority = 950,
+        Priority = 949,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENGINEER * categories.TECH3}},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, categories.EXPERIMENTAL * categories.NAVAL}},
             { MABC, 'MarkerLessThanDistance',  { 'Naval Area', 400}},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
@@ -470,7 +471,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Engineer Assist Experimental Mobile Naval',
         PlatoonTemplate = 'T2EngineerAssistSorian',
-        Priority = 800,
+        Priority = 799,
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},
@@ -491,7 +492,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Naval',
         PlatoonTemplate = 'T3EngineerAssistSorian',
-        Priority = 851,
+        Priority = 849,
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.ENERGYPRODUCTION * categories.TECH3}},

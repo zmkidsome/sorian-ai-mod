@@ -712,17 +712,18 @@ function AIPlatoonSquadAttackVectorSorian( aiBrain, platoon, bAggro )
         
         GetMostRestrictiveLayer(platoon)
         # check if we can path to here safely... give a large threat weight to sort by threat first
-        local path, reason = PlatoonGenerateSafePathTo(aiBrain, platoon.MovementLayer, platoon:GetPlatoonPosition(), attackPos, platoon.PlatoonData.NodeWeight or 50 )
+        local path, reason = PlatoonGenerateSafePathTo(aiBrain, platoon.MovementLayer, platoon:GetPlatoonPosition(), attackPos, platoon.PlatoonData.NodeWeight or 10 )
     
         # clear command queue
         platoon:Stop()    
    
         local usedTransports = false
         local position = platoon:GetPlatoonPosition()
-		local inBase = true
-		if platoon:AvoidsBases(position, true, 100) then
-			inBase = false
-		end
+		local inBase = false
+		local homeBase = aiBrain.BuilderManagers[platoon.PlatoonData.LocationType].Position
+		if VDist2Sq(position[1], position[3], homeBase[1], homeBase[3]) < 100*100 then
+			inBase = true
+		end		
         if (not path and reason == 'NoPath') or bNeedTransports then
             usedTransports = SendPlatoonWithTransportsSorian(aiBrain, platoon, attackPos, true, false, true)
         # Require transports over 512 away
