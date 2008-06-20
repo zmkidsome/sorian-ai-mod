@@ -253,7 +253,7 @@ function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
     
     # if we're here, we haven't used transports and we can path to the destination
     if result then
-        local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Amphibious', unit:GetPosition(), destination, 50)
+        local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Amphibious', unit:GetPosition(), destination, 10)
         if path then
             local pathSize = table.getn(path)
             # move to way points (but not to destination... leave that for the final command)
@@ -401,6 +401,62 @@ function AIGetAttackPointsAroundLocation( aiBrain, pos, maxRange )
 	end
 
     return AISortMarkersFromStartPos(aiBrain, markerList, 100, nil, nil, nil, nil, nil, pos)
+end
+
+function SortUnitsOnTransports( transportTable, unitTable, numSlots )
+    local leftoverUnits = {}
+    numSlots = numSlots or -1
+    for num, unit in unitTable do
+        if numSlots == -1 or num <= numSlots then
+            local transSlotNum = 0
+            local remainingLarge = 0
+            local remainingMed = 0
+            local remainingSml = 0
+            for tNum, tData in transportTable do
+                if tData.LargeSlots > remainingLarge then
+                    transSlotNum = tNum
+                    remainingLarge = tData.LargeSlots
+                    remainingMed = tData.MediumSlots
+                    remainingSml = tData.SmallSlots
+                elseif tData.LargeSlots == remainingLarge and tData.MediumSlots > remainingMed then
+                    transSlotNum = tNum
+                    remainingLarge = tData.LargeSlots
+                    remainingMed = tData.MediumSlots
+                    remainingSml = tData.SmallSlots
+                elseif tData.LargeSlots == remainingLarge and tData.MediumSlots == remainingMed and tData.SmallSlots > remainingSml then
+                    transSlotNum = tNum
+                    remainingLarge = tData.LargeSlots
+                    remainingMed = tData.MediumSlots
+                    remainingSml = tData.SmallSlots
+                end
+            end
+            if transSlotNum > 0 then
+                table.insert( transportTable[transSlotNum].Units, unit )
+                if unit:GetBlueprint().Transport.TransportClass == 3 and remainingLarge >= 1 then
+                    transportTable[transSlotNum].LargeSlots = transportTable[transSlotNum].LargeSlots - 1
+                    transportTable[transSlotNum].MediumSlots = transportTable[transSlotNum].MediumSlots - 2
+                    transportTable[transSlotNum].SmallSlots = transportTable[transSlotNum].SmallSlots - 4
+                elseif unit:GetBlueprint().Transport.TransportClass == 2 and remainingMed > 0 then
+                    if transportTable[transSlotNum].LargeSlots > 0 then
+                        transportTable[transSlotNum].LargeSlots = transportTable[transSlotNum].LargeSlots - .5
+                    end
+                    transportTable[transSlotNum].MediumSlots = transportTable[transSlotNum].MediumSlots - 1
+                    transportTable[transSlotNum].SmallSlots = transportTable[transSlotNum].SmallSlots - 2
+                elseif unit:GetBlueprint().Transport.TransportClass == 1 and remainingSml > 0 then
+                    transportTable[transSlotNum].SmallSlots = transportTable[transSlotNum].SmallSlots - 1
+                elseif remainingSml > 0 then
+                    transportTable[transSlotNum].SmallSlots = transportTable[transSlotNum].SmallSlots - 1
+                else
+                    #LOG('*AI DEBUG: FOUND TRANSPORT NOT ENOUGH SLOTS')
+                    table.insert(leftoverUnits, unit)
+                end
+            else
+                #LOG('*AI DEBUG: NO TRANSPORT FOUND')
+                table.insert(leftoverUnits, unit)
+            end
+        end
+    end
+    return transportTable, leftoverUnits
 end
 
 function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPri, avoidbases )
@@ -925,7 +981,7 @@ function UseTransports(units, transports, location, transportPlatoon)
         if not unit:IsDead() then
             if unit:IsUnitState( 'Attached' ) then
                 aiBrain:AssignUnitsToPlatoon( pool, {unit}, 'Unassigned', 'None' )
-                LOG('*AI DEBUG: ARMY ' .. aiBrain:GetArmyIndex() .. ': Already Attached units adding to pool' )
+                #LOG('*AI DEBUG: ARMY ' .. aiBrain:GetArmyIndex() .. ': Already Attached units adding to pool' )
             elseif EntityCategoryContains( categories.url0306 + categories.DEFENSE, unit ) then
                 table.insert( shields, unit )
             elseif unit:GetBlueprint().Transport.TransportClass == 3 then

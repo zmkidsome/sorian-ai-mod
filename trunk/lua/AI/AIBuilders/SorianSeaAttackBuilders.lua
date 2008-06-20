@@ -45,11 +45,11 @@ function SeaAttackCondition(aiBrain, locationType, targetNumber)
     local subThreat = pool:GetPlatoonThreat( 'AntiSub', categories.MOBILE * categories.NAVAL, position, radius )
     if ( surfaceThreat + subThreat ) > targetNumber then
         return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH3) > 0 and ( surfaceThreat + subThreat ) > 1125 then #225
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH3) and ( surfaceThreat + subThreat ) > 1125 then #5 Units x 225
 		return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH2) > 0 and ( surfaceThreat + subThreat ) > 280 then #40
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH2) and ( surfaceThreat + subThreat ) > 280 then #7 Units x 40
 		return true
-	elseif ( surfaceThreat + subThreat ) > 54 then #6
+	elseif ( surfaceThreat + subThreat ) > 42 then #7 Units x 6
 		return true
     end
     return false
@@ -204,9 +204,34 @@ BuilderGroup {
     BuilderGroupName = 'SorianT3SeaFactoryBuilders',
     BuildersType = 'FactoryBuilder',
     Builder {
+        BuilderName = 'Sorian T2 Naval Destroyer - T3',
+        PlatoonTemplate = 'T2SeaDestroyer',
+        Priority = 700,
+        BuilderType = 'Sea',
+        BuilderConditions = {
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH2 } },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
+        },
+    },
+    Builder {
+        BuilderName = 'Sorian T2 Naval Cruiser - T3',
+        PlatoonTemplate = 'T2SeaCruiser',
+        PlatoonAddBehaviors = { 'AirLandToggle' },
+        Priority = 700,
+        BuilderConditions = {
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH2 } },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
+        },
+        BuilderType = 'Sea',
+    },
+    Builder {
         BuilderName = 'Sorian T3 Naval Battleship',
         PlatoonTemplate = 'T3SeaBattleship',
-        Priority = 700,
+        Priority = 701,
         BuilderType = 'Sea',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -230,7 +255,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3MissileBoat',
         PlatoonTemplate = 'T3MissileBoat',
-        Priority = 700,
+        Priority = 699,
         BuilderType = 'Sea',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },

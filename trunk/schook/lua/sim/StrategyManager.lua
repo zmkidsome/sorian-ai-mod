@@ -89,7 +89,7 @@ StrategyManager = Class(BuilderManager) {
 		
 		if builder:GetStrategyType() == 'Intermediate' then
 			if (GetGameTimeSeconds() - self.LastChange > self.NextChange or builder:IsInterruptStrategy()) and builder:GetPriority() > 0 and builder:GetBuilderStatus() and builder != self.LastStrategy then
-				LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Intermediate Strategy to '..builder.BuilderName)
+				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Intermediate Strategy to '..builder.BuilderName)
 				self.LastChange = GetGameTimeSeconds()
 				self.NextChange = builder:GetStrategyTime() or 300
 				if self.LastStrategy then
@@ -98,20 +98,20 @@ StrategyManager = Class(BuilderManager) {
 				self.LastStrategy = builder
 				self:ExecuteChanges(builder)
 			elseif GetGameTimeSeconds() - self.LastChange > self.NextChange and self.LastStrategy and builder == self.LastStrategy and not builder:GetBuilderStatus() then
-				LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Intermediate Strategy to none.')
+				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Intermediate Strategy to none.')
 				self:UndoChanges(self.LastStrategy)
 				self.LastStrategy = false
 			end
 		elseif builder:GetStrategyType() == 'Overall' then
 			if builder:GetPriority() > 0 and builder:GetBuilderStatus() and builder != self.OverallStrategy then
-				LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Overall Strategy to '..builder.BuilderName)
+				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Overall Strategy to '..builder.BuilderName)
 				if self.OverallStrategy then
 					self:UndoChanges(self.OverallStrategy)
 				end
 				self.OverallStrategy = builder
 				self:ExecuteChanges(builder)
 			elseif self.OverallStrategy and builder == self.OverallStrategy and not builder:GetBuilderStatus() then
-				LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Overall Strategy to none.')
+				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Overall Strategy to none.')
 				self:UndoChanges(self.OverallStrategy)
 				self.LastStrategy = false
 			end

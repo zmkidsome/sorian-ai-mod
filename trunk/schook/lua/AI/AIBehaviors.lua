@@ -493,7 +493,7 @@ function CommanderThreadSorian(cdr, platoon)
 	
 	local cmdrDamaged = function(cdr, instigator)
 		local aiBrain = cdr:GetAIBrain()
-		if not instigator:IsDead() and instigator:GetPosition() then
+		if instigator and not instigator:IsDead() and instigator:GetPosition() then
 			#LOG('*AI DEBUG: cmdrDamaged in action!')
 			local attackPos = instigator:GetPosition()
 		#Bombard area
