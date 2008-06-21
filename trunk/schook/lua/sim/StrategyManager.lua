@@ -28,6 +28,7 @@ StrategyManager = Class(BuilderManager) {
 		self.NextChange = 300
 		self.LastStrategy = false
 		self.OverallStrategy = false
+		self.OverallPriority = 0
 		
         self.UseCenterPoint = useCenterPoint or false
         
@@ -103,17 +104,19 @@ StrategyManager = Class(BuilderManager) {
 				self.LastStrategy = false
 			end
 		elseif builder:GetStrategyType() == 'Overall' then
-			if builder:GetPriority() > 0 and builder:GetBuilderStatus() and builder != self.OverallStrategy then
+			if builder:GetPriority() > 0 and builder:GetPriority() >= self.OverallPriority and builder:GetBuilderStatus() and builder != self.OverallStrategy then
 				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Overall Strategy to '..builder.BuilderName)
 				if self.OverallStrategy then
 					self:UndoChanges(self.OverallStrategy)
 				end
 				self.OverallStrategy = builder
+				self.OverallPriority = builder:GetPriority()
 				self:ExecuteChanges(builder)
 			elseif self.OverallStrategy and builder == self.OverallStrategy and not builder:GetBuilderStatus() then
 				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Overall Strategy to none.')
 				self:UndoChanges(self.OverallStrategy)
-				self.LastStrategy = false
+				self.OverallStrategy = false
+				self.OverallPriority = 0
 			end
 		end
     end,

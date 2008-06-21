@@ -276,7 +276,7 @@ FactoryBuilderManager = Class(BuilderManager) {
 		local retTemplate = false
 		local templateData = self.Brain.CustomUnits[templateName]
 		if templateData and templateData[faction] then
-			LOG('*AI DEBUG: Replacement for '..templateName..' exists.')
+			#LOG('*AI DEBUG: Replacement for '..templateName..' exists.')
 			local rand = Random(1,100)
 			local possibles = {}
 			for k,v in templateData[faction] do

@@ -154,6 +154,7 @@ BaseBuilderTemplate {
 		'SorianT2ACUSnipe',
 		'SorianT3ArtyRush',
 		'SorianTeamLevelAdjustment',
+		'SorianParagonStrategy',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',
@@ -169,6 +170,8 @@ BaseBuilderTemplate {
 		'SorianT3ArtyBuildersHighPrio',
 		'SorianT2FirebaseBuildersHighPrio',
 		'SorianT3FBBuildersHighPrio',
+		'Sorian Extractor Upgrades Strategy',
+		'SorianBalancedUpgradeBuildersExpansionStrategy',
     },
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',
