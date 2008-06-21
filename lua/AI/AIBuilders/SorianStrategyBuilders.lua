@@ -159,6 +159,35 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'SorianSmallMapRush',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Small Map Rush Strategy',
+		StrategyType = 'Overall',
+        Priority = 105,
+        InstanceCount = 1,
+        BuilderConditions = {
+			{ SBC, 'IsWaterMap', { false } },
+			{ SBC, 'ClosestEnemyLessThan', { 500 } },
+			{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1 } },
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {
+			EngineerManager = {
+				'Sorian T1VacantStartingAreaEngineer - Rush',
+				'Sorian T1VacantStartingAreaEngineer',
+			},
+		},
+		AddBuilders = {
+			EngineerManager = {
+				'Sorian T1VacantStartingAreaEngineer - HP Strategy',
+				'Sorian T1VacantStartingAreaEngineer Strategy',
+			},
+		}
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianT3ArtyRush',
     BuildersType = 'StrategyBuilder',
     Builder {
@@ -463,6 +492,112 @@ BuilderGroup {
 			PlatoonFormManager = {
 				'Sorian Bomber Attack - Large',
 			}
+		}
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianParagonStrategy',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Paragon Strategy',
+		StrategyType = 'Overall',
+        Priority = 100,
+        InstanceCount = 1,
+        BuilderConditions = {
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE' }},
+        },
+        BuilderType = 'Any',
+        RemoveBuilders = {
+			PlatoonFormManager = {
+				'T1 Mass Extractor Upgrade Storage Based',
+				'Sorian T1 Mass Extractor Upgrade Timeless Single',
+				'Sorian T1 Mass Extractor Upgrade Timeless Two',
+				'Sorian T1 Mass Extractor Upgrade Timeless LOTS',
+				'Sorian T2 Mass Extractor Upgrade Timeless',
+				'Sorian T2 Mass Extractor Upgrade Timeless Multiple',
+				'Sorian Balanced T1 Land Factory Upgrade Initial',
+				'Sorian BalancedT1AirFactoryUpgradeInitial',
+				'Sorian Balanced T1 Land Factory Upgrade',
+				'Sorian BalancedT1AirFactoryUpgrade',
+				'Sorian Balanced T1 Sea Factory Upgrade',
+				'Sorian Balanced T1 Land Factory Upgrade - T3',
+				'Sorian BalancedT1AirFactoryUpgrade - T3',
+				'Sorian Balanced T2 Land Factory Upgrade - initial',
+				'Sorian Balanced T2 Air Factory Upgrade - initial',
+				'Sorian Balanced T2 Land Factory Upgrade',
+				'Sorian Balanced T2 Air Factory Upgrade',
+				'Sorian Balanced T2 Sea Factory Upgrade',
+				'Sorian Naval T1 Land Factory Upgrade Initial',
+				'Sorian Naval T1 Air Factory Upgrade Initial',
+				'Sorian Naval T1 Naval Factory Upgrade Initial',
+				'Sorian Naval T1 Land Factory Upgrade',
+				'Sorian Naval T1 AirFactory Upgrade',
+				'Sorian Naval T1 Sea Factory Upgrade',
+				'Sorian Naval T1 Land Factory Upgrade - T3',
+				'Sorian Naval T1AirFactoryUpgrade - T3',
+				'Sorian Naval T2 Land Factory Upgrade',
+				'Sorian Naval T2 Air Factory Upgrade',
+				'Sorian Naval T2 Sea Factory Upgrade',
+			},
+		},
+		AddBuilders = {
+			PlatoonFormManager = {
+				'Sorian T1 Mass Extractor Upgrade Timeless Strategy',
+				'Sorian T2 Mass Extractor Upgrade Timeless Strategy',
+				'Sorian Balanced T1 Land Factory Upgrade Expansion Strategy',
+				'Sorian BalancedT1AirFactoryUpgrade Expansion Strategy',
+				'Sorian Balanced T1 Sea Factory Upgrade Expansion Strategy',
+				'Sorian Balanced T2 Land Factory Upgrade Expansion Strategy',
+				'Sorian Balanced T2 Air Factory Upgrade Expansion Strategy',
+				'Sorian Balanced T2 Sea Factory Upgrade Expansion Strategy',
+			},
+		}
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianParagonStrategyExp',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Paragon Strategy Expansion',
+		StrategyType = 'Overall',
+        Priority = 110,
+        InstanceCount = 1,
+        BuilderConditions = {
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE' }},
+        },
+        BuilderType = 'Any',
+        RemoveBuilders = {
+			PlatoonFormManager = {
+				'Sorian Balanced T1 Land Factory Upgrade Expansion',
+				'Sorian BalancedT1AirFactoryUpgrade Expansion',
+				'Sorian Balanced T1 Sea Factory Upgrade Expansion',
+				'Sorian Balanced T2 Land Factory Upgrade Expansion',
+				'Sorian Balanced T2 Air Factory Upgrade Expansion',
+				'Sorian Balanced T2 Sea Factory Upgrade Expansion',
+				'Sorian Naval T1 Land Factory Upgrade Initial',
+				'Sorian Naval T1 Air Factory Upgrade Initial',
+				'Sorian Naval T1 Naval Factory Upgrade Initial',
+				'Sorian Naval T1 Land Factory Upgrade',
+				'Sorian Naval T1 AirFactory Upgrade',
+				'Sorian Naval T1 Sea Factory Upgrade',
+				'Sorian Naval T1 Land Factory Upgrade - T3',
+				'Sorian Naval T1AirFactoryUpgrade - T3',
+				'Sorian Naval T2 Land Factory Upgrade',
+				'Sorian Naval T2 Air Factory Upgrade',
+				'Sorian Naval T2 Sea Factory Upgrade',
+			},
+		},
+		AddBuilders = {
+			PlatoonFormManager = {
+				'Sorian Balanced T1 Land Factory Upgrade Expansion Strategy',
+				'Sorian BalancedT1AirFactoryUpgrade Expansion Strategy',
+				'Sorian Balanced T1 Sea Factory Upgrade Expansion Strategy',
+				'Sorian Balanced T2 Land Factory Upgrade Expansion Strategy',
+				'Sorian Balanced T2 Air Factory Upgrade Expansion Strategy',
+				'Sorian Balanced T2 Sea Factory Upgrade Expansion Strategy',
+			},
 		}
     },
 }

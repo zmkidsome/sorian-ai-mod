@@ -72,6 +72,14 @@ BaseBuilderTemplate {
         'SorianT2AntiAirBuilders',
         'SorianT3AntiAirBuilders',
         'SorianBaseGuardAirFormBuilders',
+		
+		# ===== STRATEGIES ====== #
+		
+		'SorianParagonStrategyExp',
+		
+		# == STRATEGY PLATOONS == #
+		
+		'SorianBalancedUpgradeBuildersExpansionStrategy',
 
         # ==== EXPERIMENTALS ==== #
         'SorianMobileLandExperimentalEngineers',

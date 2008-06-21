@@ -46,9 +46,9 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
         return true
 	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > 780 then #39 Units x 20
 		return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH2 - categories.ENGINEER) and surThreat > 273 then #39 Units x 7
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH2 - categories.ENGINEER) and surThreat > 203 then #29 Units x 7
 		return true
-	elseif surThreat > 39 then #39 Units x 1
+	elseif surThreat > 19 then #19 Units x 1
 		return true
     end
     return false
@@ -852,6 +852,7 @@ BuilderGroup {
         Priority = 950,
         BuilderConditions = {  
                 { MIBC, 'LessThanGameTime', { 600 } },
+				{ LandAttackCondition, { 'LocationType', 10 } },
 				{ SBC, 'NoRushTimeCheck', { 0 }},
 				{ SBC, 'MapGreaterThan', { 500, 500 }},
                 #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.MOBILE * categories.LAND - categories.ENGINEER } },
@@ -885,6 +886,7 @@ BuilderGroup {
         Priority = 950,
         BuilderConditions = {  
         		{ MIBC, 'GreaterThanGameTime', { 600 } },
+				{ LandAttackCondition, { 'LocationType', 50 } },
 				{ SBC, 'NoRushTimeCheck', { 0 }},
 				{ SBC, 'MapGreaterThan', { 500, 500 }},
                 #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.MOBILE * categories.LAND - categories.ENGINEER } },
@@ -982,6 +984,7 @@ BuilderGroup {
         BuilderConditions = { 
                 #{ UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },     
         		{ MIBC, 'GreaterThanGameTime', { 720 } },
+				{ LandAttackCondition, { 'LocationType', 50 } },
 				{ SBC, 'MapLessThan', { 1000, 1000 }},
 				{ SBC, 'NoRushTimeCheck', { 0 }},
                 #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.MOBILE * categories.LAND - categories.ENGINEER } },

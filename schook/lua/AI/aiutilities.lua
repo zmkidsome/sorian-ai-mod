@@ -721,7 +721,7 @@ function GetTransports(platoon, units)
         location = units[1]:GetCachePosition()
     end
     if not location then
-        LOG("*AI DEBUG: Passed in no units into AIUtilities' GetTransports" )
+        #LOG("*AI DEBUG: Passed in no units into AIUtilities' GetTransports" )
         return 0
     end
 
@@ -945,14 +945,14 @@ function UseTransports(units, transports, location, transportPlatoon)
         end
     end
     if not aiBrain then
-        LOG('*AI DEBUG: Attack force failed no brain - transports')
+        #LOG('*AI DEBUG: Attack force failed no brain - transports')
         return false
     end
         # Load transports
     local transportTable = {}
     local transSlotTable = {}
     if not transports then
-        LOG('*AI DEBUG: Attack force failed no transports')
+        #LOG('*AI DEBUG: Attack force failed no transports')
         return false
     end
     #LOG('*AI DEBUG: Attack force using Transports')

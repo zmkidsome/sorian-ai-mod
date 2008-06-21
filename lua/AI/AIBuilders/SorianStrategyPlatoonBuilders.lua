@@ -733,3 +733,209 @@ BuilderGroup {
         }
     },
 }
+
+BuilderGroup {
+    BuilderGroupName = 'Sorian Extractor Upgrades Strategy',
+    BuildersType = 'PlatoonFormBuilder',
+    Builder {
+        BuilderName = 'Sorian T1 Mass Extractor Upgrade Timeless Strategy',
+        PlatoonTemplate = 'T1MassExtractorUpgrade',
+        InstanceCount = 5,		
+        Priority = 0.1,
+		ActivePriority = 200,
+        BuilderConditions = {
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        FormRadius = 10000,
+        BuilderType = 'Any',
+    },    
+    Builder {
+        BuilderName = 'Sorian T2 Mass Extractor Upgrade Timeless Strategy',
+        PlatoonTemplate = 'T2MassExtractorUpgrade',
+        Priority = 0.1,
+		ActivePriority = 200,
+        InstanceCount = 5,
+        BuilderConditions = {
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        FormRadius = 10000,
+        BuilderType = 'Any',
+    },      
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianBalancedUpgradeBuildersExpansionStrategy',
+    BuildersType = 'PlatoonFormBuilder',
+    Builder {
+        BuilderName = 'Sorian Balanced T1 Land Factory Upgrade Expansion Strategy',
+        PlatoonTemplate = 'T1LandFactoryUpgrade',
+        Priority = 0.1,
+		ActivePriority = 200,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
+                { IBC, 'BrainNotLowPowerMode', {} },
+            },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian BalancedT1AirFactoryUpgrade Expansion Strategy',
+        PlatoonTemplate = 'T1AirFactoryUpgrade',
+        Priority = 0.1,
+		ActivePriority = 200,
+        InstanceCount = 1,
+        FormDebugFunction = nil,
+        BuilderConditions = {
+                { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
+                { IBC, 'BrainNotLowPowerMode', {} },
+            },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian Balanced T1 Sea Factory Upgrade Expansion Strategy',
+        PlatoonTemplate = 'T1SeaFactoryUpgrade',
+        Priority = 0.1,
+		ActivePriority = 200,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3, FACTORY TECH2' } },
+                { IBC, 'BrainNotLowPowerMode', {} },
+            },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian Balanced T2 Land Factory Upgrade Expansion Strategy',
+        PlatoonTemplate = 'T2LandFactoryUpgrade',
+        Priority = 0.1,
+		ActivePriority = 300,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'MASSEXTRACTION TECH3'}},
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
+                { UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 7, 'MOBILE LAND'}},
+                { IBC, 'BrainNotLowPowerMode', {} },
+            },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian Balanced T2 Air Factory Upgrade Expansion Strategy',
+        PlatoonTemplate = 'T2AirFactoryUpgrade',
+        Priority = 0.1,
+		ActivePriority = 300,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'MASSEXTRACTION TECH3'}},
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
+                { IBC, 'BrainNotLowPowerMode', {} },
+            },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian Balanced T2 Sea Factory Upgrade Expansion Strategy',
+        PlatoonTemplate = 'T2SeaFactoryUpgrade',
+        Priority = 0.1,
+		ActivePriority = 300,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'MASSEXTRACTION TECH3'}},
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
+                { IBC, 'BrainNotLowPowerMode', {} },
+            },
+        BuilderType = 'Any',
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianEngineerExpansionBuildersStrategy',
+    BuildersType = 'EngineerBuilder',
+    Builder {
+        BuilderName = 'Sorian T1VacantStartingAreaEngineer - HP Strategy',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 0.1,
+		ActivePriority = 985,
+        InstanceCount = 2,
+        BuilderConditions = {
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+            { MIBC, 'LessThanGameTime', { 900 } },
+			{ SIBC, 'LessThanExpansionBases', { } },
+            #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 14, '>=', 'FACTORY TECH2 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 19, '>=', 'FACTORY TECH3 STRUCTURE' } },
+            #{ EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                NearMarkerType = 'Start Location',
+                LocationRadius = 1000,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 5,
+                ThreatRings = 0,
+                ThreatType = 'StructuresNotMex',
+                BuildStructures = {                    
+					'T1GroundDefense',
+					'T1LandFactory',
+					'T1LandFactory',
+					'T1LandFactory',
+					'T1LandFactory',
+					'T1AADefense',
+					'T1Radar',
+                }               
+            },
+            NeedGuard = true,
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T1VacantStartingAreaEngineer Strategy',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 0.1,
+		ActivePriority = 932,
+        InstanceCount = 2,
+        BuilderConditions = {
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+			{ SIBC, 'LessThanExpansionBases', { } },
+            #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 6.5, '>=', 'FACTORY TECH1 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 14, '>=', 'FACTORY TECH2 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 19, '>=', 'FACTORY TECH3 STRUCTURE' } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                NearMarkerType = 'Start Location',
+                LocationRadius = 1000,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 100,
+                ThreatRings = 0,
+                ThreatType = 'StructuresNotMex',
+                BuildStructures = {                    
+					'T1GroundDefense',
+					'T1LandFactory',
+					'T1LandFactory',
+					'T1LandFactory',
+					'T1LandFactory',
+					'T1AADefense',
+					'T1Radar',
+                }
+            },
+            NeedGuard = true,
+        }
+    },
+}

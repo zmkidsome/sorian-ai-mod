@@ -14,10 +14,35 @@ local Utils = import('/lua/utilities.lua')
 local SUtils = import('/lua/AI/sorianutilities.lua')
 local MABC = import('/lua/editor/MarkerBuildConditions.lua')
 
-function IsWaterMap(aiBrain)
+function IsWaterMap(aiBrain, bool)
 	local startX, startZ = aiBrain:GetArmyStartPos()
 	local navalMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Naval Area', startX, startZ)
-	if navalMarker then
+	if navalMarker and bool then
+		return true
+	elseif not navalMarker and not bool then
+		return true
+	end
+	return false
+end
+
+##############################################################################################################
+# function: EnemiesLessThan = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: integer  num             = "Number of enemies"
+#
+##############################################################################################################
+function EnemyToAllyRatioLessOrEqual(aiBrain, num)	
+	local enemies = 0
+	local allies = 0
+	for k,v in ArmyBrains do
+        if not v:IsDefeated() and not ArmyIsCivilian(v:GetArmyIndex()) and IsEnemy(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+			enemies = enemies + 1
+        elseif not v:IsDefeated() and not ArmyIsCivilian(v:GetArmyIndex()) and IsAlly(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+			allies = allies + 1
+        end
+    end
+	if enemies / allies <= num then
 		return true
 	end
 	return false

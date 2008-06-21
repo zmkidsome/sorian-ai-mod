@@ -71,6 +71,14 @@ BaseBuilderTemplate {
         'SorianT2AntiAirBuilders',
         'SorianT3AntiAirBuilders',
         'SorianBaseGuardAirFormBuilders',
+		
+		# ===== STRATEGIES ====== #
+		
+		'SorianParagonStrategyExp',
+		
+		# == STRATEGY PLATOONS == #
+		
+		'SorianBalancedUpgradeBuildersExpansionStrategy',
     },
     NonCheatBuilders = {        
         'SorianLandScoutFactoryBuilders',
@@ -88,7 +96,7 @@ BaseBuilderTemplate {
         },
         
         FactoryCount = {
-            Land = 3,
+            Land = 4,
             Air = 0,
             Sea = 0,
             Gate = 0,

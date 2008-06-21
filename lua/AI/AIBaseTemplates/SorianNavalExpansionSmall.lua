@@ -44,6 +44,14 @@ BaseBuilderTemplate {
 		'SorianSeaHunterFormBuilders',
         'SorianFrequentSeaAttackFormBuilders',
         'SorianMassHunterSeaFormBuilders',
+		
+		# ===== STRATEGIES ====== #
+		
+		'SorianParagonStrategyExp',
+		
+		# == STRATEGY PLATOONS == #
+		
+		'SorianBalancedUpgradeBuildersExpansionStrategy',
         
         # ==== NAVAL EXPANSION ==== #
         'SorianNavalExpansionBuilders',

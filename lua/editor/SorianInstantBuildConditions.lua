@@ -196,7 +196,7 @@ end
 #
 ##############################################################################################################
 function GreaterThanEconIncome(aiBrain, MassIncome, EnergyIncome)
-	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE') then
 		#LOG('*AI DEBUG: Found Paragon')
 		return true
 	end
@@ -217,7 +217,7 @@ end
 #
 ##############################################################################################################
 function LessThanEconIncome(aiBrain, MassIncome, EnergyIncome)
-	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE') then
 		#LOG('*AI DEBUG: Found Paragon')
 		return false
 	end
@@ -253,7 +253,7 @@ end
 #
 ##############################################################################################################
 function GreaterThanEconEfficiency(aiBrain, MassEfficiency, EnergyEfficiency)
-	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE') then
 		#LOG('*AI DEBUG: Found Paragon')
 		return true
 	end
@@ -265,7 +265,7 @@ function GreaterThanEconEfficiency(aiBrain, MassEfficiency, EnergyEfficiency)
 end
 
 function LessThanEconEfficiency(aiBrain, MassEfficiency, EnergyEfficiency)
-	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE') then
 		#LOG('*AI DEBUG: Found Paragon')
 		return false
 	end
@@ -285,7 +285,7 @@ end
 #
 ##############################################################################################################
 function GreaterThanEconEfficiencyOverTime(aiBrain, MassEfficiency, EnergyEfficiency)
-	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE') then
 		#LOG('*AI DEBUG: Found Paragon')
 		return true
 	end
@@ -297,7 +297,7 @@ function GreaterThanEconEfficiencyOverTime(aiBrain, MassEfficiency, EnergyEffici
 end
 
 function LessThanEconEfficiencyOverTime(aiBrain, MassEfficiency, EnergyEfficiency)
-	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, categories.EXPERIMENTAL * categories.STRUCTURE * categories.ECONOMIC) then
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE') then
 		#LOG('*AI DEBUG: Found Paragon')
 		return false
 	end
