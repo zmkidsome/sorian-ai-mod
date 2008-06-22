@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.4.5:* Fixed econ issue with Rush AI, T3 Firebase strategy was not being loaded, Modified T3 Naval mix a bit.
+
 *1.4.4:* One more fix for land platoons.
 
 *1.4.3:* Adjusted Land unit platoon sizes, Made more Land platoons use the platoon size condition, Added Paragon Overall Strategy, Disabled Log messages, Added a small map strategy.
