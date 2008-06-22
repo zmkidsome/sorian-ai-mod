@@ -170,6 +170,7 @@ BuilderGroup {
 			{ SBC, 'IsWaterMap', { false } },
 			{ SBC, 'ClosestEnemyLessThan', { 500 } },
 			{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1 } },
+			{ MIBC, 'LessThanGameTime', { 1200 } },
         },
         BuilderType = 'Any',		
         RemoveBuilders = {
