@@ -231,7 +231,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Naval Battleship',
         PlatoonTemplate = 'T3SeaBattleship',
-        Priority = 701,
+        Priority = 700,
         BuilderType = 'Sea',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },

@@ -32,7 +32,8 @@ BaseBuilderTemplate {
         'SorianEngineerEnergyBuilders',
         
         # Build Mass high pri at this base
-        'SorianEngineerMassBuilders - Rush',
+        #'SorianEngineerMassBuilders - Rush',
+		'SorianEngineerMassBuildersHighPri',
         
         # Extractors
         'SorianTime Exempt Extractor Upgrades',
@@ -148,7 +149,7 @@ BaseBuilderTemplate {
 		'SorianNukeRush',
 		'SorianT3ArtyRush',
 		'SorianT2ACUSnipe',
-		'SorianT3ArtyRush',
+		'SorianT3FBRush',
 		'SorianParagonStrategy',
 		'SorianSmallMapRush',
 		
@@ -168,7 +169,7 @@ BaseBuilderTemplate {
 		'SorianT3FBBuildersHighPrio',
 		'Sorian Extractor Upgrades Strategy',
 		'SorianBalancedUpgradeBuildersExpansionStrategy',
-		'SorianEngineerExpansionBuildersStrategy',
+		#'SorianEngineerExpansionBuildersStrategy',
     },
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',

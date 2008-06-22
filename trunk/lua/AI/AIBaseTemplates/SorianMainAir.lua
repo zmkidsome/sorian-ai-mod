@@ -152,7 +152,7 @@ BaseBuilderTemplate {
 		'SorianNukeRush',
 		'SorianT3ArtyRush',
 		'SorianT2ACUSnipe',
-		'SorianT3ArtyRush',
+		'SorianT3FBRush',
 		'SorianTeamLevelAdjustment',
 		'SorianParagonStrategy',
 		
