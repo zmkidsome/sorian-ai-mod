@@ -347,7 +347,9 @@ EngineerManager = Class(BuilderManager) {
     
     GetNumCategoryUnits = function(self, unitType, category)
         if self.ConsumptionUnits[unitType] then
-            return EntityCategoryCount( category, self.ConsumptionUnits[unitType].UnitsList )
+            local numUnits = EntityCategoryCount( category, self.ConsumptionUnits[unitType].UnitsList )
+			#LOG('*AI DEBUG: '..self.Brain.Nickname..' - GetNumCategoryUnits returns '..numUnits..' at '..self.LocationType)
+			return EntityCategoryCount( category, self.ConsumptionUnits[unitType].UnitsList )
         end
         return 0
     end,

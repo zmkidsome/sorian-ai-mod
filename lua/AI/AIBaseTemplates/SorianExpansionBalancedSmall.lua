@@ -39,6 +39,7 @@ BaseBuilderTemplate {
 		#'SorianT3ArtilleryFormBuilders',
 		#'SorianT4ArtilleryFormBuilders',
 		'SorianAirStagingExpansion',
+		'SorianT2MissileDefenses',
 		
 		'SorianMassAdjacencyDefenses',
         
@@ -97,7 +98,7 @@ BaseBuilderTemplate {
         
         FactoryCount = {
             Land = 4,
-            Air = 0,
+            Air = 1,
             Sea = 0,
             Gate = 0,
         },

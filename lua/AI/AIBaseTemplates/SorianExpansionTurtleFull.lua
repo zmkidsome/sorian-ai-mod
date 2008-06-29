@@ -46,6 +46,7 @@ BaseBuilderTemplate {
 		'SorianT2ShieldsExpansion',
 		'SorianT3ShieldsExpansion',
 		'SorianAirStagingExpansion',
+		'SorianT2MissileDefenses',
 		
 		'SorianMassAdjacencyDefenses',
         

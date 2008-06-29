@@ -83,13 +83,16 @@ function AINewExpansionBase( aiBrain, baseName, position, builder, constructionD
         import('/lua/ai/AIAddBuilderTable.lua').AddGlobalBaseTemplate(aiBrain, baseName, pick )
         
         # If air base switch to building an air factory rather than land
-        if ( string.find(pick, 'Air') or string.find(pick, 'Water') ) and BaseBuilderTemplates[pick].BaseSettings.FactoryCount.Land and BaseBuilderTemplates[pick].BaseSettings.FactoryCount.Land == 0 then
+        if ( string.find(pick, 'Air') or string.find(pick, 'Water') ) then
             #if constructionData.BuildStructures[1] == 'T1LandFactory' then
             #    constructionData.BuildStructures[1] = 'T1AirFactory'
             #end
+			local numToChange = BaseBuilderTemplates[pick].BaseSettings.FactoryCount.Land
 			for k,v in constructionData.BuildStructures do
-				if constructionData.BuildStructures[k] == 'T1LandFactory' then
+				if constructionData.BuildStructures[k] == 'T1LandFactory' and numToChange <= 0 then
 					constructionData.BuildStructures[k] = 'T1AirFactory'
+				elseif constructionData.BuildStructures[k] == 'T1LandFactory' and numToChange > 0 then
+					numToChange = numToChange - 1
 				end
 			end
         end

@@ -279,6 +279,48 @@ Platoon = Class(sorianoldPlatoon) {
         if data.DoNotDisband then return end
         self:PlatoonDisband()
     end,
+	
+    UnitUpgradeAI = function(self)
+        local aiBrain = self:GetBrain()
+        local platoonUnits = self:GetPlatoonUnits()
+        local factionIndex = aiBrain:GetFactionIndex()
+		local upgradeIssued = false
+        self:Stop()
+        for k, v in platoonUnits do
+            local upgradeID
+            if EntityCategoryContains(categories.MOBILE, v ) then
+                upgradeID = aiBrain:FindUpgradeBP(v:GetUnitId(), UnitUpgradeTemplates[factionIndex])
+            else
+                upgradeID = aiBrain:FindUpgradeBP(v:GetUnitId(), StructureUpgradeTemplates[factionIndex])
+            end
+			if EntityCategoryContains(categories.CONSTRUCTION, v) and not v:CanBuild(upgradeID) then
+				continue
+			end
+            if upgradeID then
+				upgradeIssued = true
+                IssueUpgrade({v}, upgradeID)
+            end
+        end
+		if not upgradeIssued then 
+			self:PlatoonDisband()
+			return
+		end
+        local upgrading = true
+        while aiBrain:PlatoonExists(self) and upgrading do
+            WaitSeconds(3)
+            upgrading = false
+            for k, v in platoonUnits do
+                if v and not v:IsDead() then
+                    upgrading = true
+                end
+            end
+        end
+        if not aiBrain:PlatoonExists(self) then
+            return
+        end
+        WaitTicks(1)
+        self:PlatoonDisband()
+    end,
 
     ArtilleryAISorian = function(self)
         local aiBrain = self:GetBrain()
