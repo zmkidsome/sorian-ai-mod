@@ -384,7 +384,7 @@ BuilderGroup {
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 945,
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 20, 'DEFENSE TECH3 ANTIAIR STRUCTURE'}},
+            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 40, 'DEFENSE TECH3 ANTIAIR STRUCTURE'}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3 } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -2136,7 +2136,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         Priority = 1200,
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 4, 'ANTIMISSILE TECH2' }},
+            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 6, 'ANTIMISSILE TECH2' }},
             { SBC, 'GreaterThanEnemyUnitsAroundBase', { 'LocationType', 0, 'TACTICALMISSILEPLATFORM TECH2 STRUCTURE', 256 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},

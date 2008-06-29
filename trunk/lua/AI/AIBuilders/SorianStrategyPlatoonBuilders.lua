@@ -153,6 +153,35 @@ BuilderGroup {
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
     },
+    Builder {
+        BuilderName = 'Sorian Bomber Attack - Large T1',
+        PlatoonTemplate = 'BomberAttackSorian',
+		PlatoonAddBehaviors = { 'AirUnitRefitSorian' },
+		PlatoonAddPlans = { 'AirIntelToggle' },
+        Priority = 0.1,
+		ActivePriority = 995,
+        InstanceCount = 5,
+        BuilderType = 'Any',
+        BuilderData = {
+			SearchRadius = 6000,
+            PrioritizedCategories = {
+                'ENERGYPRODUCTION DRAGBUILD',
+                'MASSFABRICATION',
+                'COMMAND',
+                'MASSEXTRACTION',
+                'SHIELD',
+                'ANTIAIR STRUCTURE',
+                'DEFENSE STRUCTURE',
+                'STRUCTURE',
+                'MOBILE ANTIAIR',
+                'ALLUNITS',
+            },
+        },
+        BuilderConditions = {
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 3, 'AIR MOBILE BOMBER' } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
+    },
 }
 
 BuilderGroup {
@@ -927,6 +956,49 @@ BuilderGroup {
                 BuildStructures = {                    
 					'T1GroundDefense',
 					'T1LandFactory',
+					'T1LandFactory',
+					'T1LandFactory',
+					'T1LandFactory',
+					'T1AADefense',
+					'T1Radar',
+                }
+            },
+            NeedGuard = true,
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Vacant Expansion Area Engineer(Full Base) - Strategy',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 0.1,
+		ActivePriority = 922,
+        InstanceCount = 2,
+        BuilderConditions = {
+            { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'StartLocationsFull', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },   
+			{ SIBC, 'LessThanExpansionBases', { } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 10, '>=', 'FACTORY TECH1 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 20, '>=', 'FACTORY TECH2 STRUCTURE' } },
+            #{ EBC, 'MassIncomeToUnitRatio', { 30, '>=', 'FACTORY TECH3 STRUCTURE' } },
+            #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },
+            { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			RequireTransport = true,
+            Construction = {
+                BuildClose = false,
+                BaseTemplate = ExBaseTmpl,
+                ExpansionBase = true,
+                NearMarkerType = 'Expansion Area',
+                LocationRadius = 350,
+                LocationType = 'LocationType',
+                ThreatMin = -1000,
+                ThreatMax = 100,
+                ThreatRings = 2,
+                ThreatType = 'StructuresNotMex',
+                BuildStructures = {                    
+					'T1GroundDefense',
 					'T1LandFactory',
 					'T1LandFactory',
 					'T1LandFactory',

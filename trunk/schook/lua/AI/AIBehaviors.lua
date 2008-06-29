@@ -525,7 +525,7 @@ function CommanderThreadSorian(cdr, platoon)
 			)
 		end
 	end
-	import('/lua/ScenarioTriggers.lua').CreateUnitDamagedTrigger(cmdrDamaged, cdr, .2, -1)
+	#import('/lua/ScenarioTriggers.lua').CreateUnitDamagedTrigger(cmdrDamaged, cdr, .2, -1)
 	
     while not cdr:IsDead() do
 		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Loop')
@@ -980,7 +980,7 @@ CzarBehaviorSorian = function(self)
 			else 
 			    IssueClearCommands(platoonUnits)
 				WaitTicks(5)
-				IssueAttack(platoonUnits, experimental:GetPosition())
+				IssueAttack(platoonUnits, self:GetPlatoonPosition())
 				WaitTicks(5)
 				IssueMove(platoonUnits, targetUnit:GetPosition())
                 WaitTicks(5)
@@ -995,7 +995,7 @@ CzarBehaviorSorian = function(self)
             if nearCommander and nearCommander != oldCommander then
                 IssueClearCommands(platoonUnits)
                 WaitTicks(5)
-                IssueAttack(platoonUnits, experimental:GetPosition())
+                IssueAttack(platoonUnits, self:GetPlatoonPosition())
                 WaitTicks(5)
                 IssueMove(platoonUnits, nearCommander:GetPosition())
                 WaitTicks(5)

@@ -233,7 +233,15 @@ function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
         return false
     end
     local pos = unit:GetPosition()
-    local result, bestPos = unit:CanPathTo( destination )
+    local result, bestPos = false #unit:CanPathTo( destination )
+	result, bestPos = AIAttackUtils.CanGraphTo(unit, destination, 'Land')
+	if not result then
+		result, bestPos = AIAttackUtils.CanGraphTo(unit, destination, 'Amphibious')
+		if not result then
+			LOG('*AI DEBUG: EngineerMoveWithSafePathSorian got to CanPathTo')
+			result, bestPos	= unit:CanPathTo( destination )
+		end
+	end
 
     local bUsedTransports = false
     if not result or VDist2Sq(pos[1], pos[3], destination[1], destination[3]) > 65536 and unit.PlatoonHandle and not EntityCategoryContains(categories.COMMAND, unit) then
@@ -244,7 +252,7 @@ function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
             needTransports = true
         end
         # skip the last move... we want to return and do a build
-        bUsedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, unit.PlatoonHandle, destination, needTransports, true, false)
+        bUsedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, unit.PlatoonHandle, destination, needTransports, true, needTransports)
         
         if bUsedTransports then
             return true
@@ -728,7 +736,7 @@ function GetTransports(platoon, units)
     local transports = {}
     # Determine distance of transports from platoon
     for k,unit in pool:GetPlatoonUnits() do
-        if not unit:IsDead() and EntityCategoryContains( categories.TRANSPORTATION - categories.uea0203, unit ) and not unit:IsUnitState('Busy') and unit:GetFractionComplete() == 1 then
+        if not unit:IsDead() and EntityCategoryContains( categories.TRANSPORTATION - categories.uea0203, unit ) and not unit:IsUnitState('Busy') and not unit:IsUnitState('TransportLoading') and table.getn(unit:GetCargo()) < 1 and unit:GetFractionComplete() == 1 then
             local unitPos = unit:GetPosition()
             local curr = { Unit=unit, Distance=VDist2( unitPos[1], unitPos[3], location[1], location[3] ),
                            Id = unit:GetUnitId() }
@@ -756,7 +764,7 @@ function GetTransports(platoon, units)
 
         # Take transports as needed
         for i=1,table.getn(sortedList) do
-            if transportsNeeded then
+            if transportsNeeded and table.getn(sortedList[i].Unit:GetCargo()) < 1 and not sortedList[i].Unit:IsUnitState('TransportLoading') then
                 local id = sortedList[i].Id
                 aiBrain:AssignUnitsToPlatoon(platoon, {sortedList[i].Unit}, 'Scout', 'GrowthFormation')
                 numTransports = numTransports + 1
@@ -1117,6 +1125,41 @@ function UseTransports(units, transports, location, transportPlatoon)
     ReturnTransportsToPool( transports, true )
     #LOG('*AI DEBUG: Finished using transports')
     return true
+end
+
+function ReturnTransportsToPool(units, move)
+    # Put transports back in TPool
+    local unit
+    if not units then
+        return false
+    end
+    for k,v in units do
+        if not v:IsDead() then
+            unit = v
+            break
+        end
+    end
+    if not unit then
+        return false
+    end
+    local aiBrain = unit:GetAIBrain()
+    local x,z = aiBrain:GetArmyStartPos()
+    local position = RandomLocation(x,z)
+    local safePath, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Air', unit:GetPosition(), position, 200)
+    for k,unit in units do
+        if not unit:IsDead() and EntityCategoryContains( categories.TRANSPORTATION, unit ) then
+            aiBrain:AssignUnitsToPlatoon( 'ArmyPool', {unit}, 'Scout', 'None' )
+            if move then
+                if safePath then
+                    for _,p in safePath do
+                        IssueMove( {unit}, p )
+                    end
+                else
+                    IssueMove( {unit}, position )
+                end
+            end
+        end
+    end
 end
 
 end

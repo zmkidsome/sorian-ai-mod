@@ -860,8 +860,8 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
             # we were told that transports are the only way to get where we want to go...
             # ask for a transport every 10 seconds
             local counter = 0
-			if waitLonger then
-				counter = -6
+			if not waitLonger then
+				counter = 12
 			end
             local transportsNeeded = AIUtils.GetNumTransports(units)
             local numTransportsNeeded = math.ceil( ( transportsNeeded.Small + ( transportsNeeded.Medium * 2 ) + ( transportsNeeded.Large * 4 ) ) / 10 )
@@ -873,7 +873,7 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
                 aiBrain.NeedTransports = 10
             end
             local bUsedTransports, overflowSm, overflowMd, overflowLg = AIUtils.GetTransports(platoon) 
-            while not bUsedTransports and counter < 6 do
+            while not bUsedTransports and counter < 18 do
                 # if we have overflow, dump the overflow and just send what we can
                 if not bUsedTransports and overflowSm + overflowMd + overflowLg > 0 then
                     local goodunits, overflow = AIUtils.SplitTransportOverflow(units, overflowSm, overflowMd, overflowLg)
@@ -892,8 +892,8 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
                 if bUsedTransports then 
                     break 
                 end
-                counter = counter + 1				
-                WaitSeconds(10)
+                counter = counter + 1
+                WaitSeconds(Random(10,15))
                 if not aiBrain:PlatoonExists(platoon) then
                     aiBrain.NeedTransports = aiBrain.NeedTransports - numTransportsNeeded
                     if aiBrain.NeedTransports < 0 then

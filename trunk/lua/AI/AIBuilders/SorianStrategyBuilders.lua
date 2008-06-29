@@ -168,7 +168,7 @@ BuilderGroup {
         InstanceCount = 1,
         BuilderConditions = {
 			{ SBC, 'IsWaterMap', { false } },
-			{ SBC, 'ClosestEnemyLessThan', { 500 } },
+			{ SBC, 'ClosestEnemyLessThan', { 750 } },
 			{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1 } },
 			{ MIBC, 'LessThanGameTime', { 1200 } },
         },
@@ -177,12 +177,14 @@ BuilderGroup {
 			EngineerManager = {
 				'Sorian T1VacantStartingAreaEngineer - Rush',
 				'Sorian T1VacantStartingAreaEngineer',
+				'Sorian T1 Vacant Expansion Area Engineer(Full Base)',
 			},
 		},
 		AddBuilders = {
 			EngineerManager = {
 				'Sorian T1VacantStartingAreaEngineer - HP Strategy',
 				'Sorian T1VacantStartingAreaEngineer Strategy',
+				'Sorian T1 Vacant Expansion Area Engineer(Full Base) - Strategy',
 			},
 		}
     },
@@ -373,7 +375,7 @@ BuilderGroup {
 				'Sorian T3 Air Bomber - High Prio',
 			},
 			PlatoonFormManager = {
-				'Sorian Bomber Attack - Large',
+				'Sorian Bomber Attack - Large T1',
 			}
 		}
     },

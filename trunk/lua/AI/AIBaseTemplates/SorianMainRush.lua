@@ -169,7 +169,7 @@ BaseBuilderTemplate {
 		'SorianT3FBBuildersHighPrio',
 		'Sorian Extractor Upgrades Strategy',
 		'SorianBalancedUpgradeBuildersExpansionStrategy',
-		#'SorianEngineerExpansionBuildersStrategy',
+		'SorianEngineerExpansionBuildersStrategy',
     },
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',
@@ -192,7 +192,7 @@ BaseBuilderTemplate {
         },
         FactoryCount = {
             Land = 8,
-            Air = 1,
+            Air = 2,
             Sea = 0,
             Gate = 1,
         },
