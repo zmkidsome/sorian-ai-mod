@@ -234,6 +234,7 @@ BuilderGroup {
 					'T1Resource',
                     'T1EnergyProduction',
                     'T1EnergyProduction',
+					'T1Resource',
 					'T1EnergyProduction',
 					'T1EnergyProduction',
                     'T1AirFactory',					
@@ -885,6 +886,22 @@ BuilderGroup {
         BuilderType = 'Any',
     },
     Builder {
+        BuilderName = 'Sorian T1 Engineer Reclaim Old Pgens',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        PlatoonAIPlan = 'ReclaimStructuresAI',
+        Priority = 900,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 0, categories.TECH3 * categories.ENERGYPRODUCTION}},
+				{ UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 0, categories.TECH1 * categories.ENERGYPRODUCTION * categories.DRAGBUILD }},
+            },
+        BuilderData = {
+			Location = 'LocationType',
+			Reclaim = {'STRUCTURE ENERGYPRODUCTION TECH1 DRAGBUILD'},
+        },
+        BuilderType = 'Any',
+    },
+    Builder {
         BuilderName = 'Sorian T1 Engineer Find Unfinished',
         PlatoonTemplate = 'EngineerBuilderSorian',
         PlatoonAIPlan = 'ManagerEngineerFindUnfinished',
@@ -1238,6 +1255,22 @@ BuilderGroup {
             },
         BuilderData = {
             LocationType = 'LocationType',
+        },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian T2 Engineer Reclaim Old Pgens',
+        PlatoonTemplate = 'T2EngineerBuilderSorian',
+        PlatoonAIPlan = 'ReclaimStructuresAI',
+        Priority = 900,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 0, categories.TECH3 * categories.ENERGYPRODUCTION}},
+				{ UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 0, categories.TECH1 * categories.ENERGYPRODUCTION * categories.DRAGBUILD }},
+            },
+        BuilderData = {
+			Location = 'LocationType',
+			Reclaim = {'STRUCTURE ENERGYPRODUCTION TECH1 DRAGBUILD'},
         },
         BuilderType = 'Any',
     },

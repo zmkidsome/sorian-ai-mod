@@ -621,6 +621,7 @@ EngineerManager = Class(BuilderManager) {
     AssignEngineerTask = function(self, unit)
         unit.DesiresAssist = false
         unit.NumAssistees = nil
+		unit.MinNumAssistees = nil
         
         local builder = self:GetHighestBuilder('Any', {unit})
         if builder then
@@ -680,6 +681,10 @@ EngineerManager = Class(BuilderManager) {
             
             if hndl.PlatoonData.NumAssistees then
                 unit.NumAssistees = hndl.PlatoonData.NumAssistees
+            end
+			
+            if hndl.PlatoonData.MinNumAssistees then
+                unit.MinNumAssistees = hndl.PlatoonData.MinNumAssistees
             end
             
             builder:StoreHandle(hndl)

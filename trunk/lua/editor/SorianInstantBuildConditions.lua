@@ -344,7 +344,7 @@ function EngineerNeedsAssistance(aiBrain, doesbool, locationType, category)
 	local numFound = 0
 	for k,v in engs do
 		if v.DesiresAssist == true then
-			if v.NumAssistees and SUtils.GetGuards(aiBrain, v) < v.NumAssistees then
+			if v.MinNumAssistees and SUtils.GetGuards(aiBrain, v) < v.MinNumAssistees then
 				numFound = numFound + 1
 			end
 		end
@@ -354,7 +354,7 @@ function EngineerNeedsAssistance(aiBrain, doesbool, locationType, category)
 	local engs = engineerManager:GetEngineersBuildQueue(category)
 	for k,v in engs do
 		if v.DesiresAssist == true then
-			if v.NumAssistees and SUtils.GetGuards(aiBrain, v) < v.NumAssistees then
+			if v.MinNumAssistees and SUtils.GetGuards(aiBrain, v) < v.MinNumAssistees then
 				numFound = numFound + 1
 			end
 		end

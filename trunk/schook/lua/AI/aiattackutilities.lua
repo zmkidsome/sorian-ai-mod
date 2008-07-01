@@ -923,11 +923,23 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
             end  
         end
         # presumably, if we're here, we've gotten transports
-        # find an appropriate transport marker if it's on the map
-        local transportLocation = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Land Path Node', destination[1], destination[3])
-		if not transportLocation then
-			transportLocation = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Transport Marker', destination[1], destination[3])
+		
+		local transportLocation = false
+
+		# Try the destination directly if it is an engineer - based on Duncane's idea
+		if bSkipLastMove then
+			transportLocation = destination
 		end
+		
+		# if not an engineer try a near by land path node
+		if not transportLocation then
+			transportLocation = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Land Path Node', destination[1], destination[3])
+			# If we have not found a spot yet find an appropriate transport marker if it's on the map
+			if not transportLocation then
+				transportLocation = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Transport Marker', destination[1], destination[3])
+			end
+		end
+		
         local useGraph = 'Land'
         if not transportLocation then
             # go directly to destination, do not pass go.  This move might kill you, fyi.

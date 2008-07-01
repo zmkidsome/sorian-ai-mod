@@ -1200,6 +1200,54 @@ Platoon = Class(sorianoldPlatoon) {
         end
     end,
 	
+    ReclaimStructuresAI = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+		local data = self.PlatoonData
+        local radius = aiBrain:PBMGetLocationRadius(data.Location)
+		local categories = data.Reclaim
+        local counter = 0
+        while aiBrain:PlatoonExists(self) do
+            local unitPos = self:GetPlatoonPosition()
+			local reclaimunit = false
+			local distance = false
+			for num,cat in categories do
+				local reclaimcat = ParseEntityCategory(cat)
+				local reclaimables = aiBrain:GetListOfUnits( reclaimcat, false )
+				for k,v in reclaimables do
+					if not v:IsDead() and (not reclaimunit or VDist3(unitPos, v:GetPosition()) < distance) then
+						reclaimunit = v
+						distance = VDist3(unitPos, v:GetPosition())
+					end
+				end
+				if reclaimunit then break end
+			end
+            if reclaimunit and not reclaimunit:IsDead() then
+                counter = 0
+                IssueReclaim( self:GetPlatoonUnits(), reclaimunit )
+                local allIdle
+                repeat
+                    WaitSeconds(2)
+                    if not aiBrain:PlatoonExists(self) then
+                        return
+                    end
+                    allIdle = true
+                    for k,v in self:GetPlatoonUnits() do
+                        if not v:IsDead() and not v:IsIdleState() then
+                            allIdle = false
+                            break
+                        end
+                    end
+                until allIdle
+            elseif not reclaimunit or counter >= 5 then
+                self:PlatoonDisband()
+            else
+                counter = counter + 1
+                WaitSeconds(5)
+            end
+        end
+    end,
+	
     ReclaimAISorian = function(self)
         self:Stop()
         local aiBrain = self:GetBrain()

@@ -118,7 +118,7 @@ BuilderGroup {
         Priority = 200,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-            { SIBC, 'GreaterThanEconIncome',  { 8, 10}},
+            { SIBC, 'GreaterThanEconIncome',  { 6, 10}},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.2 }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 2, 'MASSEXTRACTION TECH2', 'MASSEXTRACTION' } },
 			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION' }},

@@ -57,84 +57,61 @@ function SetupMainBase(aiBrain)
     aiBrain:ForceManagerSort()
 end
 
+#Modeled after GPGs LowMass and LowEnergy functions
 function UnitCapWatchThreadSorian(aiBrain)
 	#LOG('*AI DEBUG: UnitCapWatchThreadSorian started')
-    KillPD = false
-	KillDF = false
-	KillEng = false	
-	KillT1Land = false
-	KillT1Air = false
-	Reset = false
-    while true do
-        WaitSeconds(60)
-		local Scouts = aiBrain:GetListOfUnits( categories.SCOUT + categories.MOBILE * categories.INTELLIGENCE * categories.AIR, true )
-		for k, v in Scouts do
-			if not v:IsDead() and EntityCategoryContains( categories.AIR, v ) and not v.HasFuel then
-				v:Kill()
+	while true do
+		WaitSeconds(30)
+		if GetArmyUnitCostTotal(aiBrain:GetArmyIndex()) > (GetArmyUnitCap(aiBrain:GetArmyIndex()) - 20) then
+			local underCap = false
+			
+			# More than 1 T3 Power
+			underCap = GetAIUnderUnitCap(aiBrain, 1, categories.TECH3 * categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.TECH1 * categories.ENERGYPRODUCTION * categories.STRUCTURE * categories.DRAGBUILD)
+			
+			# More than 14 T3 Defense
+			if underCap ~= true then
+				underCap = GetAIUnderUnitCap(aiBrain, 14, categories.TECH3 * categories.DEFENSE * categories.STRUCTURE, categories.TECH1 * categories.DEFENSE * categories.STRUCTURE)
+			end
+			
+			# More than 6 T2/T3 Engineers
+			if underCap ~= true then
+				underCap = GetAIUnderUnitCap(aiBrain, 6, categories.ENGINEER * (categories.TECH2 + categories.TECH3), categories.TECH1 * categories.ENGINEER)
+			end
+			
+			# More than 9 T3 Engineers
+			if underCap ~= true then
+				underCap = GetAIUnderUnitCap(aiBrain, 9, categories.ENGINEER * categories.TECH3, categories.TECH2 * categories.ENGINEER - categories.ENGINEERSTATION)
+			end
+			
+			# More than 39 T3 Land Units minus Engineers
+			if underCap ~= true then
+				underCap = GetAIUnderUnitCap(aiBrain, 39, categories.TECH3 * categories.MOBILE * categories.LAND - categories.ENGINEER, categories.TECH1 * categories.MOBILE * categories.LAND)
+			end
+			
+			# More than 9 T3 Air Units minus Scouts
+			if underCap ~= true then
+				underCap = GetAIUnderUnitCap(aiBrain, 9, categories.TECH3 * categories.MOBILE * categories.AIR - categories.INTELLIGENCE, categories.TECH1 * categories.MOBILE * categories.AIR - categories.SCOUT)
+			end
+			
+			# More than 9 T3 AntiAir
+			if underCap ~= true then
+				underCap = GetAIUnderUnitCap(aiBrain, 9, categories.TECH3 * categories.DEFENSE * categories.ANTIAIR, categories.TECH2 * categories.DEFENSE * categories.ANTIAIR)
 			end
 		end
-        while GetArmyUnitCostTotal(aiBrain:GetArmyIndex()) > (GetArmyUnitCap(aiBrain:GetArmyIndex()) - 20) and not Reset do
-            if not KillPD and aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENERGYPRODUCTION) > 3 then
-				local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.ENERGYPRODUCTION * categories.STRUCTURE, true)
-				for k, v in units do
-					v:Kill()
-				end
-                KillPD = true
-				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed T1 Pgens')
-            elseif not KillDF and aiBrain:GetCurrentUnits(categories.TECH3 * categories.DEFENSE * categories.STRUCTURE) > 15 then            
-                local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.DEFENSE * categories.STRUCTURE, true)
-                for k, v in units do
-                    v:Kill()
-                end
-				KillDF = true
-				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed T1 Defenses')
-			elseif not KillEng and (aiBrain:GetCurrentUnits(categories.TECH2 * categories.ENGINEER) > 6 or aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENGINEER) > 6) then
-				if aiBrain:GetCurrentUnits(categories.TECH2 * categories.ENGINEER) > 1 or aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENGINEER) > 1 then
-					local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.ENGINEER, true)
-					for k, v in units do
-						v:Kill()						
-					end
-				end
-				if aiBrain:GetCurrentUnits(categories.TECH3 * categories.ENGINEER) > 6 then
-					local units = aiBrain:GetListOfUnits(categories.TECH2 * categories.ENGINEER - categories.ENGINEERSTATION, true)
-					for k, v in units do
-						v:Kill()
-					end
-				end				
-				KillEng = true
-				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed Engies')
-			elseif not KillT1Land and aiBrain:GetCurrentUnits(categories.TECH3 * categories.MOBILE * categories.LAND - categories.ENGINEER) > 50 then
-				local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.MOBILE * categories.LAND, true)
-				for k, v in units do
-					v:Kill()
-				end				
-				KillT1Land = true
-				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed T1 Land')
-			elseif not KillT1Air and aiBrain:GetCurrentUnits(categories.TECH3 * categories.MOBILE * categories.AIR - categories.INTELLIGENCE) > 10 then
-				local units = aiBrain:GetListOfUnits(categories.TECH1 * categories.MOBILE * categories.AIR - categories.SCOUT, true)
-				for k, v in units do
-					v:Kill()
-				end				
-				KillT1Air = true
-				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Killed T1 Air')
-            else        
-				if aiBrain:GetCurrentUnits(categories.TECH3 * categories.DEFENSE * categories.ANTIAIR) > 10 then
-					local units = aiBrain:GetListOfUnits(categories.TECH2 * categories.DEFENSE * categories.ANTIAIR, true)
-					for k, v in units do
-						v:Kill()
-					end
-				end
-				KillPD = false
-				KillDF = false
-				KillEng = false
-				KillT1Land = false
-				KillT1Air = false
-				Reset = true
-				#LOG('*AI DEBUG: UnitCapWatchThreadSorian Reset')
-            end
-        end
-		Reset = false
-    end
+	end
+end
+
+function GetAIUnderUnitCap(aiBrain, num, checkCat, killCat)
+	if aiBrain:GetCurrentUnits(checkCat) > num then
+		local units = aiBrain:GetListOfUnits(killCat, true)
+		for k, v in units do
+			v:Kill()
+		end
+	end
+	if GetArmyUnitCostTotal(aiBrain:GetArmyIndex()) <= (GetArmyUnitCap(aiBrain:GetArmyIndex()) - 20) then
+		return true
+	end
+	return false
 end
 
 end
