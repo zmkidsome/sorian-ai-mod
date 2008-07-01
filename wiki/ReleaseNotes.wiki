@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.4.7:* Removed Water T4s, Optimized Unit Cap Manager, Added T1 Pgen reclaim engineer, Removed hard cap on engineers assisting T4s, Fixed Balanced AI, Removed leftover Log message.
+
 *1.4.6:* Adjust Mobile AA balance, Expansion base factories will upgrade sooner, AI will build extra engineers if it has a constant excess of power and mass, Added Expansion base emergency TMD builder, AI will no longer upgrade units if the upgrade is restricted by the unit manager, Adjusted the Expansion base creation function to allow for some Land Factories, Transports should no longer be given an order to pick up a unit when it already has one, AI Engineer movement should use less CPU and be more efficient, Hopefully fixed the Czar bug once and for all.
 
 *1.4.5:* Fixed econ issue with Rush AI, T3 Firebase strategy was not being loaded, Modified T3 Naval mix a bit.
