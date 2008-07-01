@@ -47,7 +47,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
 				AdjacencyCategory = 'SHIELD STRUCTURE',
@@ -77,7 +77,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
 				AdjacencyCategory = 'SHIELD STRUCTURE',
@@ -107,7 +107,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
 				T4 = true,
@@ -163,7 +163,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
 				AdjacencyCategory = 'SHIELD STRUCTURE',
@@ -204,7 +204,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
 				T4 = true,
@@ -292,7 +292,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
 				T4 = true,
@@ -321,7 +321,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
 				AdjacencyCategory = 'SHIELD STRUCTURE',

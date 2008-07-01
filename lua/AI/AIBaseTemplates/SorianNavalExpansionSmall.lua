@@ -57,8 +57,8 @@ BaseBuilderTemplate {
         'SorianNavalExpansionBuilders',
 		
         # ==== EXPERIMENTALS ==== #
-        'SorianMobileNavalExperimentalEngineers',
-        'SorianMobileNavalExperimentalForm',
+        #'SorianMobileNavalExperimentalEngineers',
+        #'SorianMobileNavalExperimentalForm',
     },
     NonCheatBuilders = {
         'SorianSonarEngineerBuilders',

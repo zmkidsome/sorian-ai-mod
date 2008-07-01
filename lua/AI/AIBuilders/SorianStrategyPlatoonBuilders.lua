@@ -265,7 +265,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 3,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = true,
                 BuildStructures = {
@@ -709,7 +709,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 3,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = true,
                 BuildStructures = {

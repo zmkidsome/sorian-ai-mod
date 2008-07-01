@@ -128,8 +128,8 @@ BaseBuilderTemplate {
         'SorianMobileAirExperimentalEngineers',
         'SorianMobileAirExperimentalForm',
 		
-        'SorianMobileNavalExperimentalEngineers',
-        'SorianMobileNavalExperimentalForm',
+        #'SorianMobileNavalExperimentalEngineers',
+        #'SorianMobileNavalExperimentalForm',
 		
 		'SorianEconomicExperimentalEngineers',
 		'SorianMobileExperimentalEngineersGroup',

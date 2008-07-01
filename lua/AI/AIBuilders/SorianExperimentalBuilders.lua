@@ -48,7 +48,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
 				T4 = true,
@@ -80,7 +80,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
 				T4 = true,
@@ -111,7 +111,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
 				T4 = true,
@@ -144,7 +144,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
 				T4 = true,
@@ -174,7 +174,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
 				T4 = true,
@@ -203,7 +203,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
 				T4 = true,
@@ -329,7 +329,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
 				T4 = true,
@@ -456,7 +456,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 2,
             Construction = {
                 BuildClose = false,
 				T4 = true,
@@ -560,7 +560,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = true,
 				T4 = true,
@@ -659,7 +659,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-			NumAssistees = 2,
+			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
 				T4 = true,
