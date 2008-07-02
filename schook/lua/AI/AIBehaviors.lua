@@ -491,41 +491,41 @@ function CommanderThreadSorian(cdr, platoon)
 	moveOnNext = false
 	moveWait = 0
 	
-	local cmdrDamaged = function(cdr, instigator)
-		local aiBrain = cdr:GetAIBrain()
-		if instigator and not instigator:IsDead() and instigator:GetPosition() then
-			#LOG('*AI DEBUG: cmdrDamaged in action!')
-			local attackPos = instigator:GetPosition()
-		#Bombard area
-			if not aiBrain.AttackPoints then
-				aiBrain.AttackPoints = {}
-			end
-			table.insert(aiBrain.AttackPoints,
-				{
-				Position = attackPos,
-				}
-			)
-			aiBrain:ForkThread(aiBrain.AttackPointsTimeout, attackPos)
-		#Set off base alert
-			table.insert(aiBrain.BaseMonitor.AlertsTable,
-				{
-				Position = attackPos,
-				Threat = 150,
-				}
-			)
-			aiBrain.BaseMonitor.AlertSounded = true
-			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, attackPos)
-			aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
-		#Add area to high prio scout list
-			table.insert(aiBrain.InterestList.HighPriority,
-				{
-				Position = attackPos,
-				LastScouted = GetGameTimeSeconds(),
-				}
-			)
-		end
-	end
-	#import('/lua/ScenarioTriggers.lua').CreateUnitDamagedTrigger(cmdrDamaged, cdr, .2, -1)
+#	local cmdrDamaged = function(cdr, instigator)
+#		local aiBrain = cdr:GetAIBrain()
+#		if instigator and not instigator:IsDead() and instigator:GetPosition() then
+#			#LOG('*AI DEBUG: cmdrDamaged in action!')
+#			local attackPos = instigator:GetPosition()
+#		#Bombard area
+#			if not aiBrain.AttackPoints then
+#				aiBrain.AttackPoints = {}
+#			end
+#			table.insert(aiBrain.AttackPoints,
+#				{
+#				Position = attackPos,
+#				}
+#			)
+#			aiBrain:ForkThread(aiBrain.AttackPointsTimeout, attackPos)
+#		#Set off base alert
+#			table.insert(aiBrain.BaseMonitor.AlertsTable,
+#				{
+#				Position = attackPos,
+#				Threat = 150,
+#				}
+#			)
+#			aiBrain.BaseMonitor.AlertSounded = true
+#			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, attackPos)
+#			aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
+#		#Add area to high prio scout list
+#			table.insert(aiBrain.InterestList.HighPriority,
+#				{
+#				Position = attackPos,
+#				LastScouted = GetGameTimeSeconds(),
+#				}
+#			)
+#		end
+#	end
+#	import('/lua/ScenarioTriggers.lua').CreateUnitDamagedTrigger(cmdrDamaged, cdr, .2, -1)
 	
     while not cdr:IsDead() do
 		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Loop')
