@@ -27,6 +27,57 @@ local SBC = '/lua/editor/SorianBuildConditions.lua'
 
 local AIAddBuilderTable = import('/lua/ai/AIAddBuilderTable.lua')
 
+function T4LandAttackCondition(aiBrain, locationType, targetNumber)
+	local UC = import('/lua/editor/UnitCountBuildConditions.lua')
+    local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
+    local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+	if not engineerManager then
+        return false
+    end
+	if aiBrain:GetCurrentEnemy() then
+		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+		local enemyTML = aiBrain:GetNumUnitsAroundPoint( categories.TECH2 * categories.TACTICALMISSILEPLATFORM * categories.STRUCTURE, {estartX, 0, estartZ}, 100, 'Enemy' )
+		local enemyT3PD = aiBrain:GetNumUnitsAroundPoint( categories.TECH3 * categories.DEFENSE * categories.DIRECTFIRE, {estartX, 0, estartZ}, 100, 'Enemy' )
+		targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiSurface' )
+		targetNumber = targetNumber + (enemyTML * 54) + (enemyT3PD * 54)
+	end
+
+    local position = engineerManager:GetLocationCoords()
+    local radius = engineerManager:GetLocationRadius()
+    
+    local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.LAND * categories.EXPERIMENTAL, position, radius )
+    if surThreat > targetNumber then
+        return true
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 9, categories.MOBILE * categories.LAND * categories.EXPERIMENTAL) then
+		return true
+    end
+    return false
+end
+
+function T4AirAttackCondition(aiBrain, locationType, targetNumber)
+	local UC = import('/lua/editor/UnitCountBuildConditions.lua')
+    local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
+    local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+	if not engineerManager then
+        return false
+    end
+	if aiBrain:GetCurrentEnemy() then
+		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+		targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiAir' )
+	end
+
+    local position = engineerManager:GetLocationCoords()
+    local radius = engineerManager:GetLocationRadius()
+    
+    local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.AIR * categories.EXPERIMENTAL, position, radius)
+    if surThreat > targetNumber then
+        return true
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 4, categories.MOBILE * categories.AIR * categories.EXPERIMENTAL) then
+		return true
+    end
+    return false
+end
+
 BuilderGroup {
     BuilderGroupName = 'SorianMobileExperimentalEngineersGroup',
     BuildersType = 'EngineerBuilder',
@@ -273,8 +324,32 @@ BuilderGroup {
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderConditions = {
-            { SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+            #{ SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY TECH1, FACTORY TECH2' } },
+			{ T4LandAttackCondition, { 'LocationType', 250 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
+        BuilderData = {
+			ThreatSupport = 100,
+            ThreatWeights = {
+                TargetThreatType = 'Commander',
+            },
+            UseMoveOrder = true,
+            PrioritizedCategories = { 'EXPERIMENTAL LAND', 'COMMAND', 'STRUCTURE ARTILLERY EXPERIMENTAL', 'TECH3 STRATEGIC STRUCTURE', 'MASSFABRICATION', 'ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE ANTIAIR', 'STRUCTURE DEFENSE DIRECTFIRE', 'FACTORY AIR', 'FACTORY LAND' }, # list in order
+        },
+    },
+    Builder {
+        BuilderName = 'Sorian T4 Exp Land - Scathis',
+        PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+        PlatoonTemplate = 'T4ExperimentalScathisSorian',
+        Priority = 10000,
+        FormRadius = 10000,
+        InstanceCount = 50,
+        BuilderType = 'Any',
+        BuilderConditions = {
+            #{ SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY TECH1, FACTORY TECH2' } },
+			#{ T4LandAttackCondition, { 'LocationType', 250 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -290,7 +365,7 @@ BuilderGroup {
         BuilderName = 'Sorian T4 Exp Land Late Game',
         PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         PlatoonTemplate = 'T4ExperimentalLandLate',
-        Priority = 10000,
+        Priority = 0, #10000,
         FormRadius = 10000,
         InstanceCount = 50,
         BuilderType = 'Any',
@@ -399,8 +474,9 @@ BuilderGroup {
         FormRadius = 10000,
         BuilderType = 'Any',
         BuilderConditions = {
-            { SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+            #{ SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY TECH1, FACTORY TECH2' } },
+			{ T4AirAttackCondition, { 'LocationType', 250 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -416,7 +492,7 @@ BuilderGroup {
         BuilderName = 'Sorian T4 Exp Air Late Game',
         PlatoonTemplate = 'T4ExperimentalAirLate',
         PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
-        Priority = 800,
+        Priority = 0, #800,
         InstanceCount = 50,
         FormRadius = 10000,
         BuilderType = 'Any',

@@ -213,6 +213,7 @@ BuilderGroup {
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'FACTORY AIR TECH3' }},
 			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
+			{ UCBC, 'UnitCapCheckLess', { .9 } },
         },
         BuilderType = 'Air',
     },
@@ -436,6 +437,7 @@ BuilderGroup {
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 4, 'FACTORY AIR TECH3' }},
 			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
+			{ UCBC, 'UnitCapCheckLess', { .9 } },
         },
         BuilderType = 'Air',
     },
@@ -622,6 +624,7 @@ BuilderGroup {
             #{ UCBC, 'HaveLessThanUnitsWithCategory', { 50, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
+			{ UCBC, 'UnitCapCheckLess', { .9 } },
         },
         BuilderType = 'Air',
     },
@@ -638,6 +641,7 @@ BuilderGroup {
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+			{ UCBC, 'UnitCapCheckLess', { .9 } },
         },
         BuilderType = 'Air',
     },
@@ -1073,7 +1077,7 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirUnitRefitSorian' },
 		PlatoonAddPlans = { 'AirIntelToggle', 'DistressResponseAISorian' },
         Priority = 100,
-        InstanceCount = 2,
+        InstanceCount = 6, #2
         BuilderType = 'Any',
         BuilderConditions = {
             #{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 2, 'AIR MOBILE GROUNDATTACK' } },
@@ -1198,7 +1202,7 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirUnitRefitSorian' },
 		PlatoonAddPlans = { 'AirIntelToggle', 'DistressResponseAISorian' },
         Priority = 100,
-        InstanceCount = 2,
+        InstanceCount = 6, #2
         BuilderType = 'Any',
         BuilderConditions = {
             #{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 4, 'AIR MOBILE GROUNDATTACK' } },
@@ -1308,7 +1312,7 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirUnitRefitSorian' },
 		PlatoonAddPlans = { 'AirIntelToggle', 'DistressResponseAISorian' },
         Priority = 100,
-        InstanceCount = 2,
+        InstanceCount = 6, #2
         BuilderType = 'Any',
         BuilderConditions = {
             #{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 5, 'AIR MOBILE GROUNDATTACK TECH3' } },

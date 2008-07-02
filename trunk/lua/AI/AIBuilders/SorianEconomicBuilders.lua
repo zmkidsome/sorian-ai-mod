@@ -234,7 +234,6 @@ BuilderGroup {
 					'T1Resource',
                     'T1EnergyProduction',
                     'T1EnergyProduction',
-					'T1Resource',
 					'T1EnergyProduction',
 					'T1EnergyProduction',
                     'T1AirFactory',					
