@@ -153,7 +153,7 @@ BuilderGroup {
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'MASSEXTRACTION TECH3', 'MASSEXTRACTION' } },            
             { SIBC, 'GreaterThanEconIncome', { 13, 50 } },
             { IBC, 'BrainNotLowPowerMode', {} },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.2 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.80, 1.2 }},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3' }},
         },
         FormRadius = 10000,

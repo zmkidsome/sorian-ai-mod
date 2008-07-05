@@ -56,6 +56,7 @@ local SurfacePrioritiesSorian = {
     'COMMAND',
     'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
 	'EXPERIMENTAL STRATEGIC STRUCTURE',
+	'EXPERIMENTAL ARTILLERY',
 	'EXPERIMENTAL ORBITALSYSTEM',
 	'TECH3 STRATEGIC STRUCTURE',
     'EXPERIMENTAL LAND',
@@ -1062,7 +1063,8 @@ TickBehaviorSorian = function(self)
 
         if targetLocation and targetLocation != oldTargetLocation then
             IssueClearCommands(platoonUnits)
-            IssueAggressiveMove(platoonUnits, targetLocation)           
+            #IssueAggressiveMove(platoonUnits, targetLocation)
+			IssueMove(platoonUnits, targetLocation)
             WaitSeconds(25)
         end
        

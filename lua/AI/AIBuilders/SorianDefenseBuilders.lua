@@ -1732,7 +1732,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Shield D Engineer Factory Adj',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 945,
+        Priority = 950,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, categories.ENGINEER * categories.TECH3}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
@@ -1760,7 +1760,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Shield D Engineer Factory Adj Cybran',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 945,
+        Priority = 950,
         BuilderConditions = {
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, categories.ENGINEER * categories.TECH3}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },

@@ -331,7 +331,7 @@ BuilderGroup {
 			{ MIBC, 'FactionIndex', {1, 3, 4}},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.AIR * categories.BOMBER } },
-			{ SBC, 'T4ThreatExists', {{'Land', 'Naval', 'Structure'}, (categories.LAND + categories.NAVAL + categories.STRUCTURE)}},
+			{ SBC, 'T4ThreatExists', {{'Land', 'Naval', 'Structure'}, (categories.LAND + categories.NAVAL + categories.STRUCTURE + categories.ARTILLERY)}},
 			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'EXPERIMENTAL LAND, EXPERIMENTAL NAVAL', 'Enemy'}},
         },
     },
@@ -495,7 +495,7 @@ BuilderGroup {
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.BOMBER * categories.TECH3 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
-			{ SBC, 'T4ThreatExists', {{'Land', 'Naval', 'Structure'}, (categories.LAND + categories.NAVAL + categories.STRUCTURE)}},
+			{ SBC, 'T4ThreatExists', {{'Land', 'Naval', 'Structure'}, (categories.LAND + categories.NAVAL + categories.STRUCTURE + categories.ARTILLERY)}},
 			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'EXPERIMENTAL LAND, EXPERIMENTAL NAVAL', 'Enemy'}},
         },
     },
@@ -1357,7 +1357,7 @@ BuilderGroup {
         BuilderConditions = {
             #{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'EXPERIMENTAL LAND, EXPERIMENTAL NAVAL', 'Enemy'}},
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 5, 'AIR MOBILE BOMBER TECH2, AIR MOBILE BOMBER TECH3' } },
-			{ SBC, 'T4ThreatExists', {{'Land', 'Naval', 'Structure'}, (categories.LAND + categories.NAVAL + categories.STRUCTURE)}},
+			{ SBC, 'T4ThreatExists', {{'Land', 'Naval', 'Structure'}, (categories.LAND + categories.NAVAL + categories.STRUCTURE + categories.ARTILLERY)}},
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
     },
@@ -1399,6 +1399,7 @@ BuilderGroup {
 			SearchRadius = 6000,
             PrioritizedCategories = {
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
+				'EXPERIMENTAL ARTILLERY',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
@@ -1414,7 +1415,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'STRUCTURE STRATEGIC TECH3, STRUCTURE STRATEGIC EXPERIMENTAL, EXPERIMENTAL ORBITALSYSTEM', 'Enemy'}},
+            { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'STRUCTURE STRATEGIC TECH3, STRUCTURE STRATEGIC EXPERIMENTAL, EXPERIMENTAL ARTILLERY, EXPERIMENTAL ORBITALSYSTEM', 'Enemy'}},
 			#{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 5, 'AIR MOBILE BOMBER TECH2, AIR MOBILE BOMBER TECH3' } },
 			{ AirAttackCondition, { 'LocationType', 90 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
@@ -1433,6 +1434,7 @@ BuilderGroup {
             PrioritizedCategories = {
 				'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
+				'EXPERIMENTAL ARTILLERY',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
@@ -1467,6 +1469,7 @@ BuilderGroup {
             PrioritizedCategories = {
 				'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
+				'EXPERIMENTAL ARTILLERY',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'ENERGYPRODUCTION DRAGBUILD',
@@ -1501,6 +1504,7 @@ BuilderGroup {
             PrioritizedCategories = {
 				'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
+				'EXPERIMENTAL ARTILLERY',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
@@ -1535,6 +1539,7 @@ BuilderGroup {
             PrioritizedCategories = {
 				'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
+				'EXPERIMENTAL ARTILLERY',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'ENERGYPRODUCTION DRAGBUILD',

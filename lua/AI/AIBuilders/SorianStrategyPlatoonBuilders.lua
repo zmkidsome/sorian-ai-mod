@@ -131,7 +131,7 @@ BuilderGroup {
 		PlatoonAddPlans = { 'AirIntelToggle' },
         Priority = 0.1,
 		ActivePriority = 995,
-        InstanceCount = 5,
+        InstanceCount = 20,
         BuilderType = 'Any',
         BuilderData = {
 			SearchRadius = 6000,
@@ -160,7 +160,7 @@ BuilderGroup {
 		PlatoonAddPlans = { 'AirIntelToggle' },
         Priority = 0.1,
 		ActivePriority = 995,
-        InstanceCount = 5,
+        InstanceCount = 20,
         BuilderType = 'Any',
         BuilderData = {
 			SearchRadius = 6000,
@@ -194,7 +194,7 @@ BuilderGroup {
 		PlatoonAddPlans = { 'AirIntelToggle' },
         Priority = 0.1,
 		ActivePriority = 995,
-        InstanceCount = 5,
+        InstanceCount = 20,
         BuilderType = 'Any',
         BuilderData = {
 			SearchRadius = 6000,
@@ -228,7 +228,7 @@ BuilderGroup {
 		PlatoonAddPlans = { 'AirIntelToggle' },
         Priority = 0.1,
 		ActivePriority = 995,
-        InstanceCount = 5,
+        InstanceCount = 20,
         BuilderType = 'Any',
         BuilderData = {
 			SearchRadius = 6000,

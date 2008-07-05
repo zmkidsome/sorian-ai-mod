@@ -233,9 +233,20 @@ FactoryBuilderManager = Class(BuilderManager) {
             return 'Cybran'
         elseif EntityCategoryContains( categories.SERAPHIM, factory ) then
             return 'Seraphim'
+		elseif self.UnitFromCustomFaction( factory ) then
+			return self.UnitFromCustomFaction( factory )
         end
         return false
     end,
+	
+	UnitFromCustomFaction = function(self, factory)
+		local customFactions = self.Brain.CustomFactions
+		for k,v in customFactions do
+			if EntityCategoryContains( v.customCat, factory ) then
+				return v.cat
+			end
+		end
+	end,
     
     GetFactoryTemplate = function(self, templateName, factory)
         local templateData = PlatoonTemplates[templateName]

@@ -1011,13 +1011,14 @@ BuilderGroup {
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
         Priority = 0, #1500,
         BuilderConditions = { 
-            { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'STRUCTURE STRATEGIC TECH3, STRUCTURE STRATEGIC EXPERIMENTAL', 'Enemy'}},
+            { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'STRUCTURE STRATEGIC TECH3, STRUCTURE STRATEGIC EXPERIMENTAL, EXPERIMENTAL ARTILLERY', 'Enemy'}},
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
 			ThreatSupport = 75,
             PrioritizedCategories = {
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
+				'EXPERIMENTAL ARTILLERY',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
                 'MASSEXTRACTION',
@@ -1061,6 +1062,7 @@ BuilderGroup {
             },
             PrioritizedCategories = {
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
+				'EXPERIMENTAL ARTILLERY',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
                 'ENERGYPRODUCTION DRAGBUILD',
@@ -1103,6 +1105,7 @@ BuilderGroup {
             },
             PrioritizedCategories = {
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
+				'EXPERIMENTAL ARTILLERY',
                 'STRUCTURE STRATEGIC TECH3',
                 'ENERGYPRODUCTION DRAGBUILD',
                 'MASSFABRICATION',

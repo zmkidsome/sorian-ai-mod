@@ -72,6 +72,7 @@ AIBrain = Class(oldAIBrain) {
         self.BuilderManagers = {}
 		
 		SUtils.AddCustomUnitSupport(self)
+		#SUtils.AddCustomFactionSupport(self)
         
         self:AddBuilderManagers(self:GetStartVector3f(), 100, 'MAIN', false)
         #self.BuilderManagers.MAIN.StrategyManager = StratManager.CreateStrategyManager(self, 'MAIN', self:GetStartVector3f(), 100)
