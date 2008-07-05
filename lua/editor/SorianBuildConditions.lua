@@ -488,8 +488,8 @@ function EnemyInT3ArtilleryRange(aiBrain, locationtype, inrange)
 end
 
 function AIOutnumbered(aiBrain, bool)
-	local cheatmult = tonumber(ScenarioInfo.Options.CheatMult) or 1
-	local buildmult = tonumber(ScenarioInfo.Options.BuildMult) or 1
+	local cheatmult = tonumber(ScenarioInfo.Options.CheatMult) or 2
+	local buildmult = tonumber(ScenarioInfo.Options.BuildMult) or 2
 	local cheatAdjustment = (cheatmult + buildmult) * .75
 	local myTeam = ScenarioInfo.ArmySetup[aiBrain.Name].Team
 	#LOG('*AI DEBUG: '..aiBrain.Nickname..' I am on team '..myTeam)
