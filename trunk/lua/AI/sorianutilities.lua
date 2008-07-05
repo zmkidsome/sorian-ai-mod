@@ -63,6 +63,22 @@ function AddCustomUnitSupport(aiBrain)
 	end
 end
 
+function AddCustomFactionSupport(aiBrain)
+	aiBrain.CustomFactions = {}
+	for i, m in __active_mods do
+		LOG('*AI DEBUG: Checking mod: '..m.name..' for custom factions')
+		local CustomFacFiles = DiskFindFiles(m.location..'/lua/CustomFactions', '*.lua')
+		LOG('*AI DEBUG: Custom faction files found: '..repr(CustomFacFiles))
+		for k, v in CustomFacFiles do
+			local tempfile = import(v).FactionList
+			for x, z in tempfile do
+				LOG('*AI DEBUG: Adding faction: '..z.cat)
+				table.insert(aiBrain.CustomFactions, z )
+			end
+		end
+	end
+end
+
 function GetPlatoonTechLevel(platoonUnits)
 	local highest = false
 	for k,v in platoonUnits do
@@ -384,7 +400,7 @@ function GetGuards(aiBrain, Unit)
 end
 
 function Nuke(aiBrain)
-    local atkPri = { 'STRUCTURE ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION' }
+    local atkPri = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'EXPERIMENTAL ARTILLERY', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION' }
 	local maxFire = false
 	local Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE, true )
 	local nukeCount = 0

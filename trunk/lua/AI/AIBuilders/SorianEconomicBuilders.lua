@@ -464,7 +464,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian CDR Single T1Resource',
         PlatoonTemplate = 'CommanderBuilderSorian',
-        Priority = 950,
+        Priority = 0, #950, Probably uneeded, removed for testing
         BuilderConditions = {
                 { MABC, 'CanBuildOnMassLessThanDistance', { 'LocationType', 40, -500, 1, 0, 'AntiSurface', 1 }},
             },

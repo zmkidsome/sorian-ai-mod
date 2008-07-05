@@ -397,10 +397,28 @@ EngineerManager = Class(BuilderManager) {
             return 5
         end
     end,
+	
+	UnitFromCustomFaction = function(self, engineer)
+		local customFactions = self.Brain.CustomFactions
+		for k,v in customFactions do
+			if EntityCategoryContains( v.customCat, engineer ) then
+				LOG('*AI DEBUG: UnitFromCustomFaction: '..k)
+				return k # + 4
+			end
+		end
+	end,
     
     GetBuildingId = function( self, engineer, buildingType )
         local faction = self:GetEngineerFactionIndex( engineer )
-        return self.Brain:DecideWhatToBuild( engineer, buildingType, import('/lua/BuildingTemplates.lua').BuildingTemplates[faction] )
+		if faction > 4 then
+			if self:UnitFromCustomFaction(engineer) then
+				faction = self:UnitFromCustomFaction(engineer)
+				LOG('*AI DEBUG: GetBuildingId faction: '..faction)
+				return self.Brain:DecideWhatToBuild( engineer, buildingType, self.Brain.CustomFactions[faction] )
+			end
+		else
+			return self.Brain:DecideWhatToBuild( engineer, buildingType, import('/lua/BuildingTemplates.lua').BuildingTemplates[faction] )
+		end
     end,
     
     GetEngineersQueued = function(self, buildingType)
