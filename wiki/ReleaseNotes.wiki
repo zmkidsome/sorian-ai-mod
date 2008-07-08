@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.5:* Adjusted Land T4 threat evaluation, Added T4 Support platoons.
+
 *1.4.9:* Adjusted T4 Land Grouping, Removed ACU mex builder, Upped targeting priority for the Scathis, Adjusted priority for T4 assisters to promote a bit more defense building, Adjusted some defense priorities, Increased bomber platoon instances for the strategy manager, Fixed a bug in the strategy manager, Soul Ripper now uses regular move.
 
 *1.4.8:* Tightened up nuke targeting priorities, T4s will group up based on enemy threat, Fixed Balanced AI initial build order, Added more Gunship platoon instances, Added unit cap check to the max fighter builder.
