@@ -556,6 +556,7 @@ Platoon = Class(sorianoldPlatoon) {
 						self:Patrol(v)
 					end
 					hadtarget = false
+					return self:GuardExperimentalSorian(self.FighterHuntAI)
 				end
             end
             WaitSeconds(17)
@@ -1198,6 +1199,48 @@ Platoon = Class(sorianoldPlatoon) {
                 WaitSeconds(Random(5,11) + 2 * stuckCount)
             end
         end
+    end,
+	
+	GuardExperimentalSorian = function(self, nextAIFunc)
+		local aiBrain = self:GetBrain()
+        
+		if not aiBrain:PlatoonExists(self) or not self:GetPlatoonPosition() then
+			return
+		end
+		
+		AIAttackUtils.GetMostRestrictiveLayer(self)
+		
+		local unitToGuard = false
+		local units = aiBrain:GetListOfUnits( categories.MOBILE * categories.EXPERIMENTAL - categories.url0401, false )
+		for k,v in units do
+			if (self.MovementLayer == 'Air' and SUtils.GetGuardCount(aiBrain, v, categories.AIR) < 10) or ((self.MovementLayer == 'Land' or self.MovementLayer == 'Amphibious') and EntityCategoryContains(categories.LAND, v) and SUtils.GetGuardCount(aiBrain, v, categories.LAND) < 10) then #not v.BeingGuarded then
+				unitToGuard = v
+				#v.BeingGuarded = true
+			end
+		end
+
+		local guardTime = 0
+		if unitToGuard and not unitToGuard:IsDead() then
+			IssueGuard(self:GetPlatoonUnits(), unitToGuard)
+
+			while aiBrain:PlatoonExists(self) and not unitToGuard:IsDead() do
+				guardTime = guardTime + 5
+				WaitSeconds(5)
+                    
+				if self.PlatoonData.T4GuardTimeLimit and guardTime >= self.PlatoonData.T4GuardTimeLimit 
+				or (not unitToGuard:IsDead() and unitToGuard:GetCurrentLayer() == 'Seabed' and self.MovementLayer == 'Land') then
+					break
+				end
+			end
+		end
+		
+        ##Tail call into the next ai function
+        WaitSeconds(1)
+        if type(nextAIFunc) == 'function' then
+            return nextAIFunc(self)
+        end
+        
+        return self:GuardExperimentalSorian(nextAIFunc)
     end,
 	
     ReclaimStructuresAI = function(self)
@@ -2219,7 +2262,7 @@ Platoon = Class(sorianoldPlatoon) {
 						if v[1] < 0 or v[3] < 0 or v[1] > ScenarioInfo.size[1] or v[3] > ScenarioInfo.size[2] then
 							#LOG('*AI DEBUG: STRIKE FORCE SENDING UNITS TO WRONG LOCATION - ' .. v[1] .. ', ' .. v[3] )
 						end
-						self:MoveToLocation( (v), false )
+						self:MoveToLocation( v, false )
 					end
 				elseif not movingToScout and not target and self.MovementLayer == 'Water' then
 					movingToScout = true

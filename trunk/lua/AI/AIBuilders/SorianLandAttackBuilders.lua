@@ -1295,4 +1295,20 @@ BuilderGroup {
         },
         BuilderType = 'Any',
     },
+    Builder {
+        BuilderName = 'Sorian T3 Tanks - T4 Guard',
+        PlatoonTemplate = 'T3ExpGuard',
+        PlatoonAIPlan = 'GuardExperimentalSorian',
+        Priority = 750,
+        InstanceCount = 3,
+        BuilderData = {
+            NeverGuardBases = true,
+			LocationType = 'LocationType',
+        },
+        BuilderConditions = {
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND - categories.TECH1 - categories.ENGINEER} },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
+        BuilderType = 'Any',
+    },
 }

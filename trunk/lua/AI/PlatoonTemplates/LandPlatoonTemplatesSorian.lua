@@ -97,6 +97,14 @@ PlatoonTemplate {
 }
 
 PlatoonTemplate {
+    Name = 'T3ExpGuard',
+    Plan = 'GuardExperimentalSorian',
+    GlobalSquads = {
+        { categories.DIRECTFIRE * (categories.TECH3 + categories.TECH2) * categories.LAND * categories.MOBILE - categories.SCOUT - categories.ENGINEER, 1, 10, 'guard', 'None' }
+    },
+}
+
+PlatoonTemplate {
     Name = 'T1MassHuntersCategorySorian',
     #Plan = 'AttackForceAI',    
     Plan = 'GuardMarkerSorian',    

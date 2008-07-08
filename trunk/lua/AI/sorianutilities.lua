@@ -26,6 +26,15 @@ function T4Timeout(aiBrain)
 	aiBrain.T4Building = false
 end
 
+function GetThreatAtPosition( aiBrain, pos, rings, ttype, threatFilters)
+	local threat = aiBrain:GetThreatAtPosition( pos, rings, true, ttype )
+	for k,v in threatFilters do
+		local rthreat = aiBrain:GetThreatAtPosition( pos, rings, true, v )
+		threat = threat - rthreat
+	end
+	return threat
+end
+
 function CheckForMapMarkers(aiBrain)
 	local startX, startZ = aiBrain:GetArmyStartPos()
 	local LandMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Land Path Node', startX, startZ)
@@ -393,6 +402,17 @@ function GetGuards(aiBrain, Unit)
 		local oldCat = ParseEntityCategory(UpgradesFrom)
 		local oldUnit = aiBrain:GetUnitsAroundPoint( oldCat, Unit:GetPosition(), 0, 'Ally' )
 		if oldUnit then
+			count = count + 1
+		end
+	end
+	return count
+end
+
+function GetGuardCount(aiBrain, Unit, cat)
+	local guards = Unit:GetGuards()
+	local count = 0
+	for k,v in guards do
+		if not v:IsDead() and EntityCategoryContains(cat, v) then
 			count = count + 1
 		end
 	end

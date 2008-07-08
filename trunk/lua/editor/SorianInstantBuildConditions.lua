@@ -411,3 +411,50 @@ function T4BuildingCheck(aiBrain)
     end
     return true
 end
+
+function HavePoolUnitComparisonAtLocationExp( aiBrain, locationType, unitCount, unitCategory, compareType )
+    local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+    local testCat = unitCategory
+    if type(unitCategory) == 'string' then
+        testCat = ParseEntityCategory(unitCategory)
+    end
+    if not engineerManager then
+        WARN('*AI WARNING: HavePoolUnitComparisonAtLocation - Invalid location - ' .. locationType)
+        return false
+    end
+    local poolPlatoon = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
+    local numUnits = poolPlatoon:GetNumCategoryUnits(testCat, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius() * 2)
+    return CompareBody(numUnits, unitCount, compareType)
+end
+
+function PoolLessAtLocationExp( aiBrain, locationType, unitCount, unitCategory)
+    return HavePoolUnitComparisonAtLocationExp( aiBrain, locationType, unitCount, unitCategory, '<')
+end
+
+function PoolGreaterAtLocationExp( aiBrain, locationType, unitCount, unitCategory)
+    return HavePoolUnitComparisonAtLocationExp( aiBrain, locationType, unitCount, unitCategory, '>')
+end
+
+function CompareBody( numOne, numTwo, compareType )
+    if compareType == '>' then
+        if numOne > numTwo then
+            return true
+        end
+    elseif compareType == '<' then
+        if numOne < numTwo then
+            return true
+        end
+    elseif compareType == '>=' then
+        if numOne >= numTwo then
+            return true
+        end
+    elseif compareType == '<=' then
+        if numOne <= numTwo then
+            return true
+        end
+    else
+        error('*AI ERROR: Invalid compare type: ' .. compareType)
+        return false
+    end
+    return false
+end
