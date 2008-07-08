@@ -1680,6 +1680,22 @@ BuilderGroup {
         },
     },
     Builder {
+        BuilderName = 'Sorian AntiAirT4Guard',
+        PlatoonTemplate = 'AntiAirT4Guard',
+		PlatoonAddBehaviors = { 'AirUnitRefitSorian' },
+		PlatoonAddPlans = { 'AirIntelToggle' },
+        Priority = 1,
+        InstanceCount = 10,
+        BuilderData = {
+            NeverGuardEngineers = true,
+        },
+        BuilderType = 'Any',
+        BuilderConditions = {
+            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 2, categories.AIR * categories.MOBILE * (categories.TECH1 + categories.TECH2) * categories.ANTIAIR } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
+    },
+    Builder {
         BuilderName = 'Sorian AntiAirBaseGuard',
         PlatoonTemplate = 'AntiAirBaseGuard',
 		PlatoonAddBehaviors = { 'AirUnitRefitSorian' },

@@ -76,6 +76,14 @@ PlatoonTemplate {
 }
 
 PlatoonTemplate {
+    Name = 'AntiAirT4Guard',
+    Plan = 'GuardExperimentalSorian',
+    GlobalSquads = {
+        { categories.AIR * categories.MOBILE * categories.ANTIAIR * ( categories.TECH1 + categories.TECH2 + categories.TECH3 ) - categories.BOMBER - categories.TRANSPORTFOCUS - categories.EXPERIMENTAL, 1, 10, 'attack', 'none' },
+    }
+}
+
+PlatoonTemplate {
     Name = 'T3AirScoutFormSorian',
     Plan = 'ScoutingAISorian',
     GlobalSquads = {
