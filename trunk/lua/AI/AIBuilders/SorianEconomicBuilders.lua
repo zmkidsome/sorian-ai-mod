@@ -2408,7 +2408,7 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderData = {
             Construction = {
-                #AdjacencyCategory = 'FACTORY',
+                AdjacencyCategory = 'FACTORY',
                 BuildStructures = {
                     'T1EnergyProduction',
                 },
@@ -2451,6 +2451,10 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderData = {
             Construction = {
+				AdjacencyCategory = 'FACTORY',
+				AvoidCategory = 'ENERGYPRODUCTION TECH2',
+				maxUnits = 5,
+				maxRadius = 20,
                 BuildStructures = {
                     'T2EnergyProduction',
                 },
@@ -2469,6 +2473,10 @@ BuilderGroup {
         },
         BuilderData = {
             Construction = {
+				AdjacencyCategory = 'FACTORY',
+				AvoidCategory = 'ENERGYPRODUCTION TECH3',
+				maxUnits = 5,
+				maxRadius = 20,
                 BuildStructures = {
                     'T3EnergyProduction',
                 },

@@ -605,6 +605,21 @@ function GetOwnUnitsAroundPointSorian( aiBrain, category, location, radius, min,
     return retUnits
 end
 
+function FindUnclutteredArea( aiBrain, category, location, radius, maxUnits, maxRadius, avoidCat )
+    local units = aiBrain:GetUnitsAroundPoint( category, location, radius, 'Ally' )
+    local index = aiBrain:GetArmyIndex()
+    local retUnits = {}
+    for k,v in units do
+        if not v:IsDead() and not v:IsBeingBuilt() and v:GetAIBrain():GetArmyIndex() == index then
+			local nearby = aiBrain:GetNumUnitsAroundPoint( avoidCat, v:GetPosition(), maxRadius, 'Ally' )
+			if nearby < maxUnits then
+				table.insert(retUnits, v)
+			end
+        end
+    end
+    return retUnits
+end
+
 function AIFindExpansionPointNeedsStructure( aiBrain, locationType, radius, category, markerRadius, unitMax, tMin, tMax, tRings, tType)
     local pos = aiBrain:PBMGetLocationCoords( locationType )
     if not pos then
