@@ -325,7 +325,7 @@ Platoon = Class(sorianoldPlatoon) {
     ArtilleryAISorian = function(self)
         local aiBrain = self:GetBrain()
 
-        local atkPri = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'EXPERIMENTAL ARTILLERY', 'STRUCTURE STRATEGIC TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ORBITALSYSTEM', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'STRUCTURE ANTIMISSILE TECH3', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3 ANTIAIR',
+        local atkPri = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE', 'STRUCTURE STRATEGIC TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ORBITALSYSTEM', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'STRUCTURE ANTIMISSILE TECH3', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3 ANTIAIR',
 		'COMMAND', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'EXPERIMENTAL LAND', 'MOBILE TECH3 LAND', 'MOBILE TECH2 LAND', 'MOBILE TECH1 LAND', 'STRUCTURE FACTORY', 'SPECIALLOWPRI', 'ALLUNITS' }
         local atkPriTable = {}
         for k,v in atkPri do
@@ -2093,12 +2093,14 @@ Platoon = Class(sorianoldPlatoon) {
             if table.getn(cmdQ) == 0 then #and mySurfaceThreat < 4 then
                 # if we have a low threat value, then go and defend an engineer or a base
                 if mySurfaceThreat < platoonThreatTable[platoonTechLevel]
-                    and mySurfaceThreat > 0 
-                    and not self.PlatoonData.NeverGuard 
-                    and not (self.PlatoonData.NeverGuardEngineers and self.PlatoonData.NeverGuardBases)
-                then
+                    and mySurfaceThreat > 0 and not self.PlatoonData.NeverGuard 
+                    and not (self.PlatoonData.NeverGuardEngineers and self.PlatoonData.NeverGuardBases) then
                     #LOG('*DEBUG: Trying to guard')
-                    return self:GuardEngineer(self.AttackForceAISorian)
+					if platoonTechLevel > 1 then
+						return self:GuardExperimentalSorian(self.AttackForceAISorian)
+					else
+						return self:GuardEngineer(self.AttackForceAISorian)
+					end
                 end
                 
                 # we have nothing to do, so find the nearest base and disband
@@ -2509,6 +2511,20 @@ Platoon = Class(sorianoldPlatoon) {
             end
             table.insert( baseTmplList, AIBuildStructures.AIBuildBaseTemplateFromLocation( baseTmpl, reference ) )
             buildFunction = AIBuildStructures.AIExecuteBuildStructure
+        elseif cons.AvoidCategory then
+            relative = false
+            local pos = aiBrain.BuilderManagers[eng.BuilderManagerData.LocationType].EngineerManager:GetLocationCoords()
+            local cat = ParseEntityCategory(cons.AdjacencyCategory)
+			local avoidCat = ParseEntityCategory(cons.AvoidCategory)
+            local radius = ( cons.AdjacencyDistance or 50 )
+            if not pos or not pos then
+                WaitTicks(1)
+                self:PlatoonDisband()
+                return
+            end
+            reference  = AIUtils.FindUnclutteredArea( aiBrain, cat, pos, radius, cons.maxUnits, cons.maxRadius, avoidCat)
+            buildFunction = AIBuildStructures.AIBuildAdjacency
+            table.insert( baseTmplList, baseTmpl )
         elseif cons.AdjacencyCategory then
             relative = false
             local pos = aiBrain.BuilderManagers[eng.BuilderManagerData.LocationType].EngineerManager:GetLocationCoords()

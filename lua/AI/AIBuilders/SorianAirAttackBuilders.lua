@@ -1399,7 +1399,7 @@ BuilderGroup {
 			SearchRadius = 6000,
             PrioritizedCategories = {
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
-				'EXPERIMENTAL ARTILLERY',
+				'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
@@ -1415,7 +1415,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-            { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'STRUCTURE STRATEGIC TECH3, STRUCTURE STRATEGIC EXPERIMENTAL, EXPERIMENTAL ARTILLERY, EXPERIMENTAL ORBITALSYSTEM', 'Enemy'}},
+            { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'STRUCTURE STRATEGIC TECH3, STRUCTURE STRATEGIC EXPERIMENTAL, EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE, EXPERIMENTAL ORBITALSYSTEM', 'Enemy'}},
 			#{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 5, 'AIR MOBILE BOMBER TECH2, AIR MOBILE BOMBER TECH3' } },
 			{ AirAttackCondition, { 'LocationType', 90 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
@@ -1434,7 +1434,7 @@ BuilderGroup {
             PrioritizedCategories = {
 				'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
-				'EXPERIMENTAL ARTILLERY',
+				'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
@@ -1469,7 +1469,7 @@ BuilderGroup {
             PrioritizedCategories = {
 				'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
-				'EXPERIMENTAL ARTILLERY',
+				'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'ENERGYPRODUCTION DRAGBUILD',
@@ -1504,7 +1504,7 @@ BuilderGroup {
             PrioritizedCategories = {
 				'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
-				'EXPERIMENTAL ARTILLERY',
+				'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
@@ -1539,7 +1539,7 @@ BuilderGroup {
             PrioritizedCategories = {
 				'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
-				'EXPERIMENTAL ARTILLERY',
+				'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
 				'EXPERIMENTAL ORBITALSYSTEM',
                 'STRUCTURE STRATEGIC TECH3',
                 'ENERGYPRODUCTION DRAGBUILD',
@@ -1691,7 +1691,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderConditions = {
-            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 2, categories.AIR * categories.MOBILE * (categories.TECH1 + categories.TECH2) * categories.ANTIAIR } },
+            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 2, categories.AIR * categories.MOBILE * (categories.TECH1 + categories.TECH2 + categories.TECH3) * categories.ANTIAIR } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
     },

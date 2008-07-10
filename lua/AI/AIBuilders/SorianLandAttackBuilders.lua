@@ -1011,14 +1011,14 @@ BuilderGroup {
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
         Priority = 0, #1500,
         BuilderConditions = { 
-            { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'STRUCTURE STRATEGIC TECH3, STRUCTURE STRATEGIC EXPERIMENTAL, EXPERIMENTAL ARTILLERY', 'Enemy'}},
+            { UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'STRUCTURE STRATEGIC TECH3, STRUCTURE STRATEGIC EXPERIMENTAL, EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE', 'Enemy'}},
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
 			ThreatSupport = 75,
             PrioritizedCategories = {
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
-				'EXPERIMENTAL ARTILLERY',
+				'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
                 'MASSEXTRACTION',
@@ -1062,7 +1062,7 @@ BuilderGroup {
             },
             PrioritizedCategories = {
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
-				'EXPERIMENTAL ARTILLERY',
+				'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
                 'STRUCTURE STRATEGIC TECH3',
                 'COMMAND',
                 'ENERGYPRODUCTION DRAGBUILD',
@@ -1105,7 +1105,7 @@ BuilderGroup {
             },
             PrioritizedCategories = {
                 'STRUCTURE STRATEGIC EXPERIMENTAL',
-				'EXPERIMENTAL ARTILLERY',
+				'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
                 'STRUCTURE STRATEGIC TECH3',
                 'ENERGYPRODUCTION DRAGBUILD',
                 'MASSFABRICATION',
@@ -1306,7 +1306,7 @@ BuilderGroup {
 			LocationType = 'LocationType',
         },
         BuilderConditions = {
-			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND - categories.TECH1 - categories.ENGINEER} },
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 1, categories.LAND * categories.MOBILE - categories.TECH1 - categories.ANTIAIR - categories.SCOUT - categories.ENGINEER} },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
