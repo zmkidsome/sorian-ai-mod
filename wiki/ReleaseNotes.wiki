@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.5.1:* Fixed Air T4 support, Fixed Nuke targeting, AI should spread out its T2 and T3 pgens a bit, Adjusted Land T4 support to include mobile shields.
+
 *1.5:* Adjusted Land T4 threat evaluation, Added T4 Support platoons.
 
 *1.4.9:* Adjusted T4 Land Grouping, Removed ACU mex builder, Upped targeting priority for the Scathis, Adjusted priority for T4 assisters to promote a bit more defense building, Adjusted some defense priorities, Increased bomber platoon instances for the strategy manager, Fixed a bug in the strategy manager, Soul Ripper now uses regular move.
