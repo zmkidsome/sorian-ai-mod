@@ -23,6 +23,9 @@ BaseBuilderTemplate {
         'SorianT3EngineerBuilders',
         'SorianEngineerFactoryConstruction',
         'SorianEngineerFactoryConstruction Balance',
+		
+		# SCU Upgrades
+		'SorianSCUUpgrades',
         
         # Build Mass low pri at this base
         'SorianEngineerMassBuildersLowerPri',

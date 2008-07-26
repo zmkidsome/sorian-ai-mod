@@ -67,7 +67,8 @@ function T4AirAttackCondition(aiBrain, locationType, targetNumber)
     end
 	if aiBrain:GetCurrentEnemy() then
 		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
-		targetNumber = SUtils.GetThreatAtPosition( aiBrain, {estartX, 0, estartZ}, 1, 'AntiAir', {'Air'} )
+		#targetNumber = SUtils.GetThreatAtPosition( aiBrain, {estartX, 0, estartZ}, 1, 'AntiAir', {'Air'} )
+		targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiAir' )
 	end
 
     local position = engineerManager:GetLocationCoords()
@@ -98,7 +99,8 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.EXPERIMENTAL * categories.MOBILE * (categories.LAND + categories.AIR) - categories.SATELLITE}},
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 0, categories.EXPERIMENTAL * categories.LAND } },
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'MarkerLessThan', { 'LocationType', {'Amphibious Path Node', 'Land Path Node'}, 100 } },
+			#{ SIBC, 'T4BuildingCheck', {} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -106,7 +108,7 @@ BuilderGroup {
 			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
-				T4 = true,
+				#T4 = true,
                 BaseTemplate = ExBaseTmpl,
                 NearMarkerType = 'Rally Point',
                 BuildStructures = {
@@ -130,7 +132,8 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.EXPERIMENTAL * categories.MOBILE * (categories.LAND + categories.AIR) - categories.SATELLITE}},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'MarkerLessThan', { 'LocationType', {'Amphibious Path Node', 'Land Path Node'}, 100 } },
+			#{ SIBC, 'T4BuildingCheck', {} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -138,7 +141,7 @@ BuilderGroup {
 			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
-				T4 = true,
+				#T4 = true,
                 BaseTemplate = ExBaseTmpl,
                 NearMarkerType = 'Rally Point',
                 BuildStructures = {
@@ -161,7 +164,7 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.EXPERIMENTAL * categories.MOBILE * (categories.LAND + categories.AIR) - categories.SATELLITE}},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			#{ SIBC, 'T4BuildingCheck', {} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -169,7 +172,7 @@ BuilderGroup {
 			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
-				T4 = true,
+				#T4 = true,
                 NearMarkerType = 'Protected Experimental Construction',
                 BuildStructures = {
                     'T4AirExperimental1',
@@ -194,7 +197,8 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'MarkerLessThan', { 'LocationType', {'Amphibious Path Node', 'Land Path Node'}, 100 } },
+			#{ SIBC, 'T4BuildingCheck', {} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -202,7 +206,7 @@ BuilderGroup {
 			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
-				T4 = true,
+				#T4 = true,
                 BaseTemplate = ExBaseTmpl,
                 NearMarkerType = 'Rally Point',
                 BuildStructures = {
@@ -224,7 +228,9 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'MarkerLessThan', { 'LocationType', {'Amphibious Path Node', 'Land Path Node'}, 100 } },
+			#{ SIBC, 'T4BuildingCheck', {} },
+			{ MIBC, 'FactionIndex', {1, 2, 4} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -232,7 +238,7 @@ BuilderGroup {
 			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
-				T4 = true,
+				#T4 = true,
                 BaseTemplate = ExBaseTmpl,
                 NearMarkerType = 'Rally Point',
                 BuildStructures = {
@@ -253,7 +259,8 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'MarkerLessThan', { 'LocationType', {'Amphibious Path Node', 'Land Path Node'}, 100 } },
+			#{ SIBC, 'T4BuildingCheck', {} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -261,7 +268,7 @@ BuilderGroup {
 			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
-				T4 = true,
+				#T4 = true,
                 BaseTemplate = ExBaseTmpl,
                 NearMarkerType = 'Rally Point',
                 BuildStructures = {
@@ -403,7 +410,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			#{ SIBC, 'T4BuildingCheck', {} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -411,7 +418,7 @@ BuilderGroup {
 			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
-				T4 = true,
+				#T4 = true,
                 NearMarkerType = 'Protected Experimental Construction',
                 BuildStructures = {
                     'T4AirExperimental1',
@@ -531,7 +538,7 @@ BuilderGroup {
             { MABC, 'MarkerLessThanDistance',  { 'Naval Area', 400}},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
-			{ SIBC, 'T4BuildingCheck', {} },
+			#{ SIBC, 'T4BuildingCheck', {} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -539,7 +546,7 @@ BuilderGroup {
 			MinNumAssistees = 2,
             Construction = {
                 BuildClose = false,
-				T4 = true,
+				#T4 = true,
                 NearMarkerType = 'Naval Area',
                 BuildStructures = {
                     'T4SeaExperimental1',
@@ -635,7 +642,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			#{ SIBC, 'T4BuildingCheck', {} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -643,7 +650,7 @@ BuilderGroup {
 			MinNumAssistees = 6,
             Construction = {
                 BuildClose = true,
-				T4 = true,
+				#T4 = true,
 				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T4SatelliteExperimental',
@@ -734,7 +741,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
 			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
 			{ IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			#{ SIBC, 'T4BuildingCheck', {} },
 			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
         },
         BuilderType = 'Any',
@@ -742,7 +749,7 @@ BuilderGroup {
 			MinNumAssistees = 6,
             Construction = {
                 BuildClose = false,
-				T4 = true,
+				#T4 = true,
 				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T4EconExperimental',

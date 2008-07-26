@@ -17,8 +17,8 @@ function NukeCheck(aiBrain)
 			WaitSeconds(60)
 			waitcount = 0
 			nukeCount = 0
-			numNukes = aiBrain:GetCurrentUnits( categories.NUKE * categories.SILO * categories.STRUCTURE )
-			Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE, true )
+			numNukes = aiBrain:GetCurrentUnits( categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3 )
+			Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3, true )
 			for k, v in Nukes do
 				if v:GetWorkProgress() * 100 > waitcount then
 					waitcount = v:GetWorkProgress() * 100
@@ -32,9 +32,10 @@ function NukeCheck(aiBrain)
 				SUtils.Nuke(aiBrain)
 				#LOG('*AI DEBUG: Moving on!')				
 				rollcount = 0
+				WaitSeconds(30)
 			end
 		until numNukes > lastNukes and waitcount < 65 and rollcount < 2
-		Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE, true )
+		Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3, true )
 		rollcount = rollcount + (numNukes - lastNukes)
 		
 		for k, v in Nukes do
@@ -50,6 +51,63 @@ function NukeCheck(aiBrain)
 			#LOG('*NukeCheck 5 Nuke On: ', v)
 		end
 	end
+end
+
+function AirLandToggleSorian(platoon)
+    for k,v in platoon:GetPlatoonUnits() do
+        if not v:IsDead() and not v.AirLandToggleThreadSorian then
+            v.AirLandToggleThreadSorian = v:ForkThread( AirLandToggleThreadSorian )
+        end
+    end
+end
+
+function AirLandToggleThreadSorian(unit)
+    local aiBrain = unit:GetAIBrain()
+    local bp = unit:GetBlueprint()
+    local weapons = bp.Weapon
+    local antiAirRange
+    local landRange
+    local toggleWeapons = {}
+    local unitCat = ParseEntityCategory( unit:GetUnitId() )
+    for k,v in weapons do
+        if v.ToggleWeapon then
+            local weaponType = 'Land'
+            for n,wType in v.FireTargetLayerCapsTable do
+                if string.find( wType, 'Air' ) then
+                    weaponType = 'Air'
+                    break
+                end
+            end
+            if weaponType == 'Land' then
+                landRange = v.MaxRadius
+            else
+                antiAirRange = v.MaxRadius
+            end
+        end
+    end
+    if not landRange or not antiAirRange then
+        return
+    end
+#    while not unit:IsDead() and unit:IsUnitState('Busy') do
+#        WaitSeconds(2)
+#    end
+    while not unit:IsDead() do
+        local position = unit:GetPosition()
+        local numAir = aiBrain:GetNumUnitsAroundPoint( ( categories.MOBILE * categories.AIR ) - unitCat , position, antiAirRange, 'Enemy' )
+        local numGround = aiBrain:GetNumUnitsAroundPoint( ( categories.LAND + categories.NAVAL + categories.STRUCTURE ) - unitCat, position, landRange, 'Enemy' )
+        local frndAir = aiBrain:GetNumUnitsAroundPoint( ( categories.MOBILE * categories.AIR ) - unitCat, position, antiAirRange, 'Ally' )
+        local frndGround = aiBrain:GetNumUnitsAroundPoint( ( categories.LAND + categories.NAVAL + categories.STRUCTURE ) - unitCat, position, landRange, 'Ally' )
+        if numAir > 5 and frndAir < 3 then
+            unit:SetScriptBit('RULEUTC_WeaponToggle', false)
+        elseif numGround > ( numAir * 1.5 ) then
+            unit:SetScriptBit('RULEUTC_WeaponToggle', true)
+        elseif frndAir > frndGround then
+            unit:SetScriptBit('RULEUTC_WeaponToggle', true)
+        else
+            unit:SetScriptBit('RULEUTC_WeaponToggle', false)
+        end
+        WaitSeconds(10)
+    end
 end
 
 local SurfacePrioritiesSorian = { 
@@ -203,12 +261,13 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
 	local numUnits1 = aiBrain:GetNumUnitsAroundPoint( categories.LAND * categories.TECH1 - categories.SCOUT - categories.ENGINEER, cdrPos, maxRadius, 'Enemy' )
 	local numUnits2 = aiBrain:GetNumUnitsAroundPoint( categories.LAND * categories.TECH2 - categories.SCOUT - categories.ENGINEER, cdrPos, maxRadius, 'Enemy' )
 	local numUnits3 = aiBrain:GetNumUnitsAroundPoint( categories.LAND * categories.TECH3 - categories.SCOUT - categories.ENGINEER, cdrPos, maxRadius, 'Enemy' )
+	local numUnitsEng = aiBrain:GetNumUnitsAroundPoint( categories.ENGINEER * (categories.TECH1 + categories.TECH2 + categories.TECH3), cdrPos, maxRadius, 'Enemy' )
 	local numUnits4 = aiBrain:GetNumUnitsAroundPoint( categories.EXPERIMENTAL, cdrPos, maxRadius + 130, 'Enemy' )
 	local numStructs = aiBrain:GetNumUnitsAroundPoint( categories.STRUCTURE, cdrPos, maxRadius, 'Enemy' )
 	local numUnitsDF = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.STRUCTURE * categories.DIRECTFIRE - categories.TECH1, cdrPos, maxRadius + 50, 'Enemy' )
 	local numUnitsDF1 = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.STRUCTURE * categories.DIRECTFIRE * categories.TECH1, cdrPos, maxRadius + 30, 'Enemy' )
 	local numUnitsIF = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.STRUCTURE * categories.INDIRECTFIRE - categories.TECH1, cdrPos, maxRadius + 260, 'Enemy' )
-	local totalUnits = numUnits1 + numUnits2 + numUnits3 + numUnits4 + numStructs
+	local totalUnits = numUnits1 + numUnits2 + numUnits3 + numUnits4 + numStructs + numUnitsEng
     local distressLoc = aiBrain:BaseMonitorDistressLocation(cdrPos)
 	if (cdr:HasEnhancement( 'Shield' ) or cdr:HasEnhancement( 'ShieldGeneratorField' ) or cdr:HasEnhancement( 'ShieldHeavy' )) and cdr:ShieldIsOn() then
 		shieldPercent = (cdr.MyShield:GetHealth() / cdr.MyShield:GetMaxHealth())
@@ -347,9 +406,12 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
 				shieldPercent = 1
 				#LOG('*AI DEBUG: No Shield')
 			end
+            enemyThreat = aiBrain:GetThreatAtPosition( cdrPos, 1, true, 'AntiSurface')
+			enemyCdrThreat = aiBrain:GetThreatAtPosition( cdrPos, 1, true, 'Commander')
+			friendlyThreat = aiBrain:GetThreatAtPosition( cdrPos, 1, true, 'AntiSurface', aiBrain:GetArmyIndex() )
             if (( aiBrain:GetNumUnitsAroundPoint( categories.LAND - categories.SCOUT, cdrPos, maxRadius, 'Enemy' ) == 0 )
                 and ( not distressLoc or ( Utilities.XZDistanceTwoVectors( distressLoc, cdrPos ) > distressRange )
-                and ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) < maxRadius ) )) or ( aiBrain:GetNumUnitsAroundPoint( categories.LAND - categories.SCOUT, cdrPos, maxRadius, 'Enemy' )) >= 15 or (cdr:GetHealthPercent() < .80 or shieldPercent < .30) then
+                and ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) < maxRadius ) )) or enemyThreat - enemyCdrThreat >= friendlyThreat + (cdrThreat / 1.5) or ( aiBrain:GetNumUnitsAroundPoint( categories.LAND - categories.SCOUT, cdrPos, maxRadius, 'Enemy' )) >= 15 or (cdr:GetHealthPercent() < .80 or shieldPercent < .30) then
                 continueFighting = false
             end           
         until not continueFighting or not aiBrain:PlatoonExists(plat)
@@ -964,6 +1026,9 @@ CzarBehaviorSorian = function(self)
     #if not EntityCategoryContains( categories.uaa0310, experimental ) then
     #    return
     #end
+	if not self:GatherUnitsSorian() then
+		return
+	end
     
     AssignExperimentalPrioritiesSorian(self)
     
@@ -1025,6 +1090,9 @@ AhwassaBehaviorSorian = function(self)
     #if not EntityCategoryContains( categories.xsa0402, experimental ) then
     #    return
     #end
+	if not self:GatherUnitsSorian() then
+		return
+	end
     
     AssignExperimentalPrioritiesSorian(self)
     local targetLocation = GetHighestThreatClusterLocationSorian(aiBrain, self)
@@ -1054,6 +1122,9 @@ TickBehaviorSorian = function(self)
     #if not EntityCategoryContains( categories.ura0401, experimental ) then
     #    return
     #end
+	if not self:GatherUnitsSorian() then
+		return
+	end
     
     AssignExperimentalPrioritiesSorian(self)
     local targetLocation = GetHighestThreatClusterLocationSorian(aiBrain, self)
@@ -1166,6 +1237,9 @@ end
 function FatBoyBehaviorSorian(self)   
 	local aiBrain = self:GetBrain()
 	local platoonUnits = self:GetPlatoonUnits()
+	if not self:GatherUnitsSorian() then
+		return
+	end
     AssignExperimentalPrioritiesSorian(self)
     
     local experimental #= GetExperimentalUnit(self)
@@ -1225,7 +1299,9 @@ function FatBoyBehaviorSorian(self)
             closestBlockingShield = closestBlockingShield or GetClosestShieldProtectingTargetSorian(experimental, targetUnit)
             
             #Kill shields loop
-            while closestBlockingShield and targetUnit and not targetUnit:IsDead() do
+            while closestBlockingShield do #and targetUnit and not targetUnit:IsDead() do
+				local oldTarget = targetUnit
+				targetUnit = false
 				self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 				useMove = InWaterCheck(self)
                 IssueClearCommands(platoonUnits)
@@ -1252,7 +1328,7 @@ function FatBoyBehaviorSorian(self)
                 if not airUnit then
                     closestBlockingShield = GetClosestShieldProtectingTargetSorian(experimental, experimental) 
                 end
-                closestBlockingShield = closestBlockingShield or GetClosestShieldProtectingTargetSorian(experimental, targetUnit)
+                closestBlockingShield = closestBlockingShield or GetClosestShieldProtectingTargetSorian(experimental, oldTarget)
                 
                 WaitSeconds(1)
             end
@@ -1267,6 +1343,9 @@ end
 function BehemothBehaviorSorian(self)   
 	local aiBrain = self:GetBrain()
 	local platoonUnits = self:GetPlatoonUnits()
+	if not self:GatherUnitsSorian() then
+		return
+	end
     AssignExperimentalPrioritiesSorian(self)
     
     local experimental #= GetExperimentalUnit(self)
@@ -1319,6 +1398,8 @@ function BehemothBehaviorSorian(self)
             
             #Kill shields loop
             while closestBlockingShield do
+				local oldTarget = targetUnit
+				targetUnit = false
 				self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
                 IssueClearCommands(platoonUnits)
                 #IssueAttack(platoonUnits, closestBlockingShield)
@@ -1339,7 +1420,7 @@ function BehemothBehaviorSorian(self)
                 if not airUnit then
                     closestBlockingShield = GetClosestShieldProtectingTargetSorian(experimental, experimental) 
                 end
-                closestBlockingShield = closestBlockingShield or GetClosestShieldProtectingTargetSorian(experimental, targetUnit)
+                closestBlockingShield = closestBlockingShield or GetClosestShieldProtectingTargetSorian(experimental, oldTarget)
                 
                 WaitSeconds(1)
             end

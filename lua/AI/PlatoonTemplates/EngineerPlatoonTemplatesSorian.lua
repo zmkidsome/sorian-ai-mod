@@ -18,6 +18,14 @@ PlatoonTemplate {
 }
 
 PlatoonTemplate {
+    Name = 'SCUEnhance',
+    Plan = 'EnhanceAI',
+    GlobalSquads = {
+        { categories.SUBCOMMANDER, 1, 1, 'support', 'None' }
+    },        
+}
+
+PlatoonTemplate {
     Name = 'EngineerAssistSorian',
     Plan = 'SorianManagerEngineerAssistAI',
     GlobalSquads = {

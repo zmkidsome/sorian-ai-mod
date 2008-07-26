@@ -102,7 +102,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
 			{ SBC, 'MapGreaterThan', { 500, 500 }},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			#{ SIBC, 'T4BuildingCheck', {} },
             #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T3RapidArtillery', categories.STRUCTURE, 2 } },
         },
         BuilderType = 'Any',
@@ -110,7 +110,7 @@ BuilderGroup {
 			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
-				T4 = true,
+				#T4 = true,
 				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T3RapidArtillery',
@@ -198,7 +198,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
 			{ SBC, 'MapGreaterThan', { 500, 500 }},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			#{ SIBC, 'T4BuildingCheck', {} },
             { MIBC, 'FactionIndex', {1,4} },
             #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T4Artillery', categories.STRUCTURE } },
         },
@@ -207,10 +207,47 @@ BuilderGroup {
 			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
-				T4 = true,
+				#T4 = true,
 				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T4Artillery',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+	Builder {
+        BuilderName = 'Sorian T4 Artillery Engineer - Cybran',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+		PlatoonAddPlans = {'NameUnitsSorian'},
+        Priority = 949,
+		InstanceCount = 1,
+        BuilderConditions = {
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE}},
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.EXPERIMENTAL * categories.ARTILLERY * categories.OVERLAYINDIRECTFIRE}},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.EXPERIMENTAL * categories.ARTILLERY * categories.OVERLAYINDIRECTFIRE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
+            { SIBC, 'GreaterThanEconIncome', {15, 750}},
+            { SIBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+			#{ SIBC, 'T4BuildingCheck', {} },
+            { MIBC, 'FactionIndex', {3} },
+            #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T4Artillery', categories.STRUCTURE } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			MinNumAssistees = 2,
+            Construction = {
+                BuildClose = false,
+				#T4 = true,
+                BaseTemplate = ExBaseTmpl,
+                NearMarkerType = 'Rally Point',
+                BuildStructures = {
+                    'T4LandExperimental2',
                 },
                 Location = 'LocationType',
             }
@@ -288,14 +325,14 @@ BuilderGroup {
 			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'T4BuildingCheck', {} },
+			#{ SIBC, 'T4BuildingCheck', {} },
         },
         BuilderType = 'Any',
         BuilderData = {
 			MinNumAssistees = 2,
             Construction = {
                 BuildClose = true,
-				T4 = true,
+				#T4 = true,
 				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T4Artillery',
@@ -308,6 +345,7 @@ BuilderGroup {
         BuilderName = 'Sorian T3 Nuke Engineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 950,
+		InstanceCount = 1,
         BuilderConditions = {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.NUKE * categories.STRUCTURE}},

@@ -268,7 +268,11 @@ FactoryBuilderManager = Class(BuilderManager) {
 				if self:GetCustomReplacement(v, templateName, faction) then
 					#LOG('*AI DEBUG: Replacement unit found!')
 					local replacement = self:GetCustomReplacement(v, templateName, faction)
-					table.insert( template, replacement )
+					if replacement then
+						table.insert( template, replacement )
+					else
+						table.insert( template, v )
+					end
 				else
 					table.insert( template, v )
 				end

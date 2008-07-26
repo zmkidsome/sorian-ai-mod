@@ -26,6 +26,116 @@ function T4Timeout(aiBrain)
 	aiBrain.T4Building = false
 end
 
+function AIMicro(aiBrain, platoon, target, threatatLocation, mySurfaceThreat)
+	local friendlyThreat = aiBrain:GetThreatAtPosition( platoon:GetPlatoonPosition(), 1, true, 'AntiSurface', aiBrain:GetArmyIndex()) - mySurfaceThreat
+	if mySurfaceThreat + friendlyThreat > threatatLocation * 3 or table.getn(platoon:GetPlatoonUnits()) > 14 then
+		platoon:AggressiveMoveToLocation(target:GetPosition())
+	#elseif threatatLocation * 2 > mySurfaceThreat + friendlyThreat then
+	#	OrderedRetreat(aiBrain, platoon)
+	else
+		CircleAround(aiBrain, platoon, target)
+	end
+end
+
+function CircleAround(aiBrain, platoon, target)
+	platPos = platoon:GetPlatoonPosition()
+	ePos = target:GetPosition()
+	if not platPos or not ePos then
+		return false
+	elseif VDist2Sq(platPos[1], platPos[3], ePos[1], ePos[3]) > 2500 then
+		IssueMove(platoon, ePos)
+		return
+	end
+	vert = math.abs(platPos[1] - ePos[1])
+	horz = math.abs(platPos[3] - ePos[3])
+	local leftright
+	local updown
+	local movePos = {}
+	if vert > horz then
+		if ePos[3] > platPos[3] then
+			leftright = -1
+		else
+			leftright = 1
+		end
+		if ePos[1] > platPos[1] then
+			updown = 1
+		else
+			updown = -1
+		end
+		movePos[1] = { platPos[1], ePos[2], ePos[3] + (16 * leftright) }
+		movePos[2] = { ePos[1] + (16 * updown), ePos[2], ePos[3] + (16 * leftright) }
+		movePos[3] = { ePos[1] + (16 * updown), ePos[2], ePos[3] - (16 * leftright) }
+		for k,v in movePos do
+			local surheight = GetTerrainHeight(v[1], v[3])
+			# If its in water
+			if surheight < GetSurfaceHeight(v[1], v[3]) then
+				platoon:AggressiveMoveToLocation(target:GetPosition())
+				return
+			end
+		end
+		
+		platoon:MoveToLocation( movePos[1], false)
+		platoon:MoveToLocation( movePos[2], false)
+		platoon:MoveToLocation( movePos[3], false)
+	else
+		if ePos[3] > platPos[3] then
+			leftright = 1
+		else
+			leftright = -1
+		end
+		if ePos[1] > platPos[1] then
+			updown = -1
+		else
+			updown = 1
+		end
+		movePos[1] = { ePos[1] + (16 * updown), ePos[2], platPos[3] }
+		movePos[2] = { ePos[1] + (16 * updown), ePos[2], ePos[3] + (16 * leftright) }
+		movePos[3] = { ePos[1] - (16 * updown), ePos[2], ePos[3] + (16 * leftright) }
+		for k,v in movePos do
+			local surheight = GetTerrainHeight(v[1], v[3])
+			# If its in water
+			if surheight < GetSurfaceHeight(v[1], v[3]) then
+				platoon:AggressiveMoveToLocation(target:GetPosition())
+				return
+			end
+		end
+		
+		platoon:MoveToLocation( movePos[1], false)
+		platoon:MoveToLocation( movePos[2], false)
+		platoon:MoveToLocation( movePos[3], false)
+	end
+	WaitSeconds(5)
+end
+
+function OrderedRetreat(aiBrain, platoon)
+	local bestBase = false
+	local bestBaseName = ""
+	local bestDistSq = 999999999
+	local platPos = platoon:GetPlatoonPosition()
+
+	for baseName, base in aiBrain.BuilderManagers do
+		local distSq = VDist2Sq(platPos[1], platPos[3], base.Position[1], base.Position[3])
+
+		if distSq < bestDistSq then
+			bestBase = base
+			bestBaseName = baseName
+			bestDistSq = distSq    
+		end
+	end
+
+	if bestBase then
+		AIAttackUtils.GetMostRestrictiveLayer(platoon)
+		local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, platoon.MovementLayer, platoon:GetPlatoonPosition(), bestBase.Position, 200)
+		IssueClearCommands(platoon)
+
+		if path and table.getn(path) > 1 then
+			platoon:MoveToLocation(path[1], false)
+		elseif path and table.getn(path) == 1 and VDist2Sq(path[1][1], path[1][3], platPos[1], platPos[3]) < 100 then
+			IssueGuard( platoon, platPos )
+		end
+	end
+end
+
 function GetThreatAtPosition( aiBrain, pos, rings, ttype, threatFilters)
 	local threat = aiBrain:GetThreatAtPosition( pos, rings, true, ttype )
 	for k,v in threatFilters do
@@ -75,17 +185,54 @@ end
 function AddCustomFactionSupport(aiBrain)
 	aiBrain.CustomFactions = {}
 	for i, m in __active_mods do
-		LOG('*AI DEBUG: Checking mod: '..m.name..' for custom factions')
+		#LOG('*AI DEBUG: Checking mod: '..m.name..' for custom factions')
 		local CustomFacFiles = DiskFindFiles(m.location..'/lua/CustomFactions', '*.lua')
-		LOG('*AI DEBUG: Custom faction files found: '..repr(CustomFacFiles))
+		#LOG('*AI DEBUG: Custom faction files found: '..repr(CustomFacFiles))
 		for k, v in CustomFacFiles do
 			local tempfile = import(v).FactionList
 			for x, z in tempfile do
-				LOG('*AI DEBUG: Adding faction: '..z.cat)
+				#LOG('*AI DEBUG: Adding faction: '..z.cat)
 				table.insert(aiBrain.CustomFactions, z )
 			end
 		end
 	end
+end
+
+function GetTemplateReplacement(aiBrain, building, faction)
+	local retTemplate = false
+	local templateData = aiBrain.CustomUnits[building]
+	if templateData and templateData[faction] then
+		#LOG('*AI DEBUG: Replacement for '..building..' exists.')
+		local rand = Random(1,100)
+		local possibles = {}
+		for k,v in templateData[faction] do
+			if rand <= v[2] then
+				#LOG('*AI DEBUG: Insert possibility.')
+				table.insert(possibles, v[1])
+			end
+		end
+		if table.getn(possibles) > 0 then
+			rand = Random(1,table.getn(possibles))
+			local customUnitID = possibles[rand]
+			#LOG('*AI DEBUG: Replaced with '..customUnitID)
+			retTemplate = { { building, customUnitID, } }
+		end
+	end
+	return retTemplate
+end
+
+function GetEngineerFaction( engineer )
+    if EntityCategoryContains( categories.UEF, engineer ) then
+        return 'UEF'
+    elseif EntityCategoryContains( categories.AEON, engineer ) then
+        return 'Aeon'
+    elseif EntityCategoryContains( categories.CYBRAN, engineer ) then
+        return 'Cybran'
+    elseif EntityCategoryContains( categories.SERAPHIM, engineer ) then
+        return 'Seraphim'
+    else
+        return false
+    end
 end
 
 function GetPlatoonTechLevel(platoonUnits)
@@ -230,7 +377,7 @@ function FindClosestUnitPosToAttack( aiBrain, platoon, squad, maxRange, atkCat, 
         if not unit:IsDead() then
             local unitPos = unit:GetPosition()
             if (not retUnit or Utils.XZDistanceTwoVectors( position, unitPos ) < distance) and platoon:CanAttackTarget( squad, unit ) and (not turretPitch or not CheckBlockingTerrain(position, unitPos, selectedWeaponArc, turretPitch)) then
-                retUnit = unit:GetPosition()
+                retUnit = unit #:GetPosition()
                 distance = Utils.XZDistanceTwoVectors( position, unitPos )
             end
         end
@@ -422,7 +569,7 @@ end
 function Nuke(aiBrain)
     local atkPri = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION' }
 	local maxFire = false
-	local Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE, true )
+	local Nukes = aiBrain:GetListOfUnits( categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3, true )
 	local nukeCount = 0
 	local launcher
 	local bp

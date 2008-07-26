@@ -572,6 +572,77 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
     threatWeight = threatWeight or 1
     
     local graph = GetPathGraphs()[startNode.layer][startNode.graphName]
+
+    local closed = {}
+
+    local queue = {
+            path = {startNode, },
+    }
+	
+	if testPath and VDist2Sq(location[1], location[3], startNode.position[1], startNode.position[3]) > 10000 and 
+	SUtils.DestinationBetweenPoints(destination, location, startNode.position) then
+		local newPath = {
+				path = {newNode = {position = destination}, },
+		}
+		return newPath
+	end
+	
+	local lastNode = startNode
+	
+	repeat
+		if closed[lastNode] then return false end
+		
+		closed[lastNode] = true
+		
+        local mapSizeX = ScenarioInfo.size[1]
+        local mapSizeZ = ScenarioInfo.size[2]
+		
+		local lowCost = false
+		local bestNode = false
+			
+		for i, adjacentNode in lastNode.adjacent do
+		
+            local newNode = graph[adjacentNode]
+			
+			if not newNode or closed[newNode] then
+				continue
+			end
+			
+			if testPath and SUtils.DestinationBetweenPoints(destination, lastNode.position, newNode.position) then
+				return queue
+			end
+            
+            local dist = VDist2Sq(newNode.position[1], newNode.position[3], endNode.position[1], endNode.position[3])
+
+            # this brings the dist value from 0 to 100% of the maximum length with can travel on a map
+            dist = 100 * dist / ( mapSizeX + mapSizeZ ) #(mapSizeX * mapSizeX  + mapSizeZ * mapSizeZ)
+			
+            --get threat from current node to adjacent node
+            local threat = aiBrain:GetThreatBetweenPositions(newNode.position, lastNode.position, nil, threatType)
+            
+            --update path stuff
+            local cost = dist + threat*threatWeight
+			
+			if lowCost and cost >= lowCost then
+				continue
+			end
+			
+			bestNode = newNode
+			lowCost = cost
+		end
+		if bestNode then
+			table.insert(queue.path,bestNode)
+			lastNode = bestNode
+		end		
+	until lastNode == endNode
+	
+	return queue
+end
+
+function GeneratePatholdstyle(aiBrain, startNode, endNode, threatType, threatWeight, destination, location, testPath)
+    threatWeight = threatWeight or 1
+    
+    local graph = GetPathGraphs()[startNode.layer][startNode.graphName]
     
     --ZOMG A*
     local closed = {}
@@ -933,10 +1004,14 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
 		
 		# if not an engineer try a near by land path node
 		if not transportLocation then
-			transportLocation = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Land Path Node', destination[1], destination[3])
-			# If we have not found a spot yet find an appropriate transport marker if it's on the map
+			transportLocation = AIUtils.AIGetClosestThreatMarkerLoc(aiBrain, 'Land Path Node', destination[1], destination[3], -100000, 6, 0, 'AntiAir')
+			# What if it is a water map with no Land Pathing Nodes?
 			if not transportLocation then
-				transportLocation = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Transport Marker', destination[1], destination[3])
+				transportLocation = AIUtils.AIGetClosestThreatMarkerLoc(aiBrain, 'Amphibious Path Node', destination[1], destination[3], -100000, 6, 0, 'AntiAir')				
+				# If we have not found a spot yet find an appropriate transport marker if it's on the map
+				if not transportLocation then
+					transportLocation = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Transport Marker', destination[1], destination[3])
+				end
 			end
 		end
 		

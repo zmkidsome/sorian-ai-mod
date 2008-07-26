@@ -88,7 +88,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconStorageCurrent', { 600, 0 } },
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION' }},
+			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION' }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'MASSEXTRACTION TECH2', 'MASSEXTRACTION' } },
             
         },
@@ -142,7 +142,22 @@ BuilderGroup {
         },
         FormRadius = 10000,
         BuilderType = 'Any',
-    },    
+    },
+    Builder {
+        BuilderName = 'T2 Mass Extractor Upgrade Storage Based',
+        PlatoonTemplate = 'T2MassExtractorUpgrade',
+        InstanceCount = 1,
+        Priority = 200,
+        BuilderConditions = {
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { EBC, 'GreaterThanEconStorageCurrent', { 3000, 0 } },
+			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3' } },
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'MASSEXTRACTION TECH3', 'MASSEXTRACTION' } },
+            { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3' }},
+        },
+        FormRadius = 10000,
+        BuilderType = 'Any',
+    },
     Builder {
         BuilderName = 'Sorian T2 Mass Extractor Upgrade Timeless',
         PlatoonTemplate = 'T2MassExtractorUpgrade',
@@ -177,6 +192,44 @@ BuilderGroup {
         FormRadius = 10000,
         BuilderType = 'Any',
     },      
+}
+
+# ================================= #
+#     EMERGENCY FACTORY UPGRADES
+# ================================= #
+BuilderGroup {
+    BuilderGroupName = 'SorianEmergencyUpgradeBuilders',
+    BuildersType = 'PlatoonFormBuilder',
+    Builder {
+        BuilderName = 'Sorian Emergency T1 Factory Upgrade',
+        PlatoonTemplate = 'T1LandFactoryUpgrade',
+        Priority = 200,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY TECH2, FACTORY TECH3'}},
+                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH2, FACTORY TECH3' } },
+                #{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
+				{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'MOBILE TECH2, FACTORY TECH2', 'Enemy'}},				
+                #{ SIBC, 'GreaterThanEconIncome',  { 2.4, 50}},
+            },
+        BuilderType = 'Any',
+    },
+    Builder {
+        BuilderName = 'Sorian Emergency T2 Factory Upgrade',
+        PlatoonTemplate = 'T2LandFactoryUpgrade',
+        Priority = 200,
+        InstanceCount = 1,
+        BuilderConditions = {
+                { UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY TECH3'}},
+                { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3' } },
+                #{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
+                { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
+				{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'MOBILE TECH3, FACTORY TECH3', 'Enemy'}},				
+                #{ SIBC, 'GreaterThanEconIncome',  { 2.4, 50}},
+            },
+        BuilderType = 'Any',
+    },
 }
 
 # ================================= #

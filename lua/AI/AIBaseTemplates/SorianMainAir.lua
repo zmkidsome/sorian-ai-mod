@@ -15,6 +15,7 @@ BaseBuilderTemplate {
         # Factory upgrades
         'SorianT1BalancedUpgradeBuilders',
         'SorianT2BalancedUpgradeBuilders',
+		'SorianEmergencyUpgradeBuilders',
 		'SorianMassFabPause',
         
         # Engineer Builders
@@ -24,6 +25,9 @@ BaseBuilderTemplate {
         'SorianT3EngineerBuilders',
         'SorianEngineerFactoryConstruction Air',
         'SorianEngineerFactoryConstruction',
+		
+		# SCU Upgrades
+		'SorianSCUUpgrades',
         
         # Engineer Support buildings
         'SorianEngineeringSupportBuilder',

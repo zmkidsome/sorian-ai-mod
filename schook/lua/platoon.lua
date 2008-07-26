@@ -34,7 +34,7 @@ Platoon = Class(sorianoldPlatoon) {
 			SUtils.AIDelayChat('enemies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 't4taunt', nil, randelay)
 		end
         local ID = experimental:GetUnitId()
-        
+		
 		self:SetPlatoonFormationOverride('AttackFormation')
 		
         if ID == 'uel0401' then
@@ -293,7 +293,7 @@ Platoon = Class(sorianoldPlatoon) {
             else
                 upgradeID = aiBrain:FindUpgradeBP(v:GetUnitId(), StructureUpgradeTemplates[factionIndex])
             end
-			if EntityCategoryContains(categories.CONSTRUCTION, v) and not v:CanBuild(upgradeID) then
+			if upgradeID and EntityCategoryContains(categories.CONSTRUCTION, v) and not v:CanBuild(upgradeID) then
 				continue
 			end
             if upgradeID then
@@ -394,7 +394,7 @@ Platoon = Class(sorianoldPlatoon) {
         while aiBrain:PlatoonExists(self) do
 			self:MergeWithNearbyPlatoonsSorian('SatelliteAISorian', 50, true)
 			if self:IsOpponentAIRunning() then
-                target = AIUtils.AIFindBrainTargetInRangeSorian( aiBrain, self, 'Attack', maxRadius, atkPri )
+                target = AIUtils.AIFindUndefendedBrainTargetInRangeSorian( aiBrain, self, 'Attack', maxRadius, atkPri )
 				local newtarget
 				if aiBrain.AttackPoints and table.getn(aiBrain.AttackPoints) > 0 then
 					newtarget = AIUtils.AIFindPingTargetInRangeSorian( aiBrain, self, 'Attack', maxRadius, atkPri )
@@ -437,10 +437,10 @@ Platoon = Class(sorianoldPlatoon) {
         local minRadius = weapon.MinRadius
         unit:SetAutoMode(true)
 		local atkPri = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 
-		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'TECH3 MASSPRODUCTION', 'TECH2 ENERGYPRODUCTION', 'TECH2 MASSPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'ALLUNITS' }
+		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'TECH3 MASSPRODUCTION', 'TECH2 ENERGYPRODUCTION', 'TECH2 MASSPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'LAND, NAVAL' }
         self:SetPrioritizedTargetList( 'Attack', { categories.STRUCTURE * categories.ARTILLERY * categories.EXPERIMENTAL, categories.STRUCTURE * categories.NUKE * categories.EXPERIMENTAL, categories.EXPERIMENTAL * categories.ORBITALSYSTEM, categories.STRUCTURE * categories.ARTILLERY * categories.TECH3, 
 		categories.STRUCTURE * categories.NUKE * categories.TECH3, categories.EXPERIMENTAL * categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.COMMAND, categories.EXPERIMENTAL * categories.MOBILE * categories.LAND, categories.TECH3 * categories.MASSFABRICATION,
-		categories.TECH3 * categories.ENERGYPRODUCTION, categories.MASSPRODUCTION, categories.ENERGYPRODUCTION, categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.ALLUNITS } )
+		categories.TECH3 * categories.ENERGYPRODUCTION, categories.MASSPRODUCTION, categories.ENERGYPRODUCTION, categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.LAND + categories.NAVAL } )
         while aiBrain:PlatoonExists(self) do
             local target = false
             local blip = false
@@ -919,9 +919,9 @@ Platoon = Class(sorianoldPlatoon) {
             end
 
             # merge with nearby platoons
-			if aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface') < 1 then
+			#if aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface') < 1 then
 				self:MergeWithNearbyPlatoonsSorian('NavalForceAISorian', 20)
-			end
+			#end
 
             # rebuild formation
             platoonUnits = self:GetPlatoonUnits()
@@ -965,12 +965,12 @@ Platoon = Class(sorianoldPlatoon) {
             if table.getn(cmdQ) <= 1 and closestTarget and nearDest then
                 self:StopAttack()
                 if PlatoonFormation != 'No Formation' then
-					self:AggressiveMoveToLocation(closestTarget)
+					self:AggressiveMoveToLocation(closestTarget:GetPosition())
 					#IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
 					#self:AttackTarget(closestTarget)
 					#IssueAttack(platoonUnits, closestTarget)
                 else
-					self:AggressiveMoveToLocation(closestTarget)
+					self:AggressiveMoveToLocation(closestTarget:GetPosition())
 					#IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
 					#self:AttackTarget(closestTarget)
 					#IssueAttack(platoonUnits, closestTarget)
@@ -981,12 +981,12 @@ Platoon = Class(sorianoldPlatoon) {
 			elseif closestTarget then
 				self:StopAttack()
 				if PlatoonFormation != 'No Formation' then
-					self:AggressiveMoveToLocation(closestTarget)
+					self:AggressiveMoveToLocation(closestTarget:GetPosition())
 					#IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
 					#self:AttackTarget(closestTarget)
 					#IssueAttack(platoonUnits, closestTarget)
 				else
-					self:AggressiveMoveToLocation(closestTarget)
+					self:AggressiveMoveToLocation(closestTarget:GetPosition())
 					#IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
 					#self:AttackTarget(closestTarget)
 					#IssueAttack(platoonUnits, closestTarget)
@@ -1027,6 +1027,39 @@ Platoon = Class(sorianoldPlatoon) {
 				WaitSeconds(Random(5,11) + 2 * stuckCount)
 #			end
         end
+    end,
+	
+    GatherUnitsSorian = function(self)
+        local pos = self:GetPlatoonPosition()
+        local unitsSet = true
+        for k,v in self:GetPlatoonUnits() do
+            if VDist2( v:GetPosition()[1], v:GetPosition()[3], pos[1], pos[3] ) > 20 then
+               unitsSet = false
+               break
+            end
+        end
+        local aiBrain = self:GetBrain()
+        if not unitsSet then
+            #AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Defensive Point', pos[1], pos[3])
+            local cmd = self:MoveToLocation( self:GetPlatoonPosition(), false )
+            local counter = 0
+            repeat
+                WaitSeconds(1)
+                counter = counter + 1
+                if not aiBrain:PlatoonExists(self) then
+                    return false
+                end
+				unitsSet = true
+				for k,v in self:GetPlatoonUnits() do
+					if VDist2( v:GetPosition()[1], v:GetPosition()[3], pos[1], pos[3] ) > 20 then
+						unitsSet = false
+						break
+					end
+				end
+            until unitsSet or not self:IsCommandsActive(cmd) or counter >= 30
+        end
+        
+        return true        
     end,
 	
     AttackForceAI = function(self)
@@ -1213,7 +1246,7 @@ Platoon = Class(sorianoldPlatoon) {
 		local unitToGuard = false
 		local units = aiBrain:GetListOfUnits( categories.MOBILE * categories.EXPERIMENTAL - categories.url0401, false )
 		for k,v in units do
-			if (self.MovementLayer == 'Air' and SUtils.GetGuardCount(aiBrain, v, categories.AIR) < 10) or ((self.MovementLayer == 'Land' or self.MovementLayer == 'Amphibious') and EntityCategoryContains(categories.LAND, v) and SUtils.GetGuardCount(aiBrain, v, categories.LAND) < 10) then #not v.BeingGuarded then
+			if v:GetFractionComplete() == 1 and ((self.MovementLayer == 'Air' and SUtils.GetGuardCount(aiBrain, v, categories.AIR) < 20) or ((self.MovementLayer == 'Land' or self.MovementLayer == 'Amphibious') and EntityCategoryContains(categories.LAND, v) and SUtils.GetGuardCount(aiBrain, v, categories.LAND) < 20)) then #not v.BeingGuarded then
 				unitToGuard = v
 				#v.BeingGuarded = true
 			end
@@ -1884,17 +1917,22 @@ Platoon = Class(sorianoldPlatoon) {
         local PlatoonFormation = self.PlatoonData.UseFormation or 'NoFormation'
         self:SetPlatoonFormationOverride(PlatoonFormation)
         while aiBrain:PlatoonExists(self) do
+			local mySurfaceThreat = AIAttackUtils.GetSurfaceThreatOfUnits(self)
+			local pos = self:GetPlatoonPosition()
+			local threatatLocation = aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface')
             if self:IsOpponentAIRunning() then
-                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR - categories.NAVAL)
+                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR - categories.NAVAL - categories.SCOUT)
                 if target then
                     blip = target:GetBlip(armyIndex)
                     self:Stop()
 					if PlatoonFormation != 'NoFormation' then
 						#IssueFormAttack(platoonUnits, target, PlatoonFormation, 0)
-						IssueAggressiveMove(platoonUnits, target)
+						#IssueAggressiveMove(platoonUnits, target:GetPosition())
+						SUtils.AIMicro(aiBrain, self, target, threatatLocation, mySurfaceThreat)
 					else
 						#IssueAttack(platoonUnits, target)
-						IssueAggressiveMove(platoonUnits, target)
+						#IssueAggressiveMove(platoonUnits, target:GetPosition())
+						SUtils.AIMicro(aiBrain, self, target, threatatLocation, mySurfaceThreat)
 					end
 				end
             end
@@ -1907,7 +1945,7 @@ Platoon = Class(sorianoldPlatoon) {
         local aiBrain = self:GetBrain()
         
         # get units together
-        if not self:GatherUnits() then
+        if not self:GatherUnitsSorian() then
             return
         end
         
@@ -1953,15 +1991,16 @@ Platoon = Class(sorianoldPlatoon) {
             end
 
             # merge with nearby platoons
-			if aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface') < 1 then
+			#if aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface') < 1 then
 				self:MergeWithNearbyPlatoonsSorian('AttackForceAISorian', 10)
-			end
+			#end
 
             # rebuild formation
             platoonUnits = self:GetPlatoonUnits()
             numberOfUnitsInPlatoon = table.getn(platoonUnits)
             # if we have a different number of units in our platoon, regather
-            if (oldNumberOfUnitsInPlatoon != numberOfUnitsInPlatoon) and aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface') < 1 then
+			local threatatLocation = aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface')
+            if (oldNumberOfUnitsInPlatoon != numberOfUnitsInPlatoon) and threatatLocation < 1 then
                 self:StopAttack()
                 self:SetPlatoonFormationOverride(PlatoonFormation)
 				oldNumberOfUnitsInPlatoon = numberOfUnitsInPlatoon
@@ -2029,7 +2068,7 @@ Platoon = Class(sorianoldPlatoon) {
 			
             # if we're on our final push through to the destination, and we find a unit close to our destination
             #local closestTarget = self:FindClosestUnit( 'attack', 'enemy', true, categories.ALLUNITS )
-			local closestTarget = SUtils.FindClosestUnitPosToAttack( aiBrain, self, 'attack', maxRange + 20, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.WALL, selectedWeaponArc, turretPitch )
+			local closestTarget = SUtils.FindClosestUnitPosToAttack( aiBrain, self, 'attack', maxRange + 20, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.WALL - categories.SCOUT, selectedWeaponArc, turretPitch )
             local nearDest = false
             local oldPathSize = table.getn(self.LastAttackDestination)
             if self.LastAttackDestination then
@@ -2042,11 +2081,13 @@ Platoon = Class(sorianoldPlatoon) {
                 if PlatoonFormation != 'No Formation' then
                     #IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
 					#IssueAggressiveMove(platoonUnits, closestTarget)
-					self:AggressiveMoveToLocation(closestTarget)
+					self:AggressiveMoveToLocation(closestTarget:GetPosition())
+					#SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
                 else
                     #IssueAttack(platoonUnits, closestTarget)
 					#IssueAggressiveMove(platoonUnits, closestTarget)
-					self:AggressiveMoveToLocation(closestTarget)
+					self:AggressiveMoveToLocation(closestTarget:GetPosition())
+					#SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
                 end
                 cmdQ = {1}
 #				quickReset = true
@@ -2056,11 +2097,13 @@ Platoon = Class(sorianoldPlatoon) {
 				if PlatoonFormation != 'No Formation' then
 					#IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
 					#IssueAggressiveMove(platoonUnits, closestTarget)
-					self:AggressiveMoveToLocation(closestTarget)
+					#self:AggressiveMoveToLocation(closestTarget:GetPosition())
+					SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
 				else
 					#IssueAttack(platoonUnits, closestTarget)
 					#IssueAggressiveMove(platoonUnits, closestTarget)
-					self:AggressiveMoveToLocation(closestTarget)
+					#self:AggressiveMoveToLocation(closestTarget:GetPosition())
+					SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
 				end
 				cmdQ = {1}
 #				quickReset = true
@@ -2568,7 +2611,17 @@ Platoon = Class(sorianoldPlatoon) {
             for k, v in cons.BuildStructures do
                 if aiBrain:PlatoonExists(self) then
                     if not eng:IsDead() then
-                        buildFunction(aiBrain, eng, v, closeToBuilder, relative, buildingTmpl, baseListData, reference, cons.NearMarkerType)
+						local faction = SUtils.GetEngineerFaction(eng)
+						if aiBrain.CustomUnits[v] and aiBrain.CustomUnits[v][faction] then
+							local replacement = SUtils.GetTemplateReplacement(aiBrain, v, faction)
+							if replacement then
+								buildFunction(aiBrain, eng, v, closeToBuilder, relative, replacement, baseListData, reference, cons.NearMarkerType)
+							else
+								buildFunction(aiBrain, eng, v, closeToBuilder, relative, buildingTmpl, baseListData, reference, cons.NearMarkerType)
+							end
+						else
+							buildFunction(aiBrain, eng, v, closeToBuilder, relative, buildingTmpl, baseListData, reference, cons.NearMarkerType)
+						end
                     else
                         if aiBrain:PlatoonExists(self) then
                             WaitTicks(1)
