@@ -534,7 +534,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Gate Engineer',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 945, #850,
         BuilderConditions = {
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'ENERGYPRODUCTION TECH3' }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSPRODUCTION TECH3' }},

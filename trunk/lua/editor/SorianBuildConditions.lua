@@ -25,6 +25,21 @@ function IsWaterMap(aiBrain, bool)
 	return false
 end
 
+function MarkerLessThan(aiBrain, locationType, markerTypes, distance)
+	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
+    if not engineerManager then
+        return false
+    end
+	local pos = engineerManager:GetLocationCoords()
+	for k,v in markerTypes do
+		local marker = AIUtils.AIGetClosestMarkerLocation(aiBrain, v, pos[1], pos[3])
+		if marker and VDist2Sq(marker[1], marker[3], pos[1], pos[3]) < distance * distance then
+			return true
+		end
+	end
+	return false
+end
+
 ##############################################################################################################
 # function: EnemiesLessThan = BuildCondition
 #
@@ -421,6 +436,20 @@ function CmdrHasUpgrade(aiBrain, upgrade, has)
     return false
 end
 
+function SCUNeedsUpgrade(aiBrain, upgrade)
+    local units = aiBrain:GetListOfUnits( categories.SUBCOMMANDER, false )
+	local needsUpgrade = false
+    for k,v in units do
+        if v:IsUnitState('Upgrading') then
+            return false
+        end
+        if not v:HasEnhancement( upgrade ) then
+            needsUpgrade = true
+        end
+    end
+    return needsUpgrade
+end
+
 function T4ThreatExists(aiBrain, t4types, t4cats)
 	for k,v in t4types do
 		if aiBrain.T4ThreatFound[v] then
@@ -446,6 +475,52 @@ function CanBuildFirebase( aiBrain, locationType, radius, markerType, tMin, tMax
         return false
     end
     return true
+end
+
+function TargetHasLessThanUnitsWithCategory(aiBrain, numReq, category)
+    local testCat = category
+	local enemyBrain = aiBrain:GetCurrentEnemy()
+	local count = 0
+	if not enemyBrain then
+		return false
+	end
+	local enemyIndex = enemyBrain:GetArmyIndex()
+    if type(category) == 'string' then
+        testCat = ParseEntityCategory(category)
+    end
+    local eUnits = aiBrain:GetUnitsAroundPoint( testCat, Vector(0,0,0), 100000, 'Enemy' )
+	for k,v in eUnits do
+		if v:GetAIBrain():GetArmyIndex() == enemyIndex then
+			count = count + 1
+		end
+		if count > numReq then
+			return false
+		end
+	end
+    return true
+end
+
+function TargetHasGreaterThanUnitsWithCategory(aiBrain, numReq, category)
+    local testCat = category
+	local enemyBrain = aiBrain:GetCurrentEnemy()
+	local count = 0
+	if not enemyBrain then
+		return false
+	end
+	local enemyIndex = enemyBrain:GetArmyIndex()
+    if type(category) == 'string' then
+        testCat = ParseEntityCategory(category)
+    end
+    local eUnits = aiBrain:GetUnitsAroundPoint( testCat, Vector(0,0,0), 100000, 'Enemy' )
+	for k,v in eUnits do
+		if v:GetAIBrain():GetArmyIndex() == enemyIndex then
+			count = count + 1
+		end
+		if count > numReq then
+			return true
+		end
+	end
+    return false
 end
 
 ##############################################################################################################

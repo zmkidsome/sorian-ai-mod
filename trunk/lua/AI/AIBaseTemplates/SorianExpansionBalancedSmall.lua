@@ -23,6 +23,9 @@ BaseBuilderTemplate {
         'SorianT3EngineerBuilders',
         'SorianEngineerFactoryConstruction',
         'SorianLandInitialFactoryConstruction',
+		
+		# SCU Upgrades
+		'SorianSCUUpgrades',
 
         # Extractor building        
         'SorianEngineerMassBuildersLowerPri',

@@ -47,9 +47,10 @@ function SeaAttackCondition(aiBrain, locationType, targetNumber)
         return true
 	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH3) and ( surfaceThreat + subThreat ) > 1125 then #5 Units x 225
 		return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH2) and ( surfaceThreat + subThreat ) > 280 then #7 Units x 40
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH2)
+	and UC.PoolLessAtLocation(aiBrain, locationType, 1, categories.MOBILE * categories.NAVAL * categories.TECH3) and ( surfaceThreat + subThreat ) > 280 then #7 Units x 40
 		return true
-	elseif ( surfaceThreat + subThreat ) > 42 then #7 Units x 6
+	elseif UC.PoolLessAtLocation(aiBrain, locationType, 1, categories.MOBILE * categories.NAVAL - categories.TECH1) and ( surfaceThreat + subThreat ) > 42 then #7 Units x 6
 		return true
     end
     return false
@@ -118,7 +119,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Naval Cruiser',
         PlatoonTemplate = 'T2SeaCruiser',
-        PlatoonAddBehaviors = { 'AirLandToggle' },
+        PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 600,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -187,7 +188,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Naval Cruiser - SF',
         PlatoonTemplate = 'T2SeaCruiser',
-        PlatoonAddBehaviors = { 'AirLandToggle' },
+        PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 705,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -218,7 +219,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Naval Cruiser - T3',
         PlatoonTemplate = 'T2SeaCruiser',
-        PlatoonAddBehaviors = { 'AirLandToggle' },
+        PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 700,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -286,6 +287,7 @@ BuilderGroup {
         BuilderName = 'Sorian Sea Hunters T1',
         PlatoonTemplate = 'SeaHuntSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 10,
         InstanceCount = 2,
         BuilderType = 'Any',
@@ -302,6 +304,7 @@ BuilderGroup {
         BuilderName = 'Sorian Sea Hunters T2',
         PlatoonTemplate = 'SeaHuntSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 10,
         InstanceCount = 2,
         BuilderType = 'Any',
@@ -318,6 +321,7 @@ BuilderGroup {
         BuilderName = 'Sorian Sea Hunters T3',
         PlatoonTemplate = 'SeaHuntSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 10,
         InstanceCount = 2,
         BuilderType = 'Any',
@@ -333,6 +337,7 @@ BuilderGroup {
         BuilderName = 'Sorian Sea StrikeForce T2',
         PlatoonTemplate = 'SeaStrikeSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 100,
         InstanceCount = 5,
         BuilderType = 'Any',
@@ -364,6 +369,7 @@ BuilderGroup {
         BuilderName = 'Sorian Frequent Sea Attack T1',
         PlatoonTemplate = 'SeaAttackSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 1,
         InstanceCount = 5,
         BuilderType = 'Any',
@@ -391,6 +397,7 @@ BuilderGroup {
         BuilderName = 'Sorian Frequent Sea Attack T2',
         PlatoonTemplate = 'SeaAttackSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 1,
         InstanceCount = 5,
         BuilderType = 'Any',
@@ -418,6 +425,7 @@ BuilderGroup {
         BuilderName = 'Sorian Frequent Sea Attack T3',
         PlatoonTemplate = 'SeaAttackSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 1,
         InstanceCount = 5,
         BuilderType = 'Any',
@@ -449,6 +457,7 @@ BuilderGroup {
         BuilderName = 'Sorian Big Sea Attack T1',
         PlatoonTemplate = 'SeaAttackSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 1,
         InstanceCount = 5,
         BuilderType = 'Any',
@@ -476,6 +485,7 @@ BuilderGroup {
         BuilderName = 'Sorian Big Sea Attack T2',
         PlatoonTemplate = 'SeaAttackSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 1,
         InstanceCount = 5,
         BuilderType = 'Any',
@@ -503,6 +513,7 @@ BuilderGroup {
         BuilderName = 'Sorian Big Sea Attack T3',
         PlatoonTemplate = 'SeaAttackSorian',
 		#PlatoonAddPlans = {'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
+		PlatoonAddPlans = {'AirLandToggleSorian'},
         Priority = 1,
         InstanceCount = 5,
         BuilderType = 'Any',

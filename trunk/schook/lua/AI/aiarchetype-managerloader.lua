@@ -68,9 +68,9 @@ function UnitCapWatchThreadSorian(aiBrain)
 			# More than 1 T3 Power
 			underCap = GetAIUnderUnitCap(aiBrain, 1, categories.TECH3 * categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.TECH1 * categories.ENERGYPRODUCTION * categories.STRUCTURE * categories.DRAGBUILD)
 			
-			# More than 14 T3 Defense
+			# More than 14 T2/T3 Defense - shields
 			if underCap ~= true then
-				underCap = GetAIUnderUnitCap(aiBrain, 14, categories.TECH3 * categories.DEFENSE * categories.STRUCTURE, categories.TECH1 * categories.DEFENSE * categories.STRUCTURE)
+				underCap = GetAIUnderUnitCap(aiBrain, 14, (categories.TECH2 + categories.TECH3) * categories.DEFENSE * categories.STRUCTURE - categories.SHIELD, categories.TECH1 * categories.DEFENSE * categories.STRUCTURE)
 			end
 			
 			# More than 6 T2/T3 Engineers
@@ -78,14 +78,14 @@ function UnitCapWatchThreadSorian(aiBrain)
 				underCap = GetAIUnderUnitCap(aiBrain, 6, categories.ENGINEER * (categories.TECH2 + categories.TECH3), categories.TECH1 * categories.ENGINEER)
 			end
 			
-			# More than 9 T3 Engineers
+			# More than 9 T3 Engineers/SCUs
 			if underCap ~= true then
-				underCap = GetAIUnderUnitCap(aiBrain, 9, categories.ENGINEER * categories.TECH3, categories.TECH2 * categories.ENGINEER - categories.ENGINEERSTATION)
+				underCap = GetAIUnderUnitCap(aiBrain, 9, categories.ENGINEER * categories.TECH3 + categories.SUBCOMMANDER, categories.TECH2 * categories.ENGINEER - categories.ENGINEERSTATION)
 			end
 			
-			# More than 39 T3 Land Units minus Engineers
+			# More than 29 T3 Land Units minus Engineers
 			if underCap ~= true then
-				underCap = GetAIUnderUnitCap(aiBrain, 39, categories.TECH3 * categories.MOBILE * categories.LAND - categories.ENGINEER, categories.TECH1 * categories.MOBILE * categories.LAND)
+				underCap = GetAIUnderUnitCap(aiBrain, 29, categories.TECH3 * categories.MOBILE * categories.LAND - categories.ENGINEER, categories.TECH1 * categories.MOBILE * categories.LAND)
 			end
 			
 			# More than 9 T3 Air Units minus Scouts

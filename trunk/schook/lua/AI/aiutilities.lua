@@ -59,8 +59,7 @@ function EngineerTryReclaimCaptureAreaSorian(aiBrain, eng, pos)
         for num,unit in checkUnits do
             #if not unit:IsDead() and EntityCategoryContains( categories.ENGINEER, unit ) and ( unit:GetAIBrain():GetFactionIndex() ~= aiBrain:GetFactionIndex() ) then
             #    IssueReclaim( {eng}, unit )
-            #elseif 
-			if not EntityCategoryContains( categories.COMMAND, eng ) then
+            if not unit:IsDead() and not EntityCategoryContains( categories.COMMAND, eng ) and unit:GetFractionComplete() == 1 then
                 IssueCapture( {eng}, unit )
             end
         end
@@ -491,8 +490,52 @@ function AIFindBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkP
 						end
 					end
 				end
-				local numShields = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.SHIELD * categories.STRUCTURE, unitPos, 50, 'Enemy' )
+				local numShields = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.SHIELD * categories.STRUCTURE, unitPos, 46, 'Enemy' )
                 if not retUnit or numShields < targetShields or (numShields == targetShields and Utils.XZDistanceTwoVectors( position, unitPos ) < distance) then
+                    retUnit = unit
+                    distance = Utils.XZDistanceTwoVectors( position, unitPos )
+					targetShields = numShields
+                end
+            end
+        end
+		if retUnit and targetShields > 0 then
+			local platoonUnits = platoon:GetPlatoonUnits()
+			for k,v in platoonUnits do
+				if not v:IsDead() then
+					unit = v
+					break
+				end
+			end
+			local closestBlockingShield = AIBehaviors.GetClosestShieldProtectingTargetSorian(unit, retUnit)
+			if closestBlockingShield then
+				return closestBlockingShield
+			end
+		end
+        if retUnit then
+            return retUnit
+        end
+    end
+    return false
+end
+
+function AIFindUndefendedBrainTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPri )
+    local position = platoon:GetPlatoonPosition()
+    if not aiBrain or not position or not maxRange then
+        return false
+    end
+	local numUnits = table.getn(platoon:GetPlatoonUnits())
+	local maxShields = math.ceil(numUnits / 7)
+    local targetUnits = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, position, maxRange, 'Enemy' )
+    for k,v in atkPri do
+        local category = ParseEntityCategory( v )
+        local retUnit = false
+        local distance = false
+		local targetShields = 9999
+        for num, unit in targetUnits do
+            if not unit:IsDead() and EntityCategoryContains( category, unit ) and platoon:CanAttackTarget( squad, unit ) then
+                local unitPos = unit:GetPosition()
+				local numShields = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.SHIELD * categories.STRUCTURE, unitPos, 46, 'Enemy' )
+                if numShields < maxShields and (not retUnit or numShields < targetShields or (numShields == targetShields and Utils.XZDistanceTwoVectors( position, unitPos ) < distance)) then
                     retUnit = unit
                     distance = Utils.XZDistanceTwoVectors( position, unitPos )
 					targetShields = numShields

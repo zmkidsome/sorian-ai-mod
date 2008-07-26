@@ -233,14 +233,18 @@ BuilderGroup {
         BuilderData = {
 			SearchRadius = 6000,
             PrioritizedCategories = {
-                'COMMAND',
-                'ENERGYPRODUCTION DRAGBUILD',
-                'MASSFABRICATION',
-                'MASSEXTRACTION',
+				'ENERGYPRODUCTION DRAGBUILD',
+				'HYDROCARBON',
+				'COMMAND',
+				'ENGINEER',
+				'MASSEXTRACTION',
+                'MOBILE LAND',
+				'MASSFABRICATION',
                 'SHIELD',
                 'ANTIAIR STRUCTURE',
                 'DEFENSE STRUCTURE',
                 'STRUCTURE',
+                'COMMAND',
                 'MOBILE ANTIAIR',
                 'ALLUNITS',
             },
@@ -262,6 +266,7 @@ BuilderGroup {
         ActivePriority = 980,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -706,6 +711,7 @@ BuilderGroup {
         ActivePriority = 980,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
+			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'NUKE SILO STRUCTURE TECH3' }},
         },
         BuilderType = 'Any',
         BuilderData = {
