@@ -63,6 +63,7 @@ BaseBuilderTemplate {
         'SorianFrequentLandAttackFormBuilders',
         'SorianMassHunterLandFormBuilders',
         'SorianMiscLandFormBuilders',
+		'SorianUnitCapLandAttackFormBuilders',
         
         'SorianT1ReactionDF',
         'SorianT2ReactionDF',
@@ -75,6 +76,7 @@ BaseBuilderTemplate {
         'SorianFrequentAirAttackFormBuilders',
         'SorianMassHunterAirFormBuilders',
         
+		'SorianUnitCapAirAttackFormBuilders',
         'SorianACUHunterAirFormBuilders',
         
         #'SorianTransportFactoryBuilders',

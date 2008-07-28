@@ -265,7 +265,7 @@ FactoryBuilderManager = Class(BuilderManager) {
 		local customData = self.Brain.CustomUnits[templateName]
         if faction and templateData.FactionSquads[faction] then
             for k,v in templateData.FactionSquads[faction] do
-				if self:GetCustomReplacement(v, templateName, faction) then
+				if customData and customData[faction] then
 					#LOG('*AI DEBUG: Replacement unit found!')
 					local replacement = self:GetCustomReplacement(v, templateName, faction)
 					if replacement then
@@ -278,9 +278,9 @@ FactoryBuilderManager = Class(BuilderManager) {
 				end
             end
 		elseif faction and customData and customData[faction] then
-			if self:GetCustomReplacement(v, templateName, faction) then
-				#LOG('*AI DEBUG: New unit found!')
-				local replacement = self:GetCustomReplacement(v, templateName, faction)
+			#LOG('*AI DEBUG: New unit found!')
+			local replacement = self:GetCustomReplacement(v, templateName, faction)
+			if replacement then
 				table.insert( template, replacement )
 			end
         end

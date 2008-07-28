@@ -64,6 +64,7 @@ BaseBuilderTemplate {
         'SorianFrequentAirAttackFormBuilders',
         'SorianMassHunterAirFormBuilders',
         
+		'SorianUnitCapAirAttackFormBuilders',
         'SorianACUHunterAirFormBuilders',
 		
 		'SorianAntiNavyAirFormBuilders',
