@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.6.1:* Optimized the Factory Custom Unit code, Added another fix for hoarding land units.
+
 *1.6:* Adjusted priority of torp bombers, Adjusted T4 Air threat evaluation, Adjusted Air Scout priorities, Fixed Sera T4 Nuke not firing, Tweak T1 Gunship Rush strategy, Fixed T4 Land units pausing to attack shields, UEF Sats will target like nukes, AA units that can attack ground targets, will, Units will no longers guard t4s being built, More T4 Guards, AI will use Amphibious tanks, SCUs will Upgrade, ACU will treat engineers as a threat, Adjusted economy a bit, Made a small change to the Nuke Rush and T3 Arty Rush strategies, AI should take a better account of threat when looking for transport drop points, AI will micro units a bit, AI will go after econ first with Air, AI will not build intys if does not have to, Added emergency factory upgraders, Fixed UnitUpgradeAI bug, Fixed Land, Air, and Naval platoon threat evaluation, Re-coded !GeneratePath(), Fixed a !GeneratePath() bug, Added custom engineer built unit support, T4s will group up before moving out, Gave ACU more to do, AI will treat building the Scathis like building the Mavor, TMLs will not target Air, Fix for engies getting stuck trying to capture unfinished buildings.
 
 *1.5.1:* Fixed Air T4 support, Fixed Nuke targeting, AI should spread out its T2 and T3 pgens a bit, Adjusted Land T4 support to include mobile shields.
