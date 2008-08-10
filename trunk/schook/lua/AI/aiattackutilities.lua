@@ -569,6 +569,24 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 end
 
 function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, destination, location, testPath)
+	if not aiBrain.PathCache then
+		#Create path cache table. Paths are stored in this table and saved for 1 minute so
+		#any other platoons needing to travel the same route can get the path without the extra work.
+		aiBrain.PathCache = {}
+	end
+	if not aiBrain.PathCache[startNode.name] then
+		aiBrain.PathCache[startNode.name] = {}
+		aiBrain.PathCache[startNode.name][endNode.name] = {}
+	end
+	if not aiBrain.PathCache[startNode.name][endNode.name] then
+		aiBrain.PathCache[startNode.name][endNode.name] = {}
+	end
+	
+	if aiBrain.PathCache[startNode.name][endNode.name].path
+	and aiBrain.PathCache[startNode.name][endNode.name].settime + 60 > GetGameTimeSeconds() then
+		return aiBrain.PathCache[startNode.name][endNode.name].path
+	end
+	
     threatWeight = threatWeight or 1
     
     local graph = GetPathGraphs()[startNode.layer][startNode.graphName]
@@ -635,6 +653,8 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
 			lastNode = bestNode
 		end		
 	until lastNode == endNode
+	
+	aiBrain.PathCache[startNode.name][endNode.name] = { settime = GetGameTimeSeconds(), path = queue }
 	
 	return queue
 end

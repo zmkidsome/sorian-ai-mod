@@ -78,17 +78,19 @@ end
 # parameter 1: string   locType     = "MAIN"
 #
 ##############################################################################################################
-function ReclaimablesInArea(aiBrain, locType)
+function ReclaimablesInArea(aiBrain, locType, threatValue, threatType, rings)
     if aiBrain:GetEconomyStoredRatio('MASS') > .5 and aiBrain:GetEconomyStoredRatio('ENERGY') > .5 then
         return false
     end
-
+	
+	local testRings = rings or 0
+	
     local ents = AIUtils.AIGetReclaimablesAroundLocation( aiBrain, locType )
     if not ents or table.getn( ents ) == 0 then
 		return false
     end
 	for k,v in ents do
-		if not aiBrain.BadReclaimables[v] then
+		if not aiBrain.BadReclaimables[v] and aiBrain:GetThreatAtPosition( v:GetPosition(), testRings, true, threatType or 'Overall' ) <= threatValue then
 			return true
 		end
 	end

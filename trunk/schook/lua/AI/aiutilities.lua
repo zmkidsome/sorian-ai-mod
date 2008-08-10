@@ -53,19 +53,19 @@ function EngineerTryReclaimCaptureAreaSorian(aiBrain, eng, pos)
     end
     
     # Check if enemy units are at location
-    local checkUnits = aiBrain:GetUnitsAroundPoint( categories.STRUCTURE + ( categories.MOBILE * categories.LAND), pos, 10, 'Enemy' )
-    #( Rect( pos[1] - 7, pos[3] - 7, pos[1] + 7, pos[3] + 7 ) )
-    if checkUnits and table.getn(checkUnits) > 0 then
-        for num,unit in checkUnits do
-            #if not unit:IsDead() and EntityCategoryContains( categories.ENGINEER, unit ) and ( unit:GetAIBrain():GetFactionIndex() ~= aiBrain:GetFactionIndex() ) then
-            #    IssueReclaim( {eng}, unit )
-            if not unit:IsDead() and not EntityCategoryContains( categories.COMMAND, eng ) and unit:GetFractionComplete() == 1 then
-                IssueCapture( {eng}, unit )
-            end
-        end
-        return true
-    end
-    
+	local checkCats = { categories.ENGINEER - categories.COMMAND, categories.STRUCTURE + ( categories.MOBILE * categories.LAND - categories.ENGINEER - categories.COMMAND) }
+	for k,v in checkCats do
+		local checkUnits = aiBrain:GetUnitsAroundPoint( v, pos, 10, 'Enemy' )
+		for num,unit in checkUnits do
+			if not unit:IsDead() and EntityCategoryContains( categories.ENGINEER, unit ) then
+				IssueCapture( {eng}, unit )
+				return true
+			elseif not unit:IsDead() and not EntityCategoryContains( categories.ENGINEER, unit ) then
+				IssueReclaim( {eng}, unit )
+				return true
+			end
+		end
+	end    
     return false
 end
 
@@ -1138,9 +1138,18 @@ function UseTransports(units, transports, location, transportPlatoon)
             if not unit:IsUnitState('Attached') then
                 aiBrain:AssignUnitsToPlatoon( pool, {unit}, 'Unassigned', 'None' )
             end
+        elseif not unit:IsDead() and EntityCategoryContains( categories.TRANSPORTATION, unit ) and table.getn(unit:GetCargo()) < 1 then
+            ReturnTransportsToPool({unit}, true)
+			table.remove(transports, k)
         end
     end
-    
+    # Return empty transports to base
+	for k,v in transports do
+        if not v:IsDead() and EntityCategoryContains( categories.TRANSPORTATION, v ) and table.getn(v:GetCargo()) < 1 then
+            ReturnTransportsToPool({v}, true)
+			table.remove(transports, k)
+        end
+    end
     #LOG('*AI DEBUG: Transport loaded')
 
     

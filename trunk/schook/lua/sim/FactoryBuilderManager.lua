@@ -279,7 +279,7 @@ FactoryBuilderManager = Class(BuilderManager) {
             end
 		elseif faction and customData and customData[faction] then
 			#LOG('*AI DEBUG: New unit found!')
-			local replacement = self:GetCustomReplacement(v, templateName, faction)
+			local replacement = self:GetCustomReplacement(templateData.FactionSquads[1], templateName, faction)
 			if replacement then
 				table.insert( template, replacement )
 			end

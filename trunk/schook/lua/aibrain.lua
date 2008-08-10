@@ -129,7 +129,7 @@ AIBrain = Class(oldAIBrain) {
 		while true do
 			WaitSeconds(5)
 			for k,v in self.BuilderManagers do
-				if not v == 'MAIN' and v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 3 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
+				if k != 'MAIN' and v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
 					if v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 then
 						v.EngineerManager:SetEnabled(false)
 						v.FactoryManager:SetEnabled(false)
@@ -141,23 +141,25 @@ AIBrain = Class(oldAIBrain) {
 						v.StrategyManager:Destroy()
 						self.BuilderManagers[k] = nil
 						self.NumBases = self.NumBases - 1
-					elseif table.getn(AIUtils.GetOwnUnitsAroundPoint( self, categories.ENGINEER, v.EngineerManager:GetLocationCoords(), v.EngineerManager:GetLocationRadius() )) < 1 then
-						local closest = false
-						local closeBase = false
-						for x,z in self.BuilderManagers do
-							local distance = VDist3( v.EngineerManager:GetLocationCoords(), z.EngineerManager:GetLocationCoords() )
-							if not closest or distance < closest then
-								closest = distance
-								closeBase = z
-							end
-						end
-						if closest and closeBase then
-							engies = closeBase.EngineerManager:GetUnits( 'Engineers', categories.ALLUNITS )
-							for a,b in engies do
-								v.EngineerManager:RemoveUnit(b)
-								closeBase.EngineerManager:AddUnit(b, true)
-							end
-						end
+	#No longer needed. If a base has no factory the engineer will be transferred to a 
+	#new base by the Engineer Manager and the base will be removed on the next loop.
+#					elseif table.getn(AIUtils.GetOwnUnitsAroundPoint( self, categories.ENGINEER, v.EngineerManager:GetLocationCoords(), v.EngineerManager:GetLocationRadius() )) < 1 then
+#						local closest = false
+#						local closeBase = false
+#						for x,z in self.BuilderManagers do
+#							local distance = VDist3( v.EngineerManager:GetLocationCoords(), z.EngineerManager:GetLocationCoords() )
+#							if not closest or distance < closest then
+#								closest = distance
+#								closeBase = z
+#							end
+#						end
+#						if closest and closeBase then
+#							engies = v.EngineerManager:GetUnits( 'Engineers', categories.ALLUNITS )
+#							for a,b in engies do
+#								v.EngineerManager:RemoveUnit(b)
+#								closeBase.EngineerManager:AddUnit(b, true)
+#							end
+#						end
 					end
 				end
 			end

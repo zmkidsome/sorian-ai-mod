@@ -742,11 +742,13 @@ EngineerManager = Class(BuilderManager) {
         local distance = false
         local unitPos = unit:GetPosition()
         for k,v in managers do
-            local checkDistance = VDist3( v.EngineerManager:GetLocationCoords(), unitPos)
-            if not distance or checkDistance < distance then
-                distance = checkDistance
-                bestManager = v.EngineerManager
-            end
+			if v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) > 0 or v == 'MAIN' then
+				local checkDistance = VDist3( v.EngineerManager:GetLocationCoords(), unitPos)
+				if not distance or checkDistance < distance then
+					distance = checkDistance
+					bestManager = v.EngineerManager
+				end
+			end
         end
         self:RemoveUnit(unit)
         bestManager:AddUnit(unit)
