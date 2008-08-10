@@ -19,6 +19,45 @@ Platoon = Class(sorianoldPlatoon) {
 
     NukeAISorian = function(self)
     end,
+	
+    NukeAISAI = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        local platoonUnits = self:GetPlatoonUnits()
+        local unit
+        #GET THE Launcher OUT OF THIS PLATOON
+        for k, v in platoonUnits do
+            if EntityCategoryContains(categories.SILO * categories.NUKE, v) then
+                unit = v
+                break
+            end
+        end
+
+        if unit then
+            local bp = unit:GetBlueprint()
+            local weapon = bp.Weapon[1]
+            local maxRadius = weapon.MaxRadius
+            local nukePos, oldTargetLocation
+            unit:SetAutoMode(true)
+            while aiBrain:PlatoonExists(self) do
+                while unit:GetNukeSiloAmmoCount() < 1 do
+                    WaitSeconds( 11 )
+                    if not  aiBrain:PlatoonExists(self) then
+                        return
+                    end
+                end
+                
+                nukePos = import('/lua/ai/aibehaviors.lua').GetHighestThreatClusterLocation(aiBrain, unit)
+                if nukePos then
+                    IssueNuke({unit}, nukePos)           
+                    WaitSeconds(10)
+					IssueClearCommands({unit})
+                end
+                WaitSeconds(1)
+            end
+        end
+        self:PlatoonDisband()
+    end,
 
     ExperimentalAIHubSorian = function(self)
 		local aiBrain = self:GetBrain()
@@ -845,6 +884,8 @@ Platoon = Class(sorianoldPlatoon) {
         local armyIndex = aiBrain:GetArmyIndex()
         local target = false
         local basePosition = false
+		local radius = self.PlatoonData.Radius or 100
+		local patrolling = false
 
         if self.PlatoonData.LocationType and self.PlatoonData.LocationType != 'NOTMAIN' then
             basePosition = aiBrain.BuilderManagers[self.PlatoonData.LocationType].Position
@@ -860,10 +901,15 @@ Platoon = Class(sorianoldPlatoon) {
                 if target and not target:IsDead() and VDist3( target:GetPosition(), self:GetPlatoonPosition() ) < guardRadius then
                     self:Stop()
                     self:AggressiveMoveToLocation( target:GetPosition() )
-                elseif VDist3( basePosition, self:GetPlatoonPosition() ) > guardRadius then
-					local position = AIUtils.RandomLocation(basePosition[1],basePosition[3])
-                    self:Stop()
-                    self:MoveToLocation( position, false )
+					patrolling = false
+                elseif not patrolling then #VDist3( basePosition, self:GetPlatoonPosition() ) > guardRadius then
+					#local position = AIUtils.RandomLocation(basePosition[1],basePosition[3])
+					for k,v in AIUtils.GetBasePatrolPoints(aiBrain, basePosition, radius, 'Air') do
+						self:Patrol(v)
+					end
+					patrolling = true
+                    #self:Stop()
+                    #self:MoveToLocation( position, false )
                 end
             end
             WaitSeconds(5)
@@ -1333,6 +1379,9 @@ Platoon = Class(sorianoldPlatoon) {
         local closest, entType, closeDist
         local oldClosest
 		local eng = self:GetPlatoonUnits()[1]
+		local testRings = self.PlatoonData.ThreatRings or 0
+		local threatType = self.PlatoonData.ThreatType or 'Overall'
+		local threatValue = self.PlatoonData.ThreatValue or 0
 		if not aiBrain.BadReclaimables then
 			aiBrain.BadReclaimables = {}
 		end
@@ -1372,12 +1421,7 @@ Platoon = Class(sorianoldPlatoon) {
 					if not (unitPos[1] and unitPos[3] and recPos[1] and recPos[3]) then return end
 					local tempDist = VDist2( unitPos[1], unitPos[3], recPos[1], recPos[3] )
 					# We don't want any reclaimables super close to us
-					#if not aiBrain.BadReclaimables[v] and aiBrain.BadReclaimables[v] != false and VDist3(eng:GetPosition(), recPos) > 10 and not eng:CanPathTo( v:GetPosition() ) then
-					#	aiBrain.BadReclaimables[v] = true
-					#else
-					#	aiBrain.BadReclaimables[v] = false
-					#end
-					if ( ( not closest or tempDist < closeDist ) and ( not oldClosest or closest != oldClosest ) ) and not aiBrain.BadReclaimables[v] then
+					if ( ( not closest or tempDist < closeDist ) and ( not oldClosest or closest != oldClosest ) ) and not aiBrain.BadReclaimables[v] and aiBrain:GetThreatAtPosition( recPos, testRings, true, threatType ) <= threatValue then
 						closest = v
 						entType = num
 						closeDist = tempDist
@@ -2805,9 +2849,9 @@ Platoon = Class(sorianoldPlatoon) {
                         end
                     end
                 end
-				if not threadStarted and not eng.NotBuildingThread then
-					eng.NotBuildingThread = eng:ForkThread(eng.PlatoonHandle.WatchForNotBuildingSorian)
-				end
+				#if not threadStarted and not eng.NotBuildingThread then
+				#	eng.NotBuildingThread = eng:ForkThread(eng.PlatoonHandle.WatchForNotBuildingSorian)
+				#end
                 commandDone = true             
             else
                 # we can't move there, so remove it from our build queue

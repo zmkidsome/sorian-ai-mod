@@ -114,6 +114,8 @@ BaseBuilderTemplate {
         
         'SorianUnitCapAirAttackFormBuilders',
         'SorianACUHunterAirFormBuilders',
+		
+		'SorianTransportFactoryBuilders - Rush',
 
 		'SorianExpResponseFormBuilders',
         

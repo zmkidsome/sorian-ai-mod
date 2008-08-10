@@ -426,7 +426,7 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian T4 Nuke Silo',
-        PlatoonTemplate = 'T4Nuke',
+        PlatoonTemplate = 'T4NukeSorian',
         Priority = 1,
         InstanceCount = 10,
         BuilderType = 'Any',

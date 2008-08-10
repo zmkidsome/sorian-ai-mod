@@ -46,6 +46,10 @@ function CircleAround(aiBrain, platoon, target)
 		IssueMove(platoon, ePos)
 		return
 	end
+	local platterheight = GetTerrainHeight(platPos[1], platPos[3])
+	if platterheight < GetSurfaceHeight(platPos[1], platPos[3]) then
+		platterheight = GetSurfaceHeight(platPos[1], platPos[3])
+	end
 	vert = math.abs(platPos[1] - ePos[1])
 	horz = math.abs(platPos[3] - ePos[3])
 	local leftright
@@ -66,9 +70,14 @@ function CircleAround(aiBrain, platoon, target)
 		movePos[2] = { ePos[1] + (16 * updown), ePos[2], ePos[3] + (16 * leftright) }
 		movePos[3] = { ePos[1] + (16 * updown), ePos[2], ePos[3] - (16 * leftright) }
 		for k,v in movePos do
-			local surheight = GetTerrainHeight(v[1], v[3])
+			local terheight = GetTerrainHeight(v[1], v[3])
+			local _, slope = GetSlopeAngle(platPos, v, platterheight, terheight)
 			# If its in water
-			if surheight < GetSurfaceHeight(v[1], v[3]) then
+			if terheight < GetSurfaceHeight(v[1], v[3]) then
+				platoon:AggressiveMoveToLocation(target:GetPosition())
+				return
+			# If the slope is too high
+			elseif slope > .75 then
 				platoon:AggressiveMoveToLocation(target:GetPosition())
 				return
 			end
@@ -92,9 +101,14 @@ function CircleAround(aiBrain, platoon, target)
 		movePos[2] = { ePos[1] + (16 * updown), ePos[2], ePos[3] + (16 * leftright) }
 		movePos[3] = { ePos[1] - (16 * updown), ePos[2], ePos[3] + (16 * leftright) }
 		for k,v in movePos do
-			local surheight = GetTerrainHeight(v[1], v[3])
+			local terheight = GetTerrainHeight(v[1], v[3])
+			local _, slope = GetSlopeAngle(platPos, v, platterheight, terheight)
 			# If its in water
-			if surheight < GetSurfaceHeight(v[1], v[3]) then
+			if terheight < GetSurfaceHeight(v[1], v[3]) then
+				platoon:AggressiveMoveToLocation(target:GetPosition())
+				return
+			# If the slope is too high
+			elseif slope > .75 then
 				platoon:AggressiveMoveToLocation(target:GetPosition())
 				return
 			end
@@ -391,6 +405,15 @@ end
 function LeadTarget(platoon, target)
 	position = platoon:GetPlatoonPosition()
 	pos = target:GetPosition()
+	local fromheight = GetTerrainHeight(position[1], position[3])
+	if GetSurfaceHeight(position[1], position[3]) > GetTerrainHeight(position[1], position[3]) then
+		fromheight = GetSurfaceHeight(position[1], position[3])
+	end
+	local toheight = GetTerrainHeight(pos[1], pos[3])
+	if GetSurfaceHeight(pos[1], pos[3]) > GetTerrainHeight(pos[1], pos[3]) then
+		toheight = GetSurfaceHeight(pos[1], pos[3])
+	end
+	heightdiff = math.abs(fromheight - toheight)
 	Tpos1 = {pos[1], 0, pos[3]}
 	WaitSeconds(1)
 	pos = target:GetPosition()
@@ -403,7 +426,9 @@ function LeadTarget(platoon, target)
 	dist2 = math.sqrt(dist2)
 	time1 = (dist1 / 12) 
 	time2 = (dist2 / 12)
-	newtime = time2 - (time1 - time2) + 5.82 #2.32 (time for missile to speed up) + 3.5 seconds for launch
+	heightadjust = heightdiff * .1
+	#total travel time + 2.32 (time for missile to speed up) + 3.5 seconds for launch + adjustment for height difference
+	newtime = time2 - (time1 - time2) + 5.82 + heightadjust
 	newx = xmove * newtime
 	newy = ymove * newtime
     if Tpos2[1] < 0 or Tpos2[3] < 0 or Tpos2[1] > ScenarioInfo.size[1] or Tpos2[3] > ScenarioInfo.size[2] then
@@ -466,7 +491,8 @@ function CheckBlockingTerrain(pos, targetPos, firingArc, turretPitch)
 			else
 				nextposHeight = nextposHeight + .5
 			end
-			if GetSlope(lastPos, nextpos, lastPosHeight, nextposHeight) > turretPitch then
+			local angle, slope = GetSlopeAngle(lastPos, nextpos, lastPosHeight, nextposHeight)
+			if angle > turretPitch then
 				return true
 			end
 		end
@@ -474,21 +500,19 @@ function CheckBlockingTerrain(pos, targetPos, firingArc, turretPitch)
 	return false
 end
 
-function GetSlope(pos, targetPos, posHeight, targetHeight)
+function GetSlopeAngle(pos, targetPos, posHeight, targetHeight)
 	local distance = VDist2Sq(pos[1], pos[3], targetPos[1], targetPos[3])
 	distance = math.sqrt(distance)
 	local heightDif
-	if targetHeight > posHeight then
-		heightDif = targetHeight - posHeight
-	elseif targetHeight < posHeight then
-		heightDif = posHeight - targetHeight
-	else
+	if targetHeight == posHeight then
 		return 0
+	else
+		heightDif = math.abs(targetHeight - posHeight)
 	end
 	local slope = heightDif / distance
 	local angle = math.deg(math.atan(slope))
 	#LOG('*AI DEBUG: GetSlope: heightDif = '..heightDif..' distance = '..distance..' slope = '..slope..' angle = '..angle)
-	return angle
+	return angle, slope
 end
 
 function MajorLandThreatExists( aiBrain )

@@ -161,6 +161,8 @@ BrainConditionsMonitor = Class {
             
             for k,v in self.ResultTable do
 				if not v:LocationExists() then
+					#Can't remove. The builder table checks conditions based on table key.
+					#self.ResultTable[k] = nil
 					continue
 				end
 				numResults = numResults + 1
@@ -239,6 +241,7 @@ ImportCondition = Class(Condition) {
 			end
 		end
 		if not found then return true end
+		self.Status = false
 		return false
 	end,
 }
@@ -287,6 +290,7 @@ InstantImportCondition = Class(Condition) {
 			end
 		end
 		if not found then return true end
+		self.Status = false
 		return false
 	end,
 }
@@ -316,6 +320,7 @@ FunctionCondition = Class(Condition) {
 			end
 		end
 		if not found then return true end
+		self.Status = false
 		return false
 	end,
 }

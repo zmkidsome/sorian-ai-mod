@@ -40,9 +40,9 @@ function T4LandAttackCondition(aiBrain, locationType, targetNumber)
 	if aiBrain:GetCurrentEnemy() then
 		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
 		#local enemyTML = aiBrain:GetNumUnitsAroundPoint( categories.TECH2 * categories.TACTICALMISSILEPLATFORM * categories.STRUCTURE, {estartX, 0, estartZ}, 100, 'Enemy' )
-		#local enemyT3PD = aiBrain:GetNumUnitsAroundPoint( categories.TECH3 * categories.DEFENSE * categories.DIRECTFIRE, {estartX, 0, estartZ}, 100, 'Enemy' )
+		local enemyT3PD = aiBrain:GetNumUnitsAroundPoint( categories.TECH3 * categories.DEFENSE * categories.DIRECTFIRE, {estartX, 0, estartZ}, 100, 'Enemy' )
 		targetNumber = SUtils.GetThreatAtPosition( aiBrain, {estartX, 0, estartZ}, 1, 'AntiSurface', {'Land', 'Commander'} )
-		#targetNumber = targetNumber + (enemyTML * 54) + (enemyT3PD * 54)
+		targetNumber = targetNumber + (enemyT3PD * 54)# + (enemyTML * 54)
 	end
 
     local position = engineerManager:GetLocationCoords()
@@ -67,8 +67,8 @@ function T4AirAttackCondition(aiBrain, locationType, targetNumber)
     end
 	if aiBrain:GetCurrentEnemy() then
 		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
-		#targetNumber = SUtils.GetThreatAtPosition( aiBrain, {estartX, 0, estartZ}, 1, 'AntiAir', {'Air'} )
-		targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiAir' )
+		targetNumber = SUtils.GetThreatAtPosition( aiBrain, {estartX, 0, estartZ}, 1, 'AntiAir', {'Air'} )
+		#targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiAir' )
 	end
 
     local position = engineerManager:GetLocationCoords()
@@ -341,7 +341,7 @@ BuilderGroup {
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
-			ThreatSupport = 100,
+			ThreatSupport = 300,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -364,7 +364,7 @@ BuilderGroup {
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
-			ThreatSupport = 100,
+			ThreatSupport = 300,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -386,7 +386,7 @@ BuilderGroup {
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
-			ThreatSupport = 100,
+			ThreatSupport = 300,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -491,7 +491,7 @@ BuilderGroup {
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
-			ThreatSupport = 100,
+			ThreatSupport = 300,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -513,7 +513,7 @@ BuilderGroup {
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
-			ThreatSupport = 100,
+			ThreatSupport = 300,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },
@@ -616,7 +616,7 @@ BuilderGroup {
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderData = {
-			ThreatSupport = 100,
+			ThreatSupport = 300,
             ThreatWeights = {
                 TargetThreatType = 'Commander',
             },

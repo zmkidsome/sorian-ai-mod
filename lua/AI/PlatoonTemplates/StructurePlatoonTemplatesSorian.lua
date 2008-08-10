@@ -58,6 +58,14 @@ PlatoonTemplate {
 }
 
 PlatoonTemplate {
+    Name = 'T4NukeSorian',
+    Plan = 'NukeAISAI',
+    GlobalSquads = {
+        { categories.NUKE * categories.STRUCTURE * categories.EXPERIMENTAL, 1, 1, 'attack', 'none' },
+    }
+}
+
+PlatoonTemplate {
     Name = 'T2Engineering',
     Plan = 'UnitUpgradeAI',
     FactionSquads = {

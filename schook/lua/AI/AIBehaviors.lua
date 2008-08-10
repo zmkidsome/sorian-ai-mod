@@ -1019,6 +1019,7 @@ end
 CzarBehaviorSorian = function(self)
     local aiBrain = self:GetBrain()
 	local platoonUnits = self:GetPlatoonUnits()
+	local cmd
     #local experimental = GetExperimentalUnit(self)
     if not aiBrain:PlatoonExists(self) then #not experimental then
         return
@@ -1038,34 +1039,34 @@ CzarBehaviorSorian = function(self)
     while aiBrain:PlatoonExists(self) do #not experimental:IsDead() do
 		self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 		
-        if targetUnit and targetUnit != oldTargetUnit then			
+        if (targetUnit and targetUnit != oldTargetUnit) or not self:IsCommandsActive(cmd) then			
 			if targetUnit and VDist3( targetUnit:GetPosition(), self:GetPlatoonPosition() ) > 100 then #VDist3( targetUnit:GetPosition(), experimental:GetPosition() ) > 100 then
 			    IssueClearCommands(platoonUnits)
 				WaitTicks(5)
-				IssueMove(platoonUnits, targetUnit:GetPosition())
+				cmd = self:MoveToLocation(targetUnit:GetPosition(), false) #IssueMove(platoonUnits, targetUnit:GetPosition())
 			else 
 			    IssueClearCommands(platoonUnits)
 				WaitTicks(5)
-				IssueAttack(platoonUnits, self:GetPlatoonPosition())
-				WaitTicks(5)
-				IssueMove(platoonUnits, targetUnit:GetPosition())
-                WaitTicks(5)
-                IssueAttack(platoonUnits, targetUnit)
+				#cmd = self:AggressiveMoveToLocation(targetUnit:GetPosition()) #IssueAttack(platoonUnits, self:GetPlatoonPosition())
+				#WaitTicks(5)
+				#cmd = self:MoveToLocation(targetUnit:GetPosition(), false) #IssueMove(platoonUnits, targetUnit:GetPosition())
+                #WaitTicks(5)
+                cmd = self:AttackTarget(targetUnit) #IssueAttack(platoonUnits, targetUnit)
 			end
         end
         
         
         local nearCommander = CommanderOverrideCheckSorian(self)
         local oldCommander = nil
-        while nearCommander and aiBrain:PlatoonExists(self) do #not experimental:IsDead() and not experimental:IsIdleState() do            
+        while nearCommander and aiBrain:PlatoonExists(self) and self:IsCommandsActive(cmd) do #not experimental:IsDead() and not experimental:IsIdleState() do            
             if nearCommander and nearCommander != oldCommander then
                 IssueClearCommands(platoonUnits)
                 WaitTicks(5)
-                IssueAttack(platoonUnits, self:GetPlatoonPosition())
-                WaitTicks(5)
-                IssueMove(platoonUnits, nearCommander:GetPosition())
-                WaitTicks(5)
-                IssueAttack(platoonUnits, nearCommander)
+                #cmd = IssueAttack(platoonUnits, self:GetPlatoonPosition())
+                #WaitTicks(5)
+                #cmd = IssueMove(platoonUnits, nearCommander:GetPosition())
+                #WaitTicks(5)
+                cmd = self:AttackTarget(nearCommander) #IssueAttack(platoonUnits, nearCommander)
                 targetUnit = nearCommander
             end
             
@@ -1100,7 +1101,7 @@ AhwassaBehaviorSorian = function(self)
     while aiBrain:PlatoonExists(self) do #not experimental:IsDead() do
 		self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 
-        if targetLocation and targetLocation != oldTargetLocation then
+        if (targetLocation and targetLocation != oldTargetLocation) then
             IssueClearCommands(platoonUnits)
             IssueAttack(platoonUnits, targetLocation)           
             WaitSeconds(25)
@@ -1115,6 +1116,7 @@ end
 TickBehaviorSorian = function(self)
     local aiBrain = self:GetBrain()
 	local platoonUnits = self:GetPlatoonUnits()
+	local cmd
     #local experimental = GetExperimentalUnit(self)
     if not aiBrain:PlatoonExists(self) then #not experimental then
         return
@@ -1132,10 +1134,10 @@ TickBehaviorSorian = function(self)
     while aiBrain:PlatoonExists(self) do #not experimental:IsDead() do
 		self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 
-        if targetLocation and targetLocation != oldTargetLocation then
+        if (targetLocation and targetLocation != oldTargetLocation) or not self:IsCommandsActive(cmd) then
             IssueClearCommands(platoonUnits)
             #IssueAggressiveMove(platoonUnits, targetLocation)
-			IssueMove(platoonUnits, targetLocation)
+			cmd = self:MoveToLocation(targetLocation, false) #IssueMove(platoonUnits, targetLocation)
             WaitSeconds(25)
         end
        
@@ -1237,6 +1239,7 @@ end
 function FatBoyBehaviorSorian(self)   
 	local aiBrain = self:GetBrain()
 	local platoonUnits = self:GetPlatoonUnits()
+	local cmd
 	if not self:GatherUnitsSorian() then
 		return
 	end
@@ -1263,14 +1266,14 @@ function FatBoyBehaviorSorian(self)
         if targetUnit then
             IssueClearCommands(platoonUnits)
 			if useMove then
-				IssueMove(platoonUnits, targetUnit:GetPosition())
+				cmd = self:MoveToLocation(targetUnit:GetPosition(), false) #IssueMove(platoonUnits, targetUnit:GetPosition())
 			else
-				IssueAggressiveMove(platoonUnits, targetUnit:GetPosition())
+				cmd = self:AggressiveMoveToLocation(targetUnit:GetPosition()) #IssueAggressiveMove(platoonUnits, targetUnit:GetPosition())
 			end
         end
         
         #Walk to and kill target loop
-        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and useMove == InWaterCheck(self) do #not experimental:IsDead() and not experimental:IsIdleState() do
+        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) do #not experimental:IsDead() and not experimental:IsIdleState() do
 			self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 			useMove = InWaterCheck(self)
             local nearCommander = CommanderOverrideCheckSorian(self)
@@ -1278,9 +1281,9 @@ function FatBoyBehaviorSorian(self)
             if nearCommander and nearCommander ~= targetUnit then
                 IssueClearCommands(platoonUnits)
 				if useMove then
-					IssueMove(platoonUnits, nearCommander:GetPosition())
+					cmd = self:MoveToLocation(nearCommander:GetPosition(), false) #IssueMove(platoonUnits, nearCommander:GetPosition())
 				else
-					IssueAggressiveMove(platoonUnits, nearCommander:GetPosition())
+					cmd = self:AggressiveMoveToLocation(nearCommander:GetPosition()) #IssueAggressiveMove(platoonUnits, nearCommander:GetPosition())
 				end
                 targetUnit = nearCommander
             end
@@ -1306,13 +1309,13 @@ function FatBoyBehaviorSorian(self)
 				useMove = InWaterCheck(self)
                 IssueClearCommands(platoonUnits)
 				if useMove then
-					IssueMove(platoonUnits, closestBlockingShield:GetPosition())
+					cmd = self:MoveToLocation(closestBlockingShield:GetPosition(), false) #IssueMove(platoonUnits, closestBlockingShield:GetPosition())
 				else
-					IssueAggressiveMove(platoonUnits, closestBlockingShield:GetPosition())
+					cmd = self:AggressiveMoveToLocation(closestBlockingShield:GetPosition()) #IssueAggressiveMove(platoonUnits, closestBlockingShield:GetPosition())
 				end
                 
                 #Wait for shield to die loop
-                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and useMove == InWaterCheck(self) do #not experimental:IsDead() do
+                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) do #not experimental:IsDead() do
 					self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 					useMove = InWaterCheck(self)
                     WaitSeconds(1)
@@ -1343,6 +1346,7 @@ end
 function BehemothBehaviorSorian(self)   
 	local aiBrain = self:GetBrain()
 	local platoonUnits = self:GetPlatoonUnits()
+	local cmd
 	if not self:GatherUnitsSorian() then
 		return
 	end
@@ -1367,11 +1371,11 @@ function BehemothBehaviorSorian(self)
         if targetUnit then
             IssueClearCommands(platoonUnits)
             #IssueAttack(platoonUnits, targetUnit)
-			IssueMove(platoonUnits, targetUnit:GetPosition())
+			cmd = self:MoveToLocation(targetUnit:GetPosition(), false) #IssueMove(platoonUnits, targetUnit:GetPosition())
         end
         
         #Walk to and kill target loop
-        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() do #not experimental:IsDead() and not experimental:IsIdleState() do
+        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and self:IsCommandsActive(cmd) do #not experimental:IsDead() and not experimental:IsIdleState() do
 			self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 			
             local nearCommander = CommanderOverrideCheckSorian(self)
@@ -1379,7 +1383,7 @@ function BehemothBehaviorSorian(self)
             if nearCommander and nearCommander ~= targetUnit then
                 IssueClearCommands(platoonUnits)
                 #IssueAttack(platoonUnits, nearCommander)
-				IssueMove(platoonUnits, nearCommander:GetPosition())
+				cmd = self:MoveToLocation(nearCommander:GetPosition(), false) #IssueMove(platoonUnits, nearCommander:GetPosition())
                 targetUnit = nearCommander
             end
             
@@ -1403,10 +1407,11 @@ function BehemothBehaviorSorian(self)
 				self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
                 IssueClearCommands(platoonUnits)
                 #IssueAttack(platoonUnits, closestBlockingShield)
-				IssueMove(platoonUnits, closestBlockingShield:GetPosition())
+				cmd = self:MoveToLocation(closestBlockingShield:GetPosition(), false) #IssueMove(platoonUnits, closestBlockingShield:GetPosition())
                 
                 #Wait for shield to die loop
-                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) do #not experimental:IsDead() do
+                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and self:IsCommandsActive(cmd) do #not experimental:IsDead() do
+					self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
                     WaitSeconds(1)
                 end             
 

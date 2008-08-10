@@ -777,7 +777,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Defensive Point Engineer',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 900, #850,
         BuilderConditions = {
             # Most paramaters freaking ever Build Condition -- All the threat ones are optional
             ####                                   MarkerType   LocRadius       category      markerRad unitMax tMin tMax Rings tType
@@ -820,7 +820,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Defensive Point Engineer UEF',
         PlatoonTemplate = 'UEFT2EngineerBuilderSorian',
-        Priority = 875,
+        Priority = 900, #875,
         InstanceCount = 1,
         BuilderConditions = {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -862,7 +862,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Defensive Point Engineer Cybran',
         PlatoonTemplate = 'CybranT2EngineerBuilderSorian',
-        Priority = 875,
+        Priority = 900, #875,
         InstanceCount = 1,
         BuilderConditions = {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -904,7 +904,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Defensive Point Engineer',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 875,
+        Priority = 900, #875,
         InstanceCount = 1,
         BuilderConditions = {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
