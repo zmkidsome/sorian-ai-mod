@@ -1047,7 +1047,7 @@ BuilderGroup {
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {
-            { UCBC, 'UnitCapCheckGreater', { .90 } },
+            { UCBC, 'UnitCapCheckGreater', { .85 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -1076,7 +1076,7 @@ BuilderGroup {
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {
-            { UCBC, 'UnitCapCheckGreater', { .90 } },
+            { UCBC, 'UnitCapCheckGreater', { .85 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
 		BuilderData = {
