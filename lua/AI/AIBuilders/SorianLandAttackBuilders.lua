@@ -704,7 +704,7 @@ BuilderGroup {
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {
-            { UCBC, 'UnitCapCheckGreater', { .90 } },
+            { UCBC, 'UnitCapCheckGreater', { .85 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -725,7 +725,7 @@ BuilderGroup {
         PlatoonTemplate = 'LandAttackMediumSorian',
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
-        Priority = 0,
+        Priority = 1,
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {
@@ -752,12 +752,12 @@ BuilderGroup {
         PlatoonTemplate = 'LandAttackMediumSorian',
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
-        Priority = 0,
+        Priority = 1,
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {
             { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 44, categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER } },
-			{ UCBC, 'PoolLessAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND - categories.ENGINEER - categories.TECH1 - categories.TECH2 } },
+			{ UCBC, 'PoolLessAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER } },
 			{ MIBC, 'GreaterThanGameTime', { 720 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
@@ -779,7 +779,7 @@ BuilderGroup {
         PlatoonTemplate = 'LandAttackMediumSorian',
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
-        Priority = 0,
+        Priority = 1,
         InstanceCount = 10,
         BuilderType = 'Any',
         BuilderConditions = {

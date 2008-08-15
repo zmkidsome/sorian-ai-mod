@@ -1604,7 +1604,7 @@ BuilderGroup {
     },
     Builder {
         BuilderName = 'Sorian T3 Engineer Find Low Shield',
-        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        PlatoonTemplate = 'T3EngineerBuilderOnlySorian',
         PlatoonAIPlan = 'ManagerEngineerFindLowShield',
         Priority = 1801,
         InstanceCount = 3,

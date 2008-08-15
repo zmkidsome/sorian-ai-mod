@@ -302,7 +302,7 @@ AIBrain = Class(oldAIBrain) {
             for k,v in self.BaseMonitor.PlatoonDistressTable do
                 if self:PlatoonExists(v.Platoon) then
                     local threat = self:GetThreatAtPosition( v.Platoon:GetPlatoonPosition(), 0, true, 'AntiSurface')
-					local myThreat = self:GetThreatAtPosition( v.Platoon:GetPlatoonPosition(), 0, true, 'AntiSurface', self:GetArmyIndex())
+					local myThreat = self:GetThreatAtPosition( v.Platoon:GetPlatoonPosition(), 0, true, 'Overall', self:GetArmyIndex())
                     # Platoons still threatened
 				if threat and threat > (myThreat * 1.5) then
                         v.Threat = threat
@@ -335,7 +335,7 @@ AIBrain = Class(oldAIBrain) {
         repeat
             WaitSeconds(timeout)
             threat = self:GetThreatAtPosition( pos, 0, true, threattype or 'AntiSurface' )
-			myThreat = self:GetThreatAtPosition( pos, 0, true, 'AntiSurface', self:GetArmyIndex())
+			myThreat = self:GetThreatAtPosition( pos, 0, true, 'Overall', self:GetArmyIndex())
 			if threat - myThreat < 1 then
 				local eEngies = self:GetNumUnitsAroundPoint( categories.ENGINEER, pos, 10, 'Enemy' )
 				if eEngies > 0 then

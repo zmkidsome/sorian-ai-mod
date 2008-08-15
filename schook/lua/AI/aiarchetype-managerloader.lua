@@ -75,7 +75,7 @@ function UnitCapWatchThreadSorian(aiBrain)
 			
 			# More than 6 T2/T3 Engineers
 			if underCap ~= true then
-				underCap = GetAIUnderUnitCap(aiBrain, 6, categories.ENGINEER * (categories.TECH2 + categories.TECH3), categories.TECH1 * categories.ENGINEER)
+				underCap = GetAIUnderUnitCap(aiBrain, 6, categories.ENGINEER * (categories.TECH2 + categories.TECH3), categories.TECH1 * categories.ENGINEER - categories.POD)
 			end
 			
 			# More than 9 T3 Engineers/SCUs
