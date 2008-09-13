@@ -1017,7 +1017,7 @@ Platoon = Class(sorianoldPlatoon) {
 				maxRange, selectedWeaponArc, turretPitch = AIAttackUtils.GetNavalPlatoonMaxRangeSorian(aiBrain, self)
 			end
 			
-			if not maxRange then maxRange = 50 end
+			if not maxRange then maxRange = 180 end
 
             # if we're on our final push through to the destination, and we find a unit close to our destination
             #local closestTarget = self:FindClosestUnit( 'attack', 'enemy', true, categories.ALLUNITS )

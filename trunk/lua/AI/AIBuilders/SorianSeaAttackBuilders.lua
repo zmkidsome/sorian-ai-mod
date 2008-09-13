@@ -345,7 +345,7 @@ BuilderGroup {
 		UseFormation = 'AttackFormation',
         },
         BuilderConditions = {
-            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 0, 'MOBILE TECH2 NAVAL, MOBILE TECH3 NAVAL' } },
+            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 0, 'MOBILE TECH2 NAVAL' } },
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 1, categories.STRUCTURE * categories.DEFENSE * categories.ANTINAVY, 'Enemy'}},
             { SeaAttackCondition, { 'LocationType', 60 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
