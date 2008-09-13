@@ -544,7 +544,7 @@ end
 function CommanderThreadSorian(cdr, platoon)
     local aiBrain = cdr:GetAIBrain()
 	local Mult = platoon.PlatoonData.Mult or 1
-	local Delay = platoon.PlatoonData.Delay or 0
+	local Delay = platoon.PlatoonData.Delay or 165
 	local WaitTaunt = 600 + Random(1,600)
     
     SetCDRHome(cdr, platoon)

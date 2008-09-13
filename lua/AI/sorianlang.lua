@@ -173,6 +173,7 @@ AINames = {
 		'Eye in the Sky',
 		'Orbital Defense',
 		'UEF Defense Net',
+		'Solar Bean',
     },
 	#Atlantis
 	ues0401 = {

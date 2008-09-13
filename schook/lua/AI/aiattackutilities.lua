@@ -456,6 +456,9 @@ function GetNavalPlatoonMaxRangeSorian(aiBrain, platoon)
                 elseif weapon.BallisticArc == 'RULEUBA_None' and weapon.TurretPitchRange > 0 then
                     selectedWeaponArc = 'none'
 					turretPitch = weapon.TurretPitchRange
+                elseif weapon.BallisticArc == 'RULEUBA_None' then
+                    selectedWeaponArc = 'none'
+					turretPitch = nil
 				else
 					continue
                 end

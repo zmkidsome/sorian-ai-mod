@@ -90,7 +90,7 @@ function UnitCapWatchThreadSorian(aiBrain)
 			
 			# More than 9 T3 Air Units minus Scouts
 			if underCap ~= true then
-				underCap = GetAIUnderUnitCap(aiBrain, 9, categories.TECH3 * categories.MOBILE * categories.AIR - categories.INTELLIGENCE, categories.TECH1 * categories.MOBILE * categories.AIR - categories.SCOUT)
+				underCap = GetAIUnderUnitCap(aiBrain, 9, categories.TECH3 * categories.MOBILE * categories.AIR - categories.INTELLIGENCE, categories.TECH1 * categories.MOBILE * categories.AIR - categories.SCOUT - categories.POD)
 			end
 			
 			# More than 9 T3 AntiAir

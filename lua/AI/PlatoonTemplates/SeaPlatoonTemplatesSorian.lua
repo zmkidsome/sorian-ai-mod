@@ -28,7 +28,7 @@ PlatoonTemplate {
     Name = 'SeaStrikeSorian',
     Plan = 'StrikeForceAISorian',
     GlobalSquads = {
-        { categories.MOBILE * categories.NAVAL - categories.TECH1 - categories.EXPERIMENTAL - categories.CARRIER - categories.SUBMERSIBLE, 1, 100, 'Attack', 'GrowthFormation' }
+        { categories.MOBILE * categories.NAVAL * categories.TECH2 - categories.EXPERIMENTAL - categories.CARRIER - categories.SUBMERSIBLE, 1, 100, 'Attack', 'GrowthFormation' }
     },
 }
 
