@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.6.4:* Earlier Q-Gates, Fixed Engineering station pods getting destroyed along with Air units, Navy should attack from distance better, AI should spam T1 and T2 less when at T3, Improved Air Superiority.
+
 *1.6.3:* Fixed Strikeforce AI. De-clutter platoons are back, Adjusted unit cap platoons, Improved reaction to T4s, SCUs will no longer attempt to assist shields, Improved Distress Response deactivation.
 
 *1.6.2:* Fixed engineer capture/reclaim behavior, Engies will only get reassigned to bases with factories, Added a path caching system, Microing units will take slope into account, Fix for stuck T4s, Rush AI will use transports on water maps, Fighters will patrol the AIs home base, Adjusted T4 Land threat evaluation, Added check for empty transports, Fixed Sera T4 Nuke not firing more than once, Reclaiming engineers will look at threat.
