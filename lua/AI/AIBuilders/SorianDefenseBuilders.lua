@@ -136,7 +136,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH1 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -162,7 +162,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH1 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -187,7 +187,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH1 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -216,7 +216,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH2 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -244,7 +244,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH2 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -268,7 +268,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH2 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -293,7 +293,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH2 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -390,7 +390,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH3 * categories.STRUCTURE * (categories.ANTIAIR + categories.DIRECTFIRE) } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -414,7 +414,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH3 * categories.STRUCTURE * (categories.ANTIAIR + categories.DIRECTFIRE) } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -437,7 +437,7 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
 			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'EXPERIMENTAL AIR', 'Enemy'}},
 			{ SBC, 'T4ThreatExists', {{'Air'}, categories.AIR}},
         },
@@ -489,7 +489,7 @@ BuilderGroup {
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH3 * categories.STRUCTURE * (categories.ANTIAIR + categories.DIRECTFIRE) } },
 			{ SBC, 'T4ThreatExists', {{'Land'}, categories.LAND}},
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -514,7 +514,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH3 * categories.STRUCTURE * (categories.ANTIAIR + categories.DIRECTFIRE) } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -544,7 +544,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH2 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -568,7 +568,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH2 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -596,7 +596,7 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
 			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'EXPERIMENTAL AIR', 'Enemy'}},
 			{ SBC, 'T4ThreatExists', {{'Air'}, categories.AIR}},
         },
@@ -648,7 +648,7 @@ BuilderGroup {
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH3 * categories.STRUCTURE * (categories.ANTIAIR + categories.DIRECTFIRE) } },
 			{ SBC, 'T4ThreatExists', {{'Land'}, categories.LAND}},
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -746,7 +746,7 @@ BuilderGroup {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { IBC, 'BrainNotLowPowerMode', {} },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -786,6 +786,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -829,6 +830,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -871,6 +873,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -914,6 +917,7 @@ BuilderGroup {
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
 			{ MIBC, 'FactionIndex', {2, 4}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -960,6 +964,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1002,6 +1007,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1045,6 +1051,7 @@ BuilderGroup {
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
 			{ MIBC, 'FactionIndex', {2, 4}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1092,6 +1099,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1135,6 +1143,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1179,6 +1188,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1224,6 +1234,7 @@ BuilderGroup {
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
 			{ MIBC, 'FactionIndex', {2, 4}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1272,6 +1283,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1316,6 +1328,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1361,6 +1374,7 @@ BuilderGroup {
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
             { UCBC, 'UnitCapCheckLess', { .75 } },
 			{ MIBC, 'FactionIndex', {2, 4}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -2165,7 +2179,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.ANTIMISSILE * categories.TECH2 } },
-            { UCBC, 'UnitCapCheckLess', { .9 } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
         },
         BuilderType = 'Any',
         BuilderData = {

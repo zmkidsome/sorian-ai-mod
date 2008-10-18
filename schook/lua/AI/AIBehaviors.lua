@@ -1356,10 +1356,12 @@ function BehemothBehaviorSorian(self)
     local targetUnit = false
     local lastBase = false
     local airUnit = false #EntityCategoryContains(categories.AIR, experimental)
+	local useMove = true
     
     #Find target loop
     while aiBrain:PlatoonExists(self) do #experimental and not experimental:IsDead() do
 		self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
+		useMove = InWaterCheck(self)
 		
         if lastBase then
             targetUnit, lastBase = WreckBaseSorian(self, lastBase)
@@ -1370,20 +1372,26 @@ function BehemothBehaviorSorian(self)
         
         if targetUnit then
             IssueClearCommands(platoonUnits)
-            #IssueAttack(platoonUnits, targetUnit)
-			cmd = self:MoveToLocation(targetUnit:GetPosition(), false) #IssueMove(platoonUnits, targetUnit:GetPosition())
+			if useMove then
+				cmd = self:MoveToLocation(targetUnit:GetPosition(), false) #IssueMove(platoonUnits, targetUnit:GetPosition())
+			else
+				cmd = self:AggressiveMoveToLocation(targetUnit:GetPosition()) #IssueAggressiveMove(platoonUnits, targetUnit:GetPosition())
+			end
         end
         
         #Walk to and kill target loop
-        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and self:IsCommandsActive(cmd) do #not experimental:IsDead() and not experimental:IsIdleState() do
+        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) do #not experimental:IsDead() and not experimental:IsIdleState() do
 			self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
-			
+			useMove = InWaterCheck(self)
             local nearCommander = CommanderOverrideCheckSorian(self)
             
             if nearCommander and nearCommander ~= targetUnit then
                 IssueClearCommands(platoonUnits)
-                #IssueAttack(platoonUnits, nearCommander)
-				cmd = self:MoveToLocation(nearCommander:GetPosition(), false) #IssueMove(platoonUnits, nearCommander:GetPosition())
+				if useMove then
+					cmd = self:MoveToLocation(nearCommander:GetPosition(), false) #IssueMove(platoonUnits, nearCommander:GetPosition())
+				else
+					cmd = self:AggressiveMoveToLocation(nearCommander:GetPosition()) #IssueAggressiveMove(platoonUnits, nearCommander:GetPosition())
+				end
                 targetUnit = nearCommander
             end
             
@@ -1405,13 +1413,18 @@ function BehemothBehaviorSorian(self)
 				local oldTarget = targetUnit
 				targetUnit = false
 				self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
+				useMove = InWaterCheck(self)
                 IssueClearCommands(platoonUnits)
-                #IssueAttack(platoonUnits, closestBlockingShield)
-				cmd = self:MoveToLocation(closestBlockingShield:GetPosition(), false) #IssueMove(platoonUnits, closestBlockingShield:GetPosition())
+				if useMove then
+					cmd = self:MoveToLocation(closestBlockingShield:GetPosition(), false) #IssueMove(platoonUnits, closestBlockingShield:GetPosition())
+				else
+					cmd = self:AggressiveMoveToLocation(closestBlockingShield:GetPosition()) #IssueAggressiveMove(platoonUnits, closestBlockingShield:GetPosition())
+				end
                 
                 #Wait for shield to die loop
-                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and self:IsCommandsActive(cmd) do #not experimental:IsDead() do
+                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) do #not experimental:IsDead() do
 					self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
+					useMove = InWaterCheck(self)
                     WaitSeconds(1)
                 end             
 

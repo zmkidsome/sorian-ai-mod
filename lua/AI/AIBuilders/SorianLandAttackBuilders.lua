@@ -34,11 +34,11 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
 	if not engineerManager then
         return false
     end
-	if aiBrain:GetCurrentEnemy() then
-		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
-		#targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiSurface' )
-		targetNumber = SUtils.GetThreatAtPosition( aiBrain, {estartX, 0, estartZ}, 1, 'AntiSurface', {'Land', 'Commander'} )
-	end
+	#if aiBrain:GetCurrentEnemy() then
+	#	local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+	#	#targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiSurface' )
+	#	targetNumber = SUtils.GetThreatAtPosition( aiBrain, {estartX, 0, estartZ}, 1, 'AntiSurface', {'Land', 'Commander'} )
+	#end
 
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
@@ -47,12 +47,12 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
 	local airThreat = 0 #pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER, position, radius )
     if (surThreat + airThreat) > targetNumber then
         return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > 980 then #39 Units x 20
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 9, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > 980 then #39 Units x 20
 		return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.LAND * categories.TECH2 - categories.ENGINEER)
-	and UC.PoolLessAtLocation(aiBrain, locationType, 1, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > 203 then #29 Units x 7
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 9, categories.MOBILE * categories.LAND * categories.TECH2 - categories.ENGINEER)
+	and UC.PoolLessAtLocation(aiBrain, locationType, 10, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > 203 then #29 Units x 7
 		return true
-	elseif UC.PoolLessAtLocation(aiBrain, locationType, 1, categories.MOBILE * categories.LAND - categories.TECH1 - categories.ENGINEER) and surThreat > 19 then #19 Units x 1
+	elseif UC.PoolLessAtLocation(aiBrain, locationType, 10, categories.MOBILE * categories.LAND - categories.TECH1 - categories.ENGINEER) and surThreat > 19 then #19 Units x 1
 		return true
     end
     return false
@@ -701,7 +701,7 @@ BuilderGroup {
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 1,
-        InstanceCount = 10,
+        InstanceCount = 100,
         BuilderType = 'Any',
         BuilderConditions = {
             { UCBC, 'UnitCapCheckGreater', { .85 } },
@@ -726,11 +726,11 @@ BuilderGroup {
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 1,
-        InstanceCount = 10,
+        InstanceCount = 100,
         BuilderType = 'Any',
         BuilderConditions = {
             { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 34, categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER } },
-			{ UCBC, 'PoolLessAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND - categories.ENGINEER - categories.TECH1 } },
+			{ UCBC, 'PoolLessAtLocation', { 'LocationType', 10, categories.MOBILE * categories.LAND - categories.ENGINEER - categories.TECH1 } },
 			{ MIBC, 'GreaterThanGameTime', { 720 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
@@ -753,11 +753,11 @@ BuilderGroup {
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 1,
-        InstanceCount = 10,
+        InstanceCount = 100,
         BuilderType = 'Any',
         BuilderConditions = {
             { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 44, categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER } },
-			{ UCBC, 'PoolLessAtLocation', { 'LocationType', 1, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER } },
+			{ UCBC, 'PoolLessAtLocation', { 'LocationType', 10, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER } },
 			{ MIBC, 'GreaterThanGameTime', { 720 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
@@ -780,11 +780,11 @@ BuilderGroup {
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 1,
-        InstanceCount = 10,
+        InstanceCount = 100,
         BuilderType = 'Any',
         BuilderConditions = {
             { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 54, categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER } },
-			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 0, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER } },
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 9, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER } },
 			{ MIBC, 'GreaterThanGameTime', { 720 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },

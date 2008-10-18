@@ -100,6 +100,37 @@ function HaveLessThanUnitsWithCategory(aiBrain, numReq, category, idleReq)
 end
 
 ##############################################################################################################
+# function: HaveLessThanUnitsForMapSize = BuildCondition	doc = "Please work function docs."
+#
+# parameter 0: string	aiBrain		= "default_brain"
+# parameter 1: int	numReq          = 0				doc = "docs for param1"
+# parameter 2: expr   category        = categories.ALLUNITS		doc = "param2 docs"
+# parameter 3: expr   idleReq       = false         doc = "docs for param3"
+#
+##############################################################################################################
+function HaveLessThanUnitsForMapSize(aiBrain, sizetable, category, idleReq)
+    local numUnits
+	local total = 0
+	local mapSizeX, mapSizeZ = GetMapSize()
+	if not sizetable[mapSizeX] or not sizetable[mapSizeZ] then
+		return false
+	end
+	local numReq = sizetable[mapSizeX] or sizetable[mapSizeZ]
+    if type(category) == 'string' then
+        category = ParseEntityCategory(category)
+    end
+    if not idleReq then
+        numUnits = aiBrain:GetCurrentUnits(category)
+    else
+        numUnits = table.getn(aiBrain:GetListOfUnits(category, true))
+    end
+    if numUnits < numReq then
+        return true
+    end
+    return false
+end
+
+##############################################################################################################
 # function: HaveLessThanUnitsInCategoryBeingBuilt = BuildCondition
 #
 # parameter 0: string   aiBrain         = "default_brain"
@@ -158,6 +189,31 @@ function HaveGreaterThanUnitsInCategoryBeingBuilt(aiBrain, numunits, category)
 		end
     end
 	return false
+end
+
+##############################################################################################################
+# function: LessThanEconTrend = BuildCondition	doc = "Please work function docs."
+# 
+# parameter 0: string	aiBrain		= "default_brain"			doc = "docs for param1"	
+# parameter 1: integer	mTrend	        = 0				doc = "docs for param1"
+# parameter 2: integer	eTrend	        = 0      			doc = "param2 docs"
+#
+##############################################################################################################
+function LessThanEconTrend(aiBrain, mTrend, eTrend)
+	if HaveGreaterThanUnitsWithCategory(aiBrain, 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE') then
+		#LOG('*AI DEBUG: Found Paragon')
+		return false
+	end
+    local econ = AIUtils.AIGetEconomyNumbers(aiBrain)
+	local cheatmult = tonumber(ScenarioInfo.Options.CheatMult) or 2
+	local cheatAI = string.find( aiBrain.Nickname, 'AIx:')
+    if cheatAI and (econ.MassTrend < mTrend * cheatmult and econ.EnergyTrend < eTrend * cheatmult) then
+        return true
+    elseif (econ.MassTrend < mTrend and econ.EnergyTrend < eTrend) then
+        return true
+    else
+        return false
+    end
 end
 
 ##############################################################################################################

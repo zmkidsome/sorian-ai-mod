@@ -42,7 +42,6 @@ BuilderManager = Class {
             KillThread(self.BuilderThread)
             self.BuilderThread = nil
             self.Active = false
-			#LOG('*AI DEBUG: Manager Disabled')
         end
     end,
     

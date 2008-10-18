@@ -822,7 +822,7 @@ function AIPlatoonSquadAttackVectorSorian( aiBrain, platoon, bAggro )
             usedTransports = SendPlatoonWithTransportsSorian(aiBrain, platoon, attackPos, true, false, true)
         # Require transports over 512 away
         elseif VDist2Sq( position[1], position[3], attackPos[1], attackPos[3] ) > 512*512 and inBase then
-            usedTransports = SendPlatoonWithTransportsSorian(aiBrain, platoon, attackPos, true, false, true)
+            usedTransports = SendPlatoonWithTransportsSorian(aiBrain, platoon, attackPos, true, false, false)
         # use if possible at 256
         elseif VDist2Sq( position[1], position[3], attackPos[1], attackPos[3] ) > 256*256 and inBase then
             usedTransports = SendPlatoonWithTransportsSorian(aiBrain, platoon, attackPos, false, false, false)
@@ -955,7 +955,7 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
             # ask for a transport every 10 seconds
             local counter = 0
 			if not waitLonger then
-				counter = 12
+				counter = 6
 			end
             local transportsNeeded = AIUtils.GetNumTransports(units)
             local numTransportsNeeded = math.ceil( ( transportsNeeded.Small + ( transportsNeeded.Medium * 2 ) + ( transportsNeeded.Large * 4 ) ) / 10 )
@@ -967,7 +967,7 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
                 aiBrain.NeedTransports = 10
             end
             local bUsedTransports, overflowSm, overflowMd, overflowLg = AIUtils.GetTransports(platoon) 
-            while not bUsedTransports and counter < 18 do
+            while not bUsedTransports and counter < 12 do
                 # if we have overflow, dump the overflow and just send what we can
                 if not bUsedTransports and overflowSm + overflowMd + overflowLg > 0 then
                     local goodunits, overflow = AIUtils.SplitTransportOverflow(units, overflowSm, overflowMd, overflowLg)
