@@ -26,6 +26,146 @@ function T4Timeout(aiBrain)
 	aiBrain.T4Building = false
 end
 
+function DrawIntel(aiBrain)
+	threatColor = {
+		#ThreatType = { ARGB value }
+		StructuresNotMex = 'ff00ff00', #Green
+		Commander = 'ff00ffff', #Cyan
+		Experimental = 'ffff0000', #Red
+		Land = 'ffff9600', #Orange
+	}
+	while true do
+		if aiBrain:GetArmyIndex() == GetFocusArmy() then
+			for k, v in aiBrain.InterestList.HighPriority do
+				if threatColor[v.Type] then
+					DrawCircle( v.Position, 1, threatColor[v.Type] )
+					DrawCircle( v.Position, 3, threatColor[v.Type] )
+					DrawCircle( v.Position, 5, threatColor[v.Type] )
+				end
+		    end
+		end
+		WaitSeconds(2)
+	end
+end
+
+function AIHandleIntelData(aiBrain)
+	for _, intel in aiBrain.InterestList.HighPriority do
+		if intel.Type == 'StructuresNotMex' then
+			AIHandleStructureIntel(aiBrain, intel)
+		elseif intel.Type == 'Commander' then
+			AIHandleACUIntel(aiBrain, intel)
+		#elseif intel.Type == 'Experimental' then
+		#	AIHandleT4Intel(aiBrain, intel)
+		elseif intel.Type == 'Land' then
+			AIHandleLandIntel(aiBrain, intel)
+		end
+	end
+end
+
+function AIHandleStructureIntel(aiBrain, intel)
+	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
+		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
+			return
+		end
+	end
+	for subk, subv in aiBrain.AttackPoints do
+		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
+			return
+		end
+	end
+	for k,v in aiBrain.BuilderManagers do
+		local basePos = v.EngineerManager:GetLocationCoords()
+		if VDist2Sq(intel.Position[1], intel.Position[3], basePos[1], basePos[3]) < 90000 then
+			#Bombard the location
+			table.insert(aiBrain.AttackPoints,
+				{
+				Position = intel.Position,
+				}
+			)
+			aiBrain:ForkThread(aiBrain.AttackPointsTimeout, intel.Position)
+			#Set an alert for the location
+			table.insert(aiBrain.BaseMonitor.AlertsTable,
+				{
+				Position = intel.Position,
+				Threat = 350,
+				}
+			)
+			aiBrain.BaseMonitor.AlertSounded = true
+			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position)
+			aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
+		end
+	end
+end
+
+function AIHandleACUIntel(aiBrain, intel)
+	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
+		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
+			return
+		end
+	end
+	for subk, subv in aiBrain.AttackPoints do
+		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
+			return
+		end
+	end
+	if aiBrain:GetThreatAtPosition( intel.Position, 1, true, 'AntiAir' ) < 10 then
+		#Bombard the location
+		table.insert(aiBrain.AttackPoints,
+			{
+			Position = intel.Position,
+			}
+		)
+		aiBrain:ForkThread(aiBrain.AttackPointsTimeout, intel.Position)
+		#Set an alert for the location
+		table.insert(aiBrain.BaseMonitor.AlertsTable,
+			{
+			Position = intel.Position,
+			Threat = 350,
+			}
+		)
+		aiBrain.BaseMonitor.AlertSounded = true
+		aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position)
+		aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
+	end
+end
+
+function AIHandleLandIntel(aiBrain, intel)
+	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
+		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
+			return
+		end
+	end
+	for subk, subv in aiBrain.TacticalBases do
+		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
+			return
+		end
+	end
+	for k,v in aiBrain.BuilderManagers do
+		local basePos = v.EngineerManager:GetLocationCoords()
+		if VDist2Sq(intel.Position[1], intel.Position[3], basePos[1], basePos[3]) < 10000 then
+			return
+		end
+	end
+	#Mark location for a defensive point
+	nextBase = (table.getn(aiBrain.TacticalBases) + 1)
+	table.insert(aiBrain.TacticalBases,
+		{
+		Position = intel.Position,
+		Name = 'IntelBase'..nextBase,
+		}
+	)
+	#Set an alert for the location
+	table.insert(aiBrain.BaseMonitor.AlertsTable,
+		{
+		Position = intel.Position,
+		Threat = intel.Threat,
+		}
+	)
+	aiBrain.BaseMonitor.AlertSounded = true
+	aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position)
+	aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
+end
+
 function AIMicro(aiBrain, platoon, target, threatatLocation, mySurfaceThreat)
 	local friendlyThreat = aiBrain:GetThreatAtPosition( platoon:GetPlatoonPosition(), 1, true, 'AntiSurface', aiBrain:GetArmyIndex()) - mySurfaceThreat
 	if mySurfaceThreat + friendlyThreat > threatatLocation * 3 or table.getn(platoon:GetPlatoonUnits()) > 14 then
@@ -342,9 +482,6 @@ end
 
 function AIHandlePing(aiBrain, pingData)
 	if pingData.Type == 'move' then
-		if not aiBrain.TacticalBases then
-			aiBrain.TacticalBases = {}
-		end
 		nextping = (table.getn(aiBrain.TacticalBases) + 1)
 		table.insert(aiBrain.TacticalBases,
 			{
@@ -354,9 +491,6 @@ function AIHandlePing(aiBrain, pingData)
 		)
 		AISendChat('allies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'genericchat')
 	elseif pingData.Type == 'attack' then
-		if not aiBrain.AttackPoints then
-			aiBrain.AttackPoints = {}
-		end
 		table.insert(aiBrain.AttackPoints,
 			{
 			Position = pingData.Location,

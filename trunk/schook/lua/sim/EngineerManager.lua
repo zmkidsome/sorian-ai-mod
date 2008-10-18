@@ -527,7 +527,8 @@ EngineerManager = Class(BuilderManager) {
                 end
 
                 if not dontAssign then
-                    self:AssignEngineerTask(unit)
+                    #self:AssignEngineerTask(unit)
+					self:ForkThread( self.InitialWait, unit )
                 end
 
                 return
@@ -806,6 +807,11 @@ EngineerManager = Class(BuilderManager) {
 	
     EngineerWaiting = function( self, unit )
         WaitSeconds(5)
+        self:AssignEngineerTask( unit )
+    end,
+	
+    InitialWait = function( self, unit )
+        WaitSeconds(2)
         self:AssignEngineerTask( unit )
     end,
     

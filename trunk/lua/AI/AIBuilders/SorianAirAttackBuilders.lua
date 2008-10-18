@@ -32,10 +32,10 @@ function AirAttackCondition(aiBrain, locationType, targetNumber )
 	if not engineerManager then
         return false
     end
-	if aiBrain:GetCurrentEnemy() then
-		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
-		targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiAir' )
-	end
+	#if aiBrain:GetCurrentEnemy() then
+	#	local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+	#	targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiAir' )
+	#end
 	
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
@@ -156,7 +156,7 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 555,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 15, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, categories.FACTORY * categories.AIR, 'Enemy'}},
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -173,8 +173,8 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 560,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 25, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 8, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 9, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -190,7 +190,7 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 560,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 35, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 14, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -207,8 +207,8 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 560,
         BuilderConditions = {
-            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 50, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 20, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 40, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 19, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 4, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -382,7 +382,7 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 655,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 15, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -399,8 +399,8 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 660,
         BuilderConditions = {
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 8, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 25, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 9, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -417,7 +417,7 @@ BuilderGroup {
         Priority = 660,
         BuilderConditions = {
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 14, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 35, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -433,8 +433,8 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 660,
         BuilderConditions = {
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 20, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
-            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 50, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 19, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 40, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 4, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -583,7 +583,7 @@ BuilderGroup {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, categories.FACTORY * categories.AIR, 'Enemy'}},
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
         },
@@ -596,9 +596,9 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 8, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 9, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
         },
@@ -613,7 +613,7 @@ BuilderGroup {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 14, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 40, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
         },
@@ -626,9 +626,9 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 20, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 19, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
-            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 50, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 40, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 4, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
 			{ UCBC, 'UnitCapCheckLess', { .9 } },

@@ -161,8 +161,8 @@ BrainConditionsMonitor = Class {
             
             for k,v in self.ResultTable do
 				if not v:LocationExists() then
-					#Can't remove. The builder table checks conditions based on table key.
-					#self.ResultTable[k] = nil
+					#Don't remove the condition, just skip over.
+					#If the base gets rebuilt the AI will use the old keyed conditions.
 					continue
 				end
 				numResults = numResults + 1

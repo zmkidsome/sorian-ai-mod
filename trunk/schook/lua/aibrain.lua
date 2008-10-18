@@ -39,6 +39,58 @@ AIBrain = Class(oldAIBrain) {
             self.Trash:Destroy()
         end
     end,
+	
+    OnCreateAI = function(self, planName)
+        self:CreateBrainShared(planName)
+
+        #LOG('*AI DEBUG: AI planName = ', repr(planName))
+        #LOG('*AI DEBUG: SCENARIO AI PLAN LIST = ', repr(aiScenarioPlans))
+        local civilian = false
+        for name,data in ScenarioInfo.ArmySetup do
+            if name == self.Name then
+                civilian = data.Civilian
+                break
+            end
+        end
+        if not civilian then
+            local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
+            
+            # Flag this brain as a possible brain to have skirmish systems enabled on
+            self.SkirmishSystems = true
+            
+            local cheatPos = string.find( per, 'cheat')
+            if cheatPos then
+                AIUtils.SetupCheat(self, true)
+                ScenarioInfo.ArmySetup[self.Name].AIPersonality = string.sub( per, 1, cheatPos - 1 )
+            end
+
+            self.CurrentPlan = self.AIPlansList[self:GetFactionIndex()][1]
+
+            #LOG('*AI DEBUG: AI PLAN LIST = ', repr(self.AIPlansList))
+            #LOG('===== AI DEBUG: AI Brain Fork Theads =====')
+            self.EvaluateThread = self:ForkThread(self.EvaluateAIThread)
+            self.ExecuteThread = self:ForkThread(self.ExecuteAIThread)
+
+            self.PlatoonNameCounter = {}
+            self.PlatoonNameCounter['AttackForce'] = 0
+            self.BaseTemplates = {}
+            self.RepeatExecution = true
+            self:InitializeEconomyState()
+            self.IntelData = {
+                ScoutCounter = 0,
+            }
+            
+            #Flag enemy starting locations with threat?        
+            if ScenarioInfo.type == 'skirmish' and string.find(per, 'sorian') then
+                self:AddInitialEnemyThreatSorian(200, 0.005, 'Economy')
+			elseif ScenarioInfo.type == 'skirmish' then
+				self:AddInitialEnemyThreat(200, 0.005)
+            end           
+        end        
+        self.UnitBuiltTriggerList = {}
+        self.FactoryAssistList = {}
+        self.BrainType = 'AI'
+    end,
 
     InitializeSkirmishSystems = function(self)
     
@@ -101,6 +153,27 @@ AIBrain = Class(oldAIBrain) {
 		end
     end,
 	
+    AddInitialEnemyThreatSorian = function(self, amount, decay, threatType)
+        local aiBrain = self
+        local myArmy = ScenarioInfo.ArmySetup[self.Name]
+            
+        if ScenarioInfo.Options.TeamSpawn == 'fixed' then
+            #Spawn locations were fixed. We know exactly where our opponents are. 
+            
+            for i=1,8 do
+                local token = 'ARMY_' .. i
+                local army = ScenarioInfo.ArmySetup[token]
+                
+                if army then
+                    if army.ArmyIndex ~= myArmy.ArmyIndex and (army.Team ~= myArmy.Team or army.Team == 1) then
+                        local startPos = ScenarioUtils.GetMarker('ARMY_' .. i).position
+                        self:AssignThreatAtPosition(startPos, amount, decay, threatType or 'Overall')
+                    end
+                end
+            end
+        end
+    end,
+	
     AddBuilderManagers = function(self, position, radius, baseName, useCenter )
         self.BuilderManagers[baseName] = {
             FactoryManager = FactoryManager.CreateFactoryBuilderManager(self, baseName, position, radius, useCenter),
@@ -128,6 +201,7 @@ AIBrain = Class(oldAIBrain) {
 	DeadBaseMonitor = function(self)
 		while true do
 			WaitSeconds(5)
+			local changed = false
 			for k,v in self.BuilderManagers do
 				if k != 'MAIN' and v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 and v.FactoryManager:GetNumCategoryFactories(categories.ALLUNITS) <= 0 then
 					if v.EngineerManager:GetNumCategoryUnits('Engineers', categories.ALLUNITS) <= 0 then
@@ -141,29 +215,28 @@ AIBrain = Class(oldAIBrain) {
 						v.StrategyManager:Destroy()
 						self.BuilderManagers[k] = nil
 						self.NumBases = self.NumBases - 1
-	#No longer needed. If a base has no factory the engineer will be transferred to a 
-	#new base by the Engineer Manager and the base will be removed on the next loop.
-#					elseif table.getn(AIUtils.GetOwnUnitsAroundPoint( self, categories.ENGINEER, v.EngineerManager:GetLocationCoords(), v.EngineerManager:GetLocationRadius() )) < 1 then
-#						local closest = false
-#						local closeBase = false
-#						for x,z in self.BuilderManagers do
-#							local distance = VDist3( v.EngineerManager:GetLocationCoords(), z.EngineerManager:GetLocationCoords() )
-#							if not closest or distance < closest then
-#								closest = distance
-#								closeBase = z
-#							end
-#						end
-#						if closest and closeBase then
-#							engies = v.EngineerManager:GetUnits( 'Engineers', categories.ALLUNITS )
-#							for a,b in engies do
-#								v.EngineerManager:RemoveUnit(b)
-#								closeBase.EngineerManager:AddUnit(b, true)
-#							end
-#						end
+						changed = true
 					end
 				end
 			end
+			if changed then
+				self.BuilderManagers = self:RebuildTable(self.BuilderManagers)
+			end
 		end
+	end,
+	
+	RebuildTable = function(self, oldtable)
+		local temptable = {}
+		for k,v in oldtable do
+			if v != nil then
+				if type(k) == 'string' then
+					temptable[k] = v
+				else
+					table.insert(temptable, v)
+				end
+			end
+		end
+		return temptable
 	end,
 	
     GetManagerCount = function(self, type)
@@ -431,52 +504,91 @@ AIBrain = Class(oldAIBrain) {
 		if not self.T4ThreatFound then
 			self.T4ThreatFound = {}
 		end
+		if not self.AttackPoints then
+			self.AttackPoints = {}
+		end
+		if not self.TacticalBases then
+			self.TacticalBases = {}
+		end
+		local intelChecks = {
+			#ThreatType	= {dist to merge squared, threat minimum, timeout (-1 = never timeout)}
+			StructuresNotMex = { 10000, 0, 60 },
+			Commander = { 2500, 0, 120 },
+			Experimental = { 2500, 0, 120 },
+			Land = { 10000, 50, 120 },
+		}
         while true do
-            local structures = self:GetThreatsAroundPosition(self.BuilderManagers.MAIN.Position, 16, true, 'StructuresNotMex')
+			local changed = false
+			for threatType, v in intelChecks do
+			
+	            local threats = self:GetThreatsAroundPosition(self.BuilderManagers.MAIN.Position, 16, true, threatType)
 
-            for _,struct in structures do
-                local dupe = false
-                local newPos = {struct[1], 0, struct[2]}
-                
-                for _,loc in self.InterestList.HighPriority do
-                    if VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < 10000 then
-                        dupe = true
-                        break
-                    end
-                end
-                
-                if not dupe then
-                    #Is it in the low priority list?
-                    for i=1, table.getn(self.InterestList.LowPriority) do
-                        local loc = self.InterestList.LowPriority[i]
-                        if VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < 10000 then
-                            #Found it in the low pri list. Remove it so we can add it to the high priority list.
-                            table.remove(self.InterestList.LowPriority, i)
-                            break
-                        end
-                    end
-                    
-                    table.insert(self.InterestList.HighPriority,
-                        {
-                            Position = newPos,
-                            LastScouted = GetGameTimeSeconds(),
-                        }
-                    )
-                    
-                    #Sort the list based on low long it has been since it was scouted
-                    table.sort(self.InterestList.HighPriority, function(a,b) 
-                        if a.LastScouted == b.LastScouted then
-                            local MainPos = self.BuilderManagers.MAIN.Position
-                            local distA = VDist2(MainPos[1], MainPos[3], a.Position[1], a.Position[3])
-                            local distB = VDist2(MainPos[1], MainPos[3], b.Position[1], b.Position[3])
-                            
-                            return distA < distB
-                        else
-                            return a.LastScouted < b.LastScouted
-                        end
-                    end)
-                end
-            end
+	            for _,threat in threats do
+	                local dupe = false
+	                local newPos = {threat[1], 0, threat[2]}
+	                
+	                for _,loc in self.InterestList.HighPriority do
+	                    if loc.Type == threatType and VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < v[1] then
+	                        dupe = true
+							loc.LastUpdate = GetGameTimeSeconds()
+	                        break
+	                    end
+	                end
+	                
+	                if not dupe then
+	                    #Is it in the low priority list?
+	                    for i=1, table.getn(self.InterestList.LowPriority) do
+	                        local loc = self.InterestList.LowPriority[i]
+	                        if VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < v[1] and threat[3] > v[2] then
+	                            #Found it in the low pri list. Remove it so we can add it to the high priority list.
+	                            table.remove(self.InterestList.LowPriority, i)
+	                            break
+	                        end
+	                    end
+	                    if threat[3] > v[2] then
+							changed = true
+							table.insert(self.InterestList.HighPriority,
+								{
+									Position = newPos,
+									Type = threatType,
+									Threat = threat[3],
+									LastUpdate = GetGameTimeSeconds(),
+									LastScouted = GetGameTimeSeconds(),
+								}
+							)
+						end
+					end
+	            end
+			end
+			#Get rid of outdated intel
+			for k, v in self.InterestList.HighPriority do
+				if not v.Permanent and intelChecks[v.Type][3] > 0 and v.LastUpdate + intelChecks[v.Type][3] < GetGameTimeSeconds() then
+					self.InterestList.HighPriority[k] = nil
+					changed = true
+				end
+			end
+			if changed then
+				self.InterestList.HighPriority = self:RebuildTable(self.InterestList.HighPriority)
+			end
+			#Sort the list based on low long it has been since it was scouted
+			table.sort(self.InterestList.HighPriority, function(a,b) 
+				if a.LastScouted == b.LastScouted then
+					local MainPos = self.BuilderManagers.MAIN.Position
+					local distA = VDist2(MainPos[1], MainPos[3], a.Position[1], a.Position[3])
+					local distB = VDist2(MainPos[1], MainPos[3], b.Position[1], b.Position[3])
+					
+					return distA < distB
+				else
+					return a.LastScouted < b.LastScouted
+				end
+			end)
+			#Draw intel data on map
+			if ScenarioInfo.Options.DebugIntel and not self.IntelDebugThread then #self:GetArmyIndex() == GetFocusArmy() then
+				self.IntelDebugThread = self:ForkThread( SUtils.DrawIntel ) #SUtils.DrawIntel(self)
+			end
+			if changed then
+				SUtils.AIHandleIntelData(self)
+			end
             
             WaitSeconds(5)
         end
@@ -526,7 +638,11 @@ AIBrain = Class(oldAIBrain) {
                         table.insert(aiBrain.InterestList.HighPriority,
                             {
                                 Position = startPos,
-                                LastScouted = 0,        
+								Type = 'StructuresNotMex',
+                                LastScouted = 0,
+								LastUpdate = 0,
+								Threat = 75,
+								Permanent = true,
                             }
                         )
                         else 
@@ -568,7 +684,11 @@ AIBrain = Class(oldAIBrain) {
                             table.insert(aiBrain.InterestList.LowPriority,
                                 {
                                     Position = loc.Position,
+									Type = 'StructuresNotMex',
                                     LastScouted = 0,
+									LastUpdate = 0,
+									Threat = 0,
+									Permanent = true,
                                 }
                             )
                         end
@@ -602,6 +722,9 @@ AIBrain = Class(oldAIBrain) {
                                 {
                                     Position = loc.Position,
                                     LastScouted = 0,
+									LastUpdate = 0,
+									Threat = 0,
+									Permanent = true,
                                 }
                             )
                     end

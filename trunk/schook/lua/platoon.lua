@@ -785,7 +785,7 @@ Platoon = Class(sorianoldPlatoon) {
             if path then
 				local position = self:GetPlatoonPosition()
 				if not success or VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 512 then
-					usedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, self, bestMarker.Position, true, false, true)
+					usedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, self, bestMarker.Position, true, false, false)
 				elseif VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 256 then
 					usedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, self, bestMarker.Position, false, false, false)
 				end
@@ -1101,7 +1101,7 @@ Platoon = Class(sorianoldPlatoon) {
         local pos = self:GetPlatoonPosition()
         local unitsSet = true
         for k,v in self:GetPlatoonUnits() do
-            if VDist2( v:GetPosition()[1], v:GetPosition()[3], pos[1], pos[3] ) > 20 then
+            if not v:IsDead() and VDist2( v:GetPosition()[1], v:GetPosition()[3], pos[1], pos[3] ) > 40 then
                unitsSet = false
                break
             end
@@ -1118,13 +1118,14 @@ Platoon = Class(sorianoldPlatoon) {
                     return false
                 end
 				unitsSet = true
+				pos = self:GetPlatoonPosition()
 				for k,v in self:GetPlatoonUnits() do
-					if VDist2( v:GetPosition()[1], v:GetPosition()[3], pos[1], pos[3] ) > 20 then
+					if not v:IsDead() and VDist2( v:GetPosition()[1], v:GetPosition()[3], pos[1], pos[3] ) > 40 then
 						unitsSet = false
 						break
 					end
 				end
-            until unitsSet or not self:IsCommandsActive(cmd) or counter >= 30
+            until unitsSet or not self:IsCommandsActive(cmd) or counter >= 20
         end
         
         return true        
@@ -2000,12 +2001,12 @@ Platoon = Class(sorianoldPlatoon) {
                     self:Stop()
 					if PlatoonFormation != 'NoFormation' then
 						#IssueFormAttack(platoonUnits, target, PlatoonFormation, 0)
-						#IssueAggressiveMove(platoonUnits, target:GetPosition())
-						SUtils.AIMicro(aiBrain, self, target, threatatLocation, mySurfaceThreat)
+						IssueAggressiveMove(platoonUnits, target:GetPosition())
+						#SUtils.AIMicro(aiBrain, self, target, threatatLocation, mySurfaceThreat)
 					else
 						#IssueAttack(platoonUnits, target)
-						#IssueAggressiveMove(platoonUnits, target:GetPosition())
-						SUtils.AIMicro(aiBrain, self, target, threatatLocation, mySurfaceThreat)
+						IssueAggressiveMove(platoonUnits, target:GetPosition())
+						#SUtils.AIMicro(aiBrain, self, target, threatatLocation, mySurfaceThreat)
 					end
 				end
             end
@@ -2170,13 +2171,13 @@ Platoon = Class(sorianoldPlatoon) {
 				if PlatoonFormation != 'No Formation' then
 					#IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
 					#IssueAggressiveMove(platoonUnits, closestTarget)
-					#self:AggressiveMoveToLocation(closestTarget:GetPosition())
-					SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
+					self:AggressiveMoveToLocation(closestTarget:GetPosition())
+					#SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
 				else
 					#IssueAttack(platoonUnits, closestTarget)
 					#IssueAggressiveMove(platoonUnits, closestTarget)
-					#self:AggressiveMoveToLocation(closestTarget:GetPosition())
-					SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
+					self:AggressiveMoveToLocation(closestTarget:GetPosition())
+					#SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
 				end
 				cmdQ = {1}
 #				quickReset = true
@@ -2273,13 +2274,13 @@ Platoon = Class(sorianoldPlatoon) {
 
             local oldDistSq = 0
             while aiBrain:PlatoonExists(self) do
-                WaitSeconds(10)
                 platPos = self:GetPlatoonPosition()
                 local distSq = VDist2Sq(platPos[1], platPos[3], bestBase.Position[1], bestBase.Position[3])
-                if distSq < 10 then
+                if distSq < 75 then
                     self:PlatoonDisband()
                     return
                 end
+				WaitSeconds(10)
                 # if we haven't moved in 10 seconds... go back to attacking
                 if (distSq - oldDistSq) < 5 then
                     break
@@ -2376,11 +2377,22 @@ Platoon = Class(sorianoldPlatoon) {
 				elseif not movingToScout and not target and self.MovementLayer != 'Water' then
 					movingToScout = true
 					self:Stop()
-					for k,v in AIUtils.AIGetSortedMassLocations(aiBrain, 10, nil, nil, nil, nil, self:GetPlatoonPosition()) do
-						if v[1] < 0 or v[3] < 0 or v[1] > ScenarioInfo.size[1] or v[3] > ScenarioInfo.size[2] then
-							#LOG('*AI DEBUG: STRIKE FORCE SENDING UNITS TO WRONG LOCATION - ' .. v[1] .. ', ' .. v[3] )
+					local MassSpots = AIUtils.AIGetSortedMassLocations(aiBrain, 10, nil, nil, nil, nil, self:GetPlatoonPosition())
+					if table.getn(MassSpots) > 0 then
+						for k,v in MassSpots do
+							self:MoveToLocation( v, false )
 						end
-						self:MoveToLocation( v, false )
+					else
+						local x,z = aiBrain:GetArmyStartPos()
+						local position = AIUtils.RandomLocation(x,z)
+						local safePath, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Air', self:GetPlatoonPosition(), position, 200)
+						if safePath then
+							for _,p in safePath do
+								self:MoveToLocation( p, false )
+							end
+						else
+							self:MoveToLocation( position, false )
+						end						
 					end
 				elseif not movingToScout and not target and self.MovementLayer == 'Water' then
 					movingToScout = true
@@ -2525,10 +2537,16 @@ Platoon = Class(sorianoldPlatoon) {
                     self:PlatoonDisband()
                 end
             else
-                reference, refName = AIUtils.AIFindStartLocationNeedsEngineerSorian( aiBrain, cons.LocationType, 
-                        (cons.LocationRadius or 100), cons.ThreatMin, cons.ThreatMax, cons.ThreatRings, cons.ThreatType )
-                # didn't find a location to build at
-                if not reference or not refName then
+				local mapSizeX, mapSizeZ = GetMapSize()
+				if mapSizeX > 512 and mapSizeZ > 512 then
+					reference, refName = AIUtils.AIFindStartLocationNeedsEngineerSorian( aiBrain, cons.LocationType, 
+							(cons.LocationRadius or 100), cons.ThreatMin, cons.ThreatMax, cons.ThreatRings, cons.ThreatType )
+				else
+					reference, refName = AIUtils.AIFindStartLocationNeedsEngineer( aiBrain, cons.LocationType, 
+							(cons.LocationRadius or 100), cons.ThreatMin, cons.ThreatMax, cons.ThreatRings, cons.ThreatType )
+				end
+				# didn't find a location to build at
+				if not reference or not refName then
                     self:PlatoonDisband()
                 end
             end
