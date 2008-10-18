@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.6.5:* Added No Rush restrictions to expansion and defensive points, Better reclaiming and more late game reclaiming, Added table cleanup function, BuilderManagers table uses new table cleanup, Intel Data table uses new cleanup, AI will now gather and react to intel, Newly built engineers will wait a couple seconds before being given their first order, Scouting (Air) will now be based on map size, T3 Engies will finish unfinished T4s, Fixed units bumping around at the start of the game, AI will spam buildings less, Econ improvements, AI will not send out lone Land Scouts after reaching T3, AI will react earlier when approaching unit cap, Land T4's should stop to engage units in their path, Added more enhancements to prevent the AI double building accidentally, AI will monitor rally points and move them if they get cluttered.
+
 *1.6.4:* Earlier Q-Gates, Fixed Engineering station pods getting destroyed along with Air units, Navy should attack from distance better, AI should spam T1 and T2 less when at T3, Improved Air Superiority.
 
 *1.6.3:* Fixed Strikeforce AI. De-clutter platoons are back, Adjusted unit cap platoons, Improved reaction to T4s, SCUs will no longer attempt to assist shields, Improved Distress Response deactivation.
