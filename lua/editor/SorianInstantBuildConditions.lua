@@ -407,7 +407,7 @@ function EngineerNeedsAssistance(aiBrain, doesbool, locationType, category)
 		if numFound > 0 and doesbool then return true end
 	end
 	
-	local engs = engineerManager:GetEngineersBuildQueue(category)
+	engs = engineerManager:GetEngineersBuildQueue(category)
 	for k,v in engs do
 		if v.DesiresAssist == true then
 			if v.MinNumAssistees and SUtils.GetGuards(aiBrain, v) < v.MinNumAssistees then

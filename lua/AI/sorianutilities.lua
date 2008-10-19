@@ -49,7 +49,10 @@ function DrawIntel(aiBrain)
 end
 
 function AIHandleIntelData(aiBrain)
+	local numchecks = 0
+	local checkspertick = 5
 	for _, intel in aiBrain.InterestList.HighPriority do
+		numchecks = numchecks + 1
 		if intel.Type == 'StructuresNotMex' then
 			AIHandleStructureIntel(aiBrain, intel)
 		elseif intel.Type == 'Commander' then
@@ -58,6 +61,10 @@ function AIHandleIntelData(aiBrain)
 		#	AIHandleT4Intel(aiBrain, intel)
 		elseif intel.Type == 'Land' then
 			AIHandleLandIntel(aiBrain, intel)
+		end
+		if numchecks > checkspertick then
+			WaitTicks(1)
+			numchecks = 0
 		end
 	end
 end
