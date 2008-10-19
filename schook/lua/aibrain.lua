@@ -82,6 +82,7 @@ AIBrain = Class(oldAIBrain) {
             
             #Flag enemy starting locations with threat?        
             if ScenarioInfo.type == 'skirmish' and string.find(per, 'sorian') then
+				#Gives the initial threat a type so initial land platoons will actually attack it.
                 self:AddInitialEnemyThreatSorian(200, 0.005, 'Economy')
 			elseif ScenarioInfo.type == 'skirmish' then
 				self:AddInitialEnemyThreat(200, 0.005)
@@ -198,6 +199,8 @@ AIBrain = Class(oldAIBrain) {
         self.NumBases = self.NumBases + 1
     end,
 	
+	#Removes bases that have no engineers or factories.
+	#Helps reduce the load on the game.
 	DeadBaseMonitor = function(self)
 		while true do
 			WaitSeconds(5)
@@ -225,6 +228,7 @@ AIBrain = Class(oldAIBrain) {
 		end
 	end,
 	
+	#Used to get rid of nil table entries
 	RebuildTable = function(self, oldtable)
 		local temptable = {}
 		for k,v in oldtable do
@@ -511,10 +515,11 @@ AIBrain = Class(oldAIBrain) {
 			self.TacticalBases = {}
 		end
 		local intelChecks = {
-			#ThreatType	= {dist to merge, threat minimum, timeout (-1 = never timeout), try for exact pos, categoriy to look for}
+			#ThreatType	= {max dist to merge points, threat minimum, timeout (-1 = never timeout), try for exact pos, category to use for exact pos}
 			StructuresNotMex = { 100, 0, 60, true, categories.STRUCTURE - categories.MASSEXTRACTION },
 			Commander = { 50, 0, 120, true, categories.COMMAND },
 			Experimental = { 50, 0, 120, true, categories.EXPERIMENTAL },
+			Artillery = { 50, 1150, 120, true, categories.ARTILLERY * categories.TECH3 },
 			Land = { 100, 50, 120, false, nil },
 		}
 		local numchecks = 0
@@ -547,15 +552,17 @@ AIBrain = Class(oldAIBrain) {
 	                            break
 	                        end
 	                    end
+						#Check for exact position?
 						if threat[3] > v[2] and v[4] and v[5] then
 							local nearUnits = self:GetUnitsAroundPoint(v[5], newPos, v[1], 'Enemy')
 							if table.getn(nearUnits) > 0 then
 								local unitPos = nearUnits[1]:GetPosition()
 								if unitPos then
-									newPos = unitPos
+									newPos = {unitPos[1], 0, unitPos[3]}
 								end
 							end
 						end
+						#Threat high enough?
 	                    if threat[3] > v[2] then
 							changed = true
 							table.insert(self.InterestList.HighPriority,
@@ -569,6 +576,7 @@ AIBrain = Class(oldAIBrain) {
 							)
 						end
 					end
+					#Reduce load on game
 					if numchecks > checkspertick then
 						WaitTicks(1)
 						numchecks = 0
@@ -583,6 +591,7 @@ AIBrain = Class(oldAIBrain) {
 					changed = true
 				end
 			end
+			#Rebuild intel table if there was a change
 			if changed then
 				self.InterestList.HighPriority = self:RebuildTable(self.InterestList.HighPriority)
 			end
@@ -599,9 +608,10 @@ AIBrain = Class(oldAIBrain) {
 				end
 			end)
 			#Draw intel data on map
-			if ScenarioInfo.Options.DebugIntel and not self.IntelDebugThread then #self:GetArmyIndex() == GetFocusArmy() then
-				self.IntelDebugThread = self:ForkThread( SUtils.DrawIntel ) #SUtils.DrawIntel(self)
+			if ScenarioInfo.Options.DebugIntel and not self.IntelDebugThread then
+				self.IntelDebugThread = self:ForkThread( SUtils.DrawIntel )
 			end
+			#Handle intel data if there was a change
 			if changed then
 				SUtils.AIHandleIntelData(self)
 			end

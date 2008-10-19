@@ -525,11 +525,13 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	local testPath = false
 	
 	local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
-	
-	if (string.find(per, 'sorian') or DiskGetFileInfo('/lua/AI/altaiutilities.lua')) and platoonLayer != "Water" then #If it is a Sorian AI or Duncane AI and not a water unit
+
+	#If it is a Sorian AI or Duncane AI and not a water unit.
+	if (string.find(per, 'sorian') or DiskGetFileInfo('/lua/AI/altaiutilities.lua')) and platoonLayer != "Water" then
 		testPath = true
 	end
 	
+	#If we are within 100 units of the destination, don't bother pathing.
 	if VDist2Sq( start[1], start[3], destination[1], destination[3] ) <= 10000 and testPath then
 		table.insert(finalPath, destination)    
 		return finalPath

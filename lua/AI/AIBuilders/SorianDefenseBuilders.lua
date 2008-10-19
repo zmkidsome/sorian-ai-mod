@@ -1559,12 +1559,12 @@ BuilderGroup {
         PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
         Priority = 945,
         BuilderConditions = {
-            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 75, 'DEFENSE TECH3 ANTINAVY', 20, 2, 0, 1, 2, 'AntiSurface' } },
+            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 150, 'DEFENSE TECH3 ANTINAVY', 20, 2, 0, 1, 2, 'AntiSurface' } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
-            { UCBC, 'UnitCapCheckLess', { .7 } },
+            { UCBC, 'UnitCapCheckLess', { .75 } },
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -1573,7 +1573,7 @@ BuilderGroup {
                 BuildClose = false,
                 NearMarkerType = 'Naval Defensive Point',
                 MarkerRadius = 20,
-                LocationRadius = 75,
+                LocationRadius = 150,
                 LocationType = 'LocationType',
                 ThreatMin = 0,
                 ThreatMax = 1,

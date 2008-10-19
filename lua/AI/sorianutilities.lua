@@ -32,6 +32,7 @@ function DrawIntel(aiBrain)
 		StructuresNotMex = 'ff00ff00', #Green
 		Commander = 'ff00ffff', #Cyan
 		Experimental = 'ffff0000', #Red
+		Artillery = 'ffffff00', #Yellow
 		Land = 'ffff9600', #Orange
 	}
 	while true do
@@ -59,9 +60,12 @@ function AIHandleIntelData(aiBrain)
 			AIHandleACUIntel(aiBrain, intel)
 		#elseif intel.Type == 'Experimental' then
 		#	AIHandleT4Intel(aiBrain, intel)
+		elseif intel.Type == 'Artillery' then
+			AIHandleArtilleryIntel(aiBrain, intel)
 		elseif intel.Type == 'Land' then
 			AIHandleLandIntel(aiBrain, intel)
 		end
+		#Reduce load on game
 		if numchecks > checkspertick then
 			WaitTicks(1)
 			numchecks = 0
@@ -82,6 +86,7 @@ function AIHandleStructureIntel(aiBrain, intel)
 	end
 	for k,v in aiBrain.BuilderManagers do
 		local basePos = v.EngineerManager:GetLocationCoords()
+		#If intel is within 300 units of a base
 		if VDist2Sq(intel.Position[1], intel.Position[3], basePos[1], basePos[3]) < 90000 then
 			#Bombard the location
 			table.insert(aiBrain.AttackPoints,
@@ -115,6 +120,7 @@ function AIHandleACUIntel(aiBrain, intel)
 			return
 		end
 	end
+	#If AntiAir threat level is less than 10 around the ACU
 	if aiBrain:GetThreatAtPosition( intel.Position, 1, true, 'AntiAir' ) < 10 then
 		#Bombard the location
 		table.insert(aiBrain.AttackPoints,
@@ -136,6 +142,42 @@ function AIHandleACUIntel(aiBrain, intel)
 	end
 end
 
+function AIHandleArtilleryIntel(aiBrain, intel)
+	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
+		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
+			return
+		end
+	end
+	for subk, subv in aiBrain.AttackPoints do
+		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
+			return
+		end
+	end
+	for k,v in aiBrain.BuilderManagers do
+		local basePos = v.EngineerManager:GetLocationCoords()
+		#If intel is within 950 units of a base
+		if VDist2Sq(intel.Position[1], intel.Position[3], basePos[1], basePos[3]) < 902500 then
+			#Bombard the location
+			table.insert(aiBrain.AttackPoints,
+				{
+				Position = intel.Position,
+				}
+			)
+			aiBrain:ForkThread(aiBrain.AttackPointsTimeout, intel.Position)
+			#Set an alert for the location
+			table.insert(aiBrain.BaseMonitor.AlertsTable,
+				{
+				Position = intel.Position,
+				Threat = intel.Threat,
+				}
+			)
+			aiBrain.BaseMonitor.AlertSounded = true
+			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position)
+			aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
+		end
+	end
+end
+
 function AIHandleLandIntel(aiBrain, intel)
 	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
 		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
@@ -149,6 +191,7 @@ function AIHandleLandIntel(aiBrain, intel)
 	end
 	for k,v in aiBrain.BuilderManagers do
 		local basePos = v.EngineerManager:GetLocationCoords()
+		#If intel is within 100 units of a base we don't want this spot
 		if VDist2Sq(intel.Position[1], intel.Position[3], basePos[1], basePos[3]) < 10000 then
 			return
 		end
