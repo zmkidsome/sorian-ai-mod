@@ -373,16 +373,17 @@ BuilderGroup {
         },
     },
     Builder {
-        BuilderName = 'Sorian T4 Exp Land Late Game',
+        BuilderName = 'Sorian T4 Exp Land Unit Cap',
         PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
-        PlatoonTemplate = 'T4ExperimentalLandLate',
-        Priority = 0, #10000,
+        PlatoonTemplate = 'T4ExperimentalLandSorian',
+        Priority = 10000,
         FormRadius = 10000,
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderConditions = {
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.EXPERIMENTAL * categories.MOBILE * (categories.LAND + categories.AIR) - categories.SATELLITE}},
-			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH1' } },
+            #{ SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY TECH1, FACTORY TECH2' } },
+			{ UCBC, 'UnitCapCheckGreater', { .95 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -500,16 +501,17 @@ BuilderGroup {
         },
     },
     Builder {
-        BuilderName = 'Sorian T4 Exp Air Late Game',
-        PlatoonTemplate = 'T4ExperimentalAirLate',
+        BuilderName = 'Sorian T4 Exp Air Unit Cap',
+        PlatoonTemplate = 'T4ExperimentalAirSorian',
         PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
-        Priority = 0, #800,
+        Priority = 800,
         InstanceCount = 50,
         FormRadius = 10000,
         BuilderType = 'Any',
         BuilderConditions = {
-            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 2, categories.EXPERIMENTAL * categories.MOBILE * (categories.LAND + categories.AIR) - categories.SATELLITE}},
-			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH1' } },
+            #{ SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 1, 'FACTORY TECH1, FACTORY TECH2' } },
+			{ UCBC, 'UnitCapCheckGreater', { .95 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -719,7 +721,7 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderData = {
 			SearchRadius = 6000,
-            PrioritizedCategories = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE', 'STRUCTURE STRATEGIC TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ORBITALSYSTEM', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'STRUCTURE ANTIMISSILE TECH3', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3 ANTIAIR', 'COMMAND', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE' }, # list in order
+            PrioritizedCategories = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE', 'STRUCTURE STRATEGIC TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ORBITALSYSTEM', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'STRUCTURE ANTIMISSILE TECH3', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3 ANTIAIR', 'COMMAND', 'STRUCTURE DEFENSE TECH3 DIRECTFIRE', 'STRUCTURE DEFENSE TECH3 SHIELD', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE' }, # list in order
         },
     },
 }
