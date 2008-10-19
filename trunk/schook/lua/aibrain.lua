@@ -511,12 +511,14 @@ AIBrain = Class(oldAIBrain) {
 			self.TacticalBases = {}
 		end
 		local intelChecks = {
-			#ThreatType	= {dist to merge squared, threat minimum, timeout (-1 = never timeout)}
-			StructuresNotMex = { 10000, 0, 60 },
-			Commander = { 2500, 0, 120 },
-			Experimental = { 2500, 0, 120 },
-			Land = { 10000, 50, 120 },
+			#ThreatType	= {dist to merge, threat minimum, timeout (-1 = never timeout), try for exact pos, categoriy to look for}
+			StructuresNotMex = { 100, 0, 60, true, categories.STRUCTURE - categories.MASSEXTRACTION },
+			Commander = { 50, 0, 120, true, categories.COMMAND },
+			Experimental = { 50, 0, 120, true, categories.EXPERIMENTAL },
+			Land = { 100, 50, 120, false, nil },
 		}
+		local numchecks = 0
+		local checkspertick = 5
         while true do
 			local changed = false
 			for threatType, v in intelChecks do
@@ -526,9 +528,9 @@ AIBrain = Class(oldAIBrain) {
 	            for _,threat in threats do
 	                local dupe = false
 	                local newPos = {threat[1], 0, threat[2]}
-	                
+	                numchecks = numchecks + 1
 	                for _,loc in self.InterestList.HighPriority do
-	                    if loc.Type == threatType and VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < v[1] then
+	                    if loc.Type == threatType and VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < v[1] * v[1] then
 	                        dupe = true
 							loc.LastUpdate = GetGameTimeSeconds()
 	                        break
@@ -539,12 +541,21 @@ AIBrain = Class(oldAIBrain) {
 	                    #Is it in the low priority list?
 	                    for i=1, table.getn(self.InterestList.LowPriority) do
 	                        local loc = self.InterestList.LowPriority[i]
-	                        if VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < v[1] and threat[3] > v[2] then
+	                        if VDist2Sq(newPos[1], newPos[3], loc.Position[1], loc.Position[3]) < v[1] * v[1] and threat[3] > v[2] then
 	                            #Found it in the low pri list. Remove it so we can add it to the high priority list.
 	                            table.remove(self.InterestList.LowPriority, i)
 	                            break
 	                        end
 	                    end
+						if threat[3] > v[2] and v[4] and v[5] then
+							local nearUnits = self:GetUnitsAroundPoint(v[5], newPos, v[1], 'Enemy')
+							if table.getn(nearUnits) > 0 then
+								local unitPos = nearUnits[1]:GetPosition()
+								if unitPos then
+									newPos = unitPos
+								end
+							end
+						end
 	                    if threat[3] > v[2] then
 							changed = true
 							table.insert(self.InterestList.HighPriority,
@@ -558,8 +569,13 @@ AIBrain = Class(oldAIBrain) {
 							)
 						end
 					end
+					if numchecks > checkspertick then
+						WaitTicks(1)
+						numchecks = 0
+					end
 	            end
 			end
+			numchecks = 0
 			#Get rid of outdated intel
 			for k, v in self.InterestList.HighPriority do
 				if not v.Permanent and intelChecks[v.Type][3] > 0 and v.LastUpdate + intelChecks[v.Type][3] < GetGameTimeSeconds() then

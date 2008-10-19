@@ -293,7 +293,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 150,
+                AssistRange = 200,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE LAND'},
                 Time = 60,
             },
@@ -315,7 +315,7 @@ BuilderGroup {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
 				AssistUntilFinished = true,
-                AssistRange = 150,
+                AssistRange = 200,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE LAND'},
                 Time = 60,
             },
@@ -443,7 +443,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 150,
+                AssistRange = 200,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE AIR'},
                 Time = 60,
             },
@@ -465,7 +465,7 @@ BuilderGroup {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
 				AssistUntilFinished = true,
-                AssistRange = 150,
+                AssistRange = 200,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE AIR'},
                 Time = 60,
             },
@@ -570,7 +570,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 150,
+                AssistRange = 200,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE NAVAL'},
                 Time = 60,
             },
@@ -591,7 +591,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 150,
+                AssistRange = 200,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE NAVAL'},
                 Time = 60,
             },
@@ -772,7 +772,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 150,
+                AssistRange = 200,
                 BeingBuiltCategories = {'EXPERIMENTAL ECONOMIC'},
                 Time = 60,
             },
@@ -792,7 +792,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 150,
+                AssistRange = 200,
                 BeingBuiltCategories = {'EXPERIMENTAL ECONOMIC'},
                 Time = 60,
             },
