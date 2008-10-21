@@ -130,7 +130,7 @@ PlatoonTemplate {
     Name = 'T4ExperimentalLandSorian',
     Plan = 'ExperimentalAIHubSorian',   
     GlobalSquads = {
-        { categories.EXPERIMENTAL * categories.LAND * categories.MOBILE, 1, 10, 'attack', 'none' }
+        { categories.EXPERIMENTAL * categories.LAND * categories.MOBILE - categories.url0401, 1, 10, 'attack', 'none' }
     },
 }
 
