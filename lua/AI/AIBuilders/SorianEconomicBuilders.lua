@@ -1787,7 +1787,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingAssistanceGreater', { 'LocationType', 0, 'STRUCTURE, EXPERIMENTAL' }},
             { IBC, 'BrainNotLowPowerMode', {} },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 1.0, 1.1} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1} },
         },
         BuilderType = 'Any',
         BuilderData = {
