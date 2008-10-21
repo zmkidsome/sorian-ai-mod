@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.6.8:* AI should use more engineers for big projects, AI should use T2 a bit more.
+
 *1.6.7b:* AI should have better late game build power, AI should tech up all of its mexes to T3, Minor bug fixes and cleanup.
 
 *1.6.7:* Pathing T4s, Added Unit Cap T4 platoons, UEF Satellite should try to attack HARMS less often, Added Artillery Intel and handler, Did some much needed cleanup, Minor econ tweaks.
