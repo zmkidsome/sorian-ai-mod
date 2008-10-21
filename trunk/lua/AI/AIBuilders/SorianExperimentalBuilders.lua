@@ -48,7 +48,7 @@ function T4LandAttackCondition(aiBrain, locationType, targetNumber)
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
     
-    local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.LAND * categories.EXPERIMENTAL, position, radius * 2 )
+    local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.LAND * categories.EXPERIMENTAL, position, radius * 2.5 )
     if surThreat > targetNumber then
         return true
 	elseif SInBC.PoolGreaterAtLocationExp(aiBrain, locationType, 4, categories.MOBILE * categories.LAND * categories.EXPERIMENTAL) then
@@ -74,7 +74,7 @@ function T4AirAttackCondition(aiBrain, locationType, targetNumber)
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
     
-    local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.AIR * categories.EXPERIMENTAL, position, radius * 2)
+    local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.AIR * categories.EXPERIMENTAL, position, radius * 2.5)
     if surThreat > targetNumber then
         return true
 	elseif SInBC.PoolGreaterAtLocationExp(aiBrain, locationType, 4, categories.MOBILE * categories.AIR * categories.EXPERIMENTAL) then
@@ -293,7 +293,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 200,
+                AssistRange = 250,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE LAND'},
                 Time = 60,
             },
@@ -315,7 +315,7 @@ BuilderGroup {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
 				AssistUntilFinished = true,
-                AssistRange = 200,
+                AssistRange = 250,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE LAND'},
                 Time = 60,
             },
@@ -331,7 +331,7 @@ BuilderGroup {
         PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         PlatoonTemplate = 'T4ExperimentalLandSorian',
         Priority = 10000,
-        FormRadius = 10000,
+        FormRadius = 250,
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderConditions = {
@@ -354,7 +354,7 @@ BuilderGroup {
         PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         PlatoonTemplate = 'T4ExperimentalScathisSorian',
         Priority = 10000,
-        FormRadius = 10000,
+        FormRadius = 250,
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderConditions = {
@@ -377,7 +377,7 @@ BuilderGroup {
         PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         PlatoonTemplate = 'T4ExperimentalLandSorian',
         Priority = 10000,
-        FormRadius = 10000,
+        FormRadius = 250,
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderConditions = {
@@ -444,7 +444,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 200,
+                AssistRange = 250,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE AIR'},
                 Time = 60,
             },
@@ -466,7 +466,7 @@ BuilderGroup {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
 				AssistUntilFinished = true,
-                AssistRange = 200,
+                AssistRange = 250,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE AIR'},
                 Time = 60,
             },
@@ -483,7 +483,7 @@ BuilderGroup {
         PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         Priority = 800,
         InstanceCount = 50,
-        FormRadius = 10000,
+        FormRadius = 250,
         BuilderType = 'Any',
         BuilderConditions = {
             #{ SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
@@ -506,7 +506,7 @@ BuilderGroup {
         PlatoonAddPlans = {'NameUnitsSorian', 'DistressResponseAISorian', 'PlatoonCallForHelpAISorian'},
         Priority = 800,
         InstanceCount = 50,
-        FormRadius = 10000,
+        FormRadius = 250,
         BuilderType = 'Any',
         BuilderConditions = {
             #{ SIBC, 'HaveLessThanUnitsWithCategory', { 3, 'EXPERIMENTAL MOBILE LAND, EXPERIMENTAL MOBILE AIR'}},
@@ -572,7 +572,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 200,
+                AssistRange = 250,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE NAVAL'},
                 Time = 60,
             },
@@ -593,7 +593,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 200,
+                AssistRange = 250,
                 BeingBuiltCategories = {'EXPERIMENTAL MOBILE NAVAL'},
                 Time = 60,
             },
@@ -614,7 +614,7 @@ BuilderGroup {
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
-        FormRadius = 10000,
+        FormRadius = 250,
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderData = {
@@ -716,7 +716,7 @@ BuilderGroup {
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
-        FormRadius = 10000,
+        FormRadius = 250,
         InstanceCount = 50,
         BuilderType = 'Any',
         BuilderData = {
@@ -774,7 +774,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 200,
+                AssistRange = 250,
                 BeingBuiltCategories = {'EXPERIMENTAL ECONOMIC'},
                 Time = 60,
             },
@@ -794,7 +794,7 @@ BuilderGroup {
             Assist = {
                 AssistLocation = 'LocationType',
                 AssisteeType = 'Engineer',
-                AssistRange = 200,
+                AssistRange = 250,
                 BeingBuiltCategories = {'EXPERIMENTAL ECONOMIC'},
                 Time = 60,
             },

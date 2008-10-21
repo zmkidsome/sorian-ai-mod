@@ -209,7 +209,7 @@ function LessThanEconTrend(aiBrain, mTrend, eTrend)
 	local cheatAI = string.find( aiBrain.Nickname, 'AIx:')
     if cheatAI and (econ.MassTrend < mTrend * cheatmult and econ.EnergyTrend < eTrend * cheatmult) then
         return true
-    elseif (econ.MassTrend < mTrend and econ.EnergyTrend < eTrend) then
+    elseif not cheatAI and (econ.MassTrend < mTrend and econ.EnergyTrend < eTrend) then
         return true
     else
         return false
@@ -479,7 +479,7 @@ function HavePoolUnitComparisonAtLocationExp( aiBrain, locationType, unitCount, 
         return false
     end
     local poolPlatoon = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
-    local numUnits = poolPlatoon:GetNumCategoryUnits(testCat, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius() * 2)
+    local numUnits = poolPlatoon:GetNumCategoryUnits(testCat, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius() * 2.5)
     return CompareBody(numUnits, unitCount, compareType)
 end
 

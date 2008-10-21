@@ -68,7 +68,7 @@ BuilderGroup {
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconIncome',  { 35, 10}},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.2 }},
-            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 3, 'MASSEXTRACTION TECH3', 'MASSEXTRACTION' } },
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 4, 'MASSEXTRACTION TECH3', 'MASSEXTRACTION' } },
             { UCBC, 'UnitsGreaterAtLocation', { 'MAIN', 3, 'MASSEXTRACTION TECH3', 'MASSEXTRACTION' } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH3' }},
         },
@@ -88,6 +88,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconStorageCurrent', { 600, 0 } },
+			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0, 1.2 }},
 			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION' }},
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'MASSEXTRACTION TECH2', 'MASSEXTRACTION' } },
             
@@ -151,6 +152,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconStorageCurrent', { 3000, 0 } },
+			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0, 1.2 }},
 			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3' } },
             { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'MASSEXTRACTION TECH3', 'MASSEXTRACTION' } },
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3' }},
@@ -192,6 +194,38 @@ BuilderGroup {
         FormRadius = 10000,
         BuilderType = 'Any',
     },      
+    Builder {
+        BuilderName = 'Sorian T2 Mass Extractor Upgrade Timeless - Later',
+        PlatoonTemplate = 'T2MassExtractorUpgrade',
+        Priority = 200,
+        InstanceCount = 1,
+        BuilderConditions = {
+            #{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3' } },
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'MASSEXTRACTION TECH3', 'MASSEXTRACTION' } },            
+            { SIBC, 'GreaterThanEconIncome', { 13, 50 } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.2 }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH3' }},
+        },
+        FormRadius = 10000,
+        BuilderType = 'Any',
+    },    
+    Builder {
+        BuilderName = 'Sorian T2 Mass Extractor Upgrade Timeless Multiple - Later',
+        PlatoonTemplate = 'T2MassExtractorUpgrade',
+        Priority = 200,
+        InstanceCount = 3,
+        BuilderConditions = {
+            #{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH2, ENERGYPRODUCTION TECH3' } },			
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 3, 'MASSEXTRACTION TECH3', 'MASSEXTRACTION' } },
+            { SIBC, 'GreaterThanEconIncome',  { 20, 50 } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.2 }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH3' }},
+        },
+        FormRadius = 10000,
+        BuilderType = 'Any',
+    },
 }
 
 # ================================= #

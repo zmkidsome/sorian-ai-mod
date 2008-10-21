@@ -57,7 +57,8 @@ function SetupMainBase(aiBrain)
     aiBrain:ForceManagerSort()
 end
 
-#Modeled after GPGs LowMass and LowEnergy functions
+#Modeled after GPGs LowMass and LowEnergy functions.
+#Runs the whole game and kills off units when the AI hits unit cap.
 function UnitCapWatchThreadSorian(aiBrain)
 	#LOG('*AI DEBUG: UnitCapWatchThreadSorian started')
 	while true do
@@ -65,7 +66,7 @@ function UnitCapWatchThreadSorian(aiBrain)
 		if GetArmyUnitCostTotal(aiBrain:GetArmyIndex()) > (GetArmyUnitCap(aiBrain:GetArmyIndex()) - 20) then
 			local underCap = false
 			
-			# More than 1 T3 Power
+			# More than 1 T3 Power	  ##(aiBrain, number of units to check for, category of units to check for, category of units to kill off)
 			underCap = GetAIUnderUnitCap(aiBrain, 1, categories.TECH3 * categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.TECH1 * categories.ENERGYPRODUCTION * categories.STRUCTURE * categories.DRAGBUILD)
 			
 			# More than 9 T2/T3 Defense - shields
@@ -108,9 +109,12 @@ function GetAIUnderUnitCap(aiBrain, num, checkCat, killCat)
 			v:Kill()
 		end
 	end
+	#If AI under 90% of units cap, return true
 	if GetArmyUnitCostTotal(aiBrain:GetArmyIndex()) <= (GetArmyUnitCap(aiBrain:GetArmyIndex()) * .10) then
 		return true
 	end
+	#If not, wait a tick to prevent lag and return false
+	WaitTicks(1)
 	return false
 end
 
