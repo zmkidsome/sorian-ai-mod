@@ -302,7 +302,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Land',
         PlatoonTemplate = 'T3EngineerAssistSorian',
-        Priority = 900, #951,
+        Priority = 951,
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.LAND * categories.MOBILE}},
@@ -453,7 +453,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Air',
         PlatoonTemplate = 'T3EngineerAssistSorian',
-        Priority = 900, #951,
+        Priority = 951,
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.AIR * categories.MOBILE}},
@@ -685,7 +685,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Experimental Satellite',
         PlatoonTemplate = 'T3EngineerAssistSorian',
-        Priority = 900, #851,
+        Priority = 951,
         InstanceCount = 5,
         BuilderConditions = {
             { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
@@ -783,7 +783,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Engineer Assist Experimental Economic',
         PlatoonTemplate = 'T3EngineerAssistSorian',
-        Priority = 900, #851,
+        Priority = 951,
         InstanceCount = 5,
         BuilderConditions = {
             { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.ECONOMIC }},
