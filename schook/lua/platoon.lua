@@ -2809,12 +2809,37 @@ Platoon = Class(sorianoldPlatoon) {
     WatchForNotBuildingSorian = function(eng)
         WaitTicks(5)
         local aiBrain = eng:GetAIBrain()
+		local engLastPos = false
+		local stuckCount = 0
         while not eng:IsDead() and (eng.GoingHome or eng.Upgrading or eng.Fighting or eng:IsUnitState("Building") or 
                   eng:IsUnitState("Attacking") or eng:IsUnitState("Repairing") or eng:IsUnitState("WaitingForTransport") or
                   eng:IsUnitState("Reclaiming") or eng:IsUnitState("Capturing") or eng:IsUnitState("Moving") or eng:IsUnitState("Upgrading") or eng.ProcessBuild != nil 
 				  or eng.UnitBeingBuiltBehavior) do
                   
             WaitSeconds(3)
+			local engPos = eng:GetPosition()
+			if not eng:IsDead() and engLastPos and eng:IsUnitState("Building") and not eng:IsUnitState("Capturing") and not eng:IsUnitState("Reclaiming")
+			and not eng:IsUnitState("Repairing") and eng:GetWorkProgress() == 0 and VDist2Sq(engLastPos[1], engLastPos[3], engPos[1], engPos[3]) < 1 then
+				if stuckCount > 10 then
+					#if eng.CDRHome then
+					#	LOG('*AI DEBUG: ACU was stuck. Resetting')
+					#else
+					#	LOG('*AI DEBUG: Engineer was stuck. Resetting.')
+					#end
+					#DrawCircle( engPos, 1, 'ff00ffff' )
+					#DrawCircle( engPos, 3, 'ff00ffff' )
+					#DrawCircle( engPos, 5, 'ff00ffff' )
+					stuckCount = 0
+					eng.NotBuildingThread = nil
+					eng.ProcessBuild = eng:ForkThread(eng.PlatoonHandle.ProcessBuildCommandSorian, true)
+					return
+				else
+					stuckCount = stuckCount + 1
+				end
+			else
+				stuckCount = 0
+			end
+			engLastPos = engPos
             #if eng.CDRHome then eng:PrintCommandQueue() end
         end
         eng.NotBuildingThread = nil
