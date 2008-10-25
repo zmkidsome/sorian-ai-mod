@@ -178,7 +178,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Engineer Disband - Filler 3 Econ',
         PlatoonTemplate = 'T3BuildEngineer',
-        Priority = 950,
+        Priority = 0, #950,
         BuilderConditions = {
             { EBC, 'GreaterThanEconStorageRatio', { 0.85, 0.85 } },
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 1.0, 1.2 } },
@@ -1767,7 +1767,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'LocationFactoriesBuildingGreater', { 'LocationType', 0, 'MOBILE' }},
             { IBC, 'BrainNotLowPowerMode', {} },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 1.0, 1.1} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1} },
         },
         BuilderType = 'Any',
         BuilderData = {
