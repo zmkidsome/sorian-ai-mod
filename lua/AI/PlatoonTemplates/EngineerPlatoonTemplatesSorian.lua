@@ -19,9 +19,17 @@ PlatoonTemplate {
 
 PlatoonTemplate {
     Name = 'SCUEnhance',
-    Plan = 'EnhanceAI',
+    Plan = 'EnhanceAISorian',
     GlobalSquads = {
         { categories.SUBCOMMANDER, 1, 1, 'support', 'None' }
+    },        
+}
+
+PlatoonTemplate {
+    Name = 'CommanderEnhanceSorian',
+    Plan = 'EnhanceAISorian',
+    GlobalSquads = {
+        { categories.COMMAND, 1, 1, 'support', 'None' }
     },        
 }
 

@@ -22,8 +22,21 @@ local Builder = import('/lua/sim/Builder.lua').Builder
 StrategyBuilder = Class(Builder) {
     Create = function(self,brain,data,locationType)
         Builder.Create(self,brain,data,locationType)
+		self:SetStrategyActive(false)
         return true
     end,
+	
+	SetStrategyActive = function(self, bool)
+		if bool then
+			self.Active = true
+		else
+			self.Active = false
+		end
+	end,
+	
+	IsStrategyActive = function(self)
+		return self.Active
+	end,
 	
 	GetActivateBuilders = function(self)
 		if Builders[self.BuilderName].AddBuilders then
@@ -59,6 +72,28 @@ StrategyBuilder = Class(Builder) {
 		end
 		return false
 	end,
+	
+    CalculatePriority = function(self, builderManager)
+        self.PriorityAltered = false
+        # Builders can have a function to update the priority
+        if Builders[self.BuilderName].PriorityFunction then #self.PriorityFunction then
+            local newPri = Builders[self.BuilderName]:PriorityFunction(self.Brain) #self:PriorityFunction(self.Brain)
+			if newPri > 100 then 
+				newPri = 100
+			elseif newPri < 0 then
+				newPri = 0
+			end			
+            if newPri != self.Priority then
+                self.Priority = newPri
+				self.SetByStrat = true
+                self.PriorityAltered = true
+            end
+        end
+        
+        # Returns true if a priority change happened
+        local returnVal = self.PriorityAltered
+        return returnVal
+    end,
 }
 
 function CreateStrategy(brain, data, locationType)

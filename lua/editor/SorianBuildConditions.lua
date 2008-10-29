@@ -186,7 +186,7 @@ end
 ##############################################################################################################
 function MapGreaterThan(aiBrain, sizeX, sizeZ)	
 	local mapSizeX, mapSizeZ = GetMapSize()
-	if mapSizeX > sizeX and mapSizeZ > sizeZ then
+	if mapSizeX > sizeX or mapSizeZ > sizeZ then
 		#LOG('*AI DEBUG: MapGreaterThan returned True SizeX: ' .. sizeX .. ' sizeZ: ' .. sizeZ)
 		return true
 	end

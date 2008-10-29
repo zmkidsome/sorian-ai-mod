@@ -33,11 +33,32 @@ BuilderGroup {
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
+		PriorityFunction = function(self, aiBrain)
+			local enemy, enemyIndex
+			local returnval = 0
+			if aiBrain:GetCurrentEnemy() then
+				enemy = aiBrain:GetCurrentEnemy()
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			if not aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * categories.TECH3) > 1 then
+				return returnval
+			end
+	
+			local StartX, StartZ = enemy:GetArmyStartPos()
+    
+			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiAir', enemyIndex )
+			local numEUnits = aiBrain:GetNumUnitsAroundPoint( categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, Vector(0,0,0), 100000, 'Enemy' )
+			
+			returnval = (enemyThreat * 1.5) - numEUnits
+			return returnval
+		end,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ SBC, 'GreaterThanThreatAtEnemyBase', { 'AntiAir', 55 }},
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' }},
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 5, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, 'Enemy'}},
+			#{ SBC, 'GreaterThanThreatAtEnemyBase', { 'AntiAir', 55 }},
+			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' }},
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 5, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, 'Enemy'}},
         },
         BuilderType = 'Any',		
         RemoveBuilders = {
@@ -96,13 +117,40 @@ BuilderGroup {
         InstanceCount = 1,
 		StrategyTime = 300,
 		InterruptStrategy = true,
+		PriorityFunction = function(self, aiBrain)
+			local enemyIndex
+			local returnval = 0
+			if aiBrain:GetCurrentEnemy() then
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			
+			local myFacs = aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR)
+			
+			if aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * (categories.TECH3 + categories.TECH2)) > 0 or myFacs < 1 then
+				return returnval
+			end
+
+			local eUnits = aiBrain:GetUnitsAroundPoint( categories.AIR * categories.FACTORY, Vector(0,0,0), 100000, 'Enemy' )
+			local count = 0
+			
+			for k,v in eUnits do
+				if v:GetAIBrain():GetArmyIndex() == enemyIndex then
+					count = count + 1
+				end
+			end
+			
+			returnval = 70 + (myFacs * 5) - (count * 2)
+			return returnval
+		end,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ MIBC, 'FactionIndex', {3}},
 			{ SBC, 'MapLessThan', { 1000, 1000 }},
-			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY AIR' }},
-			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
-			{ SBC, 'TargetHasLessThanUnitsWithCategory', { 3, categories.AIR * categories.FACTORY }},
+			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY AIR' }},
+			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
+			#{ SBC, 'TargetHasLessThanUnitsWithCategory', { 3, categories.AIR * categories.FACTORY }},
 			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 3, categories.AIR * categories.FACTORY, 'Enemy'}},
         },
         BuilderType = 'Any',		
@@ -161,13 +209,32 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian Small Map Rush Strategy',
 		StrategyType = 'Overall',
-        Priority = 105,
+        Priority = 100,
         InstanceCount = 1,
+		PriorityFunction = function(self, aiBrain)
+			local returnval = 0
+			local enemies = 0
+			local allies = 0
+			for k,v in ArmyBrains do
+				if not v:IsDefeated() and not ArmyIsCivilian(v:GetArmyIndex()) and IsEnemy(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+					enemies = enemies + 1
+				elseif not v:IsDefeated() and not ArmyIsCivilian(v:GetArmyIndex()) and IsAlly(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+					allies = allies + 1
+				end
+			end
+			
+			local ratio = allies - enemies
+			
+			local gtime = GetGameTimeSeconds()
+			
+			returnval = 70 + (ratio * 5) - (gtime * .008)
+			return returnval
+		end,
         BuilderConditions = {
 			{ SBC, 'IsWaterMap', { false } },
 			{ SBC, 'ClosestEnemyLessThan', { 750 } },
-			{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1 } },
-			{ MIBC, 'LessThanGameTime', { 1200 } },
+			#{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1 } },
+			#{ MIBC, 'LessThanGameTime', { 1200 } },
         },
         BuilderType = 'Any',		
         RemoveBuilders = {
@@ -196,15 +263,24 @@ BuilderGroup {
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
+		PriorityFunction = function(self, aiBrain)
+			local returnval = 0
+			local arties = aiBrain:GetCurrentUnits(categories.ARTILLERY * categories.STRUCTURE * categories.TECH3)
+			
+			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE * categories.TECH3, Vector(0,0,0), 100000, 'Enemy' )
+			
+			returnval = 70 + (arties * 5) - (eUnits * 5)
+			return returnval
+		end,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'ENGINEER TECH3' }},
-			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
+			#{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 6, categories.SHIELD * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 6, categories.SHIELD * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
 			{ SIBC, 'GreaterThanEconIncome',  { 100, 3000}},
-			{ SBC, 'MapGreaterThan', { 500, 500 }},
+			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
 			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', true } },
         },
         BuilderType = 'Any',		
@@ -227,15 +303,24 @@ BuilderGroup {
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
+		PriorityFunction = function(self, aiBrain)
+			local returnval = 0
+			local arties = aiBrain:GetCurrentUnits(categories.ARTILLERY * categories.STRUCTURE * categories.TECH3)
+			
+			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE * categories.TECH3, Vector(0,0,0), 100000, 'Enemy' )
+			
+			returnval = 70 + (arties * 5) - (eUnits * 5)
+			return returnval
+		end,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'ENGINEER TECH3' }},
-			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
+			#{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 6, categories.SHIELD * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 6, categories.SHIELD * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
 			{ SIBC, 'GreaterThanEconIncome',  { 100, 3000}},
-			{ SBC, 'MapGreaterThan', { 500, 500 }},
+			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
 			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
         },
         BuilderType = 'Any',		
@@ -264,12 +349,21 @@ BuilderGroup {
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
+		PriorityFunction = function(self, aiBrain)
+			local returnval = 0
+			local nukes = aiBrain:GetCurrentUnits(categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3)
+			
+			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, Vector(0,0,0), 100000, 'Enemy' )
+			
+			returnval = 70 + (nukes * 5) - (eUnits * 10)
+			return returnval
+		end,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'ENGINEER TECH3' }},
-			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'NUKE SILO STRUCTURE TECH3' }},
+			#{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'NUKE SILO STRUCTURE TECH3' }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 1, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 1, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, 'Enemy'}},
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
 			{ SIBC, 'GreaterThanEconIncome',  { 100, 3000}},
 			{ SBC, 'MapGreaterThan', { 500, 500 }},
@@ -295,11 +389,33 @@ BuilderGroup {
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
+		PriorityFunction = function(self, aiBrain)
+			local enemyIndex
+			local returnval = 0
+			if aiBrain:GetCurrentEnemy() then
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			
+			local eUnits = aiBrain:GetUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH2 * categories.STRUCTURE, Vector(0,0,0), 100000, 'Enemy' )
+			
+			local count = 0
+			
+			for k,v in eUnits do
+				if v:GetAIBrain():GetArmyIndex() == enemyIndex then
+					count = count + 1
+				end
+			end
+			
+			returnval = 100 - (count * 6)
+			return returnval
+		end,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'ENGINEER TECH2' }},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
-			{ SBC, 'TargetHasLessThanUnitsWithCategory', { 6, categories.ANTIMISSILE * categories.TECH2 * categories.STRUCTURE }},
+			#{ SBC, 'TargetHasLessThanUnitsWithCategory', { 6, categories.ANTIMISSILE * categories.TECH2 * categories.STRUCTURE }},
 			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 10, categories.ANTIMISSILE * categories.TECH2 * categories.STRUCTURE, 'Enemy'}},
 			{ MABC, 'CanBuildFirebase', { 'LocationType', 256, 'Expansion Area', -1000, 5, 1, 'AntiSurface', 1, 'STRATEGIC', 20} },
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
@@ -324,12 +440,34 @@ BuilderGroup {
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
+		PriorityFunction = function(self, aiBrain)
+			local enemy, enemyIndex
+			local returnval = 0
+			if aiBrain:GetCurrentEnemy() then
+				enemy = aiBrain:GetCurrentEnemy()
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			if aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * categories.TECH3) > 0 then
+				return returnval
+			end
+	
+			local StartX, StartZ = enemy:GetArmyStartPos()
+    
+			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiAir', enemyIndex )
+			local numEUnits = aiBrain:GetNumUnitsAroundPoint( categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, Vector(0,0,0), 100000, 'Enemy' )
+			
+			returnval = 85 - enemyThreat - numEUnits
+			return returnval
+		end,
         BuilderConditions = {
-            { SBC, 'LessThanThreatAtEnemyBase', { 'AntiAir', 7 }},
+            #{ SBC, 'LessThanThreatAtEnemyBase', { 'AntiAir', 7 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' }},
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 5, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, 'Enemy'}},
+			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' }},
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 5, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, 'Enemy'}},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, 'FACTORY AIR TECH1' }},
         },
         BuilderType = 'Any',		
         RemoveBuilders = {
@@ -383,11 +521,32 @@ BuilderGroup {
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
+		PriorityFunction = function(self, aiBrain)
+			local enemy, enemyIndex
+			local returnval = 0
+			if aiBrain:GetCurrentEnemy() then
+				enemy = aiBrain:GetCurrentEnemy()
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			if aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * categories.TECH3) > 0 then
+				return returnval
+			end
+	
+			local StartX, StartZ = enemy:GetArmyStartPos()
+    
+			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiAir', enemyIndex )
+			local numEUnits = aiBrain:GetNumUnitsAroundPoint( categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, Vector(0,0,0), 100000, 'Enemy' )
+			
+			returnval = 85 - (enemyThreat * 0.5) - numEUnits
+			return returnval
+		end,
         BuilderConditions = {
-            { SBC, 'LessThanThreatAtEnemyBase', { 'AntiAir', 19 }},
+            #{ SBC, 'LessThanThreatAtEnemyBase', { 'AntiAir', 19 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' }},
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 5, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, 'Enemy'}},
+			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH3' }},
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 5, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, 'Enemy'}},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY AIR TECH3' }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, 'FACTORY AIR TECH2' }},
         },
@@ -443,10 +602,31 @@ BuilderGroup {
         Priority = 100,
         InstanceCount = 1,
 		StrategyTime = 300,
+		PriorityFunction = function(self, aiBrain)
+			local enemy, enemyIndex
+			local returnval = 0
+			if aiBrain:GetCurrentEnemy() then
+				enemy = aiBrain:GetCurrentEnemy()
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			if aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * categories.TECH3) < 1 then
+				return returnval
+			end
+	
+			local StartX, StartZ = enemy:GetArmyStartPos()
+    
+			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiAir', enemyIndex )
+			local numEUnits = aiBrain:GetNumUnitsAroundPoint( categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, Vector(0,0,0), 100000, 'Enemy' )
+			
+			returnval = 85 - (enemyThreat * 0.15) - numEUnits
+			return returnval
+		end,
         BuilderConditions = {
-            { SBC, 'LessThanThreatAtEnemyBase', { 'AntiAir', 55 }},
+            #{ SBC, 'LessThanThreatAtEnemyBase', { 'AntiAir', 55 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 5, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, 'Enemy'}},
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 5, categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, 'Enemy'}},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, 'FACTORY AIR TECH3' }},
         },
         BuilderType = 'Any',		
@@ -563,7 +743,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian Paragon Strategy Expansion',
 		StrategyType = 'Overall',
-        Priority = 110,
+        Priority = 100,
         InstanceCount = 1,
         BuilderConditions = {
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION EXPERIMENTAL STRUCTURE' }},
