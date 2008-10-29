@@ -29,6 +29,15 @@ function ExpansionPointNeedsStructure( aiBrain, locationType, locationRadius, ca
     return false    
 end
 
+function AIThreatExists( aiBrain, threatThreshold )
+    for k,v in aiBrain.BaseMonitor.AlertsTable do
+		if v.Threat >= threatThreshold then
+			return true
+		end
+	end
+    return false    
+end
+
 ##############################################################################################################
 # function: HaveGreaterThanUnitsWithCategory = BuildCondition	doc = "Please work function docs."
 #

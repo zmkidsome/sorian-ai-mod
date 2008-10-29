@@ -88,38 +88,16 @@ StrategyManager = Class(BuilderManager) {
     ManagerLoopBody = function(self,builder,bType)
         BuilderManager.ManagerLoopBody(self,builder,bType)
 		
-		if builder:GetStrategyType() == 'Intermediate' then
-			if (GetGameTimeSeconds() - self.LastChange > self.NextChange or builder:IsInterruptStrategy()) and builder:GetPriority() > 0 and builder:GetBuilderStatus() and builder != self.LastStrategy then
-				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Intermediate Strategy to '..builder.BuilderName)
-				self.LastChange = GetGameTimeSeconds()
-				self.NextChange = builder:GetStrategyTime() or 300
-				if self.LastStrategy then
-					self:UndoChanges(self.LastStrategy)
-				end
-				self.LastStrategy = builder
-				self:ExecuteChanges(builder)
-			elseif GetGameTimeSeconds() - self.LastChange > self.NextChange and self.LastStrategy and builder == self.LastStrategy and not builder:GetBuilderStatus() then
-				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Intermediate Strategy to none.')
-				self:UndoChanges(self.LastStrategy)
-				self.LastStrategy = false
-			end
-		elseif builder:GetStrategyType() == 'Overall' then
-			if builder:GetPriority() > 0 and builder:GetPriority() >= self.OverallPriority and builder:GetBuilderStatus() and builder != self.OverallStrategy then
-				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Overall Strategy to '..builder.BuilderName)
-				if self.OverallStrategy then
-					self:UndoChanges(self.OverallStrategy)
-				end
-				self.OverallStrategy = builder
-				self.OverallPriority = builder:GetPriority()
-				self:ExecuteChanges(builder)
-			elseif self.OverallStrategy and builder == self.OverallStrategy and not builder:GetBuilderStatus() then
-				#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Changing Overall Strategy to none.')
-				self:UndoChanges(self.OverallStrategy)
-				self.OverallStrategy = false
-				self.OverallPriority = 0
-			end
+		if builder:GetPriority() >= 70 and builder:GetBuilderStatus() and not builder:IsStrategyActive() then
+			#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Activating Strategy: '..builder.BuilderName..' Priority: '..builder:GetPriority())
+			builder:SetStrategyActive(true)
+			self:ExecuteChanges(builder)
+		elseif builder:GetPriority() < 70 or not builder:GetBuilderStatus() and builder:IsStrategyActive() then
+			#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Deactivating Strategy: '..builder.BuilderName..' Priority: '..builder:GetPriority())
+			builder:SetStrategyActive(false)
+			self:UndoChanges(builder)
 		end
-    end,
+	end,
 }
 
 function CreateStrategyManager(brain, lType, location, radius, useCenterPoint)

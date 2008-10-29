@@ -17,6 +17,14 @@ PlatoonTemplate {
 }
 
 PlatoonTemplate {
+    Name = 'ThreatAirAttack',
+    Plan = 'ThreatStrikeSorian',
+    GlobalSquads = {
+        { categories.MOBILE * categories.AIR * (categories.BOMBER + categories.GROUNDATTACK) - categories.EXPERIMENTAL - categories.ANTINAVY, 1, 100, 'Attack', 'GrowthFormation' },
+    }
+}
+
+PlatoonTemplate {
     Name = 'BomberAttackSorianBig',
     Plan = 'StrikeForceAISorian',
     GlobalSquads = {
