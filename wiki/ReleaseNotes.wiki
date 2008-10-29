@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.7.0:* New threat response platoons, Strategy Manager revamped, Map size check will look at both height and width, Other misc changes.
+
 *1.6.9b:* AI should spread T3 engineer building out a bit, T4s should have less abrupt behavior, AI should stop building T1 land sooner, Misc econ changes.
 
 *1.6.9:* More late game build power, More T4s and less Arty on smaller maps, Lower requirements for the cheaper ACU upgrades, Engineers that get stuck trying to build something somewhere they can't should reset themselves.
