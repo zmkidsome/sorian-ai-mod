@@ -36,11 +36,11 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
-			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY AIR TECH3' }},
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
+			#{ SBC, 'NoRushTimeCheck', { 600 }},
+			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY AIR TECH3' }},
+			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
         },
     },
 }
@@ -56,11 +56,11 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
-			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY AIR TECH3' }},
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
+			#{ SBC, 'NoRushTimeCheck', { 600 }},
+			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY AIR TECH3' }},
+			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
         },
     },
 }
@@ -76,9 +76,9 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
-			{ SBC, 'NoRushTimeCheck', { 600 }},
+			#{ SBC, 'NoRushTimeCheck', { 600 }},
         },
     },
 }
@@ -94,9 +94,9 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
-			{ SBC, 'NoRushTimeCheck', { 600 }},
+			#{ SBC, 'NoRushTimeCheck', { 600 }},
         },
     },
 }
@@ -112,11 +112,11 @@ BuilderGroup {
         BuilderType = 'Air',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
+			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
-			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY AIR TECH3' }},
-			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
+			#{ SBC, 'NoRushTimeCheck', { 600 }},
+			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY AIR TECH3' }},
+			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
         },
     },
 }
@@ -266,7 +266,8 @@ BuilderGroup {
         ActivePriority = 980,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE, 'LocationType', }},
+			#{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ARTILLERY STRUCTURE TECH3' }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -284,7 +285,7 @@ BuilderGroup {
         BuilderName = 'Sorian T3 Engineer Assist Build Arty - High Prio',
         PlatoonTemplate = 'T3EngineerAssistSorian',
         Priority = 0.1,
-        ActivePriority = 980,
+        ActivePriority = 981,
         InstanceCount = 3,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -711,7 +712,8 @@ BuilderGroup {
         ActivePriority = 980,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'NUKE SILO STRUCTURE TECH3' }},
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.NUKE * categories.STRUCTURE}},
+			#{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'NUKE SILO STRUCTURE TECH3' }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -729,7 +731,7 @@ BuilderGroup {
         BuilderName = 'Sorian T3 Engineer Assist Build Nuke - High Prio',
         PlatoonTemplate = 'T3EngineerAssistSorian',
         Priority = 0.1,
-        ActivePriority = 980,
+        ActivePriority = 981,
         InstanceCount = 3,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -750,7 +752,7 @@ BuilderGroup {
         BuilderName = 'Sorian T3 Engineer Assist Build Nuke Missile - High Prio',
         PlatoonTemplate = 'T3EngineerAssistSorian',
         Priority = 0.1,
-        ActivePriority = 980,
+        ActivePriority = 981,
         InstanceCount = 3,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },

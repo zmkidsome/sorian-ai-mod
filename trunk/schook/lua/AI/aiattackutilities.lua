@@ -516,7 +516,7 @@ function GetLandPlatoonMaxRangeSorian(aiBrain, platoon)
     return maxRange, selectedWeaponArc, turretPitch
 end
 
-function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, optThreatWeight, optMaxMarkerDist)   
+function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, optThreatWeight, optMaxMarkerDist, testPathDist)   
         
     local location = start
     optMaxMarkerDist = optMaxMarkerDist or 250
@@ -532,9 +532,11 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	end
 	
 	#If we are within 100 units of the destination, don't bother pathing.
-	if VDist2Sq( start[1], start[3], destination[1], destination[3] ) <= 10000 and testPath then
-		table.insert(finalPath, destination)    
-		return finalPath
+	if (VDist2Sq( start[1], start[3], destination[1], destination[3] ) <= 10000 or
+		(testPathDist and VDist2Sq( start[1], start[3], destination[1], destination[3] ) <= testPathDist)) and
+		testPath then
+			table.insert(finalPath, destination)
+			return finalPath
 	end
 	
     --Get the closest path node at the platoon's position

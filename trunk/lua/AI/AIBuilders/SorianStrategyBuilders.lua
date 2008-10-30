@@ -141,7 +141,7 @@ BuilderGroup {
 				end
 			end
 			
-			returnval = 70 + (myFacs * 5) - (count * 2)
+			returnval = 69 + (myFacs * 5) - (count * 2)
 			return returnval
 		end,
         BuilderConditions = {
@@ -269,6 +269,10 @@ BuilderGroup {
 			
 			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE * categories.TECH3, Vector(0,0,0), 100000, 'Enemy' )
 			
+			if arties - eUnits >= 3 then
+				return returnval
+			end
+			
 			returnval = 70 + (arties * 5) - (eUnits * 5)
 			return returnval
 		end,
@@ -308,6 +312,10 @@ BuilderGroup {
 			local arties = aiBrain:GetCurrentUnits(categories.ARTILLERY * categories.STRUCTURE * categories.TECH3)
 			
 			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE * categories.TECH3, Vector(0,0,0), 100000, 'Enemy' )
+			
+			if arties - eUnits >= 3 then
+				return returnval
+			end
 			
 			returnval = 70 + (arties * 5) - (eUnits * 5)
 			return returnval
@@ -354,6 +362,10 @@ BuilderGroup {
 			local nukes = aiBrain:GetCurrentUnits(categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3)
 			
 			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, Vector(0,0,0), 100000, 'Enemy' )
+			
+			if nukes - eUnits >= 3 then
+				return returnval
+			end
 			
 			returnval = 70 + (nukes * 5) - (eUnits * 10)
 			return returnval
