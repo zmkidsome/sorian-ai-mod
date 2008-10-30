@@ -14,7 +14,7 @@ function NukeCheck(aiBrain)
 	while true do
 		lastNukes = numNukes
 		repeat
-			WaitSeconds(60)
+			WaitSeconds(30)
 			waitcount = 0
 			nukeCount = 0
 			numNukes = aiBrain:GetCurrentUnits( categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3 )
@@ -542,6 +542,11 @@ function CDRHideBehavior(aiBrain, cdr)
 			local baseLocation = AIUtils.AIFindDefensiveAreaSorian( aiBrain, cdr, category, 100, runShield )
 			IssueClearCommands( {cdr} )
 			IssueMove( {cdr}, baseLocation )
+		else
+			local x,z = aiBrain:GetArmyStartPos()
+			local position = AIUtils.RandomLocation(x,z)
+			IssueClearCommands( {cdr} )
+			IssueMove( {cdr}, position )
 		end
 	end
 end
@@ -1055,10 +1060,10 @@ GetHighestThreatClusterLocationSorian = function(aiBrain, experimental)
 
 end
 
-ExpPathToLocation = function(aiBrain, platoon, layer, dest, aggro)
+ExpPathToLocation = function(aiBrain, platoon, layer, dest, aggro, pathDist)
 	local cmd = false
 	local platoonUnits = platoon:GetPlatoonUnits()
-	local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, layer, platoon:GetPlatoonPosition(), dest )
+	local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, layer, platoon:GetPlatoonPosition(), dest, nil, nil, pathDist )
 	if not path then
 		if aggro == 'AttackMove' then
 			cmd = platoon:AggressiveMoveToLocation(dest)
@@ -1105,7 +1110,7 @@ CzarBehaviorSorian = function(self)
 			if targetUnit and VDist3( targetUnit:GetPosition(), self:GetPlatoonPosition() ) > 100 then #VDist3( targetUnit:GetPosition(), experimental:GetPosition() ) > 100 then
 			    IssueClearCommands(platoonUnits)
 				WaitTicks(5)
-				cmd = ExpPathToLocation(aiBrain, self, 'Air', targetUnit:GetPosition(), false)
+				cmd = ExpPathToLocation(aiBrain, self, 'Air', targetUnit:GetPosition(), false, 62500)
 			else 
 			    IssueClearCommands(platoonUnits)
 				WaitTicks(5)
@@ -1153,7 +1158,7 @@ AhwassaBehaviorSorian = function(self)
 
         if (targetLocation and targetLocation != oldTargetLocation) then
             IssueClearCommands(platoonUnits)
-			cmd = ExpPathToLocation(aiBrain, self, 'Air', targetLocation, 'AttackDest')
+			cmd = ExpPathToLocation(aiBrain, self, 'Air', targetLocation, 'AttackDest', 62500)
             IssueAttack(platoonUnits, targetLocation)
             WaitSeconds(25)
         end
@@ -1183,7 +1188,7 @@ TickBehaviorSorian = function(self)
 
         if (targetLocation and targetLocation != oldTargetLocation) or not self:IsCommandsActive(cmd) then
             IssueClearCommands(platoonUnits)
-			cmd = ExpPathToLocation(aiBrain, self, 'Air', targetLocation, false)
+			cmd = ExpPathToLocation(aiBrain, self, 'Air', targetLocation, false, 62500)
             WaitSeconds(25)
         end
        
