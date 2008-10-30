@@ -29,8 +29,14 @@ StrategyBuilder = Class(Builder) {
 	SetStrategyActive = function(self, bool)
 		if bool then
 			self.Active = true
+			if Builders[self.BuilderName].OnStrategyActivate then
+				Builders[self.BuilderName]:OnStrategyActivate(self.Brain)
+			end
 		else
 			self.Active = false
+			if Builders[self.BuilderName].OnStrategyDeactivate then
+				Builders[self.BuilderName]:OnStrategyDeactivate(self.Brain)
+			end
 		end
 	end,
 	
@@ -76,8 +82,8 @@ StrategyBuilder = Class(Builder) {
     CalculatePriority = function(self, builderManager)
         self.PriorityAltered = false
         # Builders can have a function to update the priority
-        if Builders[self.BuilderName].PriorityFunction then #self.PriorityFunction then
-            local newPri = Builders[self.BuilderName]:PriorityFunction(self.Brain) #self:PriorityFunction(self.Brain)
+        if Builders[self.BuilderName].PriorityFunction then
+            local newPri = Builders[self.BuilderName]:PriorityFunction(self.Brain)
 			if newPri > 100 then 
 				newPri = 100
 			elseif newPri < 0 then
