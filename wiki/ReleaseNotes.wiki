@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.7.1b:* Added support for Strategy Activation and Deactivation functions, Added the unit grouping code back in.
+
 *1.7.1:* Revamped Strategy Platoons, More misc changes.
 
 *1.7.0:* New threat response platoons, Strategy Manager revamped, Map size check will look at both height and width, Other misc changes.
