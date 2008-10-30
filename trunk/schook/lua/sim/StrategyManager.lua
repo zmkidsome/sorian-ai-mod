@@ -66,6 +66,7 @@ StrategyManager = Class(BuilderManager) {
 				Managers[mname]:SetBuilderPriority(bname, newPriority)
 			end
 		end
+		builder:SetStrategyActive(true)
 	end,
 	
 	UndoChanges = function(self, builder)
@@ -83,6 +84,7 @@ StrategyManager = Class(BuilderManager) {
 				Managers[mname]:ResetBuilderPriority(bname)
 			end
 		end
+		builder:SetStrategyActive(false)
 	end,
     
     ManagerLoopBody = function(self,builder,bType)
@@ -90,11 +92,9 @@ StrategyManager = Class(BuilderManager) {
 		
 		if builder:GetPriority() >= 70 and builder:GetBuilderStatus() and not builder:IsStrategyActive() then
 			#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Activating Strategy: '..builder.BuilderName..' Priority: '..builder:GetPriority())
-			builder:SetStrategyActive(true)
 			self:ExecuteChanges(builder)
 		elseif builder:GetPriority() < 70 or not builder:GetBuilderStatus() and builder:IsStrategyActive() then
 			#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Deactivating Strategy: '..builder.BuilderName..' Priority: '..builder:GetPriority())
-			builder:SetStrategyActive(false)
 			self:UndoChanges(builder)
 		end
 	end,

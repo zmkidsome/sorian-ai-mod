@@ -34,11 +34,11 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
 	if not engineerManager then
         return false
     end
-	#if aiBrain:GetCurrentEnemy() then
-	#	local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
-	#	#targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiSurface' )
-	#	targetNumber = SUtils.GetThreatAtPosition( aiBrain, {estartX, 0, estartZ}, 1, 'AntiSurface', {'Land', 'Commander'} )
-	#end
+	if aiBrain:GetCurrentEnemy() then
+		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+		#targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiSurface' )
+		targetNumber = SUtils.GetThreatAtPosition( aiBrain, {estartX, 0, estartZ}, 1, 'AntiSurface', {'Land', 'Commander'} )
+	end
 
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
@@ -47,7 +47,7 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
 	local airThreat = 0 #pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER, position, radius )
     if (surThreat + airThreat) > targetNumber then
         return true
-	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 9, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > 980 then #39 Units x 20
+	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 9, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > 780 then #39 Units x 20
 		return true
 	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 9, categories.MOBILE * categories.LAND * categories.TECH2 - categories.ENGINEER)
 	and UC.PoolLessAtLocation(aiBrain, locationType, 10, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > 203 then #29 Units x 7

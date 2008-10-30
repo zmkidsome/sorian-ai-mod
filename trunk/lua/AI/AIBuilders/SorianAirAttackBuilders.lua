@@ -32,10 +32,10 @@ function AirAttackCondition(aiBrain, locationType, targetNumber )
 	if not engineerManager then
         return false
     end
-	#if aiBrain:GetCurrentEnemy() then
-	#	local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
-	#	targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiAir' )
-	#end
+	if aiBrain:GetCurrentEnemy() then
+		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+		targetNumber = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'AntiAir' )
+	end
 	
     local position = engineerManager:GetLocationCoords()
     local radius = engineerManager:GetLocationRadius()
