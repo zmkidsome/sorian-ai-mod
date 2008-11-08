@@ -47,7 +47,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Engineer Disband - Filler 1',
         PlatoonTemplate = 'T1BuildEngineer',
-        Priority = 800, #825,
+        Priority = 825, #800,
         BuilderConditions = {
             { UCBC, 'EngineerLessAtLocation', { 'LocationType', 8, 'ENGINEER TECH1' }},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH3' }},
@@ -407,7 +407,7 @@ BuilderGroup {
         PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
 			Delay = 165,
-			Mult = 2,
+			Mult = 3,
             Construction = {
                 BuildStructures = {
                     'T1LandFactory',
@@ -436,7 +436,7 @@ BuilderGroup {
         PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
 			Delay = 165,
-			Mult = 2,
+			Mult = 3,
             Construction = {
                 BuildStructures = {
                     'T1LandFactory',
@@ -450,6 +450,23 @@ BuilderGroup {
                 }
             }
         }
+    },
+}
+
+BuilderGroup {
+	BuilderGroupName = 'SorianACUAttack',
+	BuildersType = 'EngineerBuilder',
+    Builder {    	
+        BuilderName = 'Sorian CDR Attack',
+        PlatoonTemplate = 'CommanderAttackSorian',
+        Priority = 875,
+        BuilderConditions = {            
+            { SBC, 'GreaterThanGameTime', { 165 }},
+			{ SBC, 'LessThanGameTime', { 900 }},
+			{ SBC, 'ClosestEnemyLessThan', { 750 } },
+			{ SIBC, 'CDRHealthGreaterThan', { .85, .35 }},
+        },
+        BuilderType = 'Any',
     },
 }
 
@@ -2660,7 +2677,7 @@ BuilderGroup {
         Priority = 1500,
         BuilderConditions = {
 			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH2'}},
-			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.1 }},
+			#{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.1 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -2678,7 +2695,7 @@ BuilderGroup {
         BuilderType = 'Any',
         BuilderConditions = {
 			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},
-			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.1 }},
+			#{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.1 }},
         },
         BuilderData = {
             Construction = {

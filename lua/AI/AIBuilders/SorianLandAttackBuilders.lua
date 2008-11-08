@@ -69,7 +69,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY LAND TECH2, FACTORY LAND TECH3' }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH1 } },
-            { MIBC, 'LessThanGameTime', { 300 } },
+            { SBC, 'LessThanGameTime', { 300 } },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
             #{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'MOBILE LAND DIRECTFIRE' } },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.05 }},
@@ -91,7 +91,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'FactoryLessAtLocation', { 'LocationType', 4, 'FACTORY LAND TECH2, FACTORY LAND TECH3' }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH1 } },
-            { MIBC, 'LessThanGameTime', { 300 } },
+            { SBC, 'LessThanGameTime', { 300 } },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
             #{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'MOBILE LAND DIRECTFIRE' } },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.05 }},
@@ -731,7 +731,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 34, categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER } },
 			{ UCBC, 'PoolLessAtLocation', { 'LocationType', 10, categories.MOBILE * categories.LAND - categories.ENGINEER - categories.TECH1 } },
-			{ MIBC, 'GreaterThanGameTime', { 720 } },
+			{ SBC, 'GreaterThanGameTime', { 720 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -758,7 +758,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 44, categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER } },
 			{ UCBC, 'PoolLessAtLocation', { 'LocationType', 10, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER } },
-			{ MIBC, 'GreaterThanGameTime', { 720 } },
+			{ SBC, 'GreaterThanGameTime', { 720 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -785,7 +785,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 54, categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER } },
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 9, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER } },
-			{ MIBC, 'GreaterThanGameTime', { 720 } },
+			{ SBC, 'GreaterThanGameTime', { 720 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderData = {
@@ -900,7 +900,7 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 950,
         BuilderConditions = {  
-                { MIBC, 'LessThanGameTime', { 600 } },
+                { SBC, 'LessThanGameTime', { 600 } },
 				{ LandAttackCondition, { 'LocationType', 10 } },
 				{ SBC, 'NoRushTimeCheck', { 0 }},
 				{ SBC, 'MapGreaterThan', { 500, 500 }},
@@ -935,7 +935,7 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 950,
         BuilderConditions = {  
-        		{ MIBC, 'GreaterThanGameTime', { 600 } },
+        		{ SBC, 'GreaterThanGameTime', { 600 } },
 				{ LandAttackCondition, { 'LocationType', 50 } },
 				{ SBC, 'NoRushTimeCheck', { 0 }},
 				{ SBC, 'MapGreaterThan', { 500, 500 }},
@@ -974,7 +974,7 @@ BuilderGroup {
         Priority = 960,
         BuilderConditions = { 
                 #{ UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },     
-        		{ MIBC, 'LessThanGameTime', { 720 } },  
+        		{ SBC, 'LessThanGameTime', { 720 } },  
 				{ SBC, 'NoRushTimeCheck', { 0 }},
 				{ SBC, 'MapGreaterThan', {500, 500}},
                 #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.MOBILE * categories.LAND - categories.ENGINEER } },
@@ -1008,7 +1008,7 @@ BuilderGroup {
         Priority = 1000,
         BuilderConditions = { 
                 #{ UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },     
-        		{ MIBC, 'LessThanGameTime', { 720 } },
+        		{ SBC, 'LessThanGameTime', { 720 } },
 				{ SBC, 'NoRushTimeCheck', { 0 }},
                 #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.MOBILE * categories.LAND - categories.ENGINEER } },
             },
@@ -1036,7 +1036,7 @@ BuilderGroup {
         Priority = 1000,
         BuilderConditions = { 
                 #{ UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 350, -1000, 0, 2, 'StructuresNotMex' } },     
-        		{ MIBC, 'GreaterThanGameTime', { 720 } },
+        		{ SBC, 'GreaterThanGameTime', { 720 } },
 				{ LandAttackCondition, { 'LocationType', 50 } },
 				{ SBC, 'MapLessThan', { 1000, 1000 }},
 				{ SBC, 'NoRushTimeCheck', { 0 }},
@@ -1100,7 +1100,7 @@ BuilderGroup {
         BuilderConditions = { 
             { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, 'AntiSurface', 'AntiSurface', 1}},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, 'FACTORY TECH2 LAND, FACTORY TECH3 LAND' }},
-			{ MIBC, 'GreaterThanGameTime', { 720 } },
+			{ SBC, 'GreaterThanGameTime', { 720 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
 			{ LandAttackCondition, { 'LocationType', 50 } },
         },
@@ -1144,7 +1144,7 @@ BuilderGroup {
         BuilderConditions = { 
             { SBC, 'PoolThreatGreaterThanEnemyBase', {'LocationType', categories.MOBILE * categories.LAND - categories.SCOUT - categories.ENGINEER, 'AntiSurface', 'AntiSurface', 1}},
 			{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 1, 'FACTORY TECH2 LAND, FACTORY TECH3 LAND' }},
-			{ MIBC, 'GreaterThanGameTime', { 720 } },
+			{ SBC, 'GreaterThanGameTime', { 720 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
 			{ LandAttackCondition, { 'LocationType', 10 } },
         },
@@ -1187,7 +1187,7 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 925,
         BuilderConditions = {        
-        		{ MIBC, 'LessThanGameTime', { 300 } },
+        		{ SBC, 'LessThanGameTime', { 300 } },
 				{ SBC, 'NoRushTimeCheck', { 0 }},
 				{ SBC, 'MapLessThan', {1000, 1000}},
 				{ SBC, 'MapGreaterThan', {500, 500}},
@@ -1219,7 +1219,7 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 925,
         BuilderConditions = {        
-        		{ MIBC, 'LessThanGameTime', { 300 } },
+        		{ SBC, 'LessThanGameTime', { 300 } },
 				{ SBC, 'NoRushTimeCheck', { 0 }},
 				{ SBC, 'MapGreaterThan', {1000, 1000}},
                 #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.MOBILE * categories.LAND - categories.ENGINEER } },

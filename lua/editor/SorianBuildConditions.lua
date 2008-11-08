@@ -41,6 +41,37 @@ function MarkerLessThan(aiBrain, locationType, markerTypes, distance)
 end
 
 ##############################################################################################################
+# function: GreaterThanGameTime = BuildCondition  doc = "Please work function docs."
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: int  num             = 1         doc = "docs for param1"
+#
+##############################################################################################################
+function GreaterThanGameTime(aiBrain, num)
+    local time = GetGameTimeSeconds()
+	local cheatmult = tonumber(ScenarioInfo.Options.CheatMult) or 2
+	local buildmult = tonumber(ScenarioInfo.Options.BuildMult) or 2
+	local cheatAdjustment = (cheatmult + buildmult) / 2
+    if aiBrain.CheatEnabled and ( num / cheatAdjustment ) < time then
+        return true
+    elseif num < time then
+        return true
+    end
+    return false
+end
+
+##############################################################################################################
+# function: LessThanGameTime = BuildCondition  doc = "Please work function docs."
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: int  num             = 1         doc = "docs for param1"
+#
+##############################################################################################################
+function LessThanGameTime(aiBrain, num)
+    return ( not GreaterThanGameTime( aiBrain, num ) )
+end
+
+##############################################################################################################
 # function: EnemiesLessThan = BuildCondition
 #
 # parameter 0: string   aiBrain         = "default_brain"

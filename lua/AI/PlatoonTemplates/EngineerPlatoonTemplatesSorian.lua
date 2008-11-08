@@ -58,6 +58,22 @@ PlatoonTemplate {
 }
 
 PlatoonTemplate {
+    Name = 'CommanderAttackSorian',
+    Plan = 'CDRHuntAISorian',
+    GlobalSquads = {
+        { categories.COMMAND, 1, 1, 'support', 'None' }
+    },        
+}
+
+PlatoonTemplate {
+    Name = 'AnyEngineerBuilderSorian',
+    Plan = 'EngineerBuildAISorian',
+    GlobalSquads = {
+        { (categories.ENGINEER - categories.ENGINEERSTATION) + categories.SUBCOMMANDER, 1, 1, 'support', 'None' }
+    },        
+}
+
+PlatoonTemplate {
     Name = 'EngineerBuilderSorian',
     Plan = 'EngineerBuildAISorian',
     GlobalSquads = {

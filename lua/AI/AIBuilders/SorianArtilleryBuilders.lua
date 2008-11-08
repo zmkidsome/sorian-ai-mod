@@ -89,6 +89,37 @@ BuilderGroup {
         }
     },
     Builder {
+        BuilderName = 'Sorian T3 Artillery Engineer - 10x10',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 949,
+        BuilderConditions = {
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.TECH3 * categories.ARTILLERY * categories.STRUCTURE, 'LocationType', }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.STRUCTURE * categories.TECH3 * categories.ARTILLERY}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.EXPERIMENTAL}},
+            { SIBC, 'GreaterThanEconIncome', {15, 750}},
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
+			{ SBC, 'MapLessThan', { 1000, 1000 }},
+            { SIBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
+            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T3Artillery', categories.STRUCTURE } },
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', true } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			MinNumAssistees = 2,
+            Construction = {
+                BuildClose = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
+                BuildStructures = {
+                    'T3Artillery',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
         BuilderName = 'Sorian Rapid T3 Artillery Engineer',
         PlatoonTemplate = 'AeonT3EngineerBuilderSorian',
         Priority = 950,
@@ -355,6 +386,36 @@ BuilderGroup {
             #{ SIBC, 'GreaterThanEconIncome', {15, 750}},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
 			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			MinNumAssistees = 2,
+            Construction = {
+                BuildClose = true,
+				AdjacencyCategory = 'SHIELD STRUCTURE',
+                BuildStructures = {
+                    'T3StrategicMissile',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Nuke Engineer - 10x10',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 950,
+		InstanceCount = 1,
+        BuilderConditions = {
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.STRUCTURE * categories.TECH3 * categories.ANTIMISSILE}},
+            { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, categories.NUKE * categories.STRUCTURE}},
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3 } },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.EXPERIMENTAL}},
+            #{ SIBC, 'GreaterThanEconIncome', {15, 750}},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
+			{ SBC, 'MapGreaterThan', { 500, 500 }},
+			{ SBC, 'MapLessThan', { 1000, 1000 }},
             { IBC, 'BrainNotLowPowerMode', {} },
         },
         BuilderType = 'Any',

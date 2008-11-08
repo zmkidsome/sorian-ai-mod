@@ -825,7 +825,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, 'TRANSPORTFOCUS' } },
             #{ MIBC, 'ArmyNeedsTransports', {} },
-			{ MIBC, 'LessThanGameTime', { 600 } },
+			{ SBC, 'LessThanGameTime', { 600 } },
 			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.SCOUT}},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
             #{ IBC, 'BrainNotLowPowerMode', {} },
@@ -940,7 +940,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, 'TRANSPORTFOCUS' } },
             #{ MIBC, 'ArmyNeedsTransports', {} },
-			{ MIBC, 'LessThanGameTime', { 600 } },
+			{ SBC, 'LessThanGameTime', { 600 } },
 			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.SCOUT}},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
             #{ IBC, 'BrainNotLowPowerMode', {} },
@@ -1895,7 +1895,7 @@ BuilderGroup {
         #PlatoonTemplate = 'EarlyGameMassHuntersCategory',
         Priority = 950,
         BuilderConditions = {  
-                #{ MIBC, 'LessThanGameTime', { 600 } },      	
+                #{ SBC, 'LessThanGameTime', { 600 } },      	
                 #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.MOBILE * categories.LAND - categories.ENGINEER } },
 				#{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 3, 'AIR MOBILE GROUNDATTACK' } },
 				{ AirAttackCondition, { 'LocationType', 6 } },
