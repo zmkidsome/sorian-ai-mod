@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.7.2:* Rush AI should use the ACU better, Added some platoons to help the AI rebuild factories if the ACU dies, Nukes and Arty are back on 10x10 maps, Game Time related build conditions now adjusted based on cheat factor.
+
 *1.7.1b:* Added support for Strategy Activation and Deactivation functions, Added the unit grouping code back in.
 
 *1.7.1:* Revamped Strategy Platoons, More misc changes.
