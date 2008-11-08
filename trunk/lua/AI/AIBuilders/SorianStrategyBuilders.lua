@@ -227,14 +227,15 @@ BuilderGroup {
 			
 			local gtime = GetGameTimeSeconds()
 			
-			returnval = 70 + (ratio * 5) - (gtime * .008)
+			returnval = 75 + (ratio * 5) - (gtime * .008)
 			return returnval
 		end,
         BuilderConditions = {
 			{ SBC, 'IsWaterMap', { false } },
 			{ SBC, 'ClosestEnemyLessThan', { 750 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
 			#{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1 } },
-			#{ MIBC, 'LessThanGameTime', { 1200 } },
+			#{ SBC, 'LessThanGameTime', { 1200 } },
         },
         BuilderType = 'Any',		
         RemoveBuilders = {

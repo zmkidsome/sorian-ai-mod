@@ -42,7 +42,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
-            { MIBC, 'LessThanGameTime', { 600 } },
+            { SBC, 'LessThanGameTime', { 600 } },
 			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
             #{ UCBC, 'HaveUnitRatio', { ExtractorToFactoryRatio, 'MASSEXTRACTION', '>=','FACTORY' } },

@@ -2062,6 +2062,61 @@ Platoon = Class(sorianoldPlatoon) {
             WaitSeconds(17)
         end
     end,
+	
+	CDRHuntAISorian = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        local armyIndex = aiBrain:GetArmyIndex()
+        local target
+        local blip
+		local platoonUnits = self:GetPlatoonUnits()
+        local eng
+        for k, v in platoonUnits do
+            if not v:IsDead() and EntityCategoryContains(categories.COMMAND, v ) then
+                eng = v
+            end
+        end
+		local weapBPs = eng:GetBlueprint().Weapon
+		local weapon
+		eng.Fighting = true
+		for k,v in weapBPs do
+			if v.Label == 'OverCharge' then
+				weapon = v
+				break
+			end
+		end
+		local weapRange = weapon.MaxRadius
+        while aiBrain:PlatoonExists(self) do
+			local mySurfaceThreat = eng:GetBlueprint().Defense.SurfaceThreatLevel or 75
+			local pos = self:GetPlatoonPosition()
+			local threatatLocation = aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface')
+            if self:IsOpponentAIRunning() then
+                local target = self:FindClosestUnit('support', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR - categories.NAVAL - categories.SCOUT)
+				if target and not target:IsDead() then
+					local targetLoc = target:GetPosition()
+					local threatatLocation = aiBrain:GetThreatAtPosition( targetLoc, 1, true, 'AntiSurface')
+					if threatatLocation < mySurfaceThreat and VDist2Sq(targetLoc[1], targetLoc[3], eng.CDRHome[1], eng.CDRHome[3]) < 90000 then
+						blip = target:GetBlip(armyIndex)
+						self:Stop()
+						if aiBrain:GetEconomyStored('ENERGY') >= weapon.EnergyRequired and VDist2Sq(targetLoc[1], targetLoc[3], pos[1], pos[3]) <= weapRange * weapRange then
+							IssueClearCommands({eng})
+							IssueOverCharge( {eng}, target )
+						else
+							IssueClearCommands( {eng} )
+							IssueMove( {eng}, targetLoc )
+						end
+					end
+				else
+					# Add something cool later - Sorian
+					eng.Fighting = false
+					eng.PlatoonHandle:PlatoonDisband()
+				end
+			end
+            WaitSeconds(17)
+        end
+		eng.Fighting = false
+		eng.PlatoonHandle:PlatoonDisband()
+    end,
 
     AttackForceAISorian = function(self)
         self:Stop()
@@ -2862,7 +2917,7 @@ Platoon = Class(sorianoldPlatoon) {
 		local stuckCount = 0
         while not eng:IsDead() and (eng.GoingHome or eng.Upgrading or eng.Fighting or eng:IsUnitState("Building") or 
                   eng:IsUnitState("Attacking") or eng:IsUnitState("Repairing") or eng:IsUnitState("WaitingForTransport") or
-                  eng:IsUnitState("Reclaiming") or eng:IsUnitState("Capturing") or eng:IsUnitState("Moving") or eng:IsUnitState("Upgrading") or eng.ProcessBuild != nil 
+                  eng:IsUnitState("Reclaiming") or eng:IsUnitState("Capturing") or eng:IsUnitState("Moving") or eng:IsUnitState("Enhancing") or eng:IsUnitState("Upgrading") or eng.ProcessBuild != nil 
 				  or eng.UnitBeingBuiltBehavior) do
                   
             WaitSeconds(3)
@@ -2913,7 +2968,7 @@ Platoon = Class(sorianoldPlatoon) {
     #       nil (tail calls into a behavior function)
     #-----------------------------------------------------
     ProcessBuildCommandSorian = function(eng, removeLastBuild)	
-		if not eng or eng:IsDead() or not eng.PlatoonHandle or eng:IsUnitState("Upgrading") or eng.Upgrading or eng.GoingHome or eng.Fighting or eng.UnitBeingBuiltBehavior then
+		if not eng or eng:IsDead() or not eng.PlatoonHandle or eng:IsUnitState("Enhancing") or eng:IsUnitState("Upgrading") or eng.Upgrading or eng.GoingHome or eng.Fighting or eng.UnitBeingBuiltBehavior then
             if eng then eng.ProcessBuild = nil end
             return
         end

@@ -39,6 +39,30 @@ function AIThreatExists( aiBrain, threatThreshold )
 end
 
 ##############################################################################################################
+# function: CDRHealthGreaterThan = BuildCondition
+#
+# parameter 0: string   aiBrain		    = "default_brain"
+# parameter 1: int      health          = "minimum health %"
+# parameter 2: int      shield          = "minimum shield %"
+#
+##############################################################################################################
+function CDRHealthGreaterThan( aiBrain, health, shield )
+    local cdr = aiBrain:GetListOfUnits(categories.COMMAND, false)[1]
+	if not cdr then return false end
+	local cdrhealth = cdr:GetHealthPercent()
+	local cdrshield
+	if (cdr:HasEnhancement( 'Shield' ) or cdr:HasEnhancement( 'ShieldGeneratorField' ) or cdr:HasEnhancement( 'ShieldHeavy' )) and cdr:ShieldIsOn() then
+		cdrshield = (cdr.MyShield:GetHealth() / cdr.MyShield:GetMaxHealth())
+	else
+		cdrshield = 1
+	end
+	if cdrhealth >= health and cdrshield >= shield then
+		return true
+	end
+    return false    
+end
+
+##############################################################################################################
 # function: HaveGreaterThanUnitsWithCategory = BuildCondition	doc = "Please work function docs."
 #
 # parameter 0: string   aiBrain		    = "default_brain"

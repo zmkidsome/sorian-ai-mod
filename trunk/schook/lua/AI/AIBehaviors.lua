@@ -213,6 +213,8 @@ function CDRRunAwaySorian( aiBrain, cdr )
 				cdr.UnitBeingBuiltBehavior = cdr:GetUnitBeingBuilt()
 			end
 			cdr.GoingHome = true
+			cdr.Fighting = false
+			cdr.Upgrading = false
             local canTeleport = false #cdr:HasEnhancement( 'Teleporter' )
             CDRRevertPriorityChange( aiBrain, cdr )
 			local runShield = false
@@ -239,6 +241,10 @@ function CDRRunAwaySorian( aiBrain, cdr )
                 else
                     runSpot = AIUtils.AIFindDefensiveAreaSorian( aiBrain, cdr, category, 100, runShield )
                 end
+				if not runSpot then
+					local x,z = aiBrain:GetArmyStartPos()
+					runSpot = AIUtils.RandomLocation(x,z)
+				end
                 if not prevSpot or runSpot[1] ~= prevSpot[1] or runSpot[3] ~= prevSpot[3] then
 					IssueClearCommands( {cdr} )
                     #plat:Stop()
@@ -278,7 +284,7 @@ function CDRRunAwaySorian( aiBrain, cdr )
 end
 
 
-function CDROverChargeSorian( aiBrain, cdr, Mult )
+function CDROverChargeSorian( aiBrain, cdr) #, Mult )
     local weapBPs = cdr:GetBlueprint().Weapon
     local weapon
 	local commanderResponse = false
@@ -291,7 +297,7 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
     end
     local distressRange = 100
     local beingBuilt = false
-    local maxRadius = weapon.MaxRadius * 4.5 * Mult
+    local maxRadius = weapon.MaxRadius * 4.5 # * Mult
 	local weapRange = weapon.MaxRadius
     cdr.UnitBeingBuiltBehavior = false
 	
@@ -318,7 +324,7 @@ function CDROverChargeSorian( aiBrain, cdr, Mult )
 	
     local overCharging = false
     
-    if Utilities.XZDistanceTwoVectors(cdrPos, cdr:GetPosition()) > distressRange * Mult then
+    if Utilities.XZDistanceTwoVectors(cdrPos, cdr:GetPosition()) > distressRange then # * Mult then
         return
     end
 	
@@ -484,6 +490,8 @@ function CDRReturnHomeSorian(aiBrain, cdr, Mult)
             #LOG("*AI DEBUG: " .. aiBrain.Nickname .. " going home")
             CDRRevertPriorityChange( aiBrain, cdr )
 			cdr.GoingHome = true
+			cdr.Fighting = false
+			cdr.Upgrading = false
             if not aiBrain:PlatoonExists(plat) then 
                 return 
             end
@@ -598,52 +606,16 @@ function CommanderThreadSorian(cdr, platoon)
 	moveOnNext = false
 	moveWait = 0
 	
-#	local cmdrDamaged = function(cdr, instigator)
-#		local aiBrain = cdr:GetAIBrain()
-#		if instigator and not instigator:IsDead() and instigator:GetPosition() then
-#			#LOG('*AI DEBUG: cmdrDamaged in action!')
-#			local attackPos = instigator:GetPosition()
-#		#Bombard area
-#			if not aiBrain.AttackPoints then
-#				aiBrain.AttackPoints = {}
-#			end
-#			table.insert(aiBrain.AttackPoints,
-#				{
-#				Position = attackPos,
-#				}
-#			)
-#			aiBrain:ForkThread(aiBrain.AttackPointsTimeout, attackPos)
-#		#Set off base alert
-#			table.insert(aiBrain.BaseMonitor.AlertsTable,
-#				{
-#				Position = attackPos,
-#				Threat = 150,
-#				}
-#			)
-#			aiBrain.BaseMonitor.AlertSounded = true
-#			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, attackPos)
-#			aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
-#		#Add area to high prio scout list
-#			table.insert(aiBrain.InterestList.HighPriority,
-#				{
-#				Position = attackPos,
-#				LastScouted = GetGameTimeSeconds(),
-#				}
-#			)
-#		end
-#	end
-#	import('/lua/ScenarioTriggers.lua').CreateUnitDamagedTrigger(cmdrDamaged, cdr, .2, -1)
-	
     while not cdr:IsDead() do
 		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Loop')
 		#AIAttackUtils.DrawPathGraph()
 		
-		if Mult > 1 and (GetGameTimeSeconds() > 600 or aiBrain.NumOpponents > 1 or not SBC.ClosestEnemyLessThan(aiBrain, 256)) then
+		if Mult > 1 and (SBC.GreaterThanGameTime(aiBrain, 900) or aiBrain.NumOpponents > 1 or not SBC.ClosestEnemyLessThan(aiBrain, 750)) then
 			Mult = 1
 		end
         WaitTicks(2)
         # Overcharge
-        if not cdr:IsDead() and not cdr.Upgrading and GetGameTimeSeconds() > Delay and UCBC.HaveGreaterThanUnitsWithCategory(aiBrain,  1, 'FACTORY') and aiBrain:GetNoRushTicks() <= 0 then CDROverChargeSorian( aiBrain, cdr, Mult ) end
+        if Mult == 1 and not cdr:IsDead() and not cdr.Upgrading and SBC.GreaterThanGameTime(aiBrain, Delay) and UCBC.HaveGreaterThanUnitsWithCategory(aiBrain,  1, 'FACTORY') and aiBrain:GetNoRushTicks() <= 0 then CDROverChargeSorian( aiBrain, cdr) end #, Mult ) end
         WaitTicks(1)
         # Run away (not really useful right now, without teleport ability kicking in... might as well just go home)
         if not cdr:IsDead() then CDRRunAwaySorian( aiBrain, cdr ) end
@@ -656,22 +628,26 @@ function CommanderThreadSorian(cdr, platoon)
 			moveOnNext = false
 		end
         WaitTicks(1)
-		if not cdr:IsDead() and not cdr:IsIdleState() and moveWait > 0 then moveWait = 0 end
+		
+		#if not cdr:IsDead() and not cdr:IsIdleState() and moveWait > 0 then moveWait = 0 end
+		
 		if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr.Upgrading and not cdr:IsUnitState("Building")
 		and not cdr:IsUnitState("Attacking") and not cdr:IsUnitState("Repairing") and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading")
-		and not moveOnNext then 
+		and not cdr:IsUnitState("Enhancing") and not moveOnNext then 
 			moveWait = moveWait + 1
 			if moveWait >= 20 then
 				moveWait = 0
 				moveOnNext = true
 			end
+		else
+			moveWait = 0
 		end
 		WaitTicks(1)
 		
         #call platoon resume building deal...
         if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr.Upgrading and not cdr:IsUnitState("Building")
 		and not cdr:IsUnitState("Attacking") and not cdr:IsUnitState("Repairing") and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading") 
-		and not ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) > 100 ) then
+		and not cdr:IsUnitState("Enhancing") and not ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) > 100 ) then
             if not cdr.EngineerBuildQueue or table.getn(cdr.EngineerBuildQueue) == 0 then
 				#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Assign to pool')
                 local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
