@@ -2117,6 +2117,63 @@ Platoon = Class(sorianoldPlatoon) {
 		eng.Fighting = false
 		eng.PlatoonHandle:PlatoonDisband()
     end,
+	
+    GhettoAISorian = function(self)
+        self:Stop()
+        local aiBrain = self:GetBrain()
+        local target
+		local haveTransports = false
+		local counter = 0
+		local units = self:GetPlatoonUnits()
+		while true do
+			haveTransports = AIUtils.GetTransports(platoon)
+			counter = counter + 1
+			if haveTransports or count > 11 then break end
+			WaitSeconds(10)
+		end
+		
+		if not haveTransports then
+			return self:HuntAISorian()
+		end
+		
+		local transport
+		for k,v in self:GetPlatoonUnits() do
+			if EntityCategoryContains( categories.TRANSPORTFOCUS, v ) then
+				transport = v
+				break
+			end
+		end
+		
+		AIUtils.UseTransportsGhetto(units, {transport})
+		
+		local data = self.PlatoonData
+		local maxRadius = data.SearchRadius or 50
+        local categoryList = {}
+        local atkPri = {}
+        if data.PrioritizedCategories then
+            for k,v in data.PrioritizedCategories do
+                table.insert( atkPri, v )
+                table.insert( categoryList, ParseEntityCategory( v ) )
+            end
+        end
+        table.insert( atkPri, 'ALLUNITS' )
+        table.insert( categoryList, categories.ALLUNITS )
+        self:SetPrioritizedTargetList( 'Attack', categoryList )
+		
+        while aiBrain:PlatoonExists(self) do
+			local pos = self:GetPlatoonPosition()
+            if self:IsOpponentAIRunning() then
+                target = AIUtils.AIFindBrainTargetInRange( aiBrain, self, 'Attack', maxRadius * 25, atkPri, aiBrain:GetCurrentEnemy() )
+                if target then
+					self:AttackTarget( target )
+				end
+            end
+			if transport:GetHealthPercent() < .35 then
+				IssueTransportUnload( transport, self:GetPlatoonPosition() )
+			end
+            WaitSeconds(17)
+        end
+    end,
 
     AttackForceAISorian = function(self)
         self:Stop()

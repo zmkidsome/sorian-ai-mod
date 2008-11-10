@@ -35,7 +35,7 @@ BuilderGroup {
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
 			local enemy, enemyIndex
-			local returnval = 0
+			local returnval = 1
 			if aiBrain:GetCurrentEnemy() then
 				enemy = aiBrain:GetCurrentEnemy()
 				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
@@ -119,7 +119,7 @@ BuilderGroup {
 		InterruptStrategy = true,
 		PriorityFunction = function(self, aiBrain)
 			local enemyIndex
-			local returnval = 0
+			local returnval = 1
 			if aiBrain:GetCurrentEnemy() then
 				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
 			else
@@ -204,6 +204,69 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'SorianGhettoGunship',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Ghetto Gunship Strategy',
+		StrategyType = 'Intermediate',
+        Priority = 100,
+        InstanceCount = 1,
+		StrategyTime = 300,
+		InterruptStrategy = true,
+		OnStrategyActivate = function(self)
+			LOG('*AI DEBUG: SorianGhettoGunship strat activated')
+		end,
+		PriorityFunction = function(self, aiBrain)
+			local enemyIndex
+			local returnval = 1
+			if aiBrain:GetCurrentEnemy() then
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			
+			local myFacs = aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR)
+			
+			if aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * (categories.TECH3 + categories.TECH2)) > 0 or myFacs < 1 then
+				return returnval
+			end
+
+			local eUnits = aiBrain:GetUnitsAroundPoint( categories.AIR * categories.FACTORY, Vector(0,0,0), 100000, 'Enemy' )
+			local count = 0
+			
+			for k,v in eUnits do
+				if v:GetAIBrain():GetArmyIndex() == enemyIndex then
+					count = count + 1
+				end
+			end
+			
+			returnval = 69 + (myFacs * 5) - (count * 2)
+			return returnval
+		end,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ MIBC, 'FactionIndex', {1, 2}},
+			{ SBC, 'MapLessThan', { 1000, 1000 }},
+			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY AIR' }},
+			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
+			#{ SBC, 'TargetHasLessThanUnitsWithCategory', { 3, categories.AIR * categories.FACTORY }},
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { false, 3, categories.AIR * categories.FACTORY, 'Enemy'}},
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {},
+		AddBuilders = {
+			FactoryManager = {
+				'Sorian T1 Air Transport - GG',
+				'Sorian T1 Bot - GG',
+			},
+			PlatoonFormManager = {
+				'Sorian GG Force',
+			}
+		}
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianSmallMapRush',
     BuildersType = 'StrategyBuilder',
     Builder {
@@ -212,7 +275,7 @@ BuilderGroup {
         Priority = 100,
         InstanceCount = 1,
 		PriorityFunction = function(self, aiBrain)
-			local returnval = 0
+			local returnval = 1
 			local enemies = 0
 			local allies = 0
 			for k,v in ArmyBrains do
@@ -265,7 +328,7 @@ BuilderGroup {
         InstanceCount = 1,
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
-			local returnval = 0
+			local returnval = 1
 			local arties = aiBrain:GetCurrentUnits(categories.ARTILLERY * categories.STRUCTURE * categories.TECH3)
 			
 			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE * categories.TECH3, Vector(0,0,0), 100000, 'Enemy' )
@@ -309,7 +372,7 @@ BuilderGroup {
         InstanceCount = 1,
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
-			local returnval = 0
+			local returnval = 1
 			local arties = aiBrain:GetCurrentUnits(categories.ARTILLERY * categories.STRUCTURE * categories.TECH3)
 			
 			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE * categories.TECH3, Vector(0,0,0), 100000, 'Enemy' )
@@ -359,7 +422,7 @@ BuilderGroup {
         InstanceCount = 1,
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
-			local returnval = 0
+			local returnval = 1
 			local nukes = aiBrain:GetCurrentUnits(categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3)
 			
 			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, Vector(0,0,0), 100000, 'Enemy' )
@@ -404,7 +467,7 @@ BuilderGroup {
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
 			local enemyIndex
-			local returnval = 0
+			local returnval = 1
 			if aiBrain:GetCurrentEnemy() then
 				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
 			else
@@ -455,7 +518,7 @@ BuilderGroup {
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
 			local enemy, enemyIndex
-			local returnval = 0
+			local returnval = 1
 			if aiBrain:GetCurrentEnemy() then
 				enemy = aiBrain:GetCurrentEnemy()
 				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
@@ -536,7 +599,7 @@ BuilderGroup {
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
 			local enemy, enemyIndex
-			local returnval = 0
+			local returnval = 1
 			if aiBrain:GetCurrentEnemy() then
 				enemy = aiBrain:GetCurrentEnemy()
 				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
@@ -617,7 +680,7 @@ BuilderGroup {
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
 			local enemy, enemyIndex
-			local returnval = 0
+			local returnval = 1
 			if aiBrain:GetCurrentEnemy() then
 				enemy = aiBrain:GetCurrentEnemy()
 				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
