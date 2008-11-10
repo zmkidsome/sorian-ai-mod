@@ -362,6 +362,8 @@ function CDROverChargeSorian( aiBrain, cdr) #, Mult )
             cdr.UnitBeingBuiltBehavior = cdr:GetUnitBeingBuilt()
         end
 		cdr.Fighting = true
+		cdr.GoingHome = false
+		cdr.Upgrading = false
         local plat = aiBrain:MakePlatoon( '', '' )
         aiBrain:AssignUnitsToPlatoon( plat, {cdr}, 'support', 'None' )
         plat:Stop()
@@ -533,6 +535,9 @@ end
 function CDRHideBehavior(aiBrain, cdr)
 	if cdr:IsIdleState() then
 		#LOG("*AI DEBUG: " .. aiBrain.Nickname .. " Commander hiding")
+		cdr.GoingHome = false
+		cdr.Fighting = false
+		cdr.Upgrading = false
 		local category = false
 		local runShield = false
 		local nmaShield = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE, cdr:GetPosition(), 100, 'Ally' )

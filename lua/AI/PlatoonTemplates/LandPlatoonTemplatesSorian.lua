@@ -105,6 +105,14 @@ PlatoonTemplate {
 }
 
 PlatoonTemplate {
+    Name = 'T1GhettoSquad',   
+    Plan = 'GhettoAISorian',    
+    GlobalSquads = {
+        { categories.TECH1 * categories.LAND * categories.MOBILE * categories.DIRECTFIRE * categories.BOT - categories.SCOUT - categories.ENGINEER - categories.EXPERIMENTAL, 6, 6, 'attack', 'none' },
+    }
+}
+
+PlatoonTemplate {
     Name = 'T1MassHuntersCategorySorian',
     #Plan = 'AttackForceAI',    
     Plan = 'GuardMarkerSorian',    

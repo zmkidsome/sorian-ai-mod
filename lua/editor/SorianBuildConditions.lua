@@ -14,12 +14,39 @@ local Utils = import('/lua/utilities.lua')
 local SUtils = import('/lua/AI/sorianutilities.lua')
 local MABC = import('/lua/editor/MarkerBuildConditions.lua')
 
+##############################################################################################################
+# function: IsWaterMap = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 2: bool     bool            = true = is a water map, false = is not a water map
+#
+##############################################################################################################
+
 function IsWaterMap(aiBrain, bool)
 	local startX, startZ = aiBrain:GetArmyStartPos()
 	local navalMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Naval Area', startX, startZ)
 	if navalMarker and bool then
 		return true
 	elseif not navalMarker and not bool then
+		return true
+	end
+	return false
+end
+
+##############################################################################################################
+# function: AIType = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 1: string   aitype          = "AI Personality"
+# parameter 2: bool     bool            = true = aitype matches, false = aitype does not match
+#
+##############################################################################################################
+
+function AIType(aiBrain, aitype, bool)
+	local per = ScenarioInfo.ArmySetup[aiBrain.Name].AIPersonality
+	if aitype == per and bool then
+		return true
+	elseif aitype != per and not bool then
 		return true
 	end
 	return false

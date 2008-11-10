@@ -9,53 +9,53 @@
 AIList = {
     {
         key = 'sorian',
-        name = "AI: SAI 1.7.2",
+        name = "AI: SAI 1.7.3",
     },
     {
         key = 'sorianrush',
-        name = "AI: SAI Rush 1.7.2",
+        name = "AI: SAI Rush 1.7.3",
     },
     {
         key = 'sorianair',
-        name = "AI: SAI Air 1.7.2",
+        name = "AI: SAI Air 1.7.3",
     },
     {
         key = 'sorianwater',
-        name = "AI: SAI Water 1.7.2",
+        name = "AI: SAI Water 1.7.3",
     },
     {
         key = 'sorianturtle',
-        name = "AI: SAI Turtle 1.7.2",
+        name = "AI: SAI Turtle 1.7.3",
     },
     {
         key = 'sorianadaptive',
-        name = "AI: SAI Adaptive 1.7.2",
+        name = "AI: SAI Adaptive 1.7.3",
     },
 }
 
 CheatAIList = {
     {
         key = 'soriancheat',
-        name = "AIx: SAI 1.7.2",
+        name = "AIx: SAI 1.7.3",
     },
     {
         key = 'sorianrushcheat',
-        name = "AIx: SAI Rush 1.7.2",
+        name = "AIx: SAI Rush 1.7.3",
     },
     {
         key = 'sorianaircheat',
-        name = "AIx: SAI Air 1.7.2",
+        name = "AIx: SAI Air 1.7.3",
     },
     {
         key = 'sorianwatercheat',
-        name = "AIx: SAI Water 1.7.2",
+        name = "AIx: SAI Water 1.7.3",
     },
     {
         key = 'sorianturtlecheat',
-        name = "AIx: SAI Turtle 1.7.2",
+        name = "AIx: SAI Turtle 1.7.3",
     },
     {
         key = 'sorianadaptivecheat',
-        name = "AIx: SAI Adaptive 1.7.2",
+        name = "AIx: SAI Adaptive 1.7.3",
     },
 }

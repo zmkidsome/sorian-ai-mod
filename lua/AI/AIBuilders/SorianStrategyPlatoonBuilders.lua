@@ -46,6 +46,67 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'SorianT1Transport - GG',
+    BuildersType = 'FactoryBuilder',
+    Builder {
+        BuilderName = 'Sorian T1 Air Transport - GG',
+        PlatoonTemplate = 'T1AirTransport',
+        Priority = 0.1,
+		ActivePriority = 701,
+        BuilderConditions = {
+            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, 'TRANSPORTFOCUS' } },
+            { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
+        },
+        BuilderType = 'Air',
+    },
+    Builder {
+        BuilderName = 'Sorian T1 Bot - GG',
+        PlatoonTemplate = 'T1LandDFBot',
+		Priority = 0.1,
+        ActivePriority = 825,
+        BuilderConditions = {
+			{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 6, categories.TECH1 * categories.LAND * categories.MOBILE * categories.DIRECTFIRE * categories.BOT - categories.SCOUT - categories.ENGINEER - categories.EXPERIMENTAL } },
+        },
+        BuilderType = 'Land',
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianGGFormBuilders',
+    BuildersType = 'PlatoonFormBuilder',
+    Builder {
+        BuilderName = 'Sorian GG Force',
+        PlatoonTemplate = 'T1GhettoSquad',
+        Priority = 0.1,
+		ActivePriority = 1500,
+        BuilderConditions = { 
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 5, categories.TECH1 * categories.LAND * categories.MOBILE * categories.DIRECTFIRE * categories.BOT - categories.SCOUT - categories.ENGINEER - categories.EXPERIMENTAL} },
+        },
+        BuilderData = {
+			ThreatSupport = 75,
+            PrioritizedCategories = {
+				'ENERGYPRODUCTION DRAGBUILD',
+				'HYDROCARBON',
+				'COMMAND',
+				'ENGINEER',
+				'MASSEXTRACTION',
+                'MOBILE LAND',
+				'MASSFABRICATION',
+                'SHIELD',
+                'ANTIAIR STRUCTURE',
+                'DEFENSE STRUCTURE',
+                'STRUCTURE',
+                'COMMAND',
+                'MOBILE ANTIAIR',
+                'ALLUNITS',
+            },
+        },    
+        InstanceCount = 2,
+        BuilderType = 'Any',
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianT2BomberHighPrio',
     BuildersType = 'FactoryBuilder',
     Builder {
