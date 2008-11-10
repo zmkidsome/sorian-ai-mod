@@ -309,7 +309,7 @@ BuilderGroup {
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, 'FACTORY LAND TECH2' }},
-				{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY LAND TECH2'}},
+				{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY LAND TECH2, FACTORY LAND TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
                 #{ SIBC, 'GreaterThanEconIncome',  { 4.0, 75}},
@@ -327,7 +327,7 @@ BuilderGroup {
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH3, FACTORY TECH2' } },
                 { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, 'FACTORY AIR TECH2' }},
-				{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY AIR TECH2'}},
+				{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY AIR TECH2, FACTORY AIR TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
                 { SIBC, 'GreaterThanEconIncome',  { 3.5, 75}},
@@ -360,7 +360,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian Balanced T1 Land Factory Upgrade - T3',
         PlatoonTemplate = 'T1LandFactoryUpgrade',
-        Priority = 250,
+        Priority = 0, #250,
         InstanceCount = 1,
         BuilderConditions = {
                 { UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY TECH2' } },
@@ -377,7 +377,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian BalancedT1AirFactoryUpgrade - T3',
         PlatoonTemplate = 'T1AirFactoryUpgrade',
-        Priority = 250,
+        Priority = 0, #250,
         InstanceCount = 1,
         FormDebugFunction = nil,
         BuilderConditions = {
