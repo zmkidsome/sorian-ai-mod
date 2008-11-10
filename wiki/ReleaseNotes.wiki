@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.7.3:* Rush AI engies should build early power better, AI should use Land T4s more on small maps and less on larger maps, Fixed bug with many of the strategies.
+
 *1.7.2:* Rush AI should use the ACU better, Added some platoons to help the AI rebuild factories if the ACU dies, Nukes and Arty are back on 10x10 maps, Game Time related build conditions now adjusted based on cheat factor.
 
 *1.7.1b:* Added support for Strategy Activation and Deactivation functions, Added the unit grouping code back in.
