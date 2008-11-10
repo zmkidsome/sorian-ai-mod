@@ -126,7 +126,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY LAND TECH3' }},
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY LAND TECH3' }},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY - categories.TECH1 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.05 }},
@@ -299,7 +299,7 @@ BuilderGroup {
         BuilderType = 'Land',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY - categories.TECH1 } },
             { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 3, 'FACTORY LAND TECH3' }},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -343,7 +343,7 @@ BuilderGroup {
         BuilderType = 'Land',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY - categories.TECH1 } },
             { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 3, 'FACTORY LAND TECH3' }},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -373,7 +373,7 @@ BuilderGroup {
         BuilderType = 'Land',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY - categories.TECH1 } },
             { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 3, 'FACTORY LAND TECH3' }},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -404,7 +404,7 @@ BuilderGroup {
         BuilderType = 'Land',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY - categories.TECH1 } },
             { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 3, 'FACTORY LAND TECH3' }},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -432,7 +432,7 @@ BuilderGroup {
         BuilderType = 'Land',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY - categories.TECH1 } },
             { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 3, 'FACTORY LAND TECH3' }},
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.7, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
