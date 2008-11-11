@@ -124,8 +124,8 @@ BuilderGroup {
         PlatoonTemplate = 'T1LandDFTank',
         Priority = 500,
         BuilderConditions = {
-            { UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY LAND TECH3' }},
-			{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY LAND TECH3' }},
+            { UCBC, 'FactoryLessAtLocation', { 'LocationType', 3, 'FACTORY LAND TECH3' }},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 3, 'FACTORY LAND TECH3' }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY - categories.TECH1 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -175,8 +175,8 @@ BuilderGroup {
         BuilderConditions = {
             #{ UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'INDIRECTFIRE LAND MOBILE' } },
             { UCBC, 'HaveUnitRatio', { 0.3, categories.LAND * categories.INDIRECTFIRE * categories.MOBILE, '<=', categories.LAND * categories.DIRECTFIRE * categories.MOBILE}},
-            { UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY LAND TECH3' }},
-			{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY LAND TECH3' }},
+            { UCBC, 'FactoryLessAtLocation', { 'LocationType', 3, 'FACTORY LAND TECH3' }},
+			{ UCBC, 'HaveLessThanUnitsWithCategory', { 3, 'FACTORY LAND TECH3' }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.LAND * categories.FACTORY - categories.TECH1 } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
