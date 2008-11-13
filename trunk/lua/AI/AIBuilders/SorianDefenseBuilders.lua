@@ -2011,7 +2011,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-            NumAssistees = 2,
+            NumAssistees = 8,
             Construction = {
                 BuildClose = false,
                 AdjacencyCategory = 'FACTORY -NAVAL',
@@ -2043,7 +2043,7 @@ BuilderGroup {
         },
         BuilderType = 'Any',
         BuilderData = {
-            NumAssistees = 2,
+            NumAssistees = 8,
             Construction = {
                 BuildClose = false,
                 AdjacencyCategory = 'FACTORY -NAVAL',
@@ -2053,6 +2053,56 @@ BuilderGroup {
                 },
                 Location = 'LocationType',
             }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Engineer Assist Anti-Nuke Emerg',
+        PlatoonTemplate = 'T3EngineerAssistSorian',
+        Priority = 1302,
+        InstanceCount = 8,
+        BuilderConditions = {
+            { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE}},
+			{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE}},
+			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'NUKE SILO STRUCTURE', 'Enemy'}},
+            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'ANTIMISSILE TECH3 STRUCTURE' }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                AssisteeType = 'Engineer',
+				AssistUntilFinished = true,
+                AssistRange = 250,
+                BeingBuiltCategories = {'ANTIMISSILE TECH3 STRUCTURE'},
+                Time = 60,
+            },
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Engineer Assist Anti-Nuke Emerg 2',
+        PlatoonTemplate = 'T3EngineerAssistSorian',
+        Priority = 1302,
+        InstanceCount = 8,
+        BuilderConditions = {
+            { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ANTIMISSILE TECH3 STRUCTURE' } },
+			{ SBC, 'HaveComparativeUnitsWithCategoryAndAllianceAtLocation', { 'LocationType', true, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, categories.STRUCTURE * categories.NUKE * categories.TECH3, 'Enemy'}},
+            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'ANTIMISSILE TECH3 STRUCTURE' }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                AssisteeType = 'Engineer',
+				AssistUntilFinished = true,
+                AssistRange = 250,
+                BeingBuiltCategories = {'ANTIMISSILE TECH3 STRUCTURE'},
+                Time = 60,
+            },
         }
     },
 }
