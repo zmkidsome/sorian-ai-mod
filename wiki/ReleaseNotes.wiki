@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.7.3d: Anti-Nukes are no longer a requirement for Arty, Nukes, or T3 Firebases, AI should use more engineers to rush build an Anti-Nuke if needed, AI should use intys like before, Hopefully fixed Rush stall.
+
 *1.7.3c:* AI will continue to build T1 units a bit longer, Fixed more factory upgrading weirdness.
 
 *1.7.3b:* Fixed some factory upgrading weirdness, Fixed some Land Unit build restrictions.
