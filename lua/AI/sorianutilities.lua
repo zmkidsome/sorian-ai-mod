@@ -601,8 +601,9 @@ end
 #				                   Launch Time: ~3 seconds
 #-----------------------------------------------------
 function LeadTarget(platoon, target)
-	position = platoon:GetPlatoonPosition()
-	pos = target:GetPosition()
+	local TMLRandom = tonumber(ScenarioInfo.Options.TMLRandom) or 0
+	local position = platoon:GetPlatoonPosition()
+	local pos = target:GetPosition()
 	
 	#Get firing position height
 	local fromheight = GetTerrainHeight(position[1], position[3])
@@ -616,23 +617,23 @@ function LeadTarget(platoon, target)
 	end
 	
 	#Get height difference between firing position and target position
-	heightdiff = math.abs(fromheight - toheight)
+	local heightdiff = math.abs(fromheight - toheight)
 	
 	#Get target position and then again after 1 second
 	#Allows us to get speed and direction
-	Tpos1 = {pos[1], 0, pos[3]}
+	local Tpos1 = {pos[1], 0, pos[3]}
 	WaitSeconds(1)
 	pos = target:GetPosition()
-	Tpos2 = {pos[1], 0, pos[3]}
+	local Tpos2 = {pos[1], 0, pos[3]}
 	
 	#Get distance moved on X and Y axis
-	xmove = (Tpos1[1] - Tpos2[1])
-	ymove = (Tpos1[3] - Tpos2[3])
+	local xmove = (Tpos1[1] - Tpos2[1])
+	local ymove = (Tpos1[3] - Tpos2[3])
 	
 	#Get distance from firing position to targets starting position and position it moved
 	#to after 1 second
-	dist1 = VDist2Sq(position[1], position[3], Tpos1[1], Tpos1[3])
-	dist2 = VDist2Sq(position[1], position[3], Tpos2[1], Tpos2[3])
+	local dist1 = VDist2Sq(position[1], position[3], Tpos1[1], Tpos1[3])
+	local dist2 = VDist2Sq(position[1], position[3], Tpos2[1], Tpos2[3])
 	dist1 = math.sqrt(dist1)
 	dist2 = math.sqrt(dist2)
 	
@@ -646,22 +647,26 @@ function LeadTarget(platoon, target)
 	end
 	
 	#Divide both distances by missiles max speed to get time to impact
-	time1 = (dist1 / 12) 
-	time2 = (dist2 / 12)
+	local time1 = (dist1 / 12) 
+	local time2 = (dist2 / 12)
 	
 	#Adjust for height difference by dividing the height difference by the missiles max speed
-	heightadjust = heightdiff / 12
+	local heightadjust = heightdiff / 12
 	
 	#Speed up time is distance the missile will travel while reaching max speed
 	#(~22.47 MU) divided by the missiles max speed which equals 1.8725 seconds flight time
 	
 	#total travel time + 1.87 (time for missile to speed up, rounded) + 3 seconds for launch
 	#+ adjustment for turn rate + adjustment for height difference
-	newtime = time2 - (time1 - time2) + 4.87 + distadjust + heightadjust
+	local newtime = time2 - (time1 - time2) + 4.87 + distadjust + heightadjust
+	
+	#Add some optional randomization to make the AI easier
+	local randomize = (100 - Random(0, TMLRandom)) / 100
+	newtime = newtime * randomize
 	
 	#Create target corrdinates
-	newx = xmove * newtime
-	newy = ymove * newtime
+	local newx = xmove * newtime
+	local newy = ymove * newtime
 	
 	#Cancel firing if target is outside map boundries
     if Tpos2[1] < 0 or Tpos2[3] < 0 or Tpos2[1] > ScenarioInfo.size[1] or Tpos2[3] > ScenarioInfo.size[2] then
