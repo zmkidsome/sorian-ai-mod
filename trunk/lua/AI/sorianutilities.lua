@@ -586,35 +586,84 @@ function FindClosestUnitPosToAttack( aiBrain, platoon, squad, maxRange, atkCat, 
     return false
 end
 
+#-----------------------------------------------------
+#   Function: LeadTarget
+#   Args:
+#       platoon - TML firing missile
+#       target  - Target to fire at
+#   Description:
+#       Allows the TML to lead a target to hit them while moving.
+#   Returns:  
+#       Map Position or false
+#	Notes:
+#		TML Specs(MU = Map Units): Max Speed: 12MU/sec
+#				                   Acceleration: 3MU/sec/sec
+#				                   Launch Time: ~3 seconds
+#-----------------------------------------------------
 function LeadTarget(platoon, target)
 	position = platoon:GetPlatoonPosition()
 	pos = target:GetPosition()
+	
+	#Get firing position height
 	local fromheight = GetTerrainHeight(position[1], position[3])
 	if GetSurfaceHeight(position[1], position[3]) > GetTerrainHeight(position[1], position[3]) then
 		fromheight = GetSurfaceHeight(position[1], position[3])
 	end
+	#Get target position height
 	local toheight = GetTerrainHeight(pos[1], pos[3])
 	if GetSurfaceHeight(pos[1], pos[3]) > GetTerrainHeight(pos[1], pos[3]) then
 		toheight = GetSurfaceHeight(pos[1], pos[3])
 	end
+	
+	#Get height difference between firing position and target position
 	heightdiff = math.abs(fromheight - toheight)
+	
+	#Get target position and then again after 1 second
+	#Allows us to get speed and direction
 	Tpos1 = {pos[1], 0, pos[3]}
 	WaitSeconds(1)
 	pos = target:GetPosition()
 	Tpos2 = {pos[1], 0, pos[3]}
+	
+	#Get distance moved on X and Y axis
 	xmove = (Tpos1[1] - Tpos2[1])
 	ymove = (Tpos1[3] - Tpos2[3])
+	
+	#Get distance from firing position to targets starting position and position it moved
+	#to after 1 second
 	dist1 = VDist2Sq(position[1], position[3], Tpos1[1], Tpos1[3])
 	dist2 = VDist2Sq(position[1], position[3], Tpos2[1], Tpos2[3])
 	dist1 = math.sqrt(dist1)
 	dist2 = math.sqrt(dist2)
+	
+	#Adjust for level off time. 
+	local distadjust = 0.25
+
+	#Missile has a faster turn rate when targeting targets < 50 MU away
+	#so will level off faster
+	if dist2 < 50 then
+		distadjust = 0.02
+	end
+	
+	#Divide both distances by missiles max speed to get time to impact
 	time1 = (dist1 / 12) 
 	time2 = (dist2 / 12)
-	heightadjust = heightdiff * .1
-	#total travel time + 2.32 (time for missile to speed up) + 3.5 seconds for launch + adjustment for height difference
-	newtime = time2 - (time1 - time2) + 5.82 + heightadjust
+	
+	#Adjust for height difference by dividing the height difference by the missiles max speed
+	heightadjust = heightdiff / 12
+	
+	#Speed up time is distance the missile will travel while reaching max speed
+	#(~22.47 MU) divided by the missiles max speed which equals 1.8725 seconds flight time
+	
+	#total travel time + 1.87 (time for missile to speed up, rounded) + 3 seconds for launch
+	#+ adjustment for turn rate + adjustment for height difference
+	newtime = time2 - (time1 - time2) + 4.87 + distadjust + heightadjust
+	
+	#Create target corrdinates
 	newx = xmove * newtime
 	newy = ymove * newtime
+	
+	#Cancel firing if target is outside map boundries
     if Tpos2[1] < 0 or Tpos2[3] < 0 or Tpos2[1] > ScenarioInfo.size[1] or Tpos2[3] > ScenarioInfo.size[2] then
         return false
     end
