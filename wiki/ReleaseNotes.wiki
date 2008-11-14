@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.7.4b:* Added support for TML randomization.
+
 *1.7.4:* Improved TML targeting function, Fixed Rush AI stall.
 
 *1.7.3d:* Anti-Nukes are no longer a requirement for Arty, Nukes, or T3 Firebases, AI should use more engineers to rush build an Anti-Nuke if needed, AI should use intys like before, Hopefully fixed Rush stall.
