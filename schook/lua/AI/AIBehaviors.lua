@@ -1401,7 +1401,7 @@ function BehemothBehaviorSorian(self)
         
         if targetUnit then
             IssueClearCommands(platoonUnits)
-			if useMove then
+			if useMove or SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), targetUnit:GetPosition()) < 40000 then
 				cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', targetUnit:GetPosition(), false)
 			else
 				cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', targetUnit:GetPosition(), 'AttackMove')
@@ -1409,14 +1409,14 @@ function BehemothBehaviorSorian(self)
         end
         
         #Walk to and kill target loop
-        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) do
+        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) and SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), closestBlockingShield:GetPosition()) >= 40000 do
 			self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 			useMove = InWaterCheck(self)
             local nearCommander = CommanderOverrideCheckSorian(self)
             
             if nearCommander and nearCommander ~= targetUnit then
                 IssueClearCommands(platoonUnits)
-				if useMove then
+				if useMove or SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), nearCommander:GetPosition()) < 40000 then
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), false)
 				else
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), 'AttackMove')
@@ -1444,14 +1444,14 @@ function BehemothBehaviorSorian(self)
 				self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 				useMove = InWaterCheck(self)
                 IssueClearCommands(platoonUnits)
-				if useMove then
+				if useMove or SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), closestBlockingShield:GetPosition()) < 40000 then
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', closestBlockingShield:GetPosition(), false)
 				else
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', closestBlockingShield:GetPosition(), 'AttackMove')
 				end
                 
                 #Wait for shield to die loop
-                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) do
+                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) and SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), closestBlockingShield:GetPosition()) >= 40000 do
 					self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 					useMove = InWaterCheck(self)
                     WaitSeconds(1)

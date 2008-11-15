@@ -14,18 +14,36 @@ local Mods = import('/lua/mods.lua')
 
 local AIChatText = import('/lua/AI/sorianlang.lua').AIChatText
 
+#Table of AI taunts orginized by faction
 local AITaunts = {
-	{3,4,5,6,7,8,9,10,11,12,14,15,16},
-	{19,21,23,24,26,27,28,29,30,31,32},
-	{33,34,35,36,37,38,39,40,41,43,46,47,48},
-	{49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64},
+	{3,4,5,6,7,8,9,10,11,12,14,15,16}, #Aeon
+	{19,21,23,24,26,27,28,29,30,31,32}, #UEF
+	{33,34,35,36,37,38,39,40,41,43,46,47,48}, #Cybran
+	{49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64}, #Seraphim
 }
 
+#Unused - Deprecated
 function T4Timeout(aiBrain)
 	WaitSeconds(30)
 	aiBrain.T4Building = false
 end
 
+#-----------------------------------------------------
+#   Function: XZDistanceTwoVectorsSq
+#   Args:
+#       v1 			- Position 1
+#       v2     		- Position 2
+#   Description:
+#       Gets the distance squred between 2 points.
+#   Returns:  
+#       Distance
+#-----------------------------------------------------
+function XZDistanceTwoVectorsSq( v1, v2 )
+	if not v1 or not v2 then return false end
+    return VDist2Sq( v1[1], v1[3], v2[1], v2[3] )
+end
+
+#Small function the draw intel points on the map for debugging
 function DrawIntel(aiBrain)
 	threatColor = {
 		#ThreatType = { ARGB value }
@@ -49,6 +67,15 @@ function DrawIntel(aiBrain)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: AIHandleIntelData
+#   Args:
+#       aiBrain			- AI Brain
+#   Description:
+#       Lets the AI handle intel data.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AIHandleIntelData(aiBrain)
 	local numchecks = 0
 	local checkspertick = 5
@@ -73,6 +100,16 @@ function AIHandleIntelData(aiBrain)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: AIHandleStructureIntel
+#   Args:
+#       aiBrain			- AI Brain
+#		intel			- Table of intel data
+#   Description:
+#       Handles structure intel.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AIHandleStructureIntel(aiBrain, intel)
 	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
 		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
@@ -109,6 +146,16 @@ function AIHandleStructureIntel(aiBrain, intel)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: AIHandleACUIntel
+#   Args:
+#       aiBrain			- AI Brain
+#		intel			- Table of intel data
+#   Description:
+#       Handles ACU intel.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AIHandleACUIntel(aiBrain, intel)
 	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
 		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
@@ -142,6 +189,16 @@ function AIHandleACUIntel(aiBrain, intel)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: AIHandleArtilleryIntel
+#   Args:
+#       aiBrain			- AI Brain
+#		intel			- Table of intel data
+#   Description:
+#       Handles Artillery intel.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AIHandleArtilleryIntel(aiBrain, intel)
 	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
 		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
@@ -178,6 +235,16 @@ function AIHandleArtilleryIntel(aiBrain, intel)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: AIHandleLandIntel
+#   Args:
+#       aiBrain			- AI Brain
+#		intel			- Table of intel data
+#   Description:
+#       Handles land unit intel.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AIHandleLandIntel(aiBrain, intel)
 	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
 		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
@@ -216,6 +283,7 @@ function AIHandleLandIntel(aiBrain, intel)
 	aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
 end
 
+#Unused
 function AIMicro(aiBrain, platoon, target, threatatLocation, mySurfaceThreat)
 	local friendlyThreat = aiBrain:GetThreatAtPosition( platoon:GetPlatoonPosition(), 1, true, 'AntiSurface', aiBrain:GetArmyIndex()) - mySurfaceThreat
 	if mySurfaceThreat + friendlyThreat > threatatLocation * 3 or table.getn(platoon:GetPlatoonUnits()) > 14 then
@@ -227,6 +295,7 @@ function AIMicro(aiBrain, platoon, target, threatatLocation, mySurfaceThreat)
 	end
 end
 
+#Unused
 function CircleAround(aiBrain, platoon, target)
 	platPos = platoon:GetPlatoonPosition()
 	ePos = target:GetPosition()
@@ -311,6 +380,7 @@ function CircleAround(aiBrain, platoon, target)
 	WaitSeconds(5)
 end
 
+#Unused
 function OrderedRetreat(aiBrain, platoon)
 	local bestBase = false
 	local bestBaseName = ""
@@ -340,6 +410,19 @@ function OrderedRetreat(aiBrain, platoon)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: GetThreatAtPosition
+#   Args:
+#       aiBrain 		- AI Brain
+#       pos     		- Position to check for threat
+#		rings			- Rings to check
+#		ttype			- Threat type
+#		threatFilters	- Threats to filter
+#   Description:
+#       Checks for threat level at a location and allows filtering of threat types.
+#   Returns:  
+#       Threat level
+#-----------------------------------------------------
 function GetThreatAtPosition( aiBrain, pos, rings, ttype, threatFilters)
 	local threat = aiBrain:GetThreatAtPosition( pos, rings, true, ttype )
 	for k,v in threatFilters do
@@ -349,6 +432,15 @@ function GetThreatAtPosition( aiBrain, pos, rings, ttype, threatFilters)
 	return threat
 end
 
+#-----------------------------------------------------
+#   Function: LeadTarget
+#   Args:
+#       aiBrain 		- AI Brain
+#   Description:
+#       Checks for Land Path Node map marker to verify the map has the appropriate AI markers.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function CheckForMapMarkers(aiBrain)
 	local startX, startZ = aiBrain:GetArmyStartPos()
 	local LandMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Land Path Node', startX, startZ)
@@ -357,25 +449,33 @@ function CheckForMapMarkers(aiBrain)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: AddCustomUnitSupport
+#   Args:
+#       aiBrain 		- AI Brain
+#   Description:
+#       Adds support for custom units.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AddCustomUnitSupport(aiBrain)
 	aiBrain.CustomUnits = {}
+	#Loop through active mods
 	for i, m in __active_mods do
-		#LOG('*AI DEBUG: Checking mod: '..m.name..' for custom units')
+		#If mod has a CustomUnits folder
 		local CustomUnitFiles = DiskFindFiles(m.location..'/lua/CustomUnits', '*.lua')
-		#LOG('*AI DEBUG: Custom unit files found: '..repr(CustomUnitFiles))
+		#Loop through files in CustomUnits folder
 		for k, v in CustomUnitFiles do
 			local tempfile = import(v).UnitList
+			#Add each files entry into the appropriate table
 			for plat, t in tempfile do
 				for fac, b in t do
 					if aiBrain.CustomUnits[plat] and aiBrain.CustomUnits[plat][fac] then
-						#LOG('*AI DEBUG: Adding to EXISTING template and EXISTING faction: '..plat..' faction = '..fac..' new ID = '..b[1]..' chance = '..b[2] )
 						table.insert(aiBrain.CustomUnits[plat][fac], { b[1], b[2] } )
 					elseif aiBrain.CustomUnits[plat] then
-						#LOG('*AI DEBUG: Adding to EXISTING template and NEW faction: '..plat..' faction = '..fac..' new ID = '..b[1]..' chance = '..b[2] )
 						aiBrain.CustomUnits[plat][fac] = {}
 						table.insert(aiBrain.CustomUnits[plat][fac], { b[1], b[2] } )
 					else
-						#LOG('*AI DEBUG: Adding to NEW template and NEW faction: '..plat..' faction = '..fac..' new ID = '..b[1]..' chance = '..b[2] )
 						aiBrain.CustomUnits[plat] = {}
 						aiBrain.CustomUnits[plat][fac] = {}
 						table.insert(aiBrain.CustomUnits[plat][fac], { b[1], b[2] } )
@@ -386,6 +486,7 @@ function AddCustomUnitSupport(aiBrain)
 	end
 end
 
+#Unused
 function AddCustomFactionSupport(aiBrain)
 	aiBrain.CustomFactions = {}
 	for i, m in __active_mods do
@@ -402,23 +503,34 @@ function AddCustomFactionSupport(aiBrain)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: GetTemplateReplacement
+#   Args:
+#       aiBrain 		- AI Brain
+#       building   		- Unit type to find a replacement for
+#		faction			- AI Faction
+#   Description:
+#       Finds a custom engineer built unit to replace a default one.
+#   Returns:  
+#       Custom Unit or false
+#-----------------------------------------------------
 function GetTemplateReplacement(aiBrain, building, faction)
 	local retTemplate = false
 	local templateData = aiBrain.CustomUnits[building]
+	#If there are Custom Units for this unit type and faction
 	if templateData and templateData[faction] then
-		#LOG('*AI DEBUG: Replacement for '..building..' exists.')
 		local rand = Random(1,100)
 		local possibles = {}
+		#Add all the possibile replacements into a table
 		for k,v in templateData[faction] do
 			if rand <= v[2] then
-				#LOG('*AI DEBUG: Insert possibility.')
 				table.insert(possibles, v[1])
 			end
 		end
+		#If we found a possibility
 		if table.getn(possibles) > 0 then
 			rand = Random(1,table.getn(possibles))
 			local customUnitID = possibles[rand]
-			#LOG('*AI DEBUG: Replaced with '..customUnitID)
 			retTemplate = { { building, customUnitID, } }
 		end
 	end
@@ -454,21 +566,44 @@ function GetPlatoonTechLevel(platoonUnits)
 	return highest
 end
 
+#-----------------------------------------------------
+#   Function: CanRespondEffectively
+#   Args:
+#       aiBrain 		- AI Brain
+#       location  		- Distress response location
+#		platoon			- Platoon to check for
+#   Description:
+#       Checks to see if the platoon can attack units in the distress area.
+#   Returns:  
+#       true or false
+#-----------------------------------------------------
 function CanRespondEffectively(aiBrain, location, platoon)
+	#Get units in area
 	local targets = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, location, 32, 'Enemy' )
+	#If threat of platoon is the same as the threat in the distess area
 	if AIAttackUtils.GetAirThreatOfUnits(platoon) > 0 and aiBrain:GetThreatAtPosition(location, 0, true, 'Air') > 0 then
 		return true
 	elseif AIAttackUtils.GetSurfaceThreatOfUnits(platoon) > 0 and (aiBrain:GetThreatAtPosition(location, 0, true, 'Land') > 0 or aiBrain:GetThreatAtPosition(location, 0, true, 'Naval') > 0) then
 		return true
 	end
+	#If no visible targets go anyway
 	if table.getn(targets) == 0 then
-		#LOG('*AI DEBUG: CanRespondEffectively returned True 2')
 		return true
 	end
-	#LOG('*AI DEBUG: CanRespondEffectively returned False')
 	return false
 end
 
+#-----------------------------------------------------
+#   Function: AISendPing
+#   Args:
+#       position 		- Position to ping
+#       pingType   		- Type of ping to send
+#		army			- AI army
+#   Description:
+#       Function to handle AI map pings.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AISendPing(position, pingType, army)
 	local PingTypes = {
        alert = {Lifetime = 6, Mesh = 'alert_marker', Ring = '/game/marker/ring_yellow02-blur.dds', ArrowColor = 'yellow', Sound = 'UEF_Select_Radar'},
@@ -486,6 +621,18 @@ function AIDelayChat(aigroup, ainickname, aiaction, targetnickname, delaytime)
 	AISendChat(aigroup, ainickname, aiaction, targetnickname)
 end
 
+#-----------------------------------------------------
+#   Function: AISendChat
+#   Args:
+#       aigroup 		- Group to send chat to
+#       ainickname  	- AI name
+#		aiaction		- Type of AI chat
+#		tagetnickname	- Target name
+#   Description:
+#       Function to handle AI sending chat messages.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AISendChat(aigroup, ainickname, aiaction, targetnickname)
 	if aigroup and not GetArmyData(ainickname):IsDefeated() and (aigroup !='allies' or AIHasAlly(GetArmyData(ainickname))) then
 		if aiaction and AIChatText[aiaction] then
@@ -506,6 +653,15 @@ function AISendChat(aigroup, ainickname, aiaction, targetnickname)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: AIRandomizeTaunt
+#   Args:
+#       aiBrain 		- AI Brain
+#   Description:
+#       Randmonly chooses a taunt and sends it to AISendChat.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AIRandomizeTaunt(aiBrain)
 	local factionIndex = aiBrain:GetFactionIndex()
 	tauntid = Random(1,table.getn(AITaunts[factionIndex]))
@@ -513,6 +669,15 @@ function AIRandomizeTaunt(aiBrain)
 	AISendChat('all', aiBrain.Nickname, '/'..AITaunts[factionIndex][tauntid])
 end
 
+#-----------------------------------------------------
+#   Function: FinishAIChat
+#   Args:
+#       data	 		- Chat data table
+#   Description:
+#       Sends a response to a human ally's chat message.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function FinishAIChat(data)
 	if data.NewTarget then
 		if data.NewTarget == 'at will' then
@@ -530,6 +695,16 @@ function FinishAIChat(data)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: AIHandlePing
+#   Args:
+#       aiBrain 		- AI Brain
+#       pingData   		- Ping data table
+#   Description:
+#       Handles the AIs reaction to a human ally's ping.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function AIHandlePing(aiBrain, pingData)
 	if pingData.Type == 'move' then
 		nextping = (table.getn(aiBrain.TacticalBases) + 1)
@@ -562,10 +737,24 @@ function AIHandlePing(aiBrain, pingData)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: FindClosestUnitPosToAttack
+#   Args:
+#       aiBrain 			- AI Brain
+#       platoon    			- Platoon to find a target for
+#		squad				- Platoon squad
+#		maxRange			- Max Range
+#		atkCat				- Categories to look for
+#		selectedWeaponArc	- Platoon weapon arc
+#		turretPitch			- platoon turret pitch
+#   Description:
+#       Finds the closest unit to attack that is not obstructed by terrain.
+#   Returns:  
+#       target or false
+#-----------------------------------------------------
 function FindClosestUnitPosToAttack( aiBrain, platoon, squad, maxRange, atkCat, selectedWeaponArc, turretPitch )
     local position = platoon:GetPlatoonPosition()
     if not aiBrain or not position or not maxRange then
-		#LOG('*AI DEBUG: FindClosestUnitToAttack missing data')
         return false
     end
     local targetUnits = aiBrain:GetUnitsAroundPoint( atkCat, position, maxRange, 'Enemy' )
@@ -574,6 +763,7 @@ function FindClosestUnitPosToAttack( aiBrain, platoon, squad, maxRange, atkCat, 
     for num, unit in targetUnits do
         if not unit:IsDead() then
             local unitPos = unit:GetPosition()
+			#If unit is close enough, can be attacked, and not obstructed
             if (not retUnit or Utils.XZDistanceTwoVectors( position, unitPos ) < distance) and platoon:CanAttackTarget( squad, unit ) and (not turretPitch or not CheckBlockingTerrain(position, unitPos, selectedWeaponArc, turretPitch)) then
                 retUnit = unit #:GetPosition()
                 distance = Utils.XZDistanceTwoVectors( position, unitPos )
@@ -589,8 +779,8 @@ end
 #-----------------------------------------------------
 #   Function: LeadTarget
 #   Args:
-#       platoon - TML firing missile
-#       target  - Target to fire at
+#       platoon 		- TML firing missile
+#       target  		- Target to fire at
 #   Description:
 #       Allows the TML to lead a target to hit them while moving.
 #   Returns:  
@@ -669,12 +859,14 @@ function LeadTarget(platoon, target)
 	local newy = ymove * newtime
 	
 	#Cancel firing if target is outside map boundries
-    if Tpos2[1] < 0 or Tpos2[3] < 0 or Tpos2[1] > ScenarioInfo.size[1] or Tpos2[3] > ScenarioInfo.size[2] then
+    if Tpos2[1] - newx < 0 or Tpos2[3] - newy < 0 or
+	  Tpos2[1] - newx > ScenarioInfo.size[1] or Tpos2[3] - newy > ScenarioInfo.size[2] then
         return false
     end
 	return {Tpos2[1] - newx, 0, Tpos2[3] - newy}
 end
 
+#Unused
 function LeadTargetArtillery(platoon, unit, target)
 	position = platoon:GetPlatoonPosition()
 	mainweapon = unit:GetBlueprint().Weapon[1]
@@ -706,19 +898,42 @@ function LeadTargetArtillery(platoon, unit, target)
 	return {Tpos2[1] - newx, 0, Tpos2[3] - newy}
 end
 
+#-----------------------------------------------------
+#   Function: CheckBlockingTerrain
+#   Args:
+#       pos     		- Platoon position
+#		targetPos		- Target position
+#		firingArc		- Firing Arc
+#		turretPitch		- Turret pitch
+#   Description:
+#       Checks to see if there is terrain blocking a unit from hiting a target.
+#   Returns:  
+#       true (there is something blocking) or false (there is not something blocking)
+#-----------------------------------------------------
 function CheckBlockingTerrain(pos, targetPos, firingArc, turretPitch)
+	#High firing arc indicates Artillery unit
 	if firingArc == 'high' then
 		return false
 	end
+	#Distance to target
 	local distance = VDist2Sq(pos[1], pos[3], targetPos[1], targetPos[3])
 	distance = math.sqrt(distance)
+	
+	#This allows us to break up the distance into 5 points so we can check
+	#5 points between the unit and target
 	local step = math.ceil(distance / 5)
 	local xstep = (pos[1] - targetPos[1]) / step
 	local ystep = (pos[3] - targetPos[3]) / step
+	
+	#Loop through the 5 points to check for blocking terrain
+	#Start at zero in case there is only 1 step. if we start at 1 with 1 step it wont check it
 	for i = 0, step do
 		if i > 0 then
+			#We want to check the slope and angle between one point along the path and the next point
 			local lastPos = {pos[1] - (xstep * (i - 1)), 0, pos[3] - (ystep * (i - 1))}
 			local nextpos = {pos[1] - (xstep * i), 0, pos[3] - (ystep * i)}
+			
+			#Get height for both points
 			local lastPosHeight = GetTerrainHeight( lastPos[1], lastPos[3] )
 			local nextposHeight = GetTerrainHeight( nextpos[1], nextpos[3] )
 			if GetSurfaceHeight( lastPos[1], lastPos[3] ) > lastPosHeight then
@@ -729,7 +944,9 @@ function CheckBlockingTerrain(pos, targetPos, firingArc, turretPitch)
 			else
 				nextposHeight = nextposHeight + .5
 			end
+			#Get the slope and angle between the 2 points
 			local angle, slope = GetSlopeAngle(lastPos, nextpos, lastPosHeight, nextposHeight)
+			#There is an obstruction
 			if angle > turretPitch then
 				return true
 			end
@@ -738,21 +955,41 @@ function CheckBlockingTerrain(pos, targetPos, firingArc, turretPitch)
 	return false
 end
 
+#-----------------------------------------------------
+#   Function: GetSlopeAngle
+#   Args:
+#       pos     		- Starting position
+#		targetPos		- Target position
+#		posHeight		- Starting position height
+#		targetHeight	- Target position height
+#   Description:
+#       Gets the slope and angle between 2 points.
+#   Returns:  
+#       slope and angle
+#-----------------------------------------------------
 function GetSlopeAngle(pos, targetPos, posHeight, targetHeight)
+	#Distance between points
 	local distance = VDist2Sq(pos[1], pos[3], targetPos[1], targetPos[3])
 	distance = math.sqrt(distance)
+	
 	local heightDif
+	
+	#If heights are the same return 0
+	#Otherwise we want the absolute value of the height difference
 	if targetHeight == posHeight then
 		return 0
 	else
 		heightDif = math.abs(targetHeight - posHeight)
 	end
+	
+	#Get the slope and angle between the points
 	local slope = heightDif / distance
 	local angle = math.deg(math.atan(slope))
-	#LOG('*AI DEBUG: GetSlope: heightDif = '..heightDif..' distance = '..distance..' slope = '..slope..' angle = '..angle)
+
 	return angle, slope
 end
 
+#Unused - Deprecated
 function MajorLandThreatExists( aiBrain )
 	local StartX, StartZ = aiBrain:GetArmyStartPos()
 	local numET2 = aiBrain:GetNumUnitsAroundPoint( categories.STRUCTURE * categories.STRATEGIC * categories.TECH2, Vector(StartX,0,StartZ), 360, 'Enemy' )
@@ -784,6 +1021,7 @@ function MajorLandThreatExists( aiBrain )
 	return retcat
 end
 
+#Unused - Deprecated
 function MajorAirThreatExists( aiBrain )
 	local StartX, StartZ = aiBrain:GetArmyStartPos()
 	local numET4Exp = aiBrain:GetUnitsAroundPoint( categories.EXPERIMENTAL * categories.AIR, Vector(StartX,0,StartZ), 100000, 'Enemy' )
@@ -798,6 +1036,16 @@ function MajorAirThreatExists( aiBrain )
 	return retcat
 end
 
+#-----------------------------------------------------
+#   Function: GetGuards
+#   Args:
+#       aiBrain 		- AI Brain
+#       Unit     		- Unit
+#   Description:
+#       Gets number of units assisting a unit.
+#   Returns:  
+#       Number of assisters
+#-----------------------------------------------------
 function GetGuards(aiBrain, Unit)
 	local engs = aiBrain:GetUnitsAroundPoint( categories.ENGINEER, Unit:GetPosition(), 10, 'Ally' )
 	local count = 0
@@ -817,6 +1065,17 @@ function GetGuards(aiBrain, Unit)
 	return count
 end
 
+#-----------------------------------------------------
+#   Function: GetGuardCount
+#   Args:
+#       aiBrain 		- AI Brain
+#       Unit     		- Unit
+#		cat				- Unit category to check for
+#   Description:
+#       Gets the number of units guarding a unit.
+#   Returns:  
+#       Number of guards
+#-----------------------------------------------------
 function GetGuardCount(aiBrain, Unit, cat)
 	local guards = Unit:GetGuards()
 	local count = 0
@@ -828,6 +1087,15 @@ function GetGuardCount(aiBrain, Unit, cat)
 	return count
 end
 
+#-----------------------------------------------------
+#   Function: Nuke
+#   Args:
+#       aiBrain 		- AI Brain
+#   Description:
+#       Finds targets for the AIs nuke launchers and fires them all simultaneously.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
 function Nuke(aiBrain)
     local atkPri = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'TECH3 MASSFABRICATION STRUCTURE', 'TECH3 ENERGYPRODUCTION STRUCTURE', 'TECH2 STRATEGIC STRUCTURE', 'TECH3 DEFENSE STRUCTURE', 'TECH2 DEFENSE STRUCTURE', 'TECH2 ENERGYPRODUCTION STRUCTURE' }
 	local maxFire = false
@@ -837,6 +1105,7 @@ function Nuke(aiBrain)
 	local bp
 	local weapon
 	local maxRadius
+	#This table keeps a list of all the nukes that have fired this round
 	local fired = {}
     for k, v in Nukes do
 		if not maxFire then
@@ -846,40 +1115,54 @@ function Nuke(aiBrain)
 			launcher = v
 			maxFire = true
 		end
+		#Add launcher to the fired table with a value of false
 		fired[v] = false
         if v:GetNukeSiloAmmoCount() > 0 then
 			nukeCount = nukeCount + 1
         end            
     end
+	#If we have nukes
 	if nukeCount > 0 then
+		#This table keeps track of all targets fired at this round to keep from firing multiple nukes
+		#at the same target unless we have to to overwhelm anti-nukes.
 		local oldTarget = {}
 		local target
 		local fireCount = 0
 		local aitarget
 		local tarPosition
+		#Repeat until all launchers have fired or we run out of targets
 		repeat
+			#Get a target and target position. This function also ensures that we fire at a new target
+			#and one that we have enough nukes to hit the target
 			target, tarPosition = AIUtils.AIFindBrainNukeTargetInRangeSorian( aiBrain, launcher, maxRadius, atkPri, nukeCount, oldTarget )
 			if target then
+				#Send a message to allies letting them know we are letting nukes fly
+				#Also ping the map where we are targeting
 				aitarget = target:GetAIBrain():GetArmyIndex()
 				AISendChat('allies', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'nukechat', ArmyBrains[aitarget].Nickname)
 				AISendPing(tarPosition, 'attack', aiBrain:GetArmyIndex())
+				#Randomly taunt the enemy
 				if Random(1,5) == 3 and (not aiBrain.LastTaunt or GetGameTimeSeconds() - aiBrain.LastTaunt > 90) then
 					aiBrain.LastTaunt = GetGameTimeSeconds()
 					AISendChat(aitarget, ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'nuketaunt')
 				end
+				#Get anti-nukes int the area
 				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, tarPosition, 80, 'Enemy' )
 				for k, v in Nukes do
+					#If we have nukes that have not fired yet
 					if v:GetNukeSiloAmmoCount() > 0 and not fired[v] then
 						IssueNuke( {v}, tarPosition )
 						nukeCount = nukeCount - 1
 						fireCount = fireCount + 1
 						fired[v] = true
 					end
-					if fireCount > (antiNukes + 1) or nukeCount == 0 or (fireCount > 0 and antiNukes == 0) then
+					#If we fired enough nukes at the target, or we are out of nukes
+					if fireCount > (antiNukes + 2) or nukeCount == 0 or (fireCount > 0 and antiNukes == 0) then
 						break
 					end
 				end
 			end
+			#Keep track of old targets
 			table.insert( oldTarget, target )
 			fireCount = 0
 			#WaitSeconds(15)
@@ -887,6 +1170,17 @@ function Nuke(aiBrain)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: FindUnfinishedUnits
+#   Args:
+#       aiBrain 		- AI Brain
+#       locationType	- Location to look at
+#		buildCat		- Building category to search for
+#   Description:
+#       Finds unifinished units in an area.
+#   Returns:  
+#       unit or false
+#-----------------------------------------------------
 function FindUnfinishedUnits(aiBrain, locationType, buildCat)
 	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
 	local unfinished = aiBrain:GetUnitsAroundPoint( buildCat, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius(), 'Ally' )
@@ -901,6 +1195,17 @@ function FindUnfinishedUnits(aiBrain, locationType, buildCat)
 	return retUnfinished
 end
 
+#-----------------------------------------------------
+#   Function: FindDamagedShield
+#   Args:
+#       aiBrain 		- AI Brain
+#       locationType	- Location to look at
+#		buildCat		- Building category to search for
+#   Description:
+#       Finds damaged shields in an area.
+#   Returns:  
+#       damaged shield or false
+#-----------------------------------------------------
 function FindDamagedShield(aiBrain, locationType, buildCat)
 	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
 	local shields = aiBrain:GetUnitsAroundPoint( buildCat, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius(), 'Ally' )
@@ -917,12 +1222,27 @@ function FindDamagedShield(aiBrain, locationType, buildCat)
 	return retShield
 end
 
+#-----------------------------------------------------
+#   Function: DestinationBetweenPoints
+#   Args:
+#       destination 	- Destination
+#       start			- Starting point
+#		finish			- Ending point
+#   Description:
+#       Checks to see if the destination is between the 2 given path points.
+#   Returns:  
+#       true or false
+#-----------------------------------------------------
 function DestinationBetweenPoints(destination, start, finish)
+	#Get distance between the points
 	local distance = VDist2Sq(start[1], start[3], finish[1], finish[3])
 	distance = math.sqrt(distance)
+	
+	#This allows us to break the distance up and check points every 100 MU
 	local step = math.ceil(distance / 100)
 	local xstep = (start[1] - finish[1]) / step
 	local ystep = (start[3] - finish[3]) / step
+	#For each point check to see if the destination is close
 	for i = 1, step do
 		#DrawCircle( {start[1] - (xstep * i), 0, start[3] - (ystep * i)}, 5, '0000ff' )
 		#DrawCircle( {start[1] - (xstep * i), 0, start[3] - (ystep * i)}, 100, '0000ff' )
@@ -934,6 +1254,15 @@ function DestinationBetweenPoints(destination, start, finish)
 	return false
 end
 
+#-----------------------------------------------------
+#   Function: GetNumberOfAIs
+#   Args:
+#       aiBrain		 	- AI Brain
+#   Description:
+#       Gets the number of AIs in the game.
+#   Returns:  
+#       Number of AIs
+#-----------------------------------------------------
 function GetNumberOfAIs(aiBrain)
 	local numberofAIs = 0
 	for k,v in ArmyBrains do
@@ -944,6 +1273,16 @@ function GetNumberOfAIs(aiBrain)
 	return numberofAIs
 end
 
+#-----------------------------------------------------
+#   Function: GetNumberOfAIs
+#   Args:
+#       x			 	- Number to round
+#		places			- Number of places to round to
+#   Description:
+#       Rounds a number to the specifed places.
+#   Returns:  
+#       Rounded number
+#-----------------------------------------------------
 function Round(x, places)
 	if places then
 		shift = 10 ^ places
@@ -955,10 +1294,28 @@ function Round(x, places)
 	end
 end
 
+#-----------------------------------------------------
+#   Function: Trim
+#   Args:
+#       s			 	- String to trim
+#   Description:
+#       Trims blank spaces around a string.
+#   Returns:  
+#       String
+#-----------------------------------------------------
 function trim(s)
 	return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
 end
 
+#-----------------------------------------------------
+#   Function: GetArmyData
+#   Args:
+#       army		 	- Army
+#   Description:
+#       Returns army data for an army.
+#   Returns:  
+#       Army data table
+#-----------------------------------------------------
 function GetArmyData(army)
     local result
     if type(army) == 'string' then
@@ -972,6 +1329,15 @@ function GetArmyData(army)
     return result
 end
 
+#-----------------------------------------------------
+#   Function: GetArmyData
+#   Args:
+#       army		 	- Army
+#   Description:
+#       Checks to see if the army is an AI.
+#   Returns:  
+#       true or false
+#-----------------------------------------------------
 function IsAIArmy(army)
     if type(army) == 'string' then
         for i, v in ArmyBrains do
@@ -987,6 +1353,15 @@ function IsAIArmy(army)
     return false
 end
 
+#-----------------------------------------------------
+#   Function: AIHasAlly
+#   Args:
+#       army		 	- Army
+#   Description:
+#       Checks to see if an AI has an ally.
+#   Returns:  
+#       true or false
+#-----------------------------------------------------
 function AIHasAlly(army)
 	for k, v in ArmyBrains do
 		if IsAlly(army:GetArmyIndex(), v:GetArmyIndex()) and army:GetArmyIndex() != v:GetArmyIndex() and not v:IsDefeated() then
@@ -996,10 +1371,30 @@ function AIHasAlly(army)
 	return false
 end
 
+#-----------------------------------------------------
+#   Function: TimeConvert
+#   Args:
+#       temptime	 	- Time in seconds
+#   Description:
+#       Converts seconds into eaier to read time.
+#   Returns:  
+#       Converted time
+#-----------------------------------------------------
 function TimeConvert(temptime)
 	hours = math.floor(temptime / 3600)
 	minutes = math.floor(temptime/60)
 	seconds = math.floor(math.mod(temptime, 60))
-	returntext = tostring(hours)..':'..tostring(minutes)..':'..tostring(seconds)
+	hours = tostring(hours)
+	if minutes < 10 then
+		minutes = '0'..tostring(minutes)
+	else
+		minutes = tostring(minutes)
+	end
+	if seconds < 10 then
+		seconds = '0'..tostring(seconds)
+	else
+		seconds = tostring(seconds)
+	end
+	returntext = hours..':'..minutes..':'..seconds
 	return returntext
 end
