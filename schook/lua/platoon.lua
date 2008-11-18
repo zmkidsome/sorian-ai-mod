@@ -479,7 +479,7 @@ Platoon = Class(sorianoldPlatoon) {
 		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'TECH3 MASSPRODUCTION', 'TECH2 ENERGYPRODUCTION', 'TECH2 MASSPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'LAND, NAVAL' }
         self:SetPrioritizedTargetList( 'Attack', { categories.STRUCTURE * categories.ARTILLERY * categories.EXPERIMENTAL, categories.STRUCTURE * categories.NUKE * categories.EXPERIMENTAL, categories.EXPERIMENTAL * categories.ORBITALSYSTEM, categories.STRUCTURE * categories.ARTILLERY * categories.TECH3, 
 		categories.STRUCTURE * categories.NUKE * categories.TECH3, categories.EXPERIMENTAL * categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.COMMAND, categories.EXPERIMENTAL * categories.MOBILE * categories.LAND, categories.TECH3 * categories.MASSFABRICATION,
-		categories.TECH3 * categories.ENERGYPRODUCTION, categories.MASSPRODUCTION, categories.ENERGYPRODUCTION, categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.LAND + categories.NAVAL } )
+		categories.TECH3 * categories.ENERGYPRODUCTION, categories.TECH3 * categories.MASSPRODUCTION, categories.TECH2 * categories.ENERGYPRODUCTION, categories.TECH2 * categories.MASSPRODUCTION, categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.LAND + categories.NAVAL } )
         while aiBrain:PlatoonExists(self) do
             local target = false
             local blip = false
@@ -494,7 +494,7 @@ Platoon = Class(sorianoldPlatoon) {
                     target = AIUtils.AIFindBrainTargetInRangeSorian( aiBrain, self, 'Attack', maxRadius, atkPri, true )
 					local newtarget = false
 					if aiBrain.AttackPoints and table.getn(aiBrain.AttackPoints) > 0 then
-						newtarget = AIUtils.AIFindPingTargetInRangeSorian( aiBrain, self, 'Artillery', maxRadius, atkPri, true )
+						newtarget = AIUtils.AIFindPingTargetInRangeSorian( aiBrain, self, 'Attack', maxRadius, atkPri, true )
 						if newtarget then
 							target = newtarget
 						end
@@ -2068,7 +2068,6 @@ Platoon = Class(sorianoldPlatoon) {
         local aiBrain = self:GetBrain()
         local armyIndex = aiBrain:GetArmyIndex()
         local target
-        local blip
 		local platoonUnits = self:GetPlatoonUnits()
         local eng
         for k, v in platoonUnits do
@@ -2086,6 +2085,7 @@ Platoon = Class(sorianoldPlatoon) {
 			end
 		end
 		local weapRange = weapon.MaxRadius
+		local movingToScout = false
         while aiBrain:PlatoonExists(self) do
 			local mySurfaceThreat = eng:GetBlueprint().Defense.SurfaceThreatLevel or 75
 			local pos = self:GetPlatoonPosition()
@@ -2093,10 +2093,10 @@ Platoon = Class(sorianoldPlatoon) {
             if self:IsOpponentAIRunning() then
                 local target = self:FindClosestUnit('support', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR - categories.NAVAL - categories.SCOUT)
 				if target and not target:IsDead() then
+					movingToScout = false
 					local targetLoc = target:GetPosition()
 					local threatatLocation = aiBrain:GetThreatAtPosition( targetLoc, 1, true, 'AntiSurface')
 					if threatatLocation < mySurfaceThreat and VDist2Sq(targetLoc[1], targetLoc[3], eng.CDRHome[1], eng.CDRHome[3]) < 90000 then
-						blip = target:GetBlip(armyIndex)
 						self:Stop()
 						if aiBrain:GetEconomyStored('ENERGY') >= weapon.EnergyRequired and VDist2Sq(targetLoc[1], targetLoc[3], pos[1], pos[3]) <= weapRange * weapRange then
 							IssueClearCommands({eng})
@@ -2106,13 +2106,20 @@ Platoon = Class(sorianoldPlatoon) {
 							IssueMove( {eng}, targetLoc )
 						end
 					end
-				else
-					# Add something cool later - Sorian
-					eng.Fighting = false
-					eng.PlatoonHandle:PlatoonDisband()
+				elseif not movingToScout then
+					movingToScout = true
+					self:Stop()
+					local DefSpots = AIUtils.AIGetSortedDefensiveLocations(aiBrain, 10)
+					if table.getn(DefSpots) > 0 then
+						for k,v in DefSpots do
+							if SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) < 90000 then
+								self:MoveToLocation( v, false )
+							end
+						end
+					end
 				end
 			end
-            WaitSeconds(17)
+            WaitSeconds(5)
         end
 		eng.Fighting = false
 		eng.PlatoonHandle:PlatoonDisband()

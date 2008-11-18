@@ -608,9 +608,9 @@ AIBrain = Class(oldAIBrain) {
 				end
 			end)
 			#Draw intel data on map
-			if ScenarioInfo.Options.DebugIntel and not self.IntelDebugThread then
-				self.IntelDebugThread = self:ForkThread( SUtils.DrawIntel )
-			end
+			#if not self.IntelDebugThread then
+			#	self.IntelDebugThread = self:ForkThread( SUtils.DrawIntel )
+			#end
 			#Handle intel data if there was a change
 			if changed then
 				SUtils.AIHandleIntelData(self)
