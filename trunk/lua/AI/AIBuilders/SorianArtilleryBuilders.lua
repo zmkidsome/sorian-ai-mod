@@ -273,10 +273,11 @@ BuilderGroup {
         BuilderData = {
 			MinNumAssistees = 2,
             Construction = {
-                BuildClose = false,
+                BuildClose = true, #false
 				#T4 = true,
-                BaseTemplate = ExBaseTmpl,
-                NearMarkerType = 'Rally Point',
+                #BaseTemplate = ExBaseTmpl,
+                #NearMarkerType = 'Rally Point',
+				AdjacencyCategory = 'SHIELD STRUCTURE',
                 BuildStructures = {
                     'T4LandExperimental2',
                 },

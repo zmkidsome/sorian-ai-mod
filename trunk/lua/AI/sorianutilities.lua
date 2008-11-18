@@ -34,7 +34,7 @@ end
 #       v1 			- Position 1
 #       v2     		- Position 2
 #   Description:
-#       Gets the distance squred between 2 points.
+#       Gets the distance squared between 2 points.
 #   Returns:  
 #       Distance
 #-----------------------------------------------------
@@ -433,7 +433,7 @@ function GetThreatAtPosition( aiBrain, pos, rings, ttype, threatFilters)
 end
 
 #-----------------------------------------------------
-#   Function: LeadTarget
+#   Function: CheckForMapMarkers
 #   Args:
 #       aiBrain 		- AI Brain
 #   Description:
