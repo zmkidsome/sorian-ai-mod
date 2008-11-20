@@ -2,6 +2,14 @@ do
 local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
 local SUtils = import('/lua/AI/sorianutilities.lua')
 local StratManager = import('/lua/sim/StrategyManager.lua')
+
+#Support for Handicap mod
+local Handicaps = {-5,-4,-3,-2,-1,0,1,2,3,4,5}
+local HCapUtils
+if DiskGetFileInfo('/lua/HandicapUtilities.lua') then
+	HCapUtils = import('/lua/HandicapUtilities.lua')
+end
+
 oldAIBrain = AIBrain
 
 AIBrain = Class(oldAIBrain) {
@@ -40,6 +48,27 @@ AIBrain = Class(oldAIBrain) {
         end
     end,
 	
+    OnCreateHuman = function(self, planName)
+        self:CreateBrainShared(planName)
+		
+		if DiskGetFileInfo('/lua/HandicapUtilities.lua') then
+			for name,data in ScenarioInfo.ArmySetup do
+				if name == self.Name then
+					self.handicap = Handicaps[data.Handicap]
+					LOG('*AI DEBUG: Handicap for '..self.Name..' set to '..self.handicap)
+					if self.handicap != 0 then
+						HCapUtils.SetupHandicap(self)
+					end
+					break
+				end
+			end
+		end
+		
+        self:InitializeEconomyState()
+        self:InitializeVO()
+        self.BrainType = 'Human'
+    end,
+	
     OnCreateAI = function(self, planName)
         self:CreateBrainShared(planName)
 
@@ -63,6 +92,19 @@ AIBrain = Class(oldAIBrain) {
                 AIUtils.SetupCheat(self, true)
                 ScenarioInfo.ArmySetup[self.Name].AIPersonality = string.sub( per, 1, cheatPos - 1 )
             end
+			
+			if DiskGetFileInfo('/lua/HandicapUtilities.lua') then
+				for name,data in ScenarioInfo.ArmySetup do
+					if name == self.Name then
+						self.handicap = Handicaps[data.Handicap]
+						LOG('*AI DEBUG: Handicap for '..self.Name..' set to '..self.handicap)
+						if self.handicap != 0 then
+							HCapUtils.SetupHandicap(self)
+						end
+						break
+					end
+				end
+			end
 
             self.CurrentPlan = self.AIPlansList[self:GetFactionIndex()][1]
 
