@@ -2,7 +2,7 @@
 
 == Release Notes ==
 
-*1.7.6:* Added support for my Handicap Mod.
+*1.7.6b:* Added support for my Handicap Mod.
 
 *1.7.6:* TMLs will now go after pgens, Altered ACU behavior a bit, Changed the way Scathi are built, Removed some unnecessary files.
 
