@@ -93,7 +93,7 @@ StrategyManager = Class(BuilderManager) {
 		if builder:GetPriority() >= 70 and builder:GetBuilderStatus() and not builder:IsStrategyActive() then
 			#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Activating Strategy: '..builder.BuilderName..' Priority: '..builder:GetPriority())
 			self:ExecuteChanges(builder)
-		elseif builder:GetPriority() < 70 or not builder:GetBuilderStatus() and builder:IsStrategyActive() then
+		elseif (builder:GetPriority() < 70 or not builder:GetBuilderStatus()) and builder:IsStrategyActive() then
 			#LOG('*AI DEBUG: '..self.Brain.Nickname..' '..SUtils.TimeConvert(GetGameTimeSeconds())..' Deactivating Strategy: '..builder.BuilderName..' Priority: '..builder:GetPriority())
 			self:UndoChanges(builder)
 		end

@@ -16,6 +16,16 @@ Platoon = Class(sorianoldPlatoon) {
             self.Trash:Destroy()
         end
     end,
+	
+    PlatoonDisbandNoAssign = function(self)
+        if self.BuilderHandle then
+            self.BuilderHandle:RemoveHandle(self)
+        end
+        for k,v in self:GetPlatoonUnits() do
+            v.PlatoonHandle = nil
+        end
+        self:GetBrain():DisbandPlatoon(self)
+    end,
 
     NukeAISorian = function(self)
     end,
@@ -2089,30 +2099,27 @@ Platoon = Class(sorianoldPlatoon) {
         while aiBrain:PlatoonExists(self) do
 			local mySurfaceThreat = eng:GetBlueprint().Defense.SurfaceThreatLevel or 75
 			local pos = self:GetPlatoonPosition()
-			local threatatLocation = aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface')
             if self:IsOpponentAIRunning() then
                 local target = self:FindClosestUnit('support', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR - categories.NAVAL - categories.SCOUT)
-				if target and not target:IsDead() then
+				if target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq(target:GetPosition(), eng.CDRHome) < 90000 and
+				  aiBrain:GetThreatAtPosition( target:GetPosition(), 1, true, 'AntiSurface') < mySurfaceThreat then
 					movingToScout = false
 					local targetLoc = target:GetPosition()
-					local threatatLocation = aiBrain:GetThreatAtPosition( targetLoc, 1, true, 'AntiSurface')
-					if threatatLocation < mySurfaceThreat and VDist2Sq(targetLoc[1], targetLoc[3], eng.CDRHome[1], eng.CDRHome[3]) < 90000 then
-						self:Stop()
-						if aiBrain:GetEconomyStored('ENERGY') >= weapon.EnergyRequired and VDist2Sq(targetLoc[1], targetLoc[3], pos[1], pos[3]) <= weapRange * weapRange then
-							IssueClearCommands({eng})
-							IssueOverCharge( {eng}, target )
-						else
-							IssueClearCommands( {eng} )
-							IssueMove( {eng}, targetLoc )
-						end
+					self:Stop()
+					if aiBrain:GetEconomyStored('ENERGY') >= weapon.EnergyRequired and VDist2Sq(targetLoc[1], targetLoc[3], pos[1], pos[3]) <= weapRange * weapRange then
+						IssueClearCommands({eng})
+						IssueOverCharge( {eng}, target )
+					else
+						IssueClearCommands( {eng} )
+						IssueMove( {eng}, targetLoc )
 					end
 				elseif not movingToScout then
-					movingToScout = true
 					self:Stop()
-					local DefSpots = AIUtils.AIGetSortedDefensiveLocations(aiBrain, 10)
+					local DefSpots = AIUtils.AIGetSortedDefensiveLocationsFromLast(aiBrain, 10)
 					if table.getn(DefSpots) > 0 then
 						for k,v in DefSpots do
 							if SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) < 90000 then
+								movingToScout = true
 								self:MoveToLocation( v, false )
 							end
 						end
@@ -2135,7 +2142,7 @@ Platoon = Class(sorianoldPlatoon) {
 		while true do
 			haveTransports = AIUtils.GetTransports(platoon)
 			counter = counter + 1
-			if haveTransports or count > 11 then break end
+			if haveTransports or counter > 11 then break end
 			WaitSeconds(10)
 		end
 		
@@ -2924,6 +2931,25 @@ Platoon = Class(sorianoldPlatoon) {
             eng.FailedToBuildCallbackSet = true
         end      
     end,
+	
+	RemoveEngineerCallbacksSorian = function(eng)
+		if eng.BuildDoneCallbackSet then
+			import('/lua/ScenarioTriggers.lua')RemoveUnitTrigger(eng, eng.PlatoonHandle.EngineerBuildDoneSorian)
+			eng.BuildDoneCallbackSet = false
+		end
+		if eng.CaptureDoneCallbackSet then
+			import('/lua/ScenarioTriggers.lua')RemoveUnitTrigger(eng, eng.PlatoonHandle.EngineerCaptureDoneSorian)
+			eng.CaptureDoneCallbackSet = false
+		end
+		if eng.ReclaimDoneCallbackSet then
+			import('/lua/ScenarioTriggers.lua')RemoveUnitTrigger(eng, eng.PlatoonHandle.EngineerReclaimDoneSorian)
+			eng.ReclaimDoneCallbackSet = false
+		end
+		if eng.FailedToBuildCallbackSet then
+			import('/lua/ScenarioTriggers.lua')RemoveUnitTrigger(eng, eng.PlatoonHandle.EngineerFailedToBuildSorian)
+			eng.FailedToBuildCallbackSet = false
+		end
+	end,
     
     # Callback functions for EngineerBuildAI
     EngineerBuildDoneSorian = function(unit, params)

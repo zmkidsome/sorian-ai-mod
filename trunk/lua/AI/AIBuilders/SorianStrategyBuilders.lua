@@ -23,6 +23,302 @@ local SAI = '/lua/ScenarioPlatoonAI.lua'
 local PlatoonFile = '/lua/platoon.lua'
 local SBC = '/lua/editor/SorianBuildConditions.lua'
 local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
+local AIUtils = import('/lua/ai/aiutilities.lua')
+local Behaviors = import('/lua/ai/aibehaviors.lua')
+local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
+
+BuilderGroup {
+    BuilderGroupName = 'Sorian Tele SCU Strategy',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Tele SCU Strategy',
+		StrategyType = 'Intermediate',
+        Priority = 100,
+        InstanceCount = 1,
+		StrategyTime = 300,
+		InterruptStrategy = true,
+		OnStrategyActivate = function(self, aiBrain)
+			Builders[self.BuilderName].Running = true
+			local x,z = aiBrain:GetArmyStartPos()
+			local faction = aiBrain:GetFactionIndex()
+			local upgrades
+			local removes
+			if faction == 2 then
+				upgrades = {'StabilitySuppressant', 'Teleporter'}
+			elseif faction == 4 then
+				upgrades = {'Shield', 'Teleporter'}
+			end
+			local SCUs = {} 
+			local possSCUs = AIUtils.GetOwnUnitsAroundPoint( aiBrain, categories.SUBCOMMANDER, {x,0,z}, 200 )
+			for k,v in possSCUs do
+				table.insert(SCUs, v)
+				if table.getn(SCUs) > 2 then
+					break
+				end
+			end
+			for k,v in SCUs do
+				if v.PlatoonHandle and aiBrain:PlatoonExists(v.PlatoonHandle) then
+					v.PlatoonHandle:RemoveEngineerCallbacksSorian()
+					v.PlatoonHandle:Stop()
+					v.PlatoonHandle:PlatoonDisbandNoAssign()
+				end
+				if v.NotBuildingThread then
+					KillThread(v.NotBuildingThread)
+					v.NotBuildingThread = nil
+				end
+				if v.ProcessBuild then
+					KillThread(v.ProcessBuild)
+					v.ProcessBuild = nil
+				end
+				v.BuilderManagerData.EngineerManager:RemoveUnit(v)
+				IssueStop({v})
+				IssueClearCommands({v})
+				if v:HasEnhancement('Overcharge') then
+					local order = {
+						TaskName = "EnhanceTask",
+						Enhancement = "OverchargeRemove"
+					}
+					IssueScript({v}, order)
+				elseif v:HasEnhancement('ResourceAllocation') then
+					local order = {
+						TaskName = "EnhanceTask",
+						Enhancement = "ResourceAllocationRemove"
+					}
+					IssueScript({v}, order)
+				end 
+			end
+			local plat = aiBrain:MakePlatoon( '', '' )
+			aiBrain:AssignUnitsToPlatoon( plat, SCUs, 'attack', 'None' )
+			for k,v in SCUs do
+				for x,z in upgrades do
+					if not v:HasEnhancement(z) then
+						local order = {
+							TaskName = "EnhanceTask",
+							Enhancement = z
+						}
+						IssueScript({v}, order)
+					end
+				end
+			end
+			local allDead
+			local upgradesFinished
+            repeat
+                WaitSeconds(5)
+				allDead = true
+				upgradesFinished = true
+				if not aiBrain:PlatoonExists(plat) then
+					Builders[self.BuilderName].Running = false
+					return
+				end
+				for k,v in plat:GetPlatoonUnits() do
+					if not v:IsDead() then
+						allDead = false
+					end
+					if not v:HasEnhancement(upgrades[2]) then
+						upgradesFinished = false
+					end
+				end
+            until allDead or upgradesFinished
+			
+			if allDead then return end
+			
+			local targetLocation = Behaviors.GetHighestThreatClusterLocationSorian(aiBrain, plat)
+			for k,v in SCUs do
+				local telePos = AIUtils.RandomLocation(targetLocation[1],targetLocation[3])
+				IssueTeleport({v}, telePos)
+			end
+			WaitSeconds(45)
+			plat:HuntAISorian()
+			Builders[self.BuilderName].Running = false
+		end,
+		PriorityFunction = function(self, aiBrain)
+			if Builders[self.BuilderName].Running then
+				return 100
+			end
+			local enemyIndex
+			local returnval = 1
+			if aiBrain:GetCurrentEnemy() then
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			
+			if Random(1,500) == 100 then
+				returnval = 100
+			end				
+			
+			return returnval
+		end,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ MIBC, 'FactionIndex', {2, 4}},
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 2, 'SUBCOMMANDER' }},
+			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.3}},
+			{ SIBC, 'GreaterThanEconIncome', {15, 1000}},
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {},
+		AddBuilders = {}
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'Sorian Engy Drop Strategy',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Engy Drop Strategy',
+		StrategyType = 'Intermediate',
+        Priority = 0, #100,
+        InstanceCount = 1,
+		StrategyTime = 300,
+		InterruptStrategy = true,
+		OnStrategyActivate = function(self, aiBrain)
+			Builders[self.BuilderName].Running = true
+			LOG('*AI DEBUG: Sorian Engy Drop Strategy Activated by '..aiBrain.Nickname..'!')
+			local x,z = aiBrain:GetArmyStartPos()
+			local count = 0
+			repeat
+				WaitSeconds(5)
+				count = count + 1
+				if count > 18 then
+					Builders[self.BuilderName].Running = false
+					Builders[self.BuilderName].Done = true
+					return
+				end
+				airfacs = AIUtils.GetOwnUnitsAroundPoint( aiBrain, categories.AIR * categories.FACTORY, {x,0,z}, 150 )
+			until table.getn(airfacs) > 0
+			local ex, ey = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+			local Engies = {} 
+			local possEngies = AIUtils.GetOwnUnitsAroundPoint( aiBrain, categories.ENGINEER * categories.TECH1, {x,0,z}, 200 )
+			for k,v in possEngies do
+				table.insert(Engies, v)
+				if table.getn(Engies) > 3 then
+					break
+				end
+			end
+			if table.getn(Engies) < 2 then
+				Builders[self.BuilderName].Running = false
+				Builders[self.BuilderName].Done = true
+				return
+			end
+			for k,v in Engies do
+				if v.PlatoonHandle and aiBrain:PlatoonExists(v.PlatoonHandle) then
+					v.PlatoonHandle:RemoveEngineerCallbacksSorian()
+					v.PlatoonHandle:Stop()
+					v.PlatoonHandle:PlatoonDisbandNoAssign()
+				end
+				if v.NotBuildingThread then
+					KillThread(v.NotBuildingThread)
+					v.NotBuildingThread = nil
+				end
+				if v.ProcessBuild then
+					KillThread(v.ProcessBuild)
+					v.ProcessBuild = nil
+				end
+				v.BuilderManagerData.EngineerManager:RemoveUnit(v)
+				IssueStop({v})
+				IssueClearCommands({v})
+			end
+			local plat = aiBrain:MakePlatoon( '', '' )
+			aiBrain:AssignUnitsToPlatoon( plat, Engies, 'support', 'None' )
+			for x=-60, 60, 60 do
+				for y=-60, 60, 60 do
+					if not (x == 0 and y == 0) then
+						tempPos = {ex + x ,0, ey + y}
+						local nextbase = (table.getn(aiBrain.TacticalBases) + 1)
+						table.insert(aiBrain.TacticalBases,
+							{
+							Position = tempPos,
+							Name = 'TacticalBase'..nextbase,
+							}
+						)
+					end
+				end
+			end
+			local targetPos = AIUtils.AIFindFirebaseLocationSorian(aiBrain, 'Main', 75, 'Expansion Area', -1000, 99999, 1, 'AntiSurface', 1, 'STRATEGIC', 20)
+			if not targetPos then
+				Builders[self.BuilderName].Running = false
+				Builders[self.BuilderName].Done = true
+				return
+			end
+			local data = { 
+				Construction = {
+					BuildClose = false,
+					BaseTemplate = 'ExpansionBaseTemplates',
+					FireBase = true,
+					FireBaseRange = 75,
+					NearMarkerType = 'Expansion Area',
+					LocationType = 'MAIN',
+					ThreatMin = -1000,
+					ThreatMax = 99999,
+					ThreatRings = 1,
+					ThreatType = 'AntiSurface',
+					MarkerUnitCount = 1,
+					MarkerUnitCategory = 'STRATEGIC',
+					MarkerRadius = 20,
+					BuildStructures = {
+						'T1GroundDefense',
+						'T1GroundDefense',
+						'T1GroundDefense',
+						'T1GroundDefense',
+						'T1AADefense',
+						'T1GroundDefense',
+						'T1GroundDefense',
+						'T1GroundDefense',
+						'T1GroundDefense',
+					}
+				}
+			}
+			plat:SetPlatoonData(data)
+			local usedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, plat, targetPos, true, true, true)
+			if not usedTransports then
+				Builders[self.BuilderName].Running = false
+				Builders[self.BuilderName].Done = true
+				return
+			end
+			plat:EngineerBuildAISorian()
+			Builders[self.BuilderName].Running = false
+			Builders[self.BuilderName].Done = true
+		end,
+		PriorityFunction = function(self, aiBrain)
+			if Builders[self.BuilderName].Running then
+				return 100
+			#elseif Builders[self.BuilderName].Done then
+			#	return 0
+			end
+			local enemyIndex
+			local returnval = 0
+			if aiBrain:GetCurrentEnemy() then
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			
+			#if Random(1,100) == 100 then
+				returnval = 100
+			#end				
+			
+			return returnval
+		end,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'ENGINEER TECH1' }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'FACTORY' }},
+			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2}},
+			{ SBC, 'MapLessThan', { 1000, 1000 }},
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {},
+		AddBuilders = {
+			FactoryManager = {
+				'Sorian T1 Air Transport - GG',
+			},
+			EngineerManager = {
+				'SorianAirFactoryHighPrio',
+			}
+		}
+    },
+}
 
 BuilderGroup {
     BuilderGroupName = 'SorianBigAirGroup',
@@ -92,7 +388,7 @@ BuilderGroup {
 				'Sorian BomberAttackT3Frequent - Anti-Land',
 				'Sorian BomberAttackT3Frequent - Anti-Resource',
 				'Sorian T1 Bomber Attack Weak Enemy Response',
-				'Sorian BomberAttack Mass Hunter',
+				#'Sorian BomberAttack Mass Hunter',
 			}
 		},
 		AddBuilders = {
@@ -213,7 +509,7 @@ BuilderGroup {
         InstanceCount = 1,
 		StrategyTime = 300,
 		InterruptStrategy = true,
-		OnStrategyActivate = function(self)
+		OnStrategyActivate = function(self, aiBrain)
 			LOG('*AI DEBUG: SorianGhettoGunship strat activated')
 		end,
 		PriorityFunction = function(self, aiBrain)
@@ -245,7 +541,7 @@ BuilderGroup {
 		end,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ MIBC, 'FactionIndex', {1, 2}},
+			{ MIBC, 'FactionIndex', {1, 2, 3}},
 			{ SBC, 'MapLessThan', { 1000, 1000 }},
 			#{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY AIR' }},
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
@@ -577,7 +873,7 @@ BuilderGroup {
 				'Sorian BomberAttackT3Frequent - Anti-Land',
 				'Sorian BomberAttackT3Frequent - Anti-Resource',
 				'Sorian T1 Bomber Attack Weak Enemy Response',
-				'Sorian BomberAttack Mass Hunter',
+				#'Sorian BomberAttack Mass Hunter',
 			}
 		},
 		AddBuilders = {
@@ -658,7 +954,7 @@ BuilderGroup {
 				'Sorian BomberAttackT3Frequent - Anti-Land',
 				'Sorian BomberAttackT3Frequent - Anti-Resource',
 				'Sorian T2/T3 Bomber Attack Weak Enemy Response',
-				'Sorian BomberAttack Mass Hunter',
+				#'Sorian BomberAttack Mass Hunter',
 			}
 		},
 		AddBuilders = {
@@ -737,7 +1033,7 @@ BuilderGroup {
 				'Sorian BomberAttackT3Frequent - Anti-Land',
 				'Sorian BomberAttackT3Frequent - Anti-Resource',
 				'Sorian T2/T3 Bomber Attack Weak Enemy Response',
-				'Sorian BomberAttack Mass Hunter',
+				#'Sorian BomberAttack Mass Hunter',
 			}
 		},
 		AddBuilders = {
