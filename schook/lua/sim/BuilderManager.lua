@@ -129,11 +129,11 @@ BuilderManager = Class {
         return false
     end,
     
-    SetBuilderPriority = function(self,builderName,priority,temporary)
+    SetBuilderPriority = function(self,builderName,priority,temporary,setbystrat)
         for _,bType in self.BuilderData do
             for _,builder in bType.Builders do
                 if builder:GetBuilderName() == builderName then
-                    builder:SetPriority(priority, temporary)
+                    builder:SetPriority(priority, temporary, setbystrat)
                     return
                 end
             end

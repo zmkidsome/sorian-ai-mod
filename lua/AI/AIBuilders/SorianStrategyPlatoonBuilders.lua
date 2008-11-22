@@ -52,9 +52,9 @@ BuilderGroup {
         BuilderName = 'Sorian T1 Air Transport - GG',
         PlatoonTemplate = 'T1AirTransport',
         Priority = 0.1,
-		ActivePriority = 701,
+		ActivePriority = 1500,
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 2, 'TRANSPORTFOCUS' } },
+            { UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'TRANSPORTFOCUS' } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'TRANSPORTFOCUS' } },
         },
         BuilderType = 'Air',
@@ -68,6 +68,49 @@ BuilderGroup {
 			{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 6, categories.TECH1 * categories.LAND * categories.MOBILE * categories.DIRECTFIRE * categories.BOT - categories.SCOUT - categories.ENGINEER - categories.EXPERIMENTAL } },
         },
         BuilderType = 'Land',
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianAirFactoryHighPrio',
+    BuildersType = 'EngineerBuilder',
+    Builder {        
+        BuilderName = 'Sorian T1 Air Factory Builder - High Prio',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 0.1,
+        ActivePriority = 1500,
+        BuilderConditions = {
+			{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, 'AIR FACTORY' } },
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'AIR FACTORY', 'LocationType', }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                Location = 'LocationType',
+                BuildStructures = {
+                    'T1AirFactory',
+                },
+            }
+        }
+    },
+    Builder {        
+        BuilderName = 'Sorian CDR T1 Air Factory Builder - High Prio',
+        PlatoonTemplate = 'CommanderBuilderSorian',
+        Priority = 0.1,
+        ActivePriority = 1500,
+        BuilderConditions = {
+			{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 1, 'AIR FACTORY' } },
+			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'AIR FACTORY', 'LocationType', }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                Location = 'LocationType',
+                BuildStructures = {
+                    'T1AirFactory',
+                },
+            }
+        }
     },
 }
 

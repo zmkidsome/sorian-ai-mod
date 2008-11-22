@@ -215,6 +215,11 @@ function LayerCheckPosition( pos, layer )
     end
 end
 
+function AIGetSortedDefensiveLocationsFromLast(aiBrain, maxNum)
+    local markerList = AIGetMarkerLocations(aiBrain, 'Defensive Point')
+    return AISortMarkersFromLastPos(aiBrain, markerList, maxNum or 1000)
+end
+
 function AIGetSortedHydroLocations(aiBrain, maxNum, tMin, tMax, tRings, tType, position)
     local markerList = AIGetMarkerLocations(aiBrain, 'Hydrocarbon')
     local newList = {}
@@ -591,7 +596,7 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
 						end
 					end
 				end
-                if (not retUnit or (distance and Utils.XZDistanceTwoVectors( position, unitPos ) < distance)) and ((antiNukes + 1 < nukeCount or antiNukes == 0) and not dupTarget) then
+                if (not retUnit or (distance and Utils.XZDistanceTwoVectors( position, unitPos ) < distance)) and ((antiNukes + 2 < nukeCount or antiNukes == 0) and not dupTarget) then
                     retUnit = unit
 					retPosition = unitPos
                     distance = Utils.XZDistanceTwoVectors( position, unitPos )
@@ -601,7 +606,7 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
 							if i ~= 0 and j~= 0 then
 								local pos = {unitPos[1] + (i * 15), 0, unitPos[3] + (j * 15)}
 								antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, pos, 80, 'Enemy' )
-								if (antiNukes + 1 < nukeCount or antiNukes == 0) then
+								if (antiNukes + 2 < nukeCount or antiNukes == 0) then
 									retUnit = unit
 									retPosition = pos
 									distance = Utils.XZDistanceTwoVectors( position, unitPos )

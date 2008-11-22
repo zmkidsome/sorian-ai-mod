@@ -143,6 +143,7 @@ BaseBuilderTemplate {
 		'SorianT2ACUSnipe',
 		'SorianT3FBRush',
 		'SorianParagonStrategy',
+		'Sorian Tele SCU Strategy',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',

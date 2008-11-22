@@ -1148,10 +1148,11 @@ function Nuke(aiBrain)
 				end
 				#Get anti-nukes int the area
 				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, tarPosition, 80, 'Enemy' )
+				local nukesToFire = {}
 				for k, v in Nukes do
 					#If we have nukes that have not fired yet
 					if v:GetNukeSiloAmmoCount() > 0 and not fired[v] then
-						IssueNuke( {v}, tarPosition )
+						table.insert(nukesToFire, v)
 						nukeCount = nukeCount - 1
 						fireCount = fireCount + 1
 						fired[v] = true
@@ -1161,12 +1162,40 @@ function Nuke(aiBrain)
 						break
 					end
 				end
+				ForkThread(LaunchNukesTimed, nukesToFire, tarPosition)
 			end
 			#Keep track of old targets
 			table.insert( oldTarget, target )
 			fireCount = 0
 			#WaitSeconds(15)
 		until nukeCount <= 0 or target == false
+	end
+end
+
+
+#-----------------------------------------------------
+#   Function: LaunchNukesTimed
+#   Args:
+#       nukesToFire 	- Table of Nukes
+#       target			- Target to attack
+#   Description:
+#       Launches nukes so that they all reach the target at about the same time.
+#   Returns:  
+#       nil
+#-----------------------------------------------------
+function LaunchNukesTimed(nukesToFire, target)
+	local nukes = {}
+	for k,v in nukesToFire do
+		local pos = v:GetPosition()
+		local timeToTarget = math.sqrt(VDist2Sq(target[1], target[3], pos[1], pos[3]))/40
+		table.insert(nukes,{unit = v, flightTime = timeToTarget})
+	end
+	table.sort(nukes, function(a,b) return a.flightTime > b.flightTime end)
+	local lastFT = nukes[1].flightTime
+	for k,v in nukes do
+		WaitSeconds(lastFT - v.flightTime)
+		IssueNuke( {v.unit}, target )
+		lastFT = v.flightTime
 	end
 end
 
