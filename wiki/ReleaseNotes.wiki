@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.7.7:* Fixed ACU Attack function, New advanced strategy, Fixed and improved nuke launching function, Some bug fixes, AI will still go after Mexes when using an Air Strategy.
+
 *1.7.6b:* Added support for my Handicap Mod.
 
 *1.7.6:* TMLs will now go after pgens, Altered ACU behavior a bit, Changed the way Scathi are built, Removed some unnecessary files.
