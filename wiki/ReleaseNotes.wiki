@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.7.8:* Fixed bug in Anti-Nuke building, AI fighters should avoid AA more, Players can now give AI allies strategies to focus on.
+
 *1.7.7:* Fixed ACU Attack function, New advanced strategy, Fixed and improved nuke launching function, Some bug fixes, AI will still go after Mexes when using an Air Strategy.
 
 *1.7.6b:* Added support for my Handicap Mod.
