@@ -649,12 +649,12 @@ Platoon = Class(sorianoldPlatoon) {
 						target = newtarget
 					end
 				end
-                if target and newtarget and target:GetFractionComplete() == 1 then
+                if target and newtarget and target:GetFractionComplete() == 1 and SUtils.GetThreatAtPosition( aiBrain, target:GetPosition(), 1, 'AntiAir', {'Air'}) < AIAttackUtils.GetAirThreatOfUnits(self) then
                     blip = target:GetBlip(armyIndex)
                     self:Stop()
                     self:AttackTarget( target )
 					hadtarget = true
-                elseif target and target:GetFractionComplete() == 1 then
+                elseif target and target:GetFractionComplete() == 1 and SUtils.GetThreatAtPosition( aiBrain, target:GetPosition(), 1, 'AntiAir', {'Air'}) < AIAttackUtils.GetAirThreatOfUnits(self) then
                     blip = target:GetBlip(armyIndex)
                     self:Stop()
                     self:AggressiveMoveToLocation( table.copy(target:GetPosition()) )
