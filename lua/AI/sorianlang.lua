@@ -292,7 +292,9 @@ AIChatText = {
 		'There aren\'t any map markers. Is there a \\nextmap command?',
 		'New map please. Preferably one with markers.',
 	},
-		
+	focuschat = {
+		'Currently focusing on [extra].',
+	},		
 	genericchat = {
 		'Roger.',
 		'Copy.',

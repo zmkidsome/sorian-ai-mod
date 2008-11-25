@@ -417,7 +417,7 @@ end
 #       pos     		- Position to check for threat
 #		rings			- Rings to check
 #		ttype			- Threat type
-#		threatFilters	- Threats to filter
+#		threatFilters	- Table of threats to filter
 #   Description:
 #       Checks for threat level at a location and allows filtering of threat types.
 #   Returns:  
@@ -633,7 +633,7 @@ end
 #   Returns:  
 #       nil
 #-----------------------------------------------------
-function AISendChat(aigroup, ainickname, aiaction, targetnickname)
+function AISendChat(aigroup, ainickname, aiaction, targetnickname, extrachat)
 	if aigroup and not GetArmyData(ainickname):IsDefeated() and (aigroup !='allies' or AIHasAlly(GetArmyData(ainickname))) then
 		if aiaction and AIChatText[aiaction] then
 			local ranchat = Random(1, table.getn(AIChatText[aiaction]))
@@ -643,6 +643,8 @@ function AISendChat(aigroup, ainickname, aiaction, targetnickname)
 					targetnickname = trim(string.gsub(targetnickname,'%b()', '' ))
 				end
 				chattext = string.gsub(AIChatText[aiaction][ranchat],'%[target%]', targetnickname )
+			elseif extrachat then
+				chattext = string.gsub(AIChatText[aiaction][ranchat],'%[extra%]', extrachat )
 			else
 				chattext = AIChatText[aiaction][ranchat]
 			end
@@ -692,6 +694,15 @@ function FinishAIChat(data)
 				AISendChat('allies', ArmyBrains[data.Army].Nickname, 'tcerrorally', ArmyBrains[data.NewTarget].Nickname)
 			end
 		end
+	elseif data.NewFocus then
+		ArmyBrains[data.Army].Focus = data.NewFocus
+		AISendChat('allies', ArmyBrains[data.Army].Nickname, 'genericchat')
+	elseif data.CurrentFocus then
+		local focus = 'nothing'
+		if ArmyBrains[data.Army].Focus then
+			focus = ArmyBrains[data.Army].Focus
+		end
+		AISendChat('allies', ArmyBrains[data.Army].Nickname, 'focuschat', nil, focus)
 	end
 end
 
@@ -1187,7 +1198,7 @@ function LaunchNukesTimed(nukesToFire, target)
 	local nukes = {}
 	for k,v in nukesToFire do
 		local pos = v:GetPosition()
-		local timeToTarget = math.sqrt(VDist2Sq(target[1], target[3], pos[1], pos[3]))/40
+		local timeToTarget = Round(math.sqrt(VDist2Sq(target[1], target[3], pos[1], pos[3]))/40)
 		table.insert(nukes,{unit = v, flightTime = timeToTarget})
 	end
 	table.sort(nukes, function(a,b) return a.flightTime > b.flightTime end)
@@ -1359,7 +1370,7 @@ function GetArmyData(army)
 end
 
 #-----------------------------------------------------
-#   Function: GetArmyData
+#   Function: IsAIArmy
 #   Args:
 #       army		 	- Army
 #   Description:

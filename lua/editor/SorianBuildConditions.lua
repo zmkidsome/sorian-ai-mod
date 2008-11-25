@@ -464,7 +464,7 @@ function HaveComparativeUnitsWithCategoryAndAllianceAtLocation(aiBrain, location
     if not engineerManager then
         return false
     end
-	local myUnits = AIUtils.GetOwnUnitsAroundPoint( aiBrain, myCategory, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius() )
+	local myUnits = table.getn(AIUtils.GetOwnUnitsAroundPoint( aiBrain, myCategory, engineerManager:GetLocationCoords(), engineerManager:GetLocationRadius() ))
     local numUnits = aiBrain:GetNumUnitsAroundPoint( eCategory, Vector(0,0,0), 100000, alliance )
 	if alliance == 'Ally' then
 		numUnits = numUnits - aiBrain:GetCurrentUnits(myCategory)

@@ -2066,7 +2066,7 @@ BuilderGroup {
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'NUKE SILO STRUCTURE', 'Enemy'}},
             { IBC, 'BrainNotLowPowerMode', {} },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
-			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'ANTIMISSILE TECH3 STRUCTURE' }},
+			{ SIBC, 'EngineerNeedsAssistance', { true, 'LocationType', 'ANTIMISSILE TECH3 STRUCTURE' }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -2091,7 +2091,7 @@ BuilderGroup {
 			{ SBC, 'HaveComparativeUnitsWithCategoryAndAllianceAtLocation', { 'LocationType', true, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, categories.STRUCTURE * categories.NUKE * categories.TECH3, 'Enemy'}},
             { IBC, 'BrainNotLowPowerMode', {} },
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
-			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'ANTIMISSILE TECH3 STRUCTURE' }},
+			{ SIBC, 'EngineerNeedsAssistance', { true, 'LocationType', 'ANTIMISSILE TECH3 STRUCTURE' }},
         },
         BuilderType = 'Any',
         BuilderData = {

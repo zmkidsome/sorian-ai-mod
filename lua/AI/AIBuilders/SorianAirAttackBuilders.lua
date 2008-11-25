@@ -640,7 +640,7 @@ BuilderGroup {
         Priority = 761,
         BuilderConditions = {
 			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, 'EXPERIMENTAL AIR', 'Enemy'}},
-			{ UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.TECH3 * categories.ANTIAIR * categories.AIR - categories.BOMBER } },
+			{ UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 3, categories.TECH3 * categories.ANTIAIR * categories.AIR - categories.BOMBER } },
 			{ SBC, 'T4ThreatExists', {{'Air'}, categories.AIR}},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},

@@ -143,7 +143,7 @@ BuilderGroup {
 				return returnval
 			end
 			
-			if Random(1,500) == 100 then
+			if Random(1,200) == 100 then
 				returnval = 100
 			end				
 			
@@ -625,6 +625,10 @@ BuilderGroup {
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
 			local returnval = 1
+			#If activated by an ally
+			if aiBrain.Focus == 'rush arty' then
+				return 100
+			end
 			local arties = aiBrain:GetCurrentUnits(categories.ARTILLERY * categories.STRUCTURE * categories.TECH3)
 			
 			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE * categories.TECH3, Vector(0,0,0), 100000, 'Enemy' )
@@ -669,6 +673,10 @@ BuilderGroup {
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
 			local returnval = 1
+			#If activated by an ally
+			if aiBrain.Focus == 'rush arty' then
+				return 100
+			end
 			local arties = aiBrain:GetCurrentUnits(categories.ARTILLERY * categories.STRUCTURE * categories.TECH3)
 			
 			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE * categories.TECH3, Vector(0,0,0), 100000, 'Enemy' )
@@ -719,6 +727,10 @@ BuilderGroup {
 		StrategyTime = 300,
 		PriorityFunction = function(self, aiBrain)
 			local returnval = 1
+			#If activated by an ally
+			if aiBrain.Focus == 'rush nuke' then
+				return 100
+			end
 			local nukes = aiBrain:GetCurrentUnits(categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3)
 			
 			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, Vector(0,0,0), 100000, 'Enemy' )
@@ -815,6 +827,10 @@ BuilderGroup {
 		PriorityFunction = function(self, aiBrain)
 			local enemy, enemyIndex
 			local returnval = 1
+			#If activated by an ally
+			if aiBrain.Focus == 'air' then
+				return 100
+			end
 			if aiBrain:GetCurrentEnemy() then
 				enemy = aiBrain:GetCurrentEnemy()
 				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
@@ -896,6 +912,10 @@ BuilderGroup {
 		PriorityFunction = function(self, aiBrain)
 			local enemy, enemyIndex
 			local returnval = 1
+			#If activated by an ally
+			if aiBrain.Focus == 'air' then
+				return 100
+			end
 			if aiBrain:GetCurrentEnemy() then
 				enemy = aiBrain:GetCurrentEnemy()
 				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
@@ -977,6 +997,10 @@ BuilderGroup {
 		PriorityFunction = function(self, aiBrain)
 			local enemy, enemyIndex
 			local returnval = 1
+			#If activated by an ally
+			if aiBrain.Focus == 'air' then
+				return 100
+			end
 			if aiBrain:GetCurrentEnemy() then
 				enemy = aiBrain:GetCurrentEnemy()
 				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()

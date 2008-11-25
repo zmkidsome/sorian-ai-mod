@@ -24,6 +24,11 @@ function ProcessAIChat(to, from, text)
 							end
 						end
 					end
+				elseif string.lower(testtext) == 'focus' and aftertext != '' then
+					local focus = trim(string.lower(aftertext))
+					SimCallback({Func = 'AIChat', Args = {Army = i, NewFocus = focus}})
+				elseif string.lower(testtext) == 'current' and aftertext == 'focus' then
+					SimCallback({Func = 'AIChat', Args = {Army = i, CurrentFocus = true}})
 				end
 			end
 		end
