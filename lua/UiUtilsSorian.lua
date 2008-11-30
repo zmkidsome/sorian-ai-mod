@@ -29,6 +29,10 @@ function ProcessAIChat(to, from, text)
 					SimCallback({Func = 'AIChat', Args = {Army = i, NewFocus = focus}})
 				elseif string.lower(testtext) == 'current' and aftertext == 'focus' then
 					SimCallback({Func = 'AIChat', Args = {Army = i, CurrentFocus = true}})
+				elseif string.lower(testtext) == 'give' and aftertext == 'me an engineer' and to == i then
+					SimCallback({Func = 'AIChat', Args = {Army = i, ToArmy = from, GiveEngineer = true}})
+				elseif string.lower(testtext) == 'command' and to == i then
+					SimCallback({Func = 'AIChat', Args = {Army = i, ToArmy = from, Command = true, Text = aftertext}})
 				end
 			end
 		end

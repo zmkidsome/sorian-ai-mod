@@ -81,6 +81,7 @@ BaseBuilderTemplate {
 		# ===== STRATEGIES ====== #
 		
 		'SorianParagonStrategyExp',
+		'SorianWaterMapLowLand',
 		
 		# == STRATEGY PLATOONS == #
 		

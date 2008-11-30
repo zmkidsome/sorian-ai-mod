@@ -1122,3 +1122,191 @@ BuilderGroup {
         }
     },
 }
+
+BuilderGroup {
+    BuilderGroupName = 'SorianT1DefensivePoints - High Prio',
+    BuildersType = 'EngineerBuilder',
+    Builder {
+        BuilderName = 'Sorian T1 - High Prio Defensive Point Engineer',
+        PlatoonTemplate = 'EngineerBuilderSorian',
+        Priority = 0.1,
+		ActivePriority = 980,
+        BuilderConditions = {
+            # Most paramaters freaking ever Build Condition -- All the threat ones are optional
+            ####                                   MarkerType   LocRadius       category      markerRad unitMax tMin tMax Rings tType
+            { SIBC, 'DefensivePointNeedsStructure', { 'LocationType', 350, 'DEFENSE TECH1 STRUCTURE', 20,        4,     -10000,   1,   1, 'AntiSurface' } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            #{ UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
+            { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			NeedGuard = true,
+            NumAssistees = 2,
+            Construction = {
+                BuildClose = false,
+                NearMarkerType = 'Defensive Point',
+                MarkerRadius = 20,
+                LocationRadius = 350,
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                ThreatType = 'AntiSurface',
+                MarkerUnitCount = 4,
+                MarkerUnitCategory = 'DEFENSE TECH1 STRUCTURE',
+                BuildStructures = {
+				'T1GroundDefense',
+				'T1AADefense',
+				'T1GroundDefense',
+				'T1AADefense',
+                },
+            },
+        },
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianT2DefensivePoints - High Prio',
+    BuildersType = 'EngineerBuilder',
+    Builder {
+        BuilderName = 'Sorian T2 - High Prio Defensive Point Engineer UEF',
+        PlatoonTemplate = 'UEFT2EngineerBuilderSorian',
+        Priority = 0.1,
+		ActivePriority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
+            { SIBC, 'DefensivePointNeedsStructure', { 'LocationType', 1000, 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE', 20, 4, -10000, 1, 1, 'AntiSurface' } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
+            { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			NeedGuard = true,
+            NumAssistees = 2,
+            Construction = {
+                BuildClose = false,
+                NearMarkerType = 'Defensive Point',
+                MarkerRadius = 20,
+                LocationRadius = 1000,
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                ThreatType = 'AntiSurface',
+                MarkerUnitCount = 4,
+                MarkerUnitCategory = 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE',
+                BuildStructures = {
+                    'T2GroundDefense',
+                    'T2AADefense',
+                    'T2MissileDefense',
+					'T2ShieldDefense',
+					'T2StrategicMissile',
+					'T2Artillery',
+					'T2EngineerSupport',
+                    'T2GroundDefense',
+                    'T2AADefense',
+					'T2ShieldDefense',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T2 - High Prio Defensive Point Engineer Cybran',
+        PlatoonTemplate = 'CybranT2EngineerBuilderSorian',
+        Priority = 0.1,
+		ActivePriority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
+            { SIBC, 'DefensivePointNeedsStructure', { 'LocationType', 1000, 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE', 20, 4, -10000, 1, 1, 'AntiSurface' } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
+            { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			NeedGuard = true,
+            NumAssistees = 2,
+            Construction = {
+                BuildClose = false,
+                NearMarkerType = 'Defensive Point',
+                MarkerRadius = 20,
+                LocationRadius = 1000,
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                ThreatType = 'AntiSurface',
+                MarkerUnitCount = 4,
+                MarkerUnitCategory = 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE',
+                BuildStructures = {
+                    'T2GroundDefense',
+                    'T2AADefense',
+                    'T2MissileDefense',
+					'T2ShieldDefense',
+					'T2StrategicMissile',
+					'T2Artillery',
+					'T2EngineerSupport',
+                    'T2GroundDefense',
+                    'T2AADefense',
+					'T2ShieldDefense',
+                }
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T2 - High Prio Defensive Point Engineer',
+        PlatoonTemplate = 'T2EngineerBuilderSorian',
+        Priority = 0.1,
+		ActivePriority = 980,
+        InstanceCount = 1,
+        BuilderConditions = {
+            #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
+            { SIBC, 'DefensivePointNeedsStructure', { 'LocationType', 1000, 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE', 20, 4, -10000, 1, 1, 'AntiSurface' } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            #{ UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 2, 'DEFENSE STRUCTURE' } },
+            { UCBC, 'UnitCapCheckLess', { .75 } },
+			{ MIBC, 'FactionIndex', {2, 4}},
+			{ SBC, 'NoRushTimeCheck', { 0 }},
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			NeedGuard = true,
+            NumAssistees = 2,
+            Construction = {
+                BuildClose = false,
+                NearMarkerType = 'Defensive Point',
+                MarkerRadius = 20,
+                LocationRadius = 1000,
+                LocationType = 'LocationType',
+                ThreatMin = -10000,
+                ThreatMax = 5,
+                ThreatRings = 1,
+                ThreatType = 'AntiSurface',
+                MarkerUnitCount = 4,
+                MarkerUnitCategory = 'DEFENSE TECH2 STRUCTURE, DEFENSE TECH3 STRUCTURE',
+                BuildStructures = {
+                    'T2GroundDefense',
+                    'T2AADefense',
+                    'T2MissileDefense',
+					'T2ShieldDefense',
+					'T2StrategicMissile',
+					'T2Artillery',
+                    'T2GroundDefense',
+                    'T2AADefense',
+					'T2ShieldDefense',
+                }
+            }
+        }
+    },
+}

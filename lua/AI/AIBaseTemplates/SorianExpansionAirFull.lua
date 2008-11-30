@@ -48,6 +48,7 @@ BaseBuilderTemplate {
         'SorianT3NukeDefensesExp',
         'SorianT3NukeDefenseBehaviors',
 		'SorianT2ShieldsExpansion',
+		'SorianShieldUpgrades',
 		'SorianT3ShieldsExpansion',
 		'SorianAirStagingExpansion',
 		'SorianT2MissileDefenses',
@@ -92,6 +93,7 @@ BaseBuilderTemplate {
 		# ===== STRATEGIES ====== #
 		
 		'SorianParagonStrategyExp',
+		'SorianWaterMapLowLand',
 		
 		# == STRATEGY PLATOONS == #
 		

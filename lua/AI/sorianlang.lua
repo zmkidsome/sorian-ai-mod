@@ -294,7 +294,16 @@ AIChatText = {
 	},
 	focuschat = {
 		'Currently focusing on [extra].',
-	},		
+	},
+	giveengineer = {
+		'Use it wisely.',
+		'Sure, not like I was going to use it or anything :P',
+		'Here.',
+		'Fine, but getting it there is your problem.',
+		'OK.',
+		'I guess so.',
+		'Have fun with it.',
+	},
 	genericchat = {
 		'Roger.',
 		'Copy.',
