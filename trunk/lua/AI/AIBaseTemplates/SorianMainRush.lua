@@ -160,6 +160,8 @@ BaseBuilderTemplate {
 		'SorianParagonStrategy',
 		'SorianSmallMapRush',
 		'Sorian Tele SCU Strategy',
+		'SorianWaterMapLowLand',
+		'Sorian PD Creep Strategy',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',
@@ -167,6 +169,8 @@ BaseBuilderTemplate {
 		'SorianT3BomberHighPrio',
 		'SorianT3BomberSpecialHighPrio',
 		'SorianT1GunshipHighPrio',
+		'SorianT1DefensivePoints - High Prio',
+		'SorianT2DefensivePoints - High Prio',
 		
 		'SorianBomberLarge',
 		'SorianBomberBig',

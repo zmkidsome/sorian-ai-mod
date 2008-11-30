@@ -681,28 +681,69 @@ end
 #       nil
 #-----------------------------------------------------
 function FinishAIChat(data)
+	local aiBrain = GetArmyBrain(data.Army)
 	if data.NewTarget then
 		if data.NewTarget == 'at will' then
-			ArmyBrains[data.Army].targetoveride = false
-			AISendChat('allies', ArmyBrains[data.Army].Nickname, 'Targeting at will')
+			aiBrain.targetoveride = false
+			AISendChat('allies', aiBrain.Nickname, 'Targeting at will')
 		else
 			if IsEnemy(data.NewTarget, data.Army) then
-				ArmyBrains[data.Army]:SetCurrentEnemy( ArmyBrains[data.NewTarget] )
-				ArmyBrains[data.Army].targetoveride = true
-				AISendChat('allies', ArmyBrains[data.Army].Nickname, 'tcrespond', ArmyBrains[data.NewTarget].Nickname)
+				aiBrain:SetCurrentEnemy( ArmyBrains[data.NewTarget] )
+				aiBrain.targetoveride = true
+				AISendChat('allies', aiBrain.Nickname, 'tcrespond', ArmyBrains[data.NewTarget].Nickname)
 			elseif IsAlly(data.NewTarget, data.Army) then
-				AISendChat('allies', ArmyBrains[data.Army].Nickname, 'tcerrorally', ArmyBrains[data.NewTarget].Nickname)
+				AISendChat('allies', aiBrain.Nickname, 'tcerrorally', ArmyBrains[data.NewTarget].Nickname)
 			end
 		end
 	elseif data.NewFocus then
-		ArmyBrains[data.Army].Focus = data.NewFocus
-		AISendChat('allies', ArmyBrains[data.Army].Nickname, 'genericchat')
+		aiBrain.Focus = data.NewFocus
+		AISendChat('allies', aiBrain.Nickname, 'genericchat')
 	elseif data.CurrentFocus then
 		local focus = 'nothing'
-		if ArmyBrains[data.Army].Focus then
-			focus = ArmyBrains[data.Army].Focus
+		if aiBrain.Focus then
+			focus = aiBrain.Focus
 		end
-		AISendChat('allies', ArmyBrains[data.Army].Nickname, 'focuschat', nil, focus)
+		AISendChat('allies', aiBrain.Nickname, 'focuschat', nil, focus)
+	elseif data.GiveEngineer and not GetArmyBrain(data.ToArmy):IsDefeated() and OkayToMessWithArmy(data.Army) then
+		local cats = {categories.TECH3, categories.TECH2, categories.TECH1}
+		local given = false
+		for _, cat in cats do
+			local engies = aiBrain:GetListOfUnits(categories.ENGINEER * cat - categories.COMMAND - categories.SUBCOMMANDER - categories.ENGINEERSTATION, false)
+			for k,v in engies do
+				if not v:IsDead() and v:GetParent() == v then
+					if v.PlatoonHandle and aiBrain:PlatoonExists(v.PlatoonHandle) then
+						v.PlatoonHandle:RemoveEngineerCallbacksSorian()
+						v.PlatoonHandle:Stop()
+						v.PlatoonHandle:PlatoonDisbandNoAssign()
+					end
+					if v.NotBuildingThread then
+						KillThread(v.NotBuildingThread)
+						v.NotBuildingThread = nil
+					end
+					if v.ProcessBuild then
+						KillThread(v.ProcessBuild)
+						v.ProcessBuild = nil
+					end
+					v.BuilderManagerData.EngineerManager:RemoveUnit(v)
+					IssueStop({v})
+					IssueClearCommands({v})
+					AISendPing(v:GetPosition(), 'move', data.Army)
+					AISendChat(data.ToArmy, aiBrain.Nickname, 'giveengineer')
+					ChangeUnitArmy(v,data.ToArmy)
+					given = true
+					break
+				end
+			end
+			if given then break end
+		end
+	elseif data.Command then
+		if data.Text == 'target' then
+			AISendChat(data.ToArmy, aiBrain.Nickname, 'target <enemy>: <enemy> is the name of the enemy you want me to attack or \'at will\' if you want me to choose targets myself.')
+		elseif data.Text == 'focus' then
+			AISendChat(data.ToArmy, aiBrain.Nickname, 'focus <strat>: <strat> is the name of the strategy you want me to use or \'at will\' if you want me to choose strategies myself. Available strategies: rush arty, rush nuke, air.')
+		else
+			AISendChat(data.ToArmy, aiBrain.Nickname, 'Available Commands: focus <strat or at will>, target <enemy or at will>, current focus, give me an engineer.')
+		end
 	end
 end
 

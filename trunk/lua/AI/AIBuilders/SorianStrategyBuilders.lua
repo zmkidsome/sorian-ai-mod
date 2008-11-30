@@ -321,6 +321,129 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'Sorian PD Creep Strategy',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian PD Creep Strategy',
+		StrategyType = 'Intermediate',
+        Priority = 100,
+        InstanceCount = 1,
+		StrategyTime = 300,
+		InterruptStrategy = true,
+		OnStrategyActivate = function(self, aiBrain)
+			Builders[self.BuilderName].Running = true
+			local x,z = aiBrain:GetArmyStartPos()
+			local ex, ez = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+			local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Land', {x,0,z}, {ex,0,ez}, 10 )
+            for pathnum,waypoint in path do
+				local nextbase = (table.getn(aiBrain.TacticalBases) + 1)
+				table.insert(aiBrain.TacticalBases,
+					{
+					Position = waypoint,
+					Name = 'PDCreep'..nextbase,
+					}
+				)
+			end
+		end,
+		PriorityFunction = function(self, aiBrain)
+			if Builders[self.BuilderName].Running then
+				return 100
+			elseif Builders[self.BuilderName].Done then
+				return 0
+			end
+			local enemyIndex
+			local returnval = 0
+			if aiBrain:GetCurrentEnemy() then
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+			
+			if Random(1,25) == 25 then
+				returnval = 100
+			end
+			
+			Builders[self.BuilderName].Done = true
+			
+			return returnval
+		end,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ SIBC, 'HaveLessThanUnitsWithCategory', { 1, 'FACTORY TECH3' }},
+			{ SBC, 'MapLessThan', { 1000, 1000 }},
+        },
+        BuilderType = 'Any',
+        RemoveBuilders = {},
+		AddBuilders = {
+			EngineerManager = {
+				'Sorian T1 - High Prio Defensive Point Engineer',
+				'Sorian T2 - High Prio Defensive Point Engineer UEF',
+				'Sorian T2 - High Prio Defensive Point Engineer Cybran',
+				'Sorian T2 - High Prio Defensive Point Engineer',
+			}
+		}
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianWaterMapLowLand',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Water Map Low Land',
+		StrategyType = 'Intermediate',
+        Priority = 100,
+        InstanceCount = 1,
+		StrategyTime = 300,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ SBC, 'IsWaterMap', { true } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 29, categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER }},
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {
+			FactoryManager = {
+				'Sorian T1 Bot - Early Game Rush',
+				'Sorian T1 Bot - Early Game',
+				'Sorian T1 Light Tank - Tech 1',
+				'Sorian T1 Light Tank - Tech 2',
+				'Sorian T1 Light Tank - Tech 3',
+				'Sorian T1 Mortar',
+				'Sorian T1 Mortar - Not T1',
+				'Sorian T1 Mortar - tough def',
+				'Sorian T1 Mobile AA',
+				'Sorian T1 Mobile AA - Response',
+				'Sorian T1 Tank Enemy Nearby',
+				'Sorian T2 Tank - Tech 2',
+				'Sorian T2 Tank 2 - Tech 3',
+				'Sorian T2 MML',
+				'Sorian T2AttackTank - Tech 2',
+				'Sorian T2AttackTank2 - Tech 3',
+				#'Sorian T2 Amphibious Tank - Tech 2',
+				#'Sorian T2 Amphibious Tank - Tech 3',
+				#'Sorian T2 Amphibious Tank - Tech 2 Cybran',
+				#'Sorian T2 Amphibious Tank - Tech 3 Cybran',
+				'Sorian T2MobileShields',
+				'Sorian T2 Tank Enemy Nearby',
+				'Sorian T2 Mobile Flak',
+				'Sorian T2 Mobile Flak Response',
+				'Sorian T3 Siege Assault Bot',
+				'Sorian T3 Mobile Heavy Artillery',
+				'Sorian T3 Mobile Heavy Artillery - tough def',
+				'Sorian T3 Mobile Flak',
+				'Sorian T3SniperBots',
+				#'Sorian T3ArmoredAssault',
+				'Sorian T3MobileMissile',
+				'Sorian T3MobileShields',
+				'Sorian T3 Mobile AA Response',
+				'Sorian T3 Assault Enemy Nearby',
+				'Sorian T3 SiegeBot Enemy Nearby',
+			},
+		},
+		AddBuilders = {}
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianBigAirGroup',
     BuildersType = 'StrategyBuilder',
     Builder {

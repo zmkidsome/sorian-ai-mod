@@ -245,6 +245,203 @@ function CreateChat()
     ToggleChat()
 end
 
+function CreateChatEdit()
+    local parent = GUI.bg:GetClientGroup()
+    local group = Group(parent)
+    
+    group.Bottom:Set(parent.Bottom)
+    group.Right:Set(parent.Right)
+    group.Left:Set(parent.Left)
+    group.Top:Set(function() return group.Bottom() - group.Height() end)
+    
+    local toText = UIUtil.CreateText(group, '', 14, 'Arial')
+    toText.Bottom:Set(function() return group.Bottom() - 1 end)
+    toText.Left:Set(function() return group.Left() + 35 end)
+    
+    ChatTo.OnDirty = function(self)
+        if ToStrings[self()] then
+            toText:SetText(LOC(ToStrings[self()].caps))
+        else
+            toText:SetText(LOCF('%s %s:', ToStrings['to'].caps, GetArmyData(self()).nickname))
+        end
+    end
+    
+    group.edit = Edit(group)
+    group.edit.Left:Set(function() return toText.Right() + 5 end)
+    group.edit.Right:Set(function() return group.Right() - 38 end)
+    group.edit.Depth:Set(function() return GUI.bg:GetClientGroup().Depth() + 200 end)
+    group.edit.Bottom:Set(function() return group.Bottom() - 1 end)
+    group.edit.Height:Set(function() return group.edit:GetFontHeight() end)
+    UIUtil.SetupEditStd(group.edit, "ff00ff00", nil, "ffffffff", UIUtil.highlightColor, UIUtil.bodyFont, 14, 200)
+    group.edit:SetDropShadow(true)
+    group.edit:ShowBackground(false)
+    
+    group.edit:SetText('')
+    
+    group.Height:Set(function() return group.edit.Height() end)
+    
+    local function CreateTestBtn(text)
+        local btn = UIUtil.CreateCheckboxStd(group, '/dialogs/toggle_btn/toggle')
+        btn.Depth:Set(function() return group.Depth() + 10 end)
+        btn.OnClick = function(self, modifiers)
+            if self._checkState == "unchecked" then
+                self:ToggleCheck()
+            end
+        end
+        btn.txt = UIUtil.CreateText(btn, text, 12, UIUtil.bodyFont)
+        LayoutHelpers.AtCenterIn(btn.txt, btn)
+        btn.txt:SetColor('ffffffff')
+        btn.txt:DisableHitTest()
+        return btn
+    end
+    
+    group.camData = UIUtil.CreateCheckbox(group,
+        UIUtil.SkinnableFile('/game/camera-btn/pinned_btn_up.dds'),
+        UIUtil.SkinnableFile('/game/camera-btn/pinned_btn_down.dds'),
+        UIUtil.SkinnableFile('/game/camera-btn/pinned_btn_over.dds'),
+        UIUtil.SkinnableFile('/game/camera-btn/pinned_btn_over.dds'),
+        UIUtil.SkinnableFile('/game/camera-btn/pinned_btn_dis.dds'),
+        UIUtil.SkinnableFile('/game/camera-btn/pinned_btn_dis.dds'))
+    
+    LayoutHelpers.AtRightIn(group.camData, group, 5)
+    LayoutHelpers.AtVerticalCenterIn(group.camData, group.edit, -1)
+    
+    group.chatBubble = Button(group,
+        UIUtil.UIFile('/game/chat-box_btn/radio_btn_up.dds'),
+        UIUtil.UIFile('/game/chat-box_btn/radio_btn_down.dds'),
+        UIUtil.UIFile('/game/chat-box_btn/radio_btn_over.dds'),
+        UIUtil.UIFile('/game/chat-box_btn/radio_btn_dis.dds'))
+    group.chatBubble.OnClick = function(self, modifiers)
+        if not self.list then
+            self.list = CreateChatList(self)
+            LayoutHelpers.Above(self.list, self, 15)
+            LayoutHelpers.AtLeftIn(self.list, self, 15)
+        else
+            self.list:Destroy()
+            self.list = nil
+        end
+    end
+    
+    toText.HandleEvent = function(self, event)
+        if event.Type == 'ButtonPress' then
+            group.chatBubble:OnClick(event.Modifiers)
+        end
+    end
+    
+    LayoutHelpers.AtLeftIn(group.chatBubble, group, 3)
+    LayoutHelpers.AtVerticalCenterIn(group.chatBubble, group.edit)
+    
+    group.edit.OnNonTextKeyPressed = function(self, charcode, event)
+        GUI.bg.curTime = 0
+        local function RecallCommand(entryNumber)
+            self:SetText(commandHistory[self.recallEntry].text)
+            if commandHistory[self.recallEntry].camera then
+                self.tempCam = commandHistory[self.recallEntry].camera
+                group.camData:Disable()
+                group.camData:SetCheck(true)
+            else
+                self.tempCam = nil
+                group.camData:Enable()
+                group.camData:SetCheck(false)
+            end
+        end
+        if charcode == UIUtil.VK_NEXT then
+            local mod = 10
+            if event.Modifiers.Shift then
+                mod = 1
+            end
+            ChatPageDown(mod)
+            return true
+        elseif charcode == UIUtil.VK_PRIOR then
+            local mod = 10
+            if event.Modifiers.Shift then
+                mod = 1
+            end
+            ChatPageUp(mod)
+            return true
+        elseif charcode == UIUtil.VK_UP then
+            if table.getsize(commandHistory) > 0 then
+                if self.recallEntry then
+                    self.recallEntry = math.max(self.recallEntry-1, 1)
+                else
+                    self.recallEntry = table.getsize(commandHistory)
+                end
+                RecallCommand(self.recallEntry)
+            end
+        elseif charcode == UIUtil.VK_DOWN then
+            if table.getsize(commandHistory) > 0 then
+                if self.recallEntry then
+                    self.recallEntry = math.min(self.recallEntry+1, table.getsize(commandHistory))
+                    RecallCommand(self.recallEntry)
+                    if self.recallEntry == table.getsize(commandHistory) then
+                        self.recallEntry = nil
+                    end
+                else
+                    self:SetText('')
+                end
+            end
+        else
+            return true
+        end
+    end
+    
+    group.edit.OnCharPressed = function(self, charcode)
+        local charLim = self:GetMaxChars()
+        if charcode == 9 then
+            return true
+        end
+        GUI.bg.curTime = 0
+        if STR_Utf8Len(self:GetText()) >= charLim then
+            local sound = Sound({Cue = 'UI_Menu_Error_01', Bank = 'Interface',})
+            PlaySound(sound)
+        end
+    end
+    
+    group.edit.OnEnterPressed = function(self, text)
+        GUI.bg.curTime = 0
+        if group.camData:IsDisabled() then
+            group.camData:Enable()
+        end
+        if text == "" then
+            ToggleChat()
+        else
+            local gnBegin, gnEnd = string.find(text, "%s+")
+            if gnBegin and (gnBegin == 1 and gnEnd == string.len(text)) then
+                return
+            end
+            if import('/lua/ui/game/taunt.lua').CheckForAndHandleTaunt(text) then
+                return
+            end
+
+            msg = { to = ChatTo(), Chat = true }
+            if self.tempCam then
+                msg.camera = self.tempCam
+            elseif group.camData:IsChecked() then
+                msg.camera = GetCamera('WorldCamera'):SaveSettings()
+            end
+            msg.text = text
+            if ChatTo() == 'allies' then
+                SessionSendChatMessage(FindClients(), msg)
+            elseif type(ChatTo()) == 'number' then
+                SessionSendChatMessage(FindClients(ChatTo()), msg)
+                msg.echo = true
+                msg.echosender = GetArmyData(GetFocusArmy()).nickname
+                ReceiveChat(GetArmyData(ChatTo()).nickname, msg)
+            else
+                SessionSendChatMessage(msg)
+            end
+            table.insert(commandHistory, msg)
+            self.recallEntry = nil
+            self.tempCam = nil
+        end
+    end
+    
+    ChatTo:Set('all')
+    group.edit:AcquireFocus()
+    
+    return group
+end
+
 function ReceiveChat(sender, msg)
 	if msg.aisender then
 		sender = msg.aisender
@@ -276,8 +473,11 @@ function ReceiveChat(sender, msg)
     if table.getn(tempText) == 0 then
         tempText = {""}
     end
-	if not msg.aisender then
+	if not msg.aisender and not msg.echo then
 		UiUtilsS.ProcessAIChat(msg.to, armyData.ArmyID, msg.text)
+	elseif msg.echo and msg.echosender then
+		local fromData = GetArmyData(msg.echosender)
+		UiUtilsS.ProcessAIChat(msg.to, fromData.ArmyID, msg.text)
 	end
     local entry = {name = name,
         tokey = tokey,
