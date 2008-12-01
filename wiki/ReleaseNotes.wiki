@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.7.9b:* Fixed small bug.
+
 *1.7.9:* Added some new strategies, Added shield upgraders to expansions, AI will build some more engineering stations, Added a command to make AI give an engineer to an ally, Added a command to have an AI tell you the available commands, Disabled T4 pathing.
 
 *1.7.8:* Fixed bug in Anti-Nuke building, AI fighters should avoid AA more, Players can now give AI allies strategies to focus on.
