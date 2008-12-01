@@ -516,6 +516,31 @@ function GetLandPlatoonMaxRangeSorian(aiBrain, platoon)
     return maxRange, selectedWeaponArc, turretPitch
 end
 
+function GetClosestPathNodeInRadiusByLayerSorian(location, destination, radius, layer)
+    
+    local maxRadius = radius*radius
+    local bestDist = 999999
+    local bestMarker = false
+    
+    local graphTable =  GetPathGraphs()[layer]
+    
+    if graphTable then
+        for name, graph in graphTable do
+            for mn, markerInfo in graph do
+                local distFromLoc = VDist2Sq(location[1], location[3], markerInfo.position[1], markerInfo.position[3])
+                local distFromDest = VDist2Sq(markerInfo.position[1], markerInfo.position[3], destination[1], destination[3])
+                    
+                if distFromLoc < maxRadius and distFromDest < bestDist then 
+                    bestDist = distFromDest
+                    bestMarker = markerInfo
+                end
+            end
+        end
+    end
+    
+    return bestMarker
+end
+
 function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, optThreatWeight, optMaxMarkerDist, testPathDist)   
         
     local location = start
@@ -540,7 +565,12 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	end
 	
     --Get the closest path node at the platoon's position
-    local startNode = GetClosestPathNodeInRadiusByLayer(location, optMaxMarkerDist, platoonLayer)
+    local startNode
+    if testPath then
+    	startNode = GetClosestPathNodeInRadiusByLayerSorian(location, destination, optMaxMarkerDist, platoonLayer)
+    else
+    	startNode = GetClosestPathNodeInRadiusByLayer(location, optMaxMarkerDist, platoonLayer)
+    end
     if not startNode and platoonLayer == 'Amphibious' then
         return PlatoonGenerateSafePathTo(aiBrain, 'Land', start, destination, optThreatWeight, optMaxMarkerDist)
     end
@@ -640,7 +670,10 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
             local dist = VDist2Sq(newNode.position[1], newNode.position[3], endNode.position[1], endNode.position[3])
 
             # this brings the dist value from 0 to 100% of the maximum length with can travel on a map
-            dist = 100 * dist / ( mapSizeX + mapSizeZ ) #(mapSizeX * mapSizeX  + mapSizeZ * mapSizeZ)
+            dist = 100 * dist / math.sqrt((mapSizeX * mapSizeX) + (mapSizeZ * mapSizeZ))
+            					#( mapSizeX + mapSizeZ ) - GPGs method made no sense.
+            					#The max distance you can travel would be diagonally across the map.
+            					#Using GPGs method would mean max distance would be 70% of the map, not 100%.
 			
             --get threat from current node to adjacent node
             local threat = aiBrain:GetThreatBetweenPositions(newNode.position, lastNode.position, nil, threatType)

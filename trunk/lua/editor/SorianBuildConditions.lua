@@ -13,6 +13,7 @@ local ScenarioUtils = import('/lua/sim/ScenarioUtilities.lua')
 local Utils = import('/lua/utilities.lua')
 local SUtils = import('/lua/AI/sorianutilities.lua')
 local MABC = import('/lua/editor/MarkerBuildConditions.lua')
+local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
 
 ##############################################################################################################
 # function: IsWaterMap = BuildCondition
@@ -43,10 +44,12 @@ end
 
 function IsIslandMap(aiBrain, bool)
 	local startX, startZ = aiBrain:GetArmyStartPos()
+	local enemyX, eenemyZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
 	local navalMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Island', startX, startZ)
-	if navalMarker and bool then
+	local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Land', {startX,0,startZ}, {enemyX,0,eenemyZ}, 10 )
+	if (navalMarker and not path) and bool then
 		return true
-	elseif not navalMarker and not bool then
+	elseif (not navalMarker or path) and not bool then
 		return true
 	end
 	return false
@@ -80,6 +83,8 @@ function MarkerLessThan(aiBrain, locationType, markerTypes, distance)
 	for k,v in markerTypes do
 		local marker = AIUtils.AIGetClosestMarkerLocation(aiBrain, v, pos[1], pos[3])
 		if marker and VDist2Sq(marker[1], marker[3], pos[1], pos[3]) < distance * distance then
+			return true
+		elseif not marker then
 			return true
 		end
 	end

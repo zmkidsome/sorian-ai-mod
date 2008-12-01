@@ -1044,7 +1044,7 @@ end
 ExpPathToLocation = function(aiBrain, platoon, layer, dest, aggro, pathDist)
 	local cmd = false
 	local platoonUnits = platoon:GetPlatoonUnits()
-	local path = false #, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, layer, platoon:GetPlatoonPosition(), dest, nil, nil, pathDist )
+	local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, layer, platoon:GetPlatoonPosition(), dest, nil, nil, pathDist )
 	if not path then
 		if aggro == 'AttackMove' then
 			cmd = platoon:AggressiveMoveToLocation(dest)
