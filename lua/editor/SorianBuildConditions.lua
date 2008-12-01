@@ -34,6 +34,25 @@ function IsWaterMap(aiBrain, bool)
 end
 
 ##############################################################################################################
+# function: IsIslandMap = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 2: bool     bool            = true = is a island map, false = is not a island map
+#
+##############################################################################################################
+
+function IsIslandMap(aiBrain, bool)
+	local startX, startZ = aiBrain:GetArmyStartPos()
+	local navalMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Island', startX, startZ)
+	if navalMarker and bool then
+		return true
+	elseif not navalMarker and not bool then
+		return true
+	end
+	return false
+end
+
+##############################################################################################################
 # function: AIType = BuildCondition
 #
 # parameter 0: string   aiBrain         = "default_brain"

@@ -396,7 +396,7 @@ BuilderGroup {
 		StrategyTime = 300,
         BuilderConditions = {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ SBC, 'IsWaterMap', { true } },
+			{ SBC, 'IsIslandMap', { true } },
 			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 29, categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.ENGINEER }},
         },
         BuilderType = 'Any',		
@@ -713,7 +713,7 @@ BuilderGroup {
 			return returnval
 		end,
         BuilderConditions = {
-			{ SBC, 'IsWaterMap', { false } },
+			{ SBC, 'IsIslandMap', { false } },
 			{ SBC, 'ClosestEnemyLessThan', { 750 } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
 			#{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1 } },
