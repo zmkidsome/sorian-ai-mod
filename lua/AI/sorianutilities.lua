@@ -742,7 +742,7 @@ function FinishAIChat(data)
 		elseif data.Text == 'focus' then
 			AISendChat(data.ToArmy, aiBrain.Nickname, 'focus <strat>: <strat> is the name of the strategy you want me to use or \'at will\' if you want me to choose strategies myself. Available strategies: rush arty, rush nuke, air.')
 		else
-			AISendChat(data.ToArmy, aiBrain.Nickname, 'Available Commands: focus <strat or at will>, target <enemy or at will>, current focus, give me an engineer.')
+			AISendChat(data.ToArmy, aiBrain.Nickname, 'Available Commands: focus <strat or at will>, target <enemy or at will>, current focus, give me an engineer, command <target or strat>.')
 		end
 	end
 end

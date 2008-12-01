@@ -33,6 +33,8 @@ function ProcessAIChat(to, from, text)
 					SimCallback({Func = 'AIChat', Args = {Army = i, ToArmy = from, GiveEngineer = true}})
 				elseif string.lower(testtext) == 'command' and to == i then
 					SimCallback({Func = 'AIChat', Args = {Army = i, ToArmy = from, Command = true, Text = aftertext}})
+				elseif to == i then
+					SimCallback({Func = 'AIChat', Args = {Army = i, ToArmy = from, Command = true, Text = ''}})
 				end
 			end
 		end
