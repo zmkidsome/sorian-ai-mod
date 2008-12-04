@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.1:* Balance changes based on feedback.
+
 *1.8.0:* AIs default response to a pm will be to give a list of available commands, Improved Island map detection, T4 pathing is back, AI will default to building T4s on maps without markers, Fiddled with pathing some more.
 
 *1.7.9c:* Fixed another bug.
