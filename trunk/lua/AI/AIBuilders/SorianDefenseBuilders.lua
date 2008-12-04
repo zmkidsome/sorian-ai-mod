@@ -211,7 +211,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         Priority = 920,
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 50, 'DEFENSE TECH2 STRUCTURE' }},
+            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 40, 'DEFENSE TECH2 STRUCTURE' }},
             { UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH2' }},
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -229,6 +229,7 @@ BuilderGroup {
                     'T2MissileDefense',
 					'T2Artillery',
 					'T2StrategicMissile',
+					'T2MissileDefense',
                 },
                 Location = 'LocationType',
             }
