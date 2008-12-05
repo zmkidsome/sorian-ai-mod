@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.2:* Changed the Nuke code a bit, Amphibious units should get stuck less, T4s should attack the ACU rather than walk on it, New strat to stop Nuke production if the AI gets too far behind, AI should, hopefully, not be able to upgrade mexes to tech 3 if the host disables tech 3, Misc. bug fixes.
+
 *1.8.1:* Balance changes based on feedback.
 
 *1.8.0:* AIs default response to a pm will be to give a list of available commands, Improved Island map detection, T4 pathing is back, AI will default to building T4s on maps without markers, Fiddled with pathing some more.
