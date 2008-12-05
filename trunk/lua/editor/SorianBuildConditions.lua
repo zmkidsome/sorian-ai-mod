@@ -44,9 +44,17 @@ end
 
 function IsIslandMap(aiBrain, bool)
 	local startX, startZ = aiBrain:GetArmyStartPos()
-	local enemyX, eenemyZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+	local enemyX, enemyZ
+	if aiBrain:GetCurrentEnemy() then
+		enemyX, enemyZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+	else
+		enemyX, enemyZ = SUtils.GetRandomEnemyPos(aiBrain)
+	end
 	local navalMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Island', startX, startZ)
-	local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Land', {startX,0,startZ}, {enemyX,0,eenemyZ}, 10 )
+	local path, reason = false
+	if enemyX then
+		path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, 'Land', {startX,0,startZ}, {enemyX,0,enemyZ}, 10 )
+	end
 	if (navalMarker and not path) and bool then
 		return true
 	elseif (not navalMarker or path) and not bool then

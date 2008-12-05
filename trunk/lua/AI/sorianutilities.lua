@@ -1182,11 +1182,12 @@ function Nuke(aiBrain)
 		local fireCount = 0
 		local aitarget
 		local tarPosition
+		local antiNukes
 		#Repeat until all launchers have fired or we run out of targets
 		repeat
 			#Get a target and target position. This function also ensures that we fire at a new target
 			#and one that we have enough nukes to hit the target
-			target, tarPosition = AIUtils.AIFindBrainNukeTargetInRangeSorian( aiBrain, launcher, maxRadius, atkPri, nukeCount, oldTarget )
+			target, tarPosition, antiNukes = AIUtils.AIFindBrainNukeTargetInRangeSorian( aiBrain, launcher, maxRadius, atkPri, nukeCount, oldTarget )
 			if target then
 				#Send a message to allies letting them know we are letting nukes fly
 				#Also ping the map where we are targeting
@@ -1199,7 +1200,7 @@ function Nuke(aiBrain)
 					AISendChat(aitarget, ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'nuketaunt')
 				end
 				#Get anti-nukes int the area
-				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, tarPosition, 80, 'Enemy' )
+				#local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, tarPosition, 90, 'Enemy' )
 				local nukesToFire = {}
 				for k, v in Nukes do
 					#If we have nukes that have not fired yet
@@ -1304,6 +1305,41 @@ function FindDamagedShield(aiBrain, locationType, buildCat)
 end
 
 #-----------------------------------------------------
+#   Function: NumberofUnitsBetweenPoints
+#   Args:
+#       start			- Starting point
+#		finish			- Ending point
+#		unitCat			- Unit category
+#		stepby			- MUs to step along path by
+#		alliance		- Unit alliance to check for
+#   Description:
+#       Counts units between 2 points.
+#   Returns:  
+#       Number of units
+#-----------------------------------------------------
+function NumberofUnitsBetweenPoints(aiBrain, start, finish, unitCat, stepby, alliance)
+    if type(unitCat) == 'string' then
+        unitCat = ParseEntityCategory(unitCat)
+    end
+
+	local returnNum = 0
+	
+	#Get distance between the points
+	local distance = math.sqrt(VDist2Sq(start[1], start[3], finish[1], finish[3]))
+	local steps = math.floor(distance / stepby)
+	
+	local xstep = (start[1] - finish[1]) / steps
+	local ystep = (start[3] - finish[3]) / steps
+	#For each point check to see if the destination is close
+	for i = 0, steps do
+		local numUnits = aiBrain:GetNumUnitsAroundPoint( unitCat, {finish[1] + (xstep * i),0 , finish[3] + (ystep * i)}, stepby, alliance )
+		returnNum = returnNum + numUnits
+	end
+	
+	return returnNum
+end
+
+#-----------------------------------------------------
 #   Function: DestinationBetweenPoints
 #   Args:
 #       destination 	- Destination
@@ -1386,6 +1422,18 @@ end
 #-----------------------------------------------------
 function trim(s)
 	return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
+end
+
+function GetRandomEnemyPos(aiBrain)
+	for k, v in ArmyBrains do
+		if IsEnemy(aiBrain:GetArmyIndex(), v:GetArmyIndex()) and not v:IsDefeated() then
+			if v:GetArmyStartPos() then
+				local ePos = v:GetArmyStartPos()
+				return ePos[1], ePos[3]
+			end
+		end
+	end
+	return false
 end
 
 #-----------------------------------------------------

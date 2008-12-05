@@ -854,15 +854,22 @@ BuilderGroup {
 			if aiBrain.Focus == 'rush nuke' then
 				return 100
 			end
+			local antis = 0
 			local nukes = aiBrain:GetCurrentUnits(categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3)
 			
-			local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, Vector(0,0,0), 100000, 'Enemy' )
+			for k,v in ArmyBrains do
+				local eStartX, eStartZ = v:GetArmyStartPos()			
+				local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, {eStartX, 0, eStartZ}, 250, 'Enemy' )
+				if eUnits > antis then
+					antis = eUnits
+				end
+			end
 			
-			if nukes - eUnits >= 3 then
+			if nukes - antis >= 3 then
 				return returnval
 			end
 			
-			returnval = 70 + (nukes * 5) - (eUnits * 10)
+			returnval = 70 + (nukes * 5) - (antis * 10)
 			return returnval
 		end,
         BuilderConditions = {
@@ -884,6 +891,46 @@ BuilderGroup {
 				'Sorian T3 Engineer Assist Build Nuke Missile - High Prio',
 			}
 		}
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianStopNukes',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Stop Nukes Strategy',
+		StrategyType = 'Intermediate',
+        Priority = 100,
+        InstanceCount = 1,
+		StrategyTime = 300,
+		PriorityFunction = function(self, aiBrain)
+			local antis = 99999
+			local returnval = 1
+			
+			local nukes = aiBrain:GetCurrentUnits(categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3)
+
+			for k,v in ArmyBrains do
+				local eStartX, eStartZ = v:GetArmyStartPos()			
+				local eUnits = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, {eStartX, 0, eStartZ}, 250, 'Enemy' )
+				if eUnits < antis then
+					antis = eUnits
+				end
+			end
+			
+			returnval = (antis - nukes) * 20
+			return returnval
+		end,
+        BuilderConditions = {
+        	{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'ENGINEER TECH3' }},
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {
+			EngineerManager = {
+				'Sorian T3 Nuke Engineer',
+				'Sorian T3 Nuke Engineer - 10x10',
+			}
+		},
+		AddBuilders = {}
     },
 }
 
