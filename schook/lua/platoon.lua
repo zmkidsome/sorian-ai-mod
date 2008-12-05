@@ -342,7 +342,7 @@ Platoon = Class(sorianoldPlatoon) {
             else
                 upgradeID = aiBrain:FindUpgradeBP(v:GetUnitId(), StructureUpgradeTemplates[factionIndex])
             end
-			if upgradeID and EntityCategoryContains(categories.CONSTRUCTION, v) and not v:CanBuild(upgradeID) then
+			if upgradeID and EntityCategoryContains(categories.STRUCTURE, v) and not v:CanBuild(upgradeID) then
 				continue
 			end
             if upgradeID then
@@ -2051,6 +2051,7 @@ Platoon = Class(sorianoldPlatoon) {
         self:SetPlatoonFormationOverride(PlatoonFormation)
         while aiBrain:PlatoonExists(self) do
 			local mySurfaceThreat = AIAttackUtils.GetSurfaceThreatOfUnits(self)
+			local inWater = AIAttackUtils.InWaterCheck(self)
 			local pos = self:GetPlatoonPosition()
 			local threatatLocation = aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface')
             if self:IsOpponentAIRunning() then
@@ -2058,14 +2059,10 @@ Platoon = Class(sorianoldPlatoon) {
                 if target then
                     blip = target:GetBlip(armyIndex)
                     self:Stop()
-					if PlatoonFormation != 'NoFormation' then
-						#IssueFormAttack(platoonUnits, target, PlatoonFormation, 0)
+					if not inWater then
 						IssueAggressiveMove(platoonUnits, target:GetPosition())
-						#SUtils.AIMicro(aiBrain, self, target, threatatLocation, mySurfaceThreat)
 					else
-						#IssueAttack(platoonUnits, target)
-						IssueAggressiveMove(platoonUnits, target:GetPosition())
-						#SUtils.AIMicro(aiBrain, self, target, threatatLocation, mySurfaceThreat)
+						IssueMove(platoonUnits, target:GetPosition())
 					end
 				end
             end
@@ -2324,35 +2321,25 @@ Platoon = Class(sorianoldPlatoon) {
                 nearDest = oldPathSize == 0 or VDist3(self.LastAttackDestination[oldPathSize], pos) < 20
             end
 			
+			local inWater = AIAttackUtils.InWaterCheck(self)
+			
 		# if we're near our destination and we have a unit closeby to kill, kill it
             if table.getn(cmdQ) <= 1 and closestTarget and nearDest then
                 self:StopAttack()
-                if PlatoonFormation != 'No Formation' then
-                    #IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
-					#IssueAggressiveMove(platoonUnits, closestTarget)
+				if not inWater then
 					self:AggressiveMoveToLocation(closestTarget:GetPosition())
-					#SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
-                else
-                    #IssueAttack(platoonUnits, closestTarget)
-					#IssueAggressiveMove(platoonUnits, closestTarget)
-					self:AggressiveMoveToLocation(closestTarget:GetPosition())
-					#SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
-                end
+				else
+					self:MoveToLocation(closestTarget:GetPosition(), false)
+				end
                 cmdQ = {1}
 #				quickReset = true
 			# if we have a target and can attack it, attack!
 			elseif closestTarget then
 				self:StopAttack()
-				if PlatoonFormation != 'No Formation' then
-					#IssueFormAttack(platoonUnits, closestTarget, PlatoonFormation, 0)
-					#IssueAggressiveMove(platoonUnits, closestTarget)
+				if not inWater then
 					self:AggressiveMoveToLocation(closestTarget:GetPosition())
-					#SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
 				else
-					#IssueAttack(platoonUnits, closestTarget)
-					#IssueAggressiveMove(platoonUnits, closestTarget)
-					self:AggressiveMoveToLocation(closestTarget:GetPosition())
-					#SUtils.AIMicro(aiBrain, self, closestTarget, threatatLocation, mySurfaceThreat)
+					self:MoveToLocation(closestTarget:GetPosition(), false)
 				end
 				cmdQ = {1}
 #				quickReset = true

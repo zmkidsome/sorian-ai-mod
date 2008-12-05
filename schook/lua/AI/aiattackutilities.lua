@@ -852,6 +852,11 @@ function AIPlatoonSquadAttackVectorSorian( aiBrain, platoon, bAggro )
         local position = platoon:GetPlatoonPosition()
 		local inBase = false
 		local homeBase = aiBrain.BuilderManagers[platoon.PlatoonData.LocationType].Position
+		
+		if not position and not homeBase then
+			return {}
+		end
+		
 		if VDist2Sq(position[1], position[3], homeBase[1], homeBase[3]) < 100*100 then
 			inBase = true
 		end		
@@ -1081,6 +1086,10 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
             transportLocation = platoon:GetPlatoonPosition()
             useGraph = 'Air'
         end
+        
+	    if not aiBrain:PlatoonExists(platoon) then
+	        return false
+	    end
         
 		if transportLocation then
 		    local minThreat = aiBrain:GetThreatAtPosition( transportLocation, 0, true, 'AntiAir' )
@@ -1330,6 +1339,12 @@ function SendPlatoonWithTransports(aiBrain, platoon, destination, bRequired, bSk
     end
     
     return true
+end
+
+function InWaterCheck(platoon)
+	local platPos = platoon:GetPlatoonPosition()
+	local inWater = GetTerrainHeight(platPos[1], platPos[3]) < GetSurfaceHeight(platPos[1], platPos[3])
+	return inWater
 end
 
 function AIPlatoonSquadAttackVector( aiBrain, platoon, bAggro )

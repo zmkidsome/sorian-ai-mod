@@ -162,6 +162,7 @@ BaseBuilderTemplate {
 		'Sorian Tele SCU Strategy',
 		'SorianWaterMapLowLand',
 		'Sorian PD Creep Strategy',
+		'SorianStopNukes',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',
@@ -223,25 +224,21 @@ BaseBuilderTemplate {
             return 1, 'sorianrush'
         end
         
-        if per != 'sorianrush' and per != 'sorianadaptive' and per != 'bleh' and per != '' then
+        if per != 'sorianrush' and per != 'sorianadaptive' and per != '' then
             return 1, 'sorianrush'
         end
 
         local mapSizeX, mapSizeZ = GetMapSize()
-        local isIsland = false
         
         local startX, startZ = aiBrain:GetArmyStartPos()
-        local islandMarker = import('/lua/AI/AIUtilities.lua').AIGetClosestMarkerLocation(aiBrain, 'Island', startX, startZ)
-        if islandMarker then
-            isIsland = true
-        end
+        local isIsland = import('/lua/editor/SorianBuildConditions.lua').IsIslandMap(aiBrain)
         
         if per == 'sorianrush' then
             return 1000, 'sorianrush'
         end
 		
-		if isIsland then
-            return 1, 'sorianrush'
+		if mapSizeX < 1024 and mapSizeZ < 1024 and isIsland then
+            return Random(75, 100), 'sorianrush'
         
         elseif mapSizeX <= 256 and mapSizeZ <= 256 and not isIsland then
             return 100, 'sorianrush'

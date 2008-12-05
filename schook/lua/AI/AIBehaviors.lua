@@ -1416,7 +1416,7 @@ function BehemothBehaviorSorian(self)
             
             if nearCommander and nearCommander ~= targetUnit then
                 IssueClearCommands(platoonUnits)
-				if useMove or SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), nearCommander:GetPosition()) < 40000 then
+				if useMove then
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), false)
 				else
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), 'AttackMove')

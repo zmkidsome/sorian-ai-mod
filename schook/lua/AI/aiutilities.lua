@@ -568,7 +568,7 @@ function AIFindUndefendedBrainTargetInRangeSorian( aiBrain, platoon, squad, maxR
 end
 
 function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri, nukeCount, oldTarget )
-    local position = platoon:GetPosition()	
+    local position = platoon:GetPosition()
     if not aiBrain or not position or not maxRange then
         return false
     end
@@ -577,11 +577,13 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
         local category = ParseEntityCategory( v )
         local retUnit = false
 		local retPosition = false
+		local retAntis = 0
         local distance = false
         for num, unit in targetUnits do
             if not unit:IsDead() and EntityCategoryContains( category, unit ) then
                 local unitPos = unit:GetPosition()
-				local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, unitPos, 80, 'Enemy' )
+				#local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, unitPos, 90, 'Enemy' )
+				local antiNukes = SUtils.NumberofUnitsBetweenPoints(aiBrain, position, unitPos, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, 90, 'Enemy')
 				local dupTarget = false
 				for x,z in oldTarget do
 					if unit == z or (not z:IsDead() and Utils.XZDistanceTwoVectors( z:GetPosition(), unitPos ) < 30) then
@@ -599,16 +601,19 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
                 if (not retUnit or (distance and Utils.XZDistanceTwoVectors( position, unitPos ) < distance)) and ((antiNukes + 2 < nukeCount or antiNukes == 0) and not dupTarget) then
                     retUnit = unit
 					retPosition = unitPos
+					retAntis = antiNukes
                     distance = Utils.XZDistanceTwoVectors( position, unitPos )
 				elseif (not retUnit or (distance and Utils.XZDistanceTwoVectors( position, unitPos ) < distance)) and not dupTarget then
 					for i=-1,1 do
 						for j=-1,1 do
 							if i ~= 0 and j~= 0 then
 								local pos = {unitPos[1] + (i * 15), 0, unitPos[3] + (j * 15)}
-								antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, pos, 80, 'Enemy' )
+								#antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, pos, 90, 'Enemy' )
+								antiNukes = SUtils.NumberofUnitsBetweenPoints(aiBrain, position, pos, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, 90, 'Enemy')
 								if (antiNukes + 2 < nukeCount or antiNukes == 0) then
 									retUnit = unit
 									retPosition = pos
+									retAntis = antiNukes
 									distance = Utils.XZDistanceTwoVectors( position, unitPos )
 								end
 							end
@@ -620,7 +625,7 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
             end
         end
         if retUnit then
-            return retUnit, retPosition
+            return retUnit, retPosition, retAntis
         end
     end
     return false

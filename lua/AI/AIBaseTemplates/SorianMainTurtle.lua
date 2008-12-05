@@ -161,6 +161,7 @@ BaseBuilderTemplate {
 		'Sorian Tele SCU Strategy',
 		'SorianWaterMapLowLand',
 		'Sorian PD Creep Strategy',
+		'SorianStopNukes',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',
@@ -221,25 +222,21 @@ BaseBuilderTemplate {
             return 1, 'sorianturtle'
         end
         
-        if per != 'sorianturtle' and per != 'sorianadaptive' and per != 'bleh' and per != '' then
+        if per != 'sorianturtle' and per != 'sorianadaptive' and per != '' then
             return 1, 'sorianturtle'
         end
 
         local mapSizeX, mapSizeZ = GetMapSize()
-        local isIsland = false
         
         local startX, startZ = aiBrain:GetArmyStartPos()
-        local islandMarker = import('/lua/AI/AIUtilities.lua').AIGetClosestMarkerLocation(aiBrain, 'Island', startX, startZ)
-        if islandMarker then
-            isIsland = true
-        end
+        local isIsland = import('/lua/editor/SorianBuildConditions.lua').IsIslandMap(aiBrain)
         
         if per == 'sorianturtle' then
             return 1000, 'sorianturtle'
         end
         
         #If we're playing on an island map,  use this plan
-        if isIsland then
+        if isIsland and mapSizeX > 500 and mapSizeZ > 500 then
             return Random(50, 100), 'sorianturtle'
         #If we're playing on a 256 map, do not turtle
         elseif mapSizeX < 500 and mapSizeZ < 500 then
