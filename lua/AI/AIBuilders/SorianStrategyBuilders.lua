@@ -143,7 +143,7 @@ BuilderGroup {
 				return returnval
 			end
 			
-			if Random(1,200) == 100 then
+			if Random(1,40) == 35 then
 				returnval = 100
 			end				
 			
@@ -705,11 +705,11 @@ BuilderGroup {
 				end
 			end
 			
-			local ratio = allies - enemies
+			local ratio = allies / enemies
 			
 			local gtime = GetGameTimeSeconds()
 			
-			returnval = 75 + (ratio * 5) - (gtime * .008)
+			returnval = 75 + (ratio * 5) - (gtime * .004)
 			return returnval
 		end,
         BuilderConditions = {

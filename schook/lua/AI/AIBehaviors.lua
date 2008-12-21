@@ -1450,10 +1450,19 @@ function BehemothBehaviorSorian(self)
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', closestBlockingShield:GetPosition(), 'AttackMove')
 				end
                 
+				local farAway = true
+				if SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), closestBlockingShield:GetPosition()) < 40000 then
+					farAway = false
+				end
                 #Wait for shield to die loop
-                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) and SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), closestBlockingShield:GetPosition()) >= 40000 do
+                while not closestBlockingShield:IsDead() and aiBrain:PlatoonExists(self) and useMove == InWaterCheck(self)
+				and self:IsCommandsActive(cmd) do
 					self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 					useMove = InWaterCheck(self)
+					local targDistSq = SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), closestBlockingShield:GetPosition())
+					if (farAway and targDistSq < 40000) or (not farAway and targDistSq >= 40000) then
+						break
+					end
                     WaitSeconds(1)
                 end             
 

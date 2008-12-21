@@ -28,7 +28,7 @@ BaseBuilderTemplate {
 		'SorianSCUUpgrades',
 
         # Extractor building        
-        'SorianEngineerMassBuildersLowerPri',
+        'SorianEngineerMassBuildersLowerPri - Rush',
 		
         # Build some power, but not much
         'SorianEngineerEnergyBuildersExpansions',

@@ -968,7 +968,7 @@ BuilderGroup {
     # Also the platoon carries an engineer with it
     Builder {
         BuilderName = 'Sorian Start Location Attack',
-        PlatoonTemplate = 'StartLocationAttackSorian',
+        PlatoonTemplate = 'StartLocationAttack2Sorian',
 		PlatoonAddPlans = {'PlatoonCallForHelpAISorian', 'DistressResponseAISorian'},
 		PlatoonAddBehaviors = { 'AirLandToggleSorian' },
         Priority = 960,
@@ -984,7 +984,7 @@ BuilderGroup {
             MarkerType = 'Start Location',            
             MoveFirst = 'Closest',
 			LocationType = 'LocationType',
-            MoveNext = 'Guard Base',
+            MoveNext = 'None',
             #ThreatType = '',
             #SelfThreat = '',
             #FindHighestThreat ='',

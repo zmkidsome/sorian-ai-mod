@@ -13,13 +13,13 @@ BaseBuilderTemplate {
     Builders = {
         # ==== ECONOMY ==== #
         # Factory upgrades
-        'SorianT1BalancedUpgradeBuilders',
+        'SorianT1RushUpgradeBuilders',
         'SorianT2BalancedUpgradeBuilders',
 		'SorianEmergencyUpgradeBuilders',
 		'SorianMassFabPause',
         
         # Engineer Builders
-        'SorianEngineerFactoryBuilders',
+        'SorianEngineerFactoryBuilders - Rush',
         'SorianT1EngineerBuilders',
         'SorianT2EngineerBuilders',
         'SorianT3EngineerBuilders',
@@ -40,7 +40,7 @@ BaseBuilderTemplate {
 		'SorianEngineerMassBuildersHighPri',
         
         # Extractors
-        'SorianTime Exempt Extractor Upgrades',
+        'SorianTime Exempt Extractor Upgrades - Rush',
         
         # ACU Builders
         'Sorian Rush Initial ACU Builders',

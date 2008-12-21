@@ -468,17 +468,17 @@ function AddCustomUnitSupport(aiBrain)
 		for k, v in CustomUnitFiles do
 			local tempfile = import(v).UnitList
 			#Add each files entry into the appropriate table
-			for plat, t in tempfile do
-				for fac, b in t do
+			for plat, tbl in tempfile do
+				for fac, entry in tbl do
 					if aiBrain.CustomUnits[plat] and aiBrain.CustomUnits[plat][fac] then
-						table.insert(aiBrain.CustomUnits[plat][fac], { b[1], b[2] } )
+						table.insert(aiBrain.CustomUnits[plat][fac], { entry[1], entry[2] } )
 					elseif aiBrain.CustomUnits[plat] then
 						aiBrain.CustomUnits[plat][fac] = {}
-						table.insert(aiBrain.CustomUnits[plat][fac], { b[1], b[2] } )
+						table.insert(aiBrain.CustomUnits[plat][fac], { entry[1], entry[2] } )
 					else
 						aiBrain.CustomUnits[plat] = {}
 						aiBrain.CustomUnits[plat][fac] = {}
-						table.insert(aiBrain.CustomUnits[plat][fac], { b[1], b[2] } )
+						table.insert(aiBrain.CustomUnits[plat][fac], { entry[1], entry[2] } )
 					end
 				end
 			end
@@ -704,7 +704,7 @@ function FinishAIChat(data)
 			focus = aiBrain.Focus
 		end
 		AISendChat('allies', aiBrain.Nickname, 'focuschat', nil, focus)
-	elseif data.GiveEngineer and not GetArmyBrain(data.ToArmy):IsDefeated() and OkayToMessWithArmy(data.Army) then
+	elseif data.GiveEngineer and not GetArmyBrain(data.ToArmy):IsDefeated() then
 		local cats = {categories.TECH3, categories.TECH2, categories.TECH1}
 		local given = false
 		for _, cat in cats do

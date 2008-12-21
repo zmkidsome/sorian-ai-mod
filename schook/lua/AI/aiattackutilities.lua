@@ -566,11 +566,11 @@ function PlatoonGenerateSafePathTo(aiBrain, platoonLayer, start, destination, op
 	
     --Get the closest path node at the platoon's position
     local startNode
-    if testPath then
-    	startNode = GetClosestPathNodeInRadiusByLayerSorian(location, destination, optMaxMarkerDist, platoonLayer)
-    else
+    #if testPath then
+    #	startNode = GetClosestPathNodeInRadiusByLayerSorian(location, destination, optMaxMarkerDist, platoonLayer)
+    #else
     	startNode = GetClosestPathNodeInRadiusByLayer(location, optMaxMarkerDist, platoonLayer)
-    end
+    #end
     if not startNode and platoonLayer == 'Amphibious' then
         return PlatoonGenerateSafePathTo(aiBrain, 'Land', start, destination, optThreatWeight, optMaxMarkerDist)
     end
