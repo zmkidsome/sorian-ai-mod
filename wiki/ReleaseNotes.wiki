@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.2b:* Altered TML targeting, Rush AI build order changed, ACU should push forward better, Land T4 bug should be fixed, Fixed stuck engineer bug (I hope), You should no longer get a cheat message when asking the AI for an engie.
+
 *1.8.2:* Changed the Nuke code a bit, Amphibious units should get stuck less, T4s should attack the ACU rather than walk on it, New strat to stop Nuke production if the AI gets too far behind, AI should, hopefully, not be able to upgrade mexes to tech 3 if the host disables tech 3, Misc. bug fixes.
 
 *1.8.1:* Balance changes based on feedback.
