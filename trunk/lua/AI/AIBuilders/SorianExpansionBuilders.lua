@@ -40,7 +40,7 @@ BuilderGroup {
         Priority = 985,
         InstanceCount = 2,
         BuilderConditions = {
-            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 5, 0, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
             { SBC, 'LessThanGameTime', { 600 } },
 			{ SIBC, 'LessThanExpansionBases', { } },
@@ -83,7 +83,7 @@ BuilderGroup {
         Priority = 932,
         InstanceCount = 2,
         BuilderConditions = {
-            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 100, 0, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
 			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
@@ -212,7 +212,7 @@ BuilderGroup {
         Priority = 922,
         InstanceCount = 2,
         BuilderConditions = {
-            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'StartLocationNeedsEngineer', { 'LocationType', 1000, -1000, 100, 0, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },
 			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
@@ -340,8 +340,8 @@ BuilderGroup {
         Priority = 922,
         InstanceCount = 2,
         BuilderConditions = {
-            { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
-            { UCBC, 'StartLocationsFull', { 'LocationType', 1000, -1000, 0, 2, 'StructuresNotMex' } },
+            { UCBC, 'ExpansionAreaNeedsEngineer', { 'LocationType', 1000, -1000, 100, 2, 'StructuresNotMex' } },
+            { UCBC, 'StartLocationsFull', { 'LocationType', 1000, -1000, 100, 2, 'StructuresNotMex' } },
             { UCBC, 'UnitCapCheckLess', { .8 } },   
 			{ SIBC, 'LessThanExpansionBases', { } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},

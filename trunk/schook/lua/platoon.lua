@@ -486,10 +486,10 @@ Platoon = Class(sorianoldPlatoon) {
         local minRadius = weapon.MinRadius
         unit:SetAutoMode(true)
 		local atkPri = { 'STRUCTURE STRATEGIC EXPERIMENTAL', 'ARTILLERY EXPERIMENTAL', 'STRUCTURE NUKE EXPERIMENTAL', 'EXPERIMENTAL ORBITALSYSTEM', 'STRUCTURE ARTILLERY TECH3', 
-		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'TECH3 MASSPRODUCTION', 'TECH2 ENERGYPRODUCTION', 'TECH2 MASSPRODUCTION', 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'LAND, NAVAL' }
+		'STRUCTURE NUKE TECH3', 'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE', 'COMMAND', 'EXPERIMENTAL MOBILE LAND', 'TECH3 MASSFABRICATION', 'TECH3 ENERGYPRODUCTION', 'TECH3 MASSPRODUCTION', 'TECH2 ENERGYPRODUCTION', 'TECH2 MASSPRODUCTION', 'STRUCTURE SHIELD' } # 'STRUCTURE STRATEGIC', 'STRUCTURE DEFENSE TECH3', 'STRUCTURE DEFENSE TECH2', 'STRUCTURE FACTORY', 'STRUCTURE', 'LAND, NAVAL' }
         self:SetPrioritizedTargetList( 'Attack', { categories.STRUCTURE * categories.ARTILLERY * categories.EXPERIMENTAL, categories.STRUCTURE * categories.NUKE * categories.EXPERIMENTAL, categories.EXPERIMENTAL * categories.ORBITALSYSTEM, categories.STRUCTURE * categories.ARTILLERY * categories.TECH3, 
 		categories.STRUCTURE * categories.NUKE * categories.TECH3, categories.EXPERIMENTAL * categories.ENERGYPRODUCTION * categories.STRUCTURE, categories.COMMAND, categories.EXPERIMENTAL * categories.MOBILE * categories.LAND, categories.TECH3 * categories.MASSFABRICATION,
-		categories.TECH3 * categories.ENERGYPRODUCTION, categories.TECH3 * categories.MASSPRODUCTION, categories.TECH2 * categories.ENERGYPRODUCTION, categories.TECH2 * categories.MASSPRODUCTION, categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.LAND + categories.NAVAL } )
+		categories.TECH3 * categories.ENERGYPRODUCTION, categories.TECH3 * categories.MASSPRODUCTION, categories.TECH2 * categories.ENERGYPRODUCTION, categories.TECH2 * categories.MASSPRODUCTION, categories.STRUCTURE * categories.SHIELD } ) # categories.STRUCTURE * categories.STRATEGIC, categories.STRUCTURE * categories.DEFENSE * categories.TECH3, categories.STRUCTURE * categories.DEFENSE * categories.TECH2, categories.STRUCTURE * categories.FACTORY, categories.STRUCTURE, categories.LAND + categories.NAVAL } )
         while aiBrain:PlatoonExists(self) do
             local target = false
             local blip = false
@@ -2098,7 +2098,7 @@ Platoon = Class(sorianoldPlatoon) {
 			local pos = self:GetPlatoonPosition()
             if self:IsOpponentAIRunning() then
                 local target = self:FindClosestUnit('support', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR - categories.NAVAL - categories.SCOUT)
-				if target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq(target:GetPosition(), eng.CDRHome) < 90000 and
+				if target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq(target:GetPosition(), eng.CDRHome) < 122500 and
 				  aiBrain:GetThreatAtPosition( target:GetPosition(), 1, true, 'AntiSurface') < mySurfaceThreat then
 					movingToScout = false
 					local targetLoc = target:GetPosition()
@@ -2115,7 +2115,7 @@ Platoon = Class(sorianoldPlatoon) {
 					local DefSpots = AIUtils.AIGetSortedDefensiveLocationsFromLast(aiBrain, 10)
 					if table.getn(DefSpots) > 0 then
 						for k,v in DefSpots do
-							if SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) < 90000 then
+							if SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) < 122500 and SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) > SUtils.XZDistanceTwoVectorsSq(pos, eng.CDRHome) then
 								movingToScout = true
 								self:MoveToLocation( v, false )
 							end
@@ -3002,14 +3002,6 @@ Platoon = Class(sorianoldPlatoon) {
 			if not eng:IsDead() and engLastPos and eng:IsUnitState("Building") and not eng:IsUnitState("Capturing") and not eng:IsUnitState("Reclaiming")
 			and not eng:IsUnitState("Repairing") and eng:GetWorkProgress() == 0 and VDist2Sq(engLastPos[1], engLastPos[3], engPos[1], engPos[3]) < 1 then
 				if stuckCount > 10 then
-					#if eng.CDRHome then
-					#	LOG('*AI DEBUG: ACU was stuck. Resetting')
-					#else
-					#	LOG('*AI DEBUG: Engineer was stuck. Resetting.')
-					#end
-					#DrawCircle( engPos, 1, 'ff00ffff' )
-					#DrawCircle( engPos, 3, 'ff00ffff' )
-					#DrawCircle( engPos, 5, 'ff00ffff' )
 					stuckCount = 0
 					eng.NotBuildingThread = nil
 					eng.ProcessBuild = eng:ForkThread(eng.PlatoonHandle.ProcessBuildCommandSorian, true)
@@ -3102,9 +3094,9 @@ Platoon = Class(sorianoldPlatoon) {
                         end
                     end
                 end
-				#if not threadStarted and not eng.NotBuildingThread then
-				#	eng.NotBuildingThread = eng:ForkThread(eng.PlatoonHandle.WatchForNotBuildingSorian)
-				#end
+				if not threadStarted and not eng.NotBuildingThread then
+					eng.NotBuildingThread = eng:ForkThread(eng.PlatoonHandle.WatchForNotBuildingSorian)
+				end
                 commandDone = true             
             else
                 # we can't move there, so remove it from our build queue

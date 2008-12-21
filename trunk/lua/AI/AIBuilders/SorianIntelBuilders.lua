@@ -246,7 +246,7 @@ BuilderGroup {
             { UCBC, 'HaveUnitRatio', { 0.10, categories.LAND * categories.SCOUT, '<=', categories.LAND * categories.MOBILE - categories.ENGINEER }},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.SCOUT * categories.LAND } },
             { IBC, 'BrainNotLowPowerMode', {} },
-			{ SBC, 'GreaterThanGameTime', { 300 } },
+			{ SBC, 'GreaterThanGameTime', { 600 } },
 			{ SBC, 'IsIslandMap', { false } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.05 }},
 			{ SBC, 'NoRushTimeCheck', { 600 }},
