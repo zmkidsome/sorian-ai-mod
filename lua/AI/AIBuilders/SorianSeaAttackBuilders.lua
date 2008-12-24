@@ -212,7 +212,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH3 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
     },
@@ -224,7 +224,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH2 } },
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.NAVAL * categories.FACTORY * categories.TECH3 } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
         },
         BuilderType = 'Sea',
@@ -232,7 +232,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Naval Battleship',
         PlatoonTemplate = 'T3SeaBattleship',
-        Priority = 700,
+        Priority = 699,
         BuilderType = 'Sea',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -268,7 +268,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3Battlecruiser',
         PlatoonTemplate = 'T3Battlecruiser',
-        Priority = 700,
+        Priority = 699,
         BuilderType = 'Sea',
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
