@@ -1092,6 +1092,7 @@ CzarBehaviorSorian = function(self)
 			    IssueClearCommands(platoonUnits)
 				WaitTicks(5)
 				cmd = ExpPathToLocation(aiBrain, self, 'Air', targetUnit:GetPosition(), false, 62500)
+				cmd = self:AttackTarget(targetUnit)
 			else 
 			    IssueClearCommands(platoonUnits)
 				WaitTicks(5)

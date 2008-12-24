@@ -481,10 +481,13 @@ end
 
 function LessThanNavalBases(aiBrain)
 	local expBaseCount = 0
-	local checkNum = tonumber(ScenarioInfo.Options.NavalExpansionsAllowed) or 2
+	local checkNum = tonumber(ScenarioInfo.Options.NavalExpansionsAllowed) or 4
+	local isIsland = import('/lua/editor/SorianBuildConditions.lua').IsIslandMap(aiBrain)
 	expBaseCount = aiBrain:GetManagerCount('Naval Area')
 	#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' LessThanNavalBases Total = '..expBaseCount)
-	if expBaseCount < checkNum then
+	if isIsland and expBaseCount < checkNum then
+		return true
+	elseif not isIsland and expBaseCount < checkNum - 2 then
 		return true
 	end
 	return false

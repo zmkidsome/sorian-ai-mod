@@ -68,10 +68,11 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Naval Builder Fast',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 922,
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
+			{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'FACTORY NAVAL'}},
 			{ UCBC, 'HaveLessThanUnitsInCategoryBeingBuilt', { 1, 'FACTORY NAVAL TECH2, FACTORY NAVAL TECH3' } },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.1 }},
             { EBC, 'MassToFactoryRatioBaseCheck', { 'LocationType' } },
@@ -104,7 +105,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2 Naval Builder Fast',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 922,
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },
@@ -140,7 +141,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Naval Builder Fast',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 850,
+        Priority = 922,
         InstanceCount = 1,
         BuilderConditions = {
             { UCBC, 'NavalAreaNeedsEngineer', { 'LocationType', 600, -1000, 10, 1, 'AntiSurface' } },

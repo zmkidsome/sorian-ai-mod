@@ -56,7 +56,8 @@ BaseBuilderTemplate {
 		'SorianMassAdjacencyDefenses',
         
         # ==== NAVAL EXPANSION ==== #
-        'SorianNavalExpansionBuilders',
+        #'SorianNavalExpansionBuilders',
+		'SorianNavalExpansionBuildersFast',
         
         # ==== AIR UNIT BUILDERS ==== #
         'SorianT1AirFactoryBuilders',
