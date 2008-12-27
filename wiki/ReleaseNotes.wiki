@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.3b:* Water AI will use some land units, Amphibious units should not get stuck in water anymore, Added support for new AI Support Mod (included in download).
+
 *1.8.3:* Czar behavior should be fixed, Worked on the Water AI a bit.
 
 *1.8.2b:* Altered TML targeting, Rush AI build order changed, ACU should push forward better, Land T4 bug should be fixed, Fixed stuck engineer bug (I hope), You should no longer get a cheat message when asking the AI for an engie.
