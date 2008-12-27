@@ -6,56 +6,62 @@
 #**  Summary  : Utility File to insert custom AI into the game.
 #**
 #****************************************************************************
-AIList = {
-    {
-        key = 'sorian',
-        name = "AI: SAI 1.8.3",
-    },
-    {
-        key = 'sorianrush',
-        name = "AI: SAI Rush 1.8.3",
-    },
-    {
-        key = 'sorianair',
-        name = "AI: SAI Air 1.8.3",
-    },
-    {
-        key = 'sorianwater',
-        name = "AI: SAI Water 1.8.3",
-    },
-    {
-        key = 'sorianturtle',
-        name = "AI: SAI Turtle 1.8.3",
-    },
-    {
-        key = 'sorianadaptive',
-        name = "AI: SAI Adaptive 1.8.3",
-    },
-}
 
-CheatAIList = {
-    {
-        key = 'soriancheat',
-        name = "AIx: SAI 1.8.3",
-    },
-    {
-        key = 'sorianrushcheat',
-        name = "AIx: SAI Rush 1.8.3",
-    },
-    {
-        key = 'sorianaircheat',
-        name = "AIx: SAI Air 1.8.3",
-    },
-    {
-        key = 'sorianwatercheat',
-        name = "AIx: SAI Water 1.8.3",
-    },
-    {
-        key = 'sorianturtlecheat',
-        name = "AIx: SAI Turtle 1.8.3",
-    },
-    {
-        key = 'sorianadaptivecheat',
-        name = "AIx: SAI Adaptive 1.8.3",
-    },
+local AIVersion = "1.8.3b"
+
+AI = {
+	Name = "Sorian AI",
+	Version = AIVersion,
+	AIList = {
+		{
+			key = 'sorian',
+			name = "AI: SAI "..AIVersion,
+		},
+		{
+			key = 'sorianrush',
+			name = "AI: SAI Rush "..AIVersion,
+		},
+		{
+			key = 'sorianair',
+			name = "AI: SAI Air "..AIVersion,
+		},
+		{
+			key = 'sorianwater',
+			name = "AI: SAI Water "..AIVersion,
+		},
+		{
+			key = 'sorianturtle',
+			name = "AI: SAI Turtle "..AIVersion,
+		},
+		{
+			key = 'sorianadaptive',
+			name = "AI: SAI Adaptive "..AIVersion,
+		},
+	},
+	CheatAIList = {
+		{
+			key = 'soriancheat',
+			name = "AIx: SAI "..AIVersion,
+		},
+		{
+			key = 'sorianrushcheat',
+			name = "AIx: SAI Rush "..AIVersion,
+		},
+		{
+			key = 'sorianaircheat',
+			name = "AIx: SAI Air "..AIVersion,
+		},
+		{
+			key = 'sorianwatercheat',
+			name = "AIx: SAI Water "..AIVersion,
+		},
+		{
+			key = 'sorianturtlecheat',
+			name = "AIx: SAI Turtle "..AIVersion,
+		},
+		{
+			key = 'sorianadaptivecheat',
+			name = "AIx: SAI Adaptive "..AIVersion,
+		},
+	},
 }

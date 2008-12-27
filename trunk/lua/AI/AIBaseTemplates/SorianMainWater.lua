@@ -83,7 +83,23 @@ BaseBuilderTemplate {
 		'SorianNavalExpansionBuildersFast',
         
         # ==== LAND UNIT BUILDERS ==== #
+        'SorianT1LandFactoryBuilders',
+        'SorianT2LandFactoryBuilders',
+        'SorianT3LandFactoryBuilders',
         
+        'SorianFrequentLandAttackFormBuilders',
+        'SorianMassHunterLandFormBuilders',
+        'SorianMiscLandFormBuilders',
+        'SorianUnitCapLandAttackFormBuilders',
+        
+        'SorianT1LandAA',
+        'SorianT2LandAA',
+		'SorianT3LandResponseBuilders',
+
+        'SorianT1ReactionDF',
+        'SorianT2ReactionDF',
+        'SorianT3ReactionDF',
+		
         'SorianT2Shields',
         'SorianShieldUpgrades',
         'SorianT3Shields',
