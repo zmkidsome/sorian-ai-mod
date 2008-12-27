@@ -162,7 +162,13 @@ Platoon = Class(sorianoldPlatoon) {
                     repeat
                         moveLocation = distressLocation
                         self:Stop()
-                        local cmd = self:AggressiveMoveToLocation( distressLocation )
+                        local cmd #= self:AggressiveMoveToLocation( distressLocation )
+						local inWater = AIAttackUtils.InWaterCheck(self)
+						if not inWater then
+							cmd = self:AggressiveMoveToLocation( distressLocation )
+						else
+							cmd = self:MoveToLocation( distressLocation, false )
+						end
 						local poscheck = self:GetPlatoonPosition()
 						local prevpos = poscheck
 						local poscounter = 0
@@ -189,7 +195,7 @@ Platoon = Class(sorianoldPlatoon) {
 							threatatPos = aiBrain:GetThreatAtPosition(moveLocation, 0, true, 'AntiSurface')
 							artyThreatatPos = aiBrain:GetThreatAtPosition(moveLocation, 0, true, 'Artillery')
 							myThreatatPos = aiBrain:GetThreatAtPosition(moveLocation, 0, true, 'Overall', aiBrain:GetArmyIndex())
-                        until not self:IsCommandsActive(cmd) or breakResponse or ((threatatPos + artyThreatatPos) - myThreatatPos) <= threatThreshold
+                        until not self:IsCommandsActive(cmd) or breakResponse or ((threatatPos + artyThreatatPos) - myThreatatPos) <= threatThreshold or (inWater != AIAttackUtils.InWaterCheck(self))
                         
                         
                         platoonPos = self:GetPlatoonPosition()
@@ -197,7 +203,12 @@ Platoon = Class(sorianoldPlatoon) {
                             # Now that we have helped the first location, see if any other location needs the help
                             distressLocation = aiBrain:BaseMonitorDistressLocation(platoonPos, distressRange)
                             if distressLocation then
-                                self:AggressiveMoveToLocation( distressLocation )
+								inWater = AIAttackUtils.InWaterCheck(self)
+								if not inWater then
+									self:AggressiveMoveToLocation( distressLocation )
+								else
+									self:MoveToLocation( distressLocation, false )
+								end
                             end
                         end
                     # If no more calls or we are at the location; break out of the function
