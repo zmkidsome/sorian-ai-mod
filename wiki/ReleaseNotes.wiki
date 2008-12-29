@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.3c:* Updated to work with AI Support Mod v0.3.
+
 *1.8.3b:* Water AI will use some land units, Amphibious units should not get stuck in water anymore, Added support for new AI Support Mod (included in download).
 
 *1.8.3:* Czar behavior should be fixed, Worked on the Water AI a bit.
