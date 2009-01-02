@@ -990,18 +990,17 @@ Platoon = Class(sorianoldPlatoon) {
                     self:Stop()
                     self:AttackTarget( target )
 					patrolling = false
-                elseif target and not target:IsDead() and VDist3( target:GetPosition(), self:GetPlatoonPosition() ) < guardRadius then
+                elseif target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq( target:GetPosition(), basePosition ) < guardRadius * guardRadius then
                     self:Stop()
                     self:AggressiveMoveToLocation( target:GetPosition() )
 					patrolling = false
-                elseif not patrolling then #VDist3( basePosition, self:GetPlatoonPosition() ) > guardRadius then
-					#local position = AIUtils.RandomLocation(basePosition[1],basePosition[3])
+                elseif not patrolling then
+					local position = AIUtils.RandomLocation(basePosition[1],basePosition[3])
+					self:MoveToLocation( position, false )
 					for k,v in AIUtils.GetBasePatrolPoints(aiBrain, basePosition, radius, 'Air') do
 						self:Patrol(v)
 					end
 					patrolling = true
-                    #self:Stop()
-                    #self:MoveToLocation( position, false )
                 end
             end
             WaitSeconds(5)
@@ -2066,7 +2065,7 @@ Platoon = Class(sorianoldPlatoon) {
 			local pos = self:GetPlatoonPosition()
 			local threatatLocation = aiBrain:GetThreatAtPosition( pos, 1, true, 'AntiSurface')
             if self:IsOpponentAIRunning() then
-                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR - categories.NAVAL - categories.SCOUT)
+                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.SCOUT)
                 if target then
                     blip = target:GetBlip(armyIndex)
                     self:Stop()
@@ -2325,7 +2324,7 @@ Platoon = Class(sorianoldPlatoon) {
 			
             # if we're on our final push through to the destination, and we find a unit close to our destination
             #local closestTarget = self:FindClosestUnit( 'attack', 'enemy', true, categories.ALLUNITS )
-			local closestTarget = SUtils.FindClosestUnitPosToAttack( aiBrain, self, 'attack', maxRange + 20, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.WALL - categories.SCOUT, selectedWeaponArc, turretPitch )
+			local closestTarget = SUtils.FindClosestUnitPosToAttack( aiBrain, self, 'attack', maxRange + 20, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.SCOUT, selectedWeaponArc, turretPitch )
             local nearDest = false
             local oldPathSize = table.getn(self.LastAttackDestination)
             if self.LastAttackDestination then

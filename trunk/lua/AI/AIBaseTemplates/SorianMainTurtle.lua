@@ -162,6 +162,8 @@ BaseBuilderTemplate {
 		'SorianWaterMapLowLand',
 		'Sorian PD Creep Strategy',
 		'SorianStopNukes',
+		'SorianEnemyTurtle - In Range',
+		'SorianEnemyTurtle - Out of Range',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',

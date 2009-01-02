@@ -37,7 +37,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
 			#{ SBC, 'NoRushTimeCheck', { 600 }},
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY AIR TECH3' }},
 			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},
@@ -161,7 +161,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
 			#{ SBC, 'NoRushTimeCheck', { 600 }},
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY AIR TECH3' }},
 			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH3' }},
@@ -181,7 +181,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
 			#{ SBC, 'NoRushTimeCheck', { 600 }},
         },
     },
@@ -199,7 +199,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
 			#{ SBC, 'NoRushTimeCheck', { 600 }},
         },
     },
@@ -217,7 +217,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			#{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.05 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
 			#{ SBC, 'NoRushTimeCheck', { 600 }},
 			#{ UCBC, 'HaveLessThanUnitsWithCategory', { 2, 'FACTORY AIR TECH3' }},
 			#{ UCBC, 'FactoryLessAtLocation', { 'LocationType', 2, 'FACTORY AIR TECH2, FACTORY AIR TECH3' }},

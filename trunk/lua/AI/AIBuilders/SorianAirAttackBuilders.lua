@@ -106,7 +106,7 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 500,
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 30, categories.AIR * categories.ANTIAIR } },
+            #{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 30, categories.AIR * categories.ANTIAIR } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -284,7 +284,7 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 600,
         BuilderConditions = {
-            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 30, categories.AIR * categories.ANTIAIR } },
+            #{ UCBC, 'UnitsLessAtLocation', { 'LocationType', 30, categories.AIR * categories.ANTIAIR } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 2, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH2 } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -1947,13 +1947,13 @@ BuilderGroup {
 		PlatoonAddBehaviors = { 'AirUnitRefitSorian' },
 		PlatoonAddPlans = { 'AirIntelToggle' },
         Priority = 1,
-        InstanceCount = 5,
+        InstanceCount = 25,
         BuilderType = 'Any',
         BuilderData = {
             NeverGuardEngineers = true,
         },
         BuilderConditions = {
-            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 2, categories.AIR * categories.MOBILE * (categories.TECH1 + categories.TECH2 + categories.TECH3) * categories.ANTIAIR } },
+            { UCBC, 'PoolGreaterAtLocation', { 'LocationType', 1, categories.AIR * categories.MOBILE * (categories.TECH1 + categories.TECH2 + categories.TECH3) * categories.ANTIAIR } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
     },

@@ -56,7 +56,7 @@ StrategyManager = Class(BuilderManager) {
 		for mname, manager in turnOff do
 			for _, bname in manager do
 				local Managers = self.Brain.BuilderManagers[self.LocationType]
-				Managers[mname]:SetBuilderPriority(bname, 0, true, true)
+				Managers[mname]:SetBuilderPriority(bname, 0.1, true, true)
 			end
 		end
 		for mname, manager in turnOn do
