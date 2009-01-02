@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.4:* Fixed major bug in strategy manager, AI should get rid of enemy walls, Added support for AI Support Mod 0.5 (included), AI should hold some fighters back for base defense, AI should stop land assaults when the enemy has too much defense, AI will use larger land groups as the game goes on.
+
 *1.8.3c:* Updated to work with AI Support Mod v0.3.
 
 *1.8.3b:* Water AI will use some land units, Amphibious units should not get stuck in water anymore, Added support for new AI Support Mod (included in download).
