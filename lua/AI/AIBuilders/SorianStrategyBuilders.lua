@@ -842,6 +842,124 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'SorianEnemyTurtle - In Range',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'SorianEnemyTurtle - In Range',
+        Priority = 100,
+        InstanceCount = 1,
+		PriorityFunction = function(self, aiBrain)
+			local enemy, enemyIndex
+			local returnval = 1
+			if aiBrain:GetCurrentEnemy() then
+				enemy = aiBrain:GetCurrentEnemy()
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+	
+			local StartX, StartZ = enemy:GetArmyStartPos()
+    
+			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
+			
+			returnval = enemyThreat * 0.07
+			return returnval
+		end,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', true } },
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {
+			PlatoonFormManager = {
+				'Sorian Frequent Land Attack T1',
+				'Sorian Frequent Land Attack T2',
+				'Sorian Frequent Land Attack T3',
+				'Sorian Start Location Attack',
+				'Sorian Early Attacks Small',
+				'Sorian Early Attacks Medium',
+				'Sorian T2/T3 Land Weak Enemy Response',
+				'Sorian T1 Land Weak Enemy Response',
+				'Sorian T1 Hunters',
+				'Sorian T2 Hunters',
+				'Sorian T4 Exp Land',
+			}
+		},
+		AddBuilders = {
+			EngineerManager = {
+				'Sorian T3 Arty Engineer - High Prio',
+				'Sorian T3 Engineer Assist Build Arty - High Prio',
+				'Sorian T3 Nuke Engineer - High Prio',
+				'Sorian T3 Engineer Assist Build Nuke - High Prio',
+				'Sorian T3 Engineer Assist Build Nuke Missile - High Prio',
+			}
+		}
+    },
+}
+
+BuilderGroup {
+    BuilderGroupName = 'SorianEnemyTurtle - Out of Range',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'SorianEnemyTurtle - Out of Range',
+        Priority = 100,
+        InstanceCount = 1,
+		PriorityFunction = function(self, aiBrain)
+			local enemy, enemyIndex
+			local returnval = 1
+			if aiBrain:GetCurrentEnemy() then
+				enemy = aiBrain:GetCurrentEnemy()
+				enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+			else
+				return returnval
+			end
+	
+			local StartX, StartZ = enemy:GetArmyStartPos()
+    
+			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
+			
+			returnval = enemyThreat * 0.07
+			return returnval
+		end,
+        BuilderConditions = {
+			{ SBC, 'NoRushTimeCheck', { 600 }},
+			{ SBC, 'EnemyInT3ArtilleryRange', { 'LocationType', false } },
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {
+			PlatoonFormManager = {
+				'Sorian Frequent Land Attack T1',
+				'Sorian Frequent Land Attack T2',
+				'Sorian Frequent Land Attack T3',
+				'Sorian Start Location Attack',
+				'Sorian Early Attacks Small',
+				'Sorian Early Attacks Medium',
+				'Sorian T2/T3 Land Weak Enemy Response',
+				'Sorian T1 Land Weak Enemy Response',
+				'Sorian T1 Hunters',
+				'Sorian T2 Hunters',
+				'Sorian T4 Exp Land',
+			}
+		},
+		AddBuilders = {
+			EngineerManager = {
+				'Sorian T3 Expansion Area Firebase Engineer - Cybran - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Aeon - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - UEF - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Seraphim - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Cybran - DP - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Aeon - DP - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - UEF - DP - HP',
+				'Sorian T3 Expansion Area Firebase Engineer - Seraphim - DP - HP',
+				'Sorian T3 Nuke Engineer - High Prio',
+				'Sorian T3 Engineer Assist Build Nuke - High Prio',
+				'Sorian T3 Engineer Assist Build Nuke Missile - High Prio',
+			}
+		}
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianNukeRush',
     BuildersType = 'StrategyBuilder',
     Builder {
