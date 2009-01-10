@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.5:* AI platoons should pass by ally bases, ACU should upgrade a bit earlier, T3 arty should not get stuck, ACU should move around and assist more, Harbs will no longer assist Land T4s, Improved fighter behaviors a bit, AI should build more fighters and faster, Lobby Enhancement Mod 0.3 Included.
+
 *1.8.4:* Fixed major bug in strategy manager, AI should get rid of enemy walls, Added support for AI Support Mod 0.5 (included), AI should hold some fighters back for base defense, AI should stop land assaults when the enemy has too much defense, AI will use larger land groups as the game goes on.
 
 *1.8.3c:* Updated to work with AI Support Mod v0.3.
