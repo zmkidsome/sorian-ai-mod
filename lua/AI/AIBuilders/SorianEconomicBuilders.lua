@@ -697,7 +697,6 @@ BuilderGroup {
             }
         }
     },
-    
     Builder {
         BuilderName = 'Sorian CDR Base D',
         PlatoonTemplate = 'CommanderBuilderSorian',
@@ -723,7 +722,6 @@ BuilderGroup {
             }
         }
     },
-    
     # CDR Assisting
     Builder {
         BuilderName = 'Sorian CDR Assist T2/T3 Power',
@@ -752,7 +750,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingAssistanceGreater', { 'LocationType', 0, 'ALLUNITS' } },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.05 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.8, 1.05 }},
         },
         BuilderType = 'Any',
         BuilderData = {
