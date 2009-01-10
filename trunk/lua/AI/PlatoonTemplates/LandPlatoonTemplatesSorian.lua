@@ -100,7 +100,7 @@ PlatoonTemplate {
     Name = 'T3ExpGuard',
     Plan = 'GuardExperimentalSorian',
     GlobalSquads = {
-        { categories.LAND * categories.MOBILE - categories.TECH1 - categories.ANTIAIR - categories.SCOUT - categories.ENGINEER, 1, 10, 'guard', 'None' }
+        { categories.LAND * categories.MOBILE - categories.TECH1 - categories.ANTIAIR - categories.SCOUT - categories.ENGINEER - categories.ual0303, 1, 10, 'guard', 'None' }
     },
 }
 

@@ -1369,7 +1369,7 @@ BuilderGroup {
 			LocationType = 'LocationType',
         },
         BuilderConditions = {
-			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 1, categories.LAND * categories.MOBILE - categories.TECH1 - categories.ANTIAIR - categories.SCOUT - categories.ENGINEER} },
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 1, categories.LAND * categories.MOBILE - categories.TECH1 - categories.ANTIAIR - categories.SCOUT - categories.ENGINEER - categories.ual0303} },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',

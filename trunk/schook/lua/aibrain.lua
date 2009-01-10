@@ -55,7 +55,6 @@ AIBrain = Class(oldAIBrain) {
 			for name,data in ScenarioInfo.ArmySetup do
 				if name == self.Name then
 					self.handicap = Handicaps[data.Handicap]
-					LOG('*AI DEBUG: Handicap for '..self.Name..' set to '..self.handicap)
 					if self.handicap != 0 then
 						HCapUtils.SetupHandicap(self)
 					end
@@ -97,7 +96,6 @@ AIBrain = Class(oldAIBrain) {
 				for name,data in ScenarioInfo.ArmySetup do
 					if name == self.Name then
 						self.handicap = Handicaps[data.Handicap]
-						LOG('*AI DEBUG: Handicap for '..self.Name..' set to '..self.handicap)
 						if self.handicap != 0 then
 							HCapUtils.SetupHandicap(self)
 						end
