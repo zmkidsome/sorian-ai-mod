@@ -752,7 +752,7 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { UCBC, 'LocationEngineersBuildingAssistanceGreater', { 'LocationType', 0, 'ALLUNITS' } },
-            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.1 }},
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.6, 1.05 }},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -977,9 +977,9 @@ BuilderGroup {
         BuilderName = 'Sorian UEF CDR Upgrade T3 Eng - Shields',
         PlatoonTemplate = 'CommanderEnhanceSorian',
         BuilderConditions = {
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'FACTORY TECH2, FACTORY TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3'}},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'T3Engineering', true }},
@@ -1019,9 +1019,9 @@ BuilderGroup {
         BuilderName = 'Sorian Aeon CDR Upgrade T3 Eng - ResourceAdv - EnhSensor',
         PlatoonTemplate = 'CommanderEnhanceSorian',
         BuilderConditions = {
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'FACTORY TECH2, FACTORY TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3'}},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'T3Engineering', true }},
@@ -1061,9 +1061,9 @@ BuilderGroup {
         BuilderName = 'Sorian Cybran CDR Upgrade T3 Eng - Resource',
         PlatoonTemplate = 'CommanderEnhanceSorian',
         BuilderConditions = {
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'FACTORY TECH2, FACTORY TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3'}},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'T3Engineering', true }},
@@ -1103,9 +1103,9 @@ BuilderGroup {
         BuilderName = 'Sorian Seraphim CDR Upgrade T3 Eng - ResourceAdv - EnhSensor',
         PlatoonTemplate = 'CommanderEnhanceSorian',
         BuilderConditions = {
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 4, 'FACTORY TECH2, FACTORY TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'FACTORY TECH2, FACTORY TECH3'}},
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
-                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, 'ENERGYPRODUCTION TECH3'}},
+                { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'ENERGYPRODUCTION TECH3'}},
                 #{ EBC, 'GreaterThanEconStorageRatio', { 0.5, 0.5}},
 				{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
 				{ SBC, 'CmdrHasUpgrade', { 'T3Engineering', true }},

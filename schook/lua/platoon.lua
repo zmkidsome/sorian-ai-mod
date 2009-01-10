@@ -407,6 +407,7 @@ Platoon = Class(sorianoldPlatoon) {
         local bp = unit:GetBlueprint()
         local weapon = bp.Weapon[1]
         local maxRadius = weapon.MaxRadius
+		local attacking = false
         unit:SetTargetPriorities( atkPriTable )
         
         while aiBrain:PlatoonExists(self) do
@@ -424,8 +425,11 @@ Platoon = Class(sorianoldPlatoon) {
 					#self:AttackTarget(target)
                     IssueClearCommands( {unit} )
                     IssueAttack( {unit}, target )
-				elseif not target then
-					self:Stop()
+					attacking = true
+				elseif not target and attacking then
+					#self:Stop()
+					IssueClearCommands( {unit} )
+					attacking = false
 				end
             end
             WaitSeconds(20)
@@ -770,7 +774,7 @@ Platoon = Class(sorianoldPlatoon) {
 	                self.LastMarker[1] = nil
 	                self.LastMarker[2] = nil
 	            end            	
-                if self:AvoidsBases(marker.Position, bAvoidBases, avoidBasesRadius) then
+                if self:AvoidsBasesSorian(marker.Position, bAvoidBases, avoidBasesRadius) then
             		if self.LastMarker[1] and marker.Position[1] == self.LastMarker[1][1] and marker.Position[3] == self.LastMarker[1][3] then
             		    continue                
             		end                        
@@ -802,7 +806,7 @@ Platoon = Class(sorianoldPlatoon) {
                 local distSq = VDist2Sq(marker.Position[1], marker.Position[3], platLoc[1], platLoc[3])
 
                 if markerThreat >= minThreatThreshold and markerThreat <= maxThreatThreshold then
-                    if self:AvoidsBases(marker.Position, bAvoidBases, avoidBasesRadius) then
+                    if self:AvoidsBasesSorian(marker.Position, bAvoidBases, avoidBasesRadius) then
                         if self.IsBetterThreat(bFindHighestThreat, markerThreat, bestMarkerThreat) then
                             bestDistSq = distSq
                             bestMarker = marker
@@ -827,7 +831,7 @@ Platoon = Class(sorianoldPlatoon) {
             end
             for _,marker in markerLocations do
                 local distSq = VDist2Sq(marker.Position[1], marker.Position[3], platLoc[1], platLoc[3])
-                if self:AvoidsBases(marker.Position, bAvoidBases, avoidBasesRadius) and distSq > (avoidClosestRadius * avoidClosestRadius) then
+                if self:AvoidsBasesSorian(marker.Position, bAvoidBases, avoidBasesRadius) and distSq > (avoidClosestRadius * avoidClosestRadius) then
                     if distSq < bestDistSq then
                 		if self.LastMarker[1] and marker.Position[1] == self.LastMarker[1][1] and marker.Position[3] == self.LastMarker[1][3] then
                 		    continue                
@@ -2385,11 +2389,11 @@ Platoon = Class(sorianoldPlatoon) {
                     and mySurfaceThreat > 0 and not self.PlatoonData.NeverGuard 
                     and not (self.PlatoonData.NeverGuardEngineers and self.PlatoonData.NeverGuardBases) then
                     #LOG('*DEBUG: Trying to guard')
-					if platoonTechLevel > 1 then
-						return self:GuardExperimentalSorian(self.AttackForceAISorian)
-					else
+					#if platoonTechLevel > 1 then
+					#	return self:GuardExperimentalSorian(self.AttackForceAISorian)
+					#else
 						return self:GuardEngineer(self.AttackForceAISorian)
-					end
+					#end
                 end
                 
                 # we have nothing to do, so find the nearest base and disband
@@ -2497,6 +2501,7 @@ Platoon = Class(sorianoldPlatoon) {
 				end  
 				if targetCheck then
 					target = false
+					oldTarget = false
 				end
 			end
             if not target or target:IsDead() or not target:GetPosition() then
@@ -3209,6 +3214,31 @@ Platoon = Class(sorianoldPlatoon) {
 				self:StopAttack()
 			end
         end
+    end,
+	
+	#Modified version of AvoidsBases() that checks for and avoids ally bases
+    AvoidsBasesSorian = function(self, markerPos, avoidBasesDefault, baseRadius)
+        if not avoidBasesDefault then 
+            return true
+        end
+        
+        local aiBrain = self:GetBrain()
+        
+        for baseName, base in aiBrain.BuilderManagers do
+            local avoidDist = VDist2Sq(base.Position[1], base.Position[3], markerPos[1], markerPos[3]) 
+            if avoidDist < baseRadius * baseRadius then
+                return false
+            end
+        end
+		for k,v in ArmyBrains do
+			if not v:IsDefeated() and not ArmyIsCivilian(v:GetArmyIndex()) and IsAlly(v:GetArmyIndex(), aiBrain:GetArmyIndex()) then
+				local startX, startZ = v:GetArmyStartPos()
+				if VDist2Sq( markerPos[1], markerPos[3], startX, startZ) < baseRadius * baseRadius then
+					return false
+				end
+			end
+		end
+        return true
     end,
 	
     NameUnitsSorian = function(self)
