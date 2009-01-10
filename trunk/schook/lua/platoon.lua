@@ -222,7 +222,9 @@ Platoon = Class(sorianoldPlatoon) {
 								oldPlan = 'ExperimentalAIHubSorian'
 							elseif not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.LAND - categories.EXPERIMENTAL, v) then
 								oldPlan = 'AttackForceAISorian'
-							elseif not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.AIR - categories.EXPERIMENTAL, v) then
+							elseif not v:IsDead() and EntityCategoryContains(categories.AIR * categories.MOBILE * categories.ANTIAIR - categories.BOMBER - categories.TRANSPORTFOCUS - categories.EXPERIMENTAL, v) then
+								oldPlan = 'FighterHuntAI'
+							elseif not v:IsDead() and EntityCategoryContains(categories.AIR * categories.MOBILE * categories.BOMBER - categories.EXPERIMENTAL, v) then
 								oldPlan = 'AirHuntAI'
 							elseif not v:IsDead() and EntityCategoryContains(categories.MOBILE * categories.NAVAL - categories.EXPERIMENTAL, v) then
 								oldPlan = 'NavalForceAISorian'
@@ -656,7 +658,7 @@ Platoon = Class(sorianoldPlatoon) {
 		local hadtarget = false
         while aiBrain:PlatoonExists(self) do
             if self:IsOpponentAIRunning() then
-                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.ALLUNITS - categories.WALL)
+                target = self:FindClosestUnit('Attack', 'Enemy', true, categories.AIR)
 				local newtarget = false
 				if aiBrain.T4ThreatFound['Air'] then
 					newtarget = self:FindClosestUnit('Attack', 'Enemy', true, categories.EXPERIMENTAL * categories.AIR)
