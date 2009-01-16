@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.6:* Econ adjustments, Some performance improvements (I hope).
+
 *1.8.5b:* Altered ACU assisting requirements.
 
 *1.8.5:* AI platoons should pass by ally bases, ACU should upgrade a bit earlier, T3 arty should not get stuck, ACU should move around and assist more, Harbs will no longer assist Land T4s, Improved fighter behaviors a bit, AI should build more fighters and faster, Lobby Enhancement Mod 0.3 Included.
