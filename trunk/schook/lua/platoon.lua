@@ -2113,9 +2113,9 @@ Platoon = Class(sorianoldPlatoon) {
 			local mySurfaceThreat = eng:GetBlueprint().Defense.SurfaceThreatLevel or 75
 			local pos = self:GetPlatoonPosition()
             if self:IsOpponentAIRunning() then
-                local target = self:FindClosestUnit('support', 'Enemy', true, categories.ALLUNITS - categories.WALL - categories.AIR - categories.NAVAL - categories.SCOUT)
+                local target = self:FindClosestUnit('support', 'Enemy', true, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.SCOUT)
 				if target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq(target:GetPosition(), eng.CDRHome) < 122500 and
-				  aiBrain:GetThreatAtPosition( target:GetPosition(), 1, true, 'AntiSurface') < mySurfaceThreat then
+				  aiBrain:GetThreatAtPosition( target:GetPosition(), 1, true, 'AntiSurface') < mySurfaceThreat * 1.5 then
 					movingToScout = false
 					local targetLoc = target:GetPosition()
 					self:Stop()

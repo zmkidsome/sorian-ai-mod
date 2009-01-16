@@ -619,9 +619,11 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
 		aiBrain.PathCache[startNode.name][endNode.name] = {}
 	end
 	
-	if aiBrain.PathCache[startNode.name][endNode.name].path
+	if aiBrain.PathCache[startNode.name][endNode.name].path and aiBrain.PathCache[startNode.name][endNode.name].path != 'bad'
 	and aiBrain.PathCache[startNode.name][endNode.name].settime + 60 > GetGameTimeSeconds() then
 		return aiBrain.PathCache[startNode.name][endNode.name].path
+	elseif aiBrain.PathCache[startNode.name][endNode.name].path and aiBrain.PathCache[startNode.name][endNode.name].path == 'bad' then
+		return false
 	end
 	
     threatWeight = threatWeight or 1
@@ -645,7 +647,10 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
 	local lastNode = startNode
 	
 	repeat
-		if closed[lastNode] then return false end
+		if closed[lastNode] then 
+			aiBrain.PathCache[startNode.name][endNode.name] = { settime = 36000 , path = 'bad' }
+			return false 
+		end
 		
 		closed[lastNode] = true
 		
