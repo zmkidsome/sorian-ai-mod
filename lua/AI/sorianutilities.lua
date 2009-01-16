@@ -445,8 +445,9 @@ function CheckForMapMarkers(aiBrain)
 	local startX, startZ = aiBrain:GetArmyStartPos()
 	local LandMarker = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Land Path Node', startX, startZ)
 	if not LandMarker then
-		AISendChat('all', ArmyBrains[aiBrain:GetArmyIndex()].Nickname, 'badmap')
+		return false
 	end
+	return true
 end
 
 #-----------------------------------------------------

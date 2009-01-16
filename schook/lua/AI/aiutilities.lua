@@ -241,8 +241,8 @@ function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
 	result, bestPos = AIAttackUtils.CanGraphTo(unit, destination, 'Land')
 	if not result then
 		result, bestPos = AIAttackUtils.CanGraphTo(unit, destination, 'Amphibious')
-		if not result then
-			#LOG('*AI DEBUG: EngineerMoveWithSafePathSorian got to CanPathTo')
+		if not result and not SUtils.CheckForMapMarkers(aiBrain) then
+			LOG('*AI DEBUG: EngineerMoveWithSafePathSorian got to CanPathTo')
 			result, bestPos	= unit:CanPathTo( destination )
 		end
 	end
@@ -708,7 +708,6 @@ function AIFindDefensiveAreaSorian( aiBrain, unit, category, range, runShield )
         local unitPos = unit:GetPosition()
         local distance
         local startPosX, startPosZ = aiBrain:GetArmyStartPos()
-		local found = false
         for i=-5,5 do
             for j=-5,5 do
                 local height = GetTerrainHeight( unitPos[1] - ( gridSize * i ), unitPos[3] - ( gridSize * j ) )
@@ -719,7 +718,6 @@ function AIFindDefensiveAreaSorian( aiBrain, unit, category, range, runShield )
                 local units = aiBrain:GetUnitsAroundPoint( category, checkPos, gridSize, 'Ally' )
                 local tempNum = 0
                 for k,v in units do
-					found = true
                     if ( EntityCategoryContains( categories.TECH3, v ) and not runShield ) or ( EntityCategoryContains( categories.TECH3, v ) and runShield and v:ShieldIsOn() ) then
                         tempNum = tempNum + 10
                     elseif ( EntityCategoryContains( categories.TECH2, v ) and not runShield ) or ( EntityCategoryContains( categories.TECH2, v ) and runShield and v:ShieldIsOn() ) then
@@ -751,7 +749,7 @@ function AIFindDefensiveAreaSorian( aiBrain, unit, category, range, runShield )
                 end
             end
         end
-		if not found then
+		if not highPoint then
 			local x,z = aiBrain:GetArmyStartPos()
 			return RandomLocation(x,z)
 		else
