@@ -2,7 +2,7 @@
 
 == Release Notes ==
 
-*1.8.6:* Econ adjustments, Some performance improvements (I hope).
+*1.8.6:* Econ adjustments, Some performance improvements (I hope), Added Lobby Enhancement Mod 1.0.
 
 *1.8.5b:* Altered ACU assisting requirements.
 
