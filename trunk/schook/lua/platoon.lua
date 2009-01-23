@@ -1667,7 +1667,8 @@ Platoon = Class(sorianoldPlatoon) {
 
             if table.getn(assistList) > 0 then
                 # only have one unit in the list; assist it
-                if table.getn(assistList) == 1 then
+                if table.getn(assistList) == 1
+				and ( not assistData.AssistRange or SUtils.XZDistanceTwoVectorsSq(eng:GetPosition(), assistList[1]:GetPosition()) < assistData.AssistRange) then
                     assistee = assistList[1]
                     break
                 else
@@ -1675,7 +1676,8 @@ Platoon = Class(sorianoldPlatoon) {
                     local lowNum = false
                     local lowUnit = false
                     for k,v in assistList do
-                        if not lowNum or table.getn( v:GetGuards() ) < lowNum then
+                        if (not lowNum or table.getn( v:GetGuards() ) < lowNum) and
+						( not assistData.AssistRange or SUtils.XZDistanceTwoVectorsSq(eng:GetPosition(), v:GetPosition()) < assistData.AssistRange) then
                             lowNum = v:GetGuards()
                             lowUnit = v
                         end

@@ -1421,8 +1421,10 @@ function BehemothBehaviorSorian(self)
                 IssueClearCommands(platoonUnits)
 				if useMove then
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), false)
+					cmd = self:AttackTarget(targetUnit)
 				else
-					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), 'AttackMove')
+					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), 'AttackDest')
+					cmd = self:AttackTarget(targetUnit)
 				end
                 targetUnit = nearCommander
             end
