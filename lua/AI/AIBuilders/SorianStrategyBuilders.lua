@@ -1127,7 +1127,7 @@ BuilderGroup {
 			else
 				return returnval
 			end
-			if aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * categories.TECH3) > 0 then
+			if aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * (categories.TECH2 + categories.TECH3)) > 0 then
 				return returnval
 			end
 	
@@ -1136,7 +1136,7 @@ BuilderGroup {
 			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiAir', enemyIndex )
 			local numEUnits = aiBrain:GetNumUnitsAroundPoint( categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, Vector(0,0,0), 100000, 'Enemy' )
 			
-			returnval = 85 - enemyThreat - numEUnits
+			returnval = 90 - enemyThreat - numEUnits
 			return returnval
 		end,
         BuilderConditions = {
@@ -1212,7 +1212,8 @@ BuilderGroup {
 			else
 				return returnval
 			end
-			if aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * categories.TECH3) > 0 then
+			if aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * categories.TECH3) > 0 or
+			aiBrain:GetCurrentUnits(categories.FACTORY * categories.AIR * categories.TECH2) < 1 then
 				return returnval
 			end
 	
@@ -1221,7 +1222,7 @@ BuilderGroup {
 			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiAir', enemyIndex )
 			local numEUnits = aiBrain:GetNumUnitsAroundPoint( categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, Vector(0,0,0), 100000, 'Enemy' )
 			
-			returnval = 85 - (enemyThreat * 0.5) - numEUnits
+			returnval = 90 - (enemyThreat * 0.5) - numEUnits
 			return returnval
 		end,
         BuilderConditions = {
@@ -1306,7 +1307,7 @@ BuilderGroup {
 			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiAir', enemyIndex )
 			local numEUnits = aiBrain:GetNumUnitsAroundPoint( categories.MOBILE * categories.AIR * categories.ANTIAIR - categories.BOMBER, Vector(0,0,0), 100000, 'Enemy' )
 			
-			returnval = 85 - (enemyThreat * 0.15) - numEUnits
+			returnval = 90 - (enemyThreat * 0.15) - numEUnits
 			return returnval
 		end,
         BuilderConditions = {

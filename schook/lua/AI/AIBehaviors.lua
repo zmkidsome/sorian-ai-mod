@@ -111,7 +111,6 @@ function AirLandToggleThreadSorian(unit)
 end
 
 local SurfacePrioritiesSorian = { 
-    'COMMAND',
     'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
 	'EXPERIMENTAL STRATEGIC STRUCTURE',
 	'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
@@ -151,6 +150,7 @@ local SurfacePrioritiesSorian = {
 }
 
 local T4WeaponPrioritiesSorian = {
+    'COMMAND',
     'EXPERIMENTAL ENERGYPRODUCTION STRUCTURE',
 	'EXPERIMENTAL STRATEGIC STRUCTURE',
 	'EXPERIMENTAL ARTILLERY OVERLAYINDIRECTFIRE',
@@ -1314,8 +1314,10 @@ function FatBoyBehaviorSorian(self)
                 IssueClearCommands(platoonUnits)
 				if useMove then
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), false)
+					#cmd = self:AttackTarget(targetUnit)
 				else
-					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), 'AttackMove')
+					#cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), 'AttackMove')
+					cmd = self:AttackTarget(targetUnit)
 				end
                 targetUnit = nearCommander
             end
@@ -1389,6 +1391,7 @@ function BehemothBehaviorSorian(self)
     local lastBase = false
     local airUnit = false
 	local useMove = true
+	local farTarget = false
     
     #Find target loop
     while aiBrain:PlatoonExists(self) do
@@ -1401,30 +1404,41 @@ function BehemothBehaviorSorian(self)
         if not lastBase then
             targetUnit, lastBase = FindExperimentalTargetSorian(self)
         end
-        
+		
+		farTarget = false
+		if targetUnit and SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), targetUnit:GetPosition()) >= 40000 then
+			farTarget = true
+		end        
+		
         if targetUnit then
             IssueClearCommands(platoonUnits)
-			if useMove or SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), targetUnit:GetPosition()) < 40000 then
+			if useMove or not farTarget then
 				cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', targetUnit:GetPosition(), false)
 			else
 				cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', targetUnit:GetPosition(), 'AttackMove')
 			end
         end
         
+		local nearCommander = CommanderOverrideCheckSorian(self)
+		local ACUattack = false
         #Walk to and kill target loop
-        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and useMove == InWaterCheck(self) and self:IsCommandsActive(cmd) and SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), targetUnit:GetPosition()) >= 40000 do
+        while aiBrain:PlatoonExists(self) and targetUnit and not targetUnit:IsDead() and useMove == InWaterCheck(self) and
+		self:IsCommandsActive(cmd) and (nearCommander or ((farTarget and SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), targetUnit:GetPosition()) >= 40000) or
+		(not farTarget and SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), targetUnit:GetPosition()) < 40000))) do
 			self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 			useMove = InWaterCheck(self)
-            local nearCommander = CommanderOverrideCheckSorian(self)
-            
-            if nearCommander and nearCommander ~= targetUnit then
+            nearCommander = CommanderOverrideCheckSorian(self)
+
+            if nearCommander and (nearCommander ~= targetUnit or
+			(not ACUattack and SUtils.XZDistanceTwoVectorsSq(self:GetPlatoonPosition(), nearCommander:GetPosition()) < 40000)) then
                 IssueClearCommands(platoonUnits)
 				if useMove then
 					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), false)
-					cmd = self:AttackTarget(targetUnit)
+					#cmd = self:AttackTarget(targetUnit)
 				else
-					cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), 'AttackDest')
+					#cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', nearCommander:GetPosition(), 'AttackDest')
 					cmd = self:AttackTarget(targetUnit)
+					ACUattack = true
 				end
                 targetUnit = nearCommander
             end

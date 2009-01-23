@@ -1868,8 +1868,8 @@ BuilderGroup {
             PrioritizedCategories = {
                 'MASSEXTRACTION',
 				'ENGINEER',
+				'ENERGYPRODUCTION DRAGBUILD',
 				'MOBILE LAND',
-                'ENERGYPRODUCTION DRAGBUILD',
                 'MASSFABRICATION',
                 'SHIELD',
                 'ANTIAIR STRUCTURE',
