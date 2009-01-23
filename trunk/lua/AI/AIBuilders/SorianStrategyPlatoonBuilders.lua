@@ -241,9 +241,9 @@ BuilderGroup {
 			SearchRadius = 6000,
             PrioritizedCategories = {
                 'ENERGYPRODUCTION DRAGBUILD',
+				'MASSEXTRACTION',
                 'MASSFABRICATION',
                 'COMMAND',
-                'MASSEXTRACTION',
                 'SHIELD',
                 'ANTIAIR STRUCTURE',
                 'DEFENSE STRUCTURE',
@@ -253,7 +253,7 @@ BuilderGroup {
             },
         },
         BuilderConditions = {
-			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 9, 'AIR MOBILE BOMBER' } },
+			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 5, 'AIR MOBILE BOMBER' } },
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
     },
@@ -270,9 +270,9 @@ BuilderGroup {
 			SearchRadius = 6000,
             PrioritizedCategories = {
                 'ENERGYPRODUCTION DRAGBUILD',
+				'MASSEXTRACTION',
                 'MASSFABRICATION',
                 'COMMAND',
-                'MASSEXTRACTION',
                 'SHIELD',
                 'ANTIAIR STRUCTURE',
                 'DEFENSE STRUCTURE',
