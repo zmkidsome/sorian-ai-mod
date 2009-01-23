@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.7b:* Bombers adjusted a bit, Land T4s should now attack the ACU instead of trying to stomp it, Includes Lobby Enhancement Mod 1.2.
+
 *1.8.7:* More Econ adjustments, Assist platoons will now pay attention to their max range, Land T4s should now attack the ACU, not try and stomp it to death, Land T4s should spread out more in formations, Includes Lobby Enhancement Mod 1.1.
 
 *1.8.6:* Econ adjustments, Some performance improvements (I hope), Added Lobby Enhancement Mod 1.0.
