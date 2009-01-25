@@ -862,7 +862,7 @@ BuilderGroup {
     
 			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
 			
-			returnval = enemyThreat * 0.07
+			returnval = enemyThreat * 0.05
 			return returnval
 		end,
         BuilderConditions = {
@@ -918,7 +918,7 @@ BuilderGroup {
     
 			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
 			
-			returnval = enemyThreat * 0.07
+			returnval = enemyThreat * 0.05
 			return returnval
 		end,
         BuilderConditions = {
