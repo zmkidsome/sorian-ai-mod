@@ -215,6 +215,9 @@ function CDRRunAwaySorian( aiBrain, cdr )
 			cdr.GoingHome = true
 			cdr.Fighting = false
 			cdr.Upgrading = false
+			if cdr.PlatoonHandle then
+				cdr.PlatoonHandle:PlatoonDisband()
+			end
             local canTeleport = false #cdr:HasEnhancement( 'Teleporter' )
             CDRRevertPriorityChange( aiBrain, cdr )
 			local runShield = false
@@ -617,7 +620,7 @@ function CommanderThreadSorian(cdr, platoon)
 		#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Loop')
 		#AIAttackUtils.DrawPathGraph()
 		
-		if Mult > 1 and (SBC.GreaterThanGameTime(aiBrain, 900) or aiBrain.NumOpponents > 1 or not SBC.ClosestEnemyLessThan(aiBrain, 750)) then
+		if Mult > 1 and (SBC.GreaterThanGameTime(aiBrain, 900) or not SBC.EnemyToAllyRatioLessOrEqual(aiBrain, 1.0) or not SBC.ClosestEnemyLessThan(aiBrain, 750)) then
 			Mult = 1
 		end
         WaitTicks(2)

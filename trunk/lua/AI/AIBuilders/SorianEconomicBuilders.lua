@@ -589,7 +589,7 @@ BuilderGroup {
         PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
 			Delay = 165,
-			Mult = 3.5,
+			Mult = 3,
             Construction = {
                 BuildStructures = {
                     'T1LandFactory',
@@ -618,7 +618,7 @@ BuilderGroup {
         PlatoonAddFunctions = { {SAI, 'BuildOnce'}, },
         BuilderData = {
 			Delay = 165,
-			Mult = 3.5,
+			Mult = 3,
             Construction = {
                 BuildStructures = {
                     'T1LandFactory',
@@ -646,6 +646,7 @@ BuilderGroup {
             { SBC, 'GreaterThanGameTime', { 165 }},
 			{ SBC, 'LessThanGameTime', { 900 }},
 			{ SBC, 'ClosestEnemyLessThan', { 750 } },
+			{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1.0 } },
 			{ SIBC, 'CDRHealthGreaterThan', { .85, .35 }},
         },
         BuilderType = 'Any',

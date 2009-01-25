@@ -2116,8 +2116,8 @@ Platoon = Class(sorianoldPlatoon) {
 			local pos = self:GetPlatoonPosition()
             if self:IsOpponentAIRunning() then
                 local target = self:FindClosestUnit('support', 'Enemy', true, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.SCOUT)
-				if target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq(target:GetPosition(), eng.CDRHome) < 122500 and
-				  aiBrain:GetThreatAtPosition( target:GetPosition(), 1, true, 'AntiSurface') < mySurfaceThreat * 1.5 then
+				if target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq(target:GetPosition(), eng.CDRHome) < 90000 and
+				  aiBrain:GetThreatAtPosition( target:GetPosition(), 1, true, 'AntiSurface') < mySurfaceThreat then
 					movingToScout = false
 					local targetLoc = target:GetPosition()
 					self:Stop()
@@ -2133,7 +2133,7 @@ Platoon = Class(sorianoldPlatoon) {
 					local DefSpots = AIUtils.AIGetSortedDefensiveLocationsFromLast(aiBrain, 10)
 					if table.getn(DefSpots) > 0 then
 						for k,v in DefSpots do
-							if SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) < 122500 and SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) > SUtils.XZDistanceTwoVectorsSq(pos, eng.CDRHome) then
+							if SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) < 90000 and SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) > SUtils.XZDistanceTwoVectorsSq(pos, eng.CDRHome) then
 								movingToScout = true
 								self:MoveToLocation( v, false )
 							end
