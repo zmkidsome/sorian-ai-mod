@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.8.8:* AI will upgrade factories in a more balanced matter, ACU should be a little more cautious, Includes LEM 2.0b.
+
 *1.8.7d:* Re-tuned anti-turtle measures.
 
 *1.8.7c:* AI will now upgrade mexes to prevent wasting mass, ACUs should now behave better, Includes LEM 1.9.
