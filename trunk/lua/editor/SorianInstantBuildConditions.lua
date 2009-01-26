@@ -39,6 +39,48 @@ function AIThreatExists( aiBrain, threatThreshold )
 end
 
 ##############################################################################################################
+# function: FactoryRatioLessOrEqual = BuildCondition
+#
+# parameter 0: string   aiBrain		    = "default_brain"
+# parameter 1: string   locationType    = "location type"
+# parameter 2: expr     unitCategory    = "Unit Category"
+# parameter 2: expr     unitCategory2   = "Unit Category"
+# parameter 2: expr     unitCategory3   = "Unit Category"
+#
+##############################################################################################################
+function FactoryRatioLessOrEqual( aiBrain, locationType, num, unitCategory, unitCategory2, unitCategory3 )
+    local factoryManager = aiBrain.BuilderManagers[locationType].FactoryManager
+    local testCat = unitCategory
+    if type(unitCategory) == 'string' then
+        testCat = ParseEntityCategory(unitCategory)
+    end
+    local testCat2 = unitCategory2
+    if type(unitCategory2) == 'string' then
+        testCat2 = ParseEntityCategory(unitCategory2)
+    end
+    local testCat3 = unitCategory3
+    if type(unitCategory3) == 'string' then
+        testCat3 = ParseEntityCategory(unitCategory3)
+    end
+    if not factoryManager then
+        WARN('*AI WARNING: FactoryComparisonAtLocation - Invalid location - ' .. locationType)
+        return false
+    end
+    local numUnits = factoryManager:GetNumCategoryFactories(testCat)
+    local numUnits2 = factoryManager:GetNumCategoryFactories(testCat2)
+	local numUnits3 = factoryManager:GetNumCategoryFactories(testCat3)
+	if numUnits == 0 and numUnits2 == 0 then
+		return true
+	elseif numUnits2 == 0 and (numUnits - numUnits2 <= num or numUnits3 < 1) then
+		return true
+    elseif numUnits2 > 0 and (numUnits / numUnits2 <= num or numUnits3 < 1) then
+		return true
+	else
+		return false
+	end
+end
+
+##############################################################################################################
 # function: CDRHealthGreaterThan = BuildCondition
 #
 # parameter 0: string   aiBrain		    = "default_brain"
