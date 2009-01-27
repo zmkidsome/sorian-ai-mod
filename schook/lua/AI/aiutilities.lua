@@ -242,7 +242,7 @@ function EngineerMoveWithSafePathSorian(aiBrain, unit, destination)
 	if not result then
 		result, bestPos = AIAttackUtils.CanGraphTo(unit, destination, 'Amphibious')
 		if not result and not SUtils.CheckForMapMarkers(aiBrain) then
-			LOG('*AI DEBUG: EngineerMoveWithSafePathSorian got to CanPathTo')
+			#LOG('*AI DEBUG: EngineerMoveWithSafePathSorian got to CanPathTo')
 			result, bestPos	= unit:CanPathTo( destination )
 		end
 	end

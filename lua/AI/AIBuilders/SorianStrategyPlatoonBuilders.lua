@@ -916,6 +916,7 @@ BuilderGroup {
         BuilderConditions = {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
+				{ SIBC, 'FactoryRatioLessOrEqual', { 'LocationType', 1.0, 'FACTORY LAND TECH2', 'FACTORY AIR TECH2', 'FACTORY AIR TECH1'}},
                 { IBC, 'BrainNotLowPowerMode', {} },
             },
         BuilderType = 'Any',
@@ -930,6 +931,7 @@ BuilderGroup {
         BuilderConditions = {
                 { UCBC, 'HaveGreaterThanUnitsWithCategory', { 3, 'MASSEXTRACTION TECH2, MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH2, FACTORY TECH3' } },
+				{ SIBC, 'FactoryRatioLessOrEqual', { 'LocationType', 1.0, 'FACTORY AIR TECH2', 'FACTORY LAND TECH2', 'FACTORY LAND TECH1'}},
                 { IBC, 'BrainNotLowPowerMode', {} },
             },
         BuilderType = 'Any',
@@ -956,6 +958,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
+				{ SIBC, 'FactoryRatioLessOrEqual', { 'LocationType', 1.0, 'FACTORY LAND TECH3', 'FACTORY AIR TECH3', 'FACTORY AIR TECH2'}},
                 { UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 7, 'MOBILE LAND'}},
                 { IBC, 'BrainNotLowPowerMode', {} },
             },
@@ -970,6 +973,7 @@ BuilderGroup {
         BuilderConditions = {
                 { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, 'MASSEXTRACTION TECH3'}},
                 { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, 'FACTORY TECH3' } },
+				{ SIBC, 'FactoryRatioLessOrEqual', { 'LocationType', 1.0, 'FACTORY AIR TECH3', 'FACTORY LAND TECH3', 'FACTORY LAND TECH2'}},
                 { IBC, 'BrainNotLowPowerMode', {} },
             },
         BuilderType = 'Any',

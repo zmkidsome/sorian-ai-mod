@@ -647,6 +647,7 @@ BuilderGroup {
 			{ SBC, 'LessThanGameTime', { 900 }},
 			{ SBC, 'ClosestEnemyLessThan', { 750 } },
 			{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1.0 } },
+			{ SBC, 'IsBadMap', { false } },
 			{ SIBC, 'CDRHealthGreaterThan', { .85, .35 }},
         },
         BuilderType = 'Any',

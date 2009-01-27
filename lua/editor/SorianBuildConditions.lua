@@ -16,6 +16,23 @@ local MABC = import('/lua/editor/MarkerBuildConditions.lua')
 local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
 
 ##############################################################################################################
+# function: IsBadMap = BuildCondition
+#
+# parameter 0: string   aiBrain         = "default_brain"
+# parameter 2: bool     bool            = true = is a bad map, false = is not a bad map
+#
+##############################################################################################################
+
+function IsBadMap(aiBrain, bool)
+	if not SUtils.CheckForMapMarkers(aiBrain) and bool then
+		return true
+	elseif SUtils.CheckForMapMarkers(aiBrain) and not bool then
+		return true
+	end
+	return false
+end
+
+##############################################################################################################
 # function: IsWaterMap = BuildCondition
 #
 # parameter 0: string   aiBrain         = "default_brain"
@@ -82,7 +99,10 @@ function AIType(aiBrain, aitype, bool)
 	return false
 end
 
-function MarkerLessThan(aiBrain, locationType, markerTypes, distance)
+function MarkerLessThan(aiBrain, locationType, markerTypes, distance, checkForBad)
+	if checkForBad and not SUtils.CheckForMapMarkers(aiBrain) then
+		return true
+	end
 	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
     if not engineerManager then
         return false

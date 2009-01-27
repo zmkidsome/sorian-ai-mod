@@ -2616,6 +2616,12 @@ Platoon = Class(sorianoldPlatoon) {
         local buildingTmpl, buildingTmplFile, baseTmpl, baseTmplFile
         
         local factionIndex = cons.FactionIndex or self:GetFactionIndex()
+		
+		if not SUtils.CheckForMapMarkers(aiBrain) and cons.NearMarkerType and (cons.NearMarkerType == 'Rally Point' or
+		cons.NearMarkerType == 'Protected Experimental Construction') then
+			cons.NearMarkerType = nil
+			cons.BaseTemplate = nil
+		end
         
         buildingTmplFile = import(cons.BuildingTemplateFile or '/lua/BuildingTemplates.lua')
         baseTmplFile = import(cons.BaseTemplateFile or '/lua/BaseTemplates.lua')
@@ -2658,7 +2664,7 @@ Platoon = Class(sorianoldPlatoon) {
             self:PlatoonDisband()
             return
         end
-        
+		
         if cons.NearUnitCategory then
             self:SetPrioritizedTargetList('support', {ParseEntityCategory(cons.NearUnitCategory)})
             local unitNearBy = self:FindPrioritizedUnit('support', 'Ally', false, self:GetPlatoonPosition(), cons.NearUnitRadius or 50)
