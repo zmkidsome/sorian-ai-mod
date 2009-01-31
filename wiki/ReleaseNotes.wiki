@@ -2,7 +2,7 @@
 
 == Release Notes ==
 
-*1.9.0:* Adjusted ACU behaviors, Fix for stuck units at unit cap, Fix for stuck units in the GuardExperimental behavior, Fix for Rush AI not being able to tech to T3, Includes LEM 3.4.
+*1.9.0:* Adjusted ACU behaviors, Fix for stuck units at unit cap, Fix for stuck units in the !GuardExperimental behavior, Fix for Rush AI not being able to tech to T3, Includes LEM 3.4.
 
 *1.8.9*: Re-tuned Anti-Turtle, AI should raid more later into the game, AI will build T4s on maps without markers, Fixed ACU early game behavior on maps without markers, Includes LEM 2.1.
 
