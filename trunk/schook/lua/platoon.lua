@@ -5,6 +5,19 @@ sorianoldPlatoon = Platoon
 
 Platoon = Class(sorianoldPlatoon) {
 
+    OnCreate = function(self, plan)
+        self.Trash = TrashBag()
+        if self[plan] then
+            self.AIThread = self:ForkThread(self[plan])
+        end
+        self.PlatoonData = {}
+        self.EventCallbacks = {
+            OnDestroyed = {},
+        }
+        self.PartOfAttackForce = false
+        self.CreationTime = GetGameTimeSeconds()
+    end,
+
     OnDestroy = function(self)
 		
 		#Courtesy of Duncane
@@ -856,11 +869,11 @@ Platoon = Class(sorianoldPlatoon) {
             self.LastMarker[1] = bestMarker.Position
             #LOG("GuardMarker: Attacking " .. bestMarker.Name)
             local path, reason = AIAttackUtils.PlatoonGenerateSafePathTo(aiBrain, self.MovementLayer, self:GetPlatoonPosition(), bestMarker.Position, 200)
-			local success, bestGoalPos = AIAttackUtils.CheckPlatoonPathingEx(self, bestMarker.Position)
+			#local success, bestGoalPos = AIAttackUtils.CheckPlatoonPathingEx(self, bestMarker.Position)
             IssueClearCommands(self:GetPlatoonUnits())
             if path then
 				local position = self:GetPlatoonPosition()
-				if not success or VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 512 then
+				if VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 512 then
 					usedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, self, bestMarker.Position, true, false, false)
 				elseif VDist2( position[1], position[3], bestMarker.Position[1], bestMarker.Position[3] ) > 256 then
 					usedTransports = AIAttackUtils.SendPlatoonWithTransportsSorian(aiBrain, self, bestMarker.Position, false, false, false)
@@ -882,7 +895,7 @@ Platoon = Class(sorianoldPlatoon) {
                 return
             end
 			
-			if (not path or not success) and not usedTransports then
+			if not path and not usedTransports then
                 self:PlatoonDisband()
                 return
 			end
@@ -909,7 +922,7 @@ Platoon = Class(sorianoldPlatoon) {
 					StuckCount = 0
 				end
 				if StuckCount > 5 then
-					return self:GuardMarker()
+					return self:GuardMarkerSorian()
 				end
 				oldPlatPos = platLoc
             until VDist2Sq(platLoc[1], platLoc[3], bestMarker.Position[1], bestMarker.Position[3]) < 64 or not aiBrain:PlatoonExists(self)
@@ -939,7 +952,7 @@ Platoon = Class(sorianoldPlatoon) {
             
             # set our MoveFirst to our MoveNext
             self.PlatoonData.MoveFirst = moveNext
-            return self:GuardMarker()
+            return self:GuardMarkerSorian()
         else
             # no marker found, disband!
             self:PlatoonDisband()
@@ -1423,6 +1436,10 @@ Platoon = Class(sorianoldPlatoon) {
         if type(nextAIFunc) == 'function' then
             return nextAIFunc(self)
         end
+		
+		if not unitToGuard then
+			return self:ReturnToBaseAISorian()
+		end
         
         return self:GuardExperimentalSorian(nextAIFunc)
     end,
@@ -2117,7 +2134,8 @@ Platoon = Class(sorianoldPlatoon) {
             if self:IsOpponentAIRunning() then
                 local target = self:FindClosestUnit('support', 'Enemy', true, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.SCOUT)
 				if target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq(target:GetPosition(), eng.CDRHome) < 90000 and
-				  aiBrain:GetThreatAtPosition( target:GetPosition(), 1, true, 'AntiSurface') < mySurfaceThreat * 1.5 then
+				aiBrain:GetThreatBetweenPositions(pos, target:GetPosition(), nil, 'AntiSurface') < mySurfaceThreat then
+				--aiBrain:GetThreatAtPosition( target:GetPosition(), 1, true, 'AntiSurface') < mySurfaceThreat * 1.5 then
 					movingToScout = false
 					local targetLoc = target:GetPosition()
 					self:Stop()

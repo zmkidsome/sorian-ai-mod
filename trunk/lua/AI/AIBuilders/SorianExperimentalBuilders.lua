@@ -30,7 +30,7 @@ local SUtils = import('/lua/AI/sorianutilities.lua')
 local AIAddBuilderTable = import('/lua/ai/AIAddBuilderTable.lua')
 
 function T4LandAttackCondition(aiBrain, locationType, targetNumber)
-	#local UC = import('/lua/editor/UnitCountBuildConditions.lua')
+	local UC = import('/lua/editor/UnitCountBuildConditions.lua')
 	local SInBC = import('/lua/editor/SorianInstantBuildConditions.lua')
     local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
     local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
@@ -51,6 +51,8 @@ function T4LandAttackCondition(aiBrain, locationType, targetNumber)
     local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.LAND * categories.EXPERIMENTAL, position, radius * 2.5 )
     if surThreat > targetNumber * 2 then
         return true
+	elseif UC.UnitCapCheckGreater(aiBrain, .85) then
+		return true
 	elseif SInBC.PoolGreaterAtLocationExp(aiBrain, locationType, 4, categories.MOBILE * categories.LAND * categories.EXPERIMENTAL) then
 		return true
     end
@@ -58,7 +60,7 @@ function T4LandAttackCondition(aiBrain, locationType, targetNumber)
 end
 
 function T4AirAttackCondition(aiBrain, locationType, targetNumber)
-	#local UC = import('/lua/editor/UnitCountBuildConditions.lua')
+	local UC = import('/lua/editor/UnitCountBuildConditions.lua')
 	local SInBC = import('/lua/editor/SorianInstantBuildConditions.lua')
     local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
     local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
@@ -77,6 +79,8 @@ function T4AirAttackCondition(aiBrain, locationType, targetNumber)
     local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.AIR * categories.EXPERIMENTAL, position, radius * 2.5)
     if surThreat > targetNumber then
         return true
+	elseif UC.UnitCapCheckGreater(aiBrain, .85) then
+		return true
 	elseif SInBC.PoolGreaterAtLocationExp(aiBrain, locationType, 4, categories.MOBILE * categories.AIR * categories.EXPERIMENTAL) then
 		return true
     end

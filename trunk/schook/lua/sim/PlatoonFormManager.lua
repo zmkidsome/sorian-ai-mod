@@ -118,7 +118,7 @@ PlatoonFormManager = Class(BuilderManager) {
                 return
             end
             local formIt = poolPlatoon:CanFormPlatoon(template, personality:GetPlatoonSize(), self.Location, radius)
-            local ptnSize = personality:GetPlatoonSize()
+            local ptnSize = personality:GetPlatoonSize() -- Always 1?
             if formIt then
                 local hndl = poolPlatoon:FormPlatoon(template, personality:GetPlatoonSize(), self.Location, radius)
 
@@ -160,6 +160,12 @@ PlatoonFormManager = Class(BuilderManager) {
                 hndl.BuilderName = builder:GetBuilderName()
                 
                 hndl:SetPlatoonData(builder:GetBuilderData(self.LocationType))
+				
+				for k,v in hndl:GetPlatoonUnits() do
+					if not v.PlatoonPlanName then
+						v.PlatoonHandle = hndl
+					end
+				end
                 
                 builder:StoreHandle(hndl)
             end

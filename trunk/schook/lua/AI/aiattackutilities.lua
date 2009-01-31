@@ -858,7 +858,7 @@ function AIPlatoonSquadAttackVectorSorian( aiBrain, platoon, bAggro )
 		local inBase = false
 		local homeBase = aiBrain.BuilderManagers[platoon.PlatoonData.LocationType].Position
 		
-		if not position and not homeBase then
+		if not position or not homeBase then
 			return {}
 		end
 		
@@ -1099,6 +1099,9 @@ function SendPlatoonWithTransportsSorian(aiBrain, platoon, destination, bRequire
 		if transportLocation then
 		    local minThreat = aiBrain:GetThreatAtPosition( transportLocation, 0, true, 'AntiAir' )
 			local pos = platoon:GetPlatoonPosition()
+			if not pos then
+				return false
+			end
 			local closest = VDist2Sq(pos[1], pos[3], transportLocation[1], transportLocation[3])
 		    if minThreat > 0 then
 		        local threatTable = aiBrain:GetThreatsAroundPosition(transportLocation, 1, true, 'AntiAir' )
