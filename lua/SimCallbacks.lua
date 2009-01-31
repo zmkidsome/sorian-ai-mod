@@ -54,6 +54,8 @@ Callbacks.AIChat = SUtils.FinishAIChat
 
 Callbacks.DiplomacyHandler = import('/lua/SimDiplomacy.lua').DiplomacyHandler
 
+Callbacks.GetUnitHandle = import('/lua/debugai.lua').GetHandle
+
 function Callbacks.OnMovieFinished(name)
     ScenarioInfo.DialogueFinished[name] = true
 end

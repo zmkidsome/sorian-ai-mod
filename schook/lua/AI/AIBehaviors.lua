@@ -218,6 +218,8 @@ function CDRRunAwaySorian( aiBrain, cdr )
 			if cdr.PlatoonHandle then
 				cdr.PlatoonHandle:PlatoonDisband()
 			end
+			aiBrain.BaseMonitor.CDRDistress = cdrPos
+			aiBrain.BaseMonitor.CDRThreatLevel = aiBrain:GetThreatAtPosition( cdrPos, 1, true, 'AntiSurface')
             local canTeleport = false #cdr:HasEnhancement( 'Teleporter' )
             CDRRevertPriorityChange( aiBrain, cdr )
 			local runShield = false
@@ -279,6 +281,8 @@ function CDRRunAwaySorian( aiBrain, cdr )
 			#LOG("*AI DEBUG: " .. aiBrain.Nickname .. " done running")
             cdr.GoingHome = false
 			IssueClearCommands( {cdr} )
+			aiBrain.BaseMonitor.CDRDistress = false
+			aiBrain.BaseMonitor.CDRThreatLevel = 0
 			if cdr.UnitBeingBuiltBehavior then
 				cdr:ForkThread( CDRFinishUnit )
 			end
@@ -503,7 +507,7 @@ function CDRReturnHomeSorian(aiBrain, cdr, Mult)
             IssueMove( {cdr}, loc )
             WaitSeconds(7)
 			cdrPos = cdr:GetPosition()
-		until cdr:IsDead() or VDist2Sq(cdrPos[1], cdrPos[3], loc[1], loc[3]) <= distSqAway
+		until cdr:IsDead() or VDist2Sq(cdrPos[1], cdrPos[3], loc[1], loc[3]) <= (rad / 2) * (rad / 2)
 		cdr.GoingHome = false
 		IssueClearCommands( {cdr} )
 		#LOG("*AI DEBUG: " .. aiBrain.Nickname .. " done going home")

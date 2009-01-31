@@ -46,9 +46,11 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
     local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER, position, radius )
 	local airThreat = 0 #pool:GetPlatoonThreat( 'AntiAir', categories.MOBILE * categories.LAND - categories.EXPERIMENTAL - categories.SCOUT - categories.ENGINEER, position, radius )
 	local adjustForTime = 1 + (math.floor(GetGameTimeSeconds()/60) * .01)
-    if (surThreat + airThreat) >= targetNumber * 2 and targetNumber > 0 then
+    if (surThreat + airThreat) >= targetNumber and targetNumber > 0 then
         return true
 	elseif targetNumber == 0 then
+		return true
+	elseif UC.UnitCapCheckGreater(aiBrain, .85) then
 		return true
 	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 9, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > (500 * adjustForTime) then #25 Units x 20
 		return true
@@ -1370,6 +1372,7 @@ BuilderGroup {
         },
         BuilderConditions = {
 			{ UCBC, 'PoolGreaterAtLocation', { 'LocationType', 1, categories.LAND * categories.MOBILE - categories.TECH1 - categories.ANTIAIR - categories.SCOUT - categories.ENGINEER - categories.ual0303} },
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL * categories.LAND}},
 			{ SBC, 'NoRushTimeCheck', { 0 }},
         },
         BuilderType = 'Any',
