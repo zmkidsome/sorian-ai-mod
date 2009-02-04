@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.9.1:* Rush AI should build more T3 AA, Fixed !GatherUnits script to keep units from getting stuck inside the AIs base, Adjusted ACU behaviors, Includes LEM 3.8.
+
 *1.9.0b:* Fix for simcallback issue.
 
 *1.9.0:* Adjusted ACU behaviors, Fix for stuck units at unit cap, Fix for stuck units in the !GuardExperimental behavior, Fix for Rush AI not being able to tech to T3, Includes LEM 3.4.
