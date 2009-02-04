@@ -1189,15 +1189,21 @@ Platoon = Class(sorianoldPlatoon) {
         local pos = self:GetPlatoonPosition()
         local unitsSet = true
         for k,v in self:GetPlatoonUnits() do
-            if not v:IsDead() and VDist2( v:GetPosition()[1], v:GetPosition()[3], pos[1], pos[3] ) > 40 then
+            if not v:IsDead() and SUtils.XZDistanceTwoVectorsSq(v:GetPosition(), pos) > 3600 then #60
                unitsSet = false
                break
             end
         end
         local aiBrain = self:GetBrain()
         if not unitsSet then
-            #AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Defensive Point', pos[1], pos[3])
-            local cmd = self:MoveToLocation( self:GetPlatoonPosition(), false )
+            local gatherPoint = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Rally Point', pos[1], pos[3])
+			if not gatherPoint or SUtils.XZDistanceTwoVectorsSq(pos, gatherPoint) > 6400 then #80
+				gatherPoint = AIUtils.AIGetClosestMarkerLocation(aiBrain, 'Defensive Point', pos[1], pos[3])
+				if not gatherPoint or SUtils.XZDistanceTwoVectorsSq(pos, gatherPoint) > 6400 then #80
+					gatherPoint = self:GetPlatoonPosition()
+				end
+			end
+            local cmd = self:MoveToLocation( gatherPoint, false )
             local counter = 0
             repeat
                 WaitSeconds(1)
@@ -1206,9 +1212,8 @@ Platoon = Class(sorianoldPlatoon) {
                     return false
                 end
 				unitsSet = true
-				pos = self:GetPlatoonPosition()
 				for k,v in self:GetPlatoonUnits() do
-					if not v:IsDead() and VDist2( v:GetPosition()[1], v:GetPosition()[3], pos[1], pos[3] ) > 40 then
+					if not v:IsDead() and SUtils.XZDistanceTwoVectorsSq(v:GetPosition(), gatherPoint) > 3600 then #60
 						unitsSet = false
 						break
 					end
@@ -2117,6 +2122,7 @@ Platoon = Class(sorianoldPlatoon) {
                 eng = v
             end
         end
+		local leashRange = eng.Mult * 100
 		local weapBPs = eng:GetBlueprint().Weapon
 		local weapon
 		eng.Fighting = true
@@ -2133,7 +2139,7 @@ Platoon = Class(sorianoldPlatoon) {
 			local pos = self:GetPlatoonPosition()
             if self:IsOpponentAIRunning() then
                 local target = self:FindClosestUnit('support', 'Enemy', true, categories.ALLUNITS - categories.AIR - categories.NAVAL - categories.SCOUT)
-				if target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq(target:GetPosition(), eng.CDRHome) < 90000 and
+				if target and not target:IsDead() and SUtils.XZDistanceTwoVectorsSq(target:GetPosition(), eng.CDRHome) < (leashRange * leashRange) and
 				aiBrain:GetThreatBetweenPositions(pos, target:GetPosition(), nil, 'AntiSurface') < mySurfaceThreat then
 				--aiBrain:GetThreatAtPosition( target:GetPosition(), 1, true, 'AntiSurface') < mySurfaceThreat * 1.5 then
 					movingToScout = false
@@ -2151,7 +2157,7 @@ Platoon = Class(sorianoldPlatoon) {
 					local DefSpots = AIUtils.AIGetSortedDefensiveLocationsFromLast(aiBrain, 10)
 					if table.getn(DefSpots) > 0 then
 						for k,v in DefSpots do
-							if SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) < 90000 and SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) > SUtils.XZDistanceTwoVectorsSq(pos, eng.CDRHome) then
+							if SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) < (leashRange * leashRange) and SUtils.XZDistanceTwoVectorsSq(v, eng.CDRHome) > SUtils.XZDistanceTwoVectorsSq(pos, eng.CDRHome) then
 								movingToScout = true
 								self:MoveToLocation( v, false )
 							end
@@ -2405,7 +2411,7 @@ Platoon = Class(sorianoldPlatoon) {
             
             self.LastPosition = pos
             
-            if table.getn(cmdQ) == 0 then #and mySurfaceThreat < 4 then
+--[[            if table.getn(cmdQ) == 0 then #and mySurfaceThreat < 4 then
                 # if we have a low threat value, then go and defend an engineer or a base
                 if mySurfaceThreat < platoonThreatTable[platoonTechLevel]
                     and mySurfaceThreat > 0 and not self.PlatoonData.NeverGuard 
@@ -2428,10 +2434,10 @@ Platoon = Class(sorianoldPlatoon) {
 #				if quickReset then
 #					quickReset = false
 #					WaitSeconds(6)
-#				else
+#				else ]]--
 				WaitSeconds(Random(5,11) + 2 * stuckCount)
 #				end
-            end
+#            end
         end
     end,
 	
@@ -2474,13 +2480,13 @@ Platoon = Class(sorianoldPlatoon) {
             while aiBrain:PlatoonExists(self) do
                 platPos = self:GetPlatoonPosition()
                 local distSq = VDist2Sq(platPos[1], platPos[3], bestBase.Position[1], bestBase.Position[3])
-                if distSq < 75 then
+                if distSq < 5625 then # 75 * 75
                     self:PlatoonDisband()
                     return
                 end
 				WaitSeconds(10)
                 # if we haven't moved in 10 seconds... go back to attacking
-                if (distSq - oldDistSq) < 5 then
+                if (distSq - oldDistSq) < 25 then # 5 * 5
                     break
                 end
                 oldDistSq = distSq      

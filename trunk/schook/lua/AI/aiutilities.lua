@@ -607,7 +607,7 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
 					for i=-1,1 do
 						for j=-1,1 do
 							if i ~= 0 and j~= 0 then
-								local pos = {unitPos[1] + (i * 15), 0, unitPos[3] + (j * 15)}
+								local pos = {unitPos[1] + (i * 10), 0, unitPos[3] + (j * 10)}
 								#antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, pos, 90, 'Enemy' )
 								antiNukes = SUtils.NumberofUnitsBetweenPoints(aiBrain, position, pos, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, 90, 'Enemy')
 								if (antiNukes + 2 < nukeCount or antiNukes == 0) then

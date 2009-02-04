@@ -45,7 +45,7 @@ BaseBuilderTemplate {
         # ACU Builders
         'Sorian Rush Initial ACU Builders',
         'SorianACUBuilders',
-        'SorianACUUpgrades',
+        'SorianACUUpgrades - Rush',
 		'SorianACUAttack',
         
         # ACU Defense

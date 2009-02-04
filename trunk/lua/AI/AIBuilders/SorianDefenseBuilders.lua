@@ -589,6 +589,30 @@ BuilderGroup {
     BuilderGroupName = 'SorianT3BaseDefenses - Emerg',
     BuildersType = 'EngineerBuilder',
     Builder {
+        BuilderName = 'Sorian T3 Base D AA Engineer - Response R',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 925,
+        BuilderConditions = {
+            { UCBC, 'UnitsLessAtLocation', { 'LocationType', 10, 'DEFENSE TECH3 ANTIAIR STRUCTURE' }},
+            { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 1, 'Air' } },
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+            { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.TECH3 * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
+            { UCBC, 'UnitCapCheckLess', { .8 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            NumAssistees = 2,
+            Construction = {
+                BuildClose = false,
+                BuildStructures = {
+                    'T3AADefense',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
         BuilderName = 'Sorian T3 Base D Engineer AA - Exp Response R',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 1300,
