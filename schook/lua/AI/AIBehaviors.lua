@@ -607,7 +607,15 @@ end
 
 function CommanderThreadSorian(cdr, platoon)
     local aiBrain = cdr:GetAIBrain()
-	local Mult = platoon.PlatoonData.Mult or 1
+	if platoon.PlatoonData.aggroCDR then
+		local mapSizeX, mapSizeZ = GetMapSize()
+		local size = mapSizeX
+		if mapSizeZ > mapSizeX then
+			size = mapSizeZ
+		end
+		cdr.Mult = (size / 2) / 100
+	end
+	local Mult = cdr.Mult or 1
 	local Delay = platoon.PlatoonData.Delay or 165
 	local WaitTaunt = 600 + Random(1,600)
     
