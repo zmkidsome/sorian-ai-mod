@@ -164,6 +164,7 @@ BaseBuilderTemplate {
 		'SorianStopNukes',
 		'SorianEnemyTurtle - In Range',
 		'SorianEnemyTurtle - Out of Range',
+		'Sorian Excess Mass Strategy',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',

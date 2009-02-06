@@ -84,7 +84,7 @@ BuilderGroup {
         BuilderName = 'T1 Mass Extractor Upgrade Storage Based',
         PlatoonTemplate = 'T1MassExtractorUpgrade',
         InstanceCount = 1,
-        Priority = 200,
+        Priority = 0, #200,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconStorageCurrent', { 600, 0 } },
@@ -163,7 +163,7 @@ BuilderGroup {
         BuilderName = 'T2 Mass Extractor Upgrade Storage Based',
         PlatoonTemplate = 'T2MassExtractorUpgrade',
         InstanceCount = 1,
-        Priority = 200,
+        Priority = 0, #200,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconStorageCurrent', { 3000, 0 } },
@@ -266,7 +266,7 @@ BuilderGroup {
         BuilderName = 'T1 Mass Extractor Upgrade Storage Based - Rush',
         PlatoonTemplate = 'T1MassExtractorUpgrade',
         InstanceCount = 1,
-        Priority = 200,
+        Priority = 0, #200,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconStorageCurrent', { 600, 0 } },
@@ -348,7 +348,7 @@ BuilderGroup {
         BuilderName = 'T2 Mass Extractor Upgrade Storage Based - Rush',
         PlatoonTemplate = 'T2MassExtractorUpgrade',
         InstanceCount = 1,
-        Priority = 200,
+        Priority = 0, #200,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
             { EBC, 'GreaterThanEconStorageCurrent', { 3000, 0 } },

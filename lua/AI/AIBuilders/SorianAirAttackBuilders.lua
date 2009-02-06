@@ -158,7 +158,8 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 555,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+			{ SIBC, 'HaveLessThanUnitsForMapSize', { {[256] = 5, [512] = 8, [1024] = 12, [2048] = 15, [4096] = 15}, categories.AIR * categories.ANTIAIR * categories.TECH1}},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, categories.FACTORY * categories.AIR, 'Enemy'}},
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -175,9 +176,10 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 560,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 9, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 9, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
+			{ SBC, 'HaveRatioUnitsWithCategoryAndAlliance', { true, 2, categories.AIR * categories.ANTIAIR * categories.TECH1, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH1 } },
@@ -190,7 +192,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Interceptors - Enemy Air Extra',
         PlatoonTemplate = 'T1AirFighter',
-        Priority = 560,
+        Priority = 0, #560,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 14, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
@@ -207,7 +209,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T1 Interceptors - Enemy Air Extra 2',
         PlatoonTemplate = 'T1AirFighter',
-        Priority = 560,
+        Priority = 0, #560,
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 40, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 19, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
@@ -383,7 +385,8 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 655,
         BuilderConditions = {
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+			{ SIBC, 'HaveLessThanUnitsForMapSize', { {[256] = 10, [512] = 12, [1024] = 15, [2048] = 20, [4096] = 20}, categories.AIR * categories.ANTIAIR * categories.TECH1}},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -400,8 +403,9 @@ BuilderGroup {
         PlatoonTemplate = 'T1AirFighter',
         Priority = 660,
         BuilderConditions = {
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 9, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 9, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
+			{ SBC, 'HaveRatioUnitsWithCategoryAndAlliance', { true, 2, categories.AIR * categories.ANTIAIR * categories.TECH1, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -415,7 +419,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2AntiAirPlanes - Enemy Air Extra',
         PlatoonTemplate = 'T1AirFighter',
-        Priority = 660,
+        Priority = 0, #660,
         BuilderConditions = {
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 14, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 30, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
@@ -432,7 +436,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T2AntiAirPlanes - Enemy Air Extra 2',
         PlatoonTemplate = 'T1AirFighter',
-        Priority = 660,
+        Priority = 0, #660,
         BuilderConditions = {
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 19, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             { UCBC, 'HaveLessThanUnitsWithCategory', { 40, categories.AIR * categories.ANTIAIR * categories.TECH1 } },
@@ -584,7 +588,8 @@ BuilderGroup {
 			{ SBC, 'NoRushTimeCheck', { 600 }},
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
 			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 0, categories.FACTORY * categories.AIR, 'Enemy'}},
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 10, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
+			{ SIBC, 'HaveLessThanUnitsForMapSize', { {[256] = 10, [512] = 12, [1024] = 15, [2048] = 20, [4096] = 20}, categories.AIR * categories.ANTIAIR * categories.TECH3}},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
         },
@@ -597,9 +602,10 @@ BuilderGroup {
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
-			{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 9, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
+			#{ UCBC, 'HaveUnitsWithCategoryAndAlliance', { true, 9, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
             #{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.85, 1.05 }},
-            { UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
+            #{ UCBC, 'HaveLessThanUnitsWithCategory', { 20, categories.AIR * categories.ANTIAIR * categories.TECH3 } },
+			{ SBC, 'HaveRatioUnitsWithCategoryAndAlliance', { true, 2, categories.AIR * categories.ANTIAIR * categories.TECH3, categories.MOBILE * categories.AIR - categories.SCOUT, 'Enemy'}},
 			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.AIR * categories.TECH3 } },
             { UCBC, 'LocationFactoriesBuildingLess', { 'LocationType', 1, categories.ANTIAIR * categories.AIR - categories.BOMBER } },
         },
@@ -608,7 +614,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3AntiAirPlanes - Enemy Air Extra',
         PlatoonTemplate = 'T3AirFighter',
-        Priority = 760,
+        Priority = 0, #760,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},
@@ -623,7 +629,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3AntiAirPlanes - Enemy Air Extra 2',
         PlatoonTemplate = 'T3AirFighter',
-        Priority = 760,
+        Priority = 0, #760,
         BuilderConditions = {
             { IBC, 'BrainNotLowPowerMode', {} },
 			{ SBC, 'NoRushTimeCheck', { 600 }},

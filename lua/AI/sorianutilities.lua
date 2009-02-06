@@ -157,18 +157,21 @@ end
 #       nil
 #-----------------------------------------------------
 function AIHandleACUIntel(aiBrain, intel)
+	local bombard = true
+	local attack = true
 	for subk, subv in aiBrain.BaseMonitor.AlertsTable do
 		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
-			return
+			attack = false
+			break
 		end
 	end
 	for subk, subv in aiBrain.AttackPoints do
 		if intel.Position[1] == subv.Position[1] and intel.Position[3] == subv.Position[3] then
-			return
+			bombard = false
+			break
 		end
 	end
-	#If AntiAir threat level is less than 10 around the ACU
-	if aiBrain:GetThreatAtPosition( intel.Position, 1, true, 'AntiAir' ) < 10 then
+	if bombard then
 		#Bombard the location
 		table.insert(aiBrain.AttackPoints,
 			{
@@ -176,16 +179,26 @@ function AIHandleACUIntel(aiBrain, intel)
 			}
 		)
 		aiBrain:ForkThread(aiBrain.AttackPointsTimeout, intel.Position)
-		#Set an alert for the location
-		table.insert(aiBrain.BaseMonitor.AlertsTable,
-			{
-			Position = intel.Position,
-			Threat = 350,
-			}
-		)
-		aiBrain.BaseMonitor.AlertSounded = true
-		aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position)
-		aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
+	end
+	if attack then
+		local bomberThreat = 0
+		local bombers = AIUtils.GetOwnUnitsAroundPoint( aiBrain, categories.AIR * (categories.BOMBER + categories.GROUNDATTACK), intel.Position, 500 )
+		for k, unit in bombers do
+			bomberThreat = bomberThreat + unit:GetBlueprint().Defense.SurfaceThreatLevel
+		end
+		#If AntiAir threat level is less than our bomber threat around the ACU
+		if aiBrain:GetThreatAtPosition( intel.Position, 1, true, 'AntiAir' ) < bomberThreat then
+			#Set an alert for the location
+			table.insert(aiBrain.BaseMonitor.AlertsTable,
+				{
+				Position = intel.Position,
+				Threat = 350,
+				}
+			)
+			aiBrain.BaseMonitor.AlertSounded = true
+			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position)
+			aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
+		end
 	end
 end
 

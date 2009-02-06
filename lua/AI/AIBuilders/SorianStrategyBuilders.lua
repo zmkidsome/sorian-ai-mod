@@ -26,6 +26,69 @@ local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
 local AIUtils = import('/lua/ai/aiutilities.lua')
 local Behaviors = import('/lua/ai/aibehaviors.lua')
 local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
+local UnitUpgradeTemplates = import('/lua/upgradetemplates.lua').UnitUpgradeTemplates
+local StructureUpgradeTemplates = import('/lua/upgradetemplates.lua').StructureUpgradeTemplates
+
+BuilderGroup {
+    BuilderGroupName = 'Sorian Excess Mass Strategy',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Excess Mass Strategy',
+		StrategyType = 'Intermediate',
+        Priority = 100,
+        InstanceCount = 1,
+		StrategyTime = 300,
+		InterruptStrategy = true,
+		OnStrategyActivate = function(self, aiBrain)
+			local x,z = aiBrain:GetArmyStartPos()
+			local factionIndex = aiBrain:GetFactionIndex()
+			local cats = {
+				categories.MASSEXTRACTION * categories.TECH1,
+				categories.FACTORY * categories.TECH1,
+				categories.MASSEXTRACTION * categories.TECH2,
+				categories.FACTORY * categories.TECH2,
+				categories.MASSEXTRACTION * categories.TECH3,
+				categories.FACTORY * categories.TECH3,
+			}
+			repeat
+				for _,cat in cats do
+					local units = aiBrain:GetListOfUnits( cat, false )
+					if table.getn(units) <= 0 then continue end
+					for k, unit in units do
+						if unit:IsDead() then continue end
+						local upgradeID
+						if EntityCategoryContains(categories.MOBILE, unit ) then
+							upgradeID = aiBrain:FindUpgradeBP(unit:GetUnitId(), UnitUpgradeTemplates[factionIndex])
+						else
+							upgradeID = aiBrain:FindUpgradeBP(unit:GetUnitId(), StructureUpgradeTemplates[factionIndex])
+						end
+						if upgradeID and EntityCategoryContains(categories.STRUCTURE, unit) and not unit:CanBuild(upgradeID) then
+							continue
+						end
+						if upgradeID then
+							IssueStop({unit})
+							IssueUpgrade({unit}, upgradeID)
+						end
+						WaitSeconds(2)
+						if AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiencyOverTime < 1.0
+						or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiencyOverTime < 1.0 then break end
+					end
+					if AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiencyOverTime < 1.0
+					or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiencyOverTime < 1.0 then break end
+				end
+			until AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiencyOverTime < 1.0
+			or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiencyOverTime < 1.0
+		end,
+        BuilderConditions = {
+			{ SBC, 'GreaterThanGameTime', { 300 }},
+			{ EBC, 'GreaterThanEconEfficiencyOverTime', { 1.0, 1.0}},
+			{ EBC, 'GreaterThanEconStorageRatio', {0.5, 0}},
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {},
+		AddBuilders = {}
+    },
+}
 
 BuilderGroup {
     BuilderGroupName = 'Sorian Tele SCU Strategy',
@@ -562,7 +625,7 @@ BuilderGroup {
 				end
 			end
 			
-			returnval = 69 + (myFacs * 5) - (count * 2)
+			returnval = 74 + (myFacs * 5) - (count * 4)
 			return returnval
 		end,
         BuilderConditions = {
