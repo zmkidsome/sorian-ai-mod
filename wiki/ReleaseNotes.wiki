@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.9.2:* The AI should do a better job of not wasting mass, AI should do a better job of spotting an open ACU, Adjusted ACU behaviors, Misc bug fixes and stuff, Includes LEM 3.9.
+
 *1.9.1:* Rush AI should build more T3 AA, Fixed !GatherUnits script to keep units from getting stuck inside the AIs base, Adjusted ACU behaviors, Includes LEM 3.8.
 
 *1.9.0b:* Fix for simcallback issue.
