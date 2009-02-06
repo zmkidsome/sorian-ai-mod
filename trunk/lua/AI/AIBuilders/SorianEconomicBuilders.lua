@@ -644,7 +644,7 @@ BuilderGroup {
         Priority = 875,
         BuilderConditions = {            
             { SBC, 'GreaterThanGameTime', { 165 }},
-			{ SBC, 'LessThanGameTime', { 900 }},
+			{ SBC, 'LessThanGameTime', { 1200 }},
 			{ SBC, 'ClosestEnemyLessThan', { 750 } },
 			{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1.0 } },
 			{ SBC, 'IsBadMap', { false } },

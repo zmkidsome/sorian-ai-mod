@@ -165,6 +165,7 @@ BaseBuilderTemplate {
 		'SorianStopNukes',
 		'SorianEnemyTurtle - In Range',
 		'SorianEnemyTurtle - Out of Range',
+		'Sorian Excess Mass Strategy',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',
@@ -206,8 +207,8 @@ BaseBuilderTemplate {
             SCU = 2,
         },
         FactoryCount = {
-            Land = 8,
-            Air = 2,
+            Land = 7,
+            Air = 3,
             Sea = 0,
             Gate = 1,
         },
