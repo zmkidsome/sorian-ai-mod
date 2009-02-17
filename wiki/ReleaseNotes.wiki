@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.9.4:* AI should use its air superiority better, AI will stop building T1 sooner, The AI will use more ASFs, AI should stop sending its fighters into situations where they will die unnecessarily, Adjusted the excess mass strategy, Fixed a bug with the Gun Upgrade strategy, Includes LEM 4.2.
+
 *1.9.3:* Rush AI will not always use the gun upgrade, Fix for stuck T4s, Fix for stuck land units, Fix for game freeze after 5 min when T2 or T3 disabled, Some path calculation fixes, Misc fixes and improvements, Includes LEM 3.9d.
 
 *1.9.2:* The AI should do a better job of not wasting mass, AI should do a better job of spotting an open ACU, Adjusted ACU behaviors, Misc bug fixes and stuff, Includes LEM 3.9.
