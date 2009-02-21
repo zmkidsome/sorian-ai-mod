@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.9.6:* Misc. tweaks.
+
 *1.9.5:* Air units should no longer land.
 
 *1.9.4:* AI should use its air superiority better, AI will stop building T1 sooner, The AI will use more ASFs, AI should stop sending its fighters into situations where they will die unnecessarily, Adjusted the excess mass strategy, Fixed a bug with the Gun Upgrade strategy, Includes LEM 4.2.
