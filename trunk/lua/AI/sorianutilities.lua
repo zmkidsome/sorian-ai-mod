@@ -67,6 +67,27 @@ function DrawIntel(aiBrain)
 	end
 end
 
+function AICheckForWeakEnemyBase(aiBrain)
+	if aiBrain:GetCurrentEnemy() and table.getn(aiBrain.AirAttackPoints) == 0 then
+		local enemy = aiBrain:GetCurrentEnemy()
+		local x,z = enemy:GetArmyStartPos()
+		local enemyBaseThreat = aiBrain:GetThreatAtPosition( {x,0,z}, 1, true, 'AntiAir', enemy:GetArmyIndex())
+		local bomberThreat = 0
+		local bombers = AIUtils.GetOwnUnitsAroundPoint( aiBrain, categories.AIR * (categories.BOMBER + categories.GROUNDATTACK), {x,0,z}, 10000 )
+		for k, unit in bombers do
+			bomberThreat = bomberThreat + unit:GetBlueprint().Defense.SurfaceThreatLevel
+		end
+		if bomberThreat > enemyBaseThreat then
+			table.insert(aiBrain.AirAttackPoints,
+				{
+				Position = {x,0,z},
+				}
+			)
+			aiBrain:ForkThread(aiBrain.AirAttackPointsTimeout, {x,0,z}, enemy)
+		end
+	end
+end
+
 #-----------------------------------------------------
 #   Function: AIHandleIntelData
 #   Args:
@@ -140,7 +161,7 @@ function AIHandleStructureIntel(aiBrain, intel)
 				}
 			)
 			aiBrain.BaseMonitor.AlertSounded = true
-			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position)
+			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position, 'Overall')
 			aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
 		end
 	end
@@ -242,7 +263,7 @@ function AIHandleArtilleryIntel(aiBrain, intel)
 				}
 			)
 			aiBrain.BaseMonitor.AlertSounded = true
-			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position)
+			aiBrain:ForkThread(aiBrain.BaseMonitorAlertTimeout, intel.Position, 'Economy')
 			aiBrain.BaseMonitor.ActiveAlerts = aiBrain.BaseMonitor.ActiveAlerts + 1
 		end
 	end
@@ -1239,6 +1260,21 @@ function Nuke(aiBrain)
 	end
 end
 
+function CheckCost(aiBrain, pos, massCost)
+	if massCost == 0 then
+		massCost = 12000
+	end
+	local units = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, pos, 30, 'Enemy' )
+	local massValue = 0
+	for k,v in units do
+		if not v:IsDead() then
+			local unitValue = (v:GetBlueprint().Economy.BuildCostMass * v:GetFractionComplete())
+			massValue = massValue + unitValue
+		end
+		if massValue > massCost then return true end
+	end
+	return false
+end
 
 #-----------------------------------------------------
 #   Function: LaunchNukesTimed

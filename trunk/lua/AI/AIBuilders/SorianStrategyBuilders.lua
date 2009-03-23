@@ -70,18 +70,20 @@ BuilderGroup {
 							IssueUpgrade({unit}, upgradeID)
 						end
 						WaitSeconds(2)
-						if AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiencyOverTime < 1.0
-						or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiencyOverTime < 1.0 then break end
+						if AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiency < 1.0
+						or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiency < 1.0 then break end
 					end
-					if AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiencyOverTime < 1.0
-					or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiencyOverTime < 1.0 then break end
+					if AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiency < 1.0
+					or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiency < 1.0 then break end
 				end
-			until AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiencyOverTime < 1.0
-			or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiencyOverTime < 1.0
+			until AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiency < 1.0
+			or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiency < 1.0
 		end,
         BuilderConditions = {
 			{ SBC, 'GreaterThanGameTime', { 300 }},
-			{ EBC, 'GreaterThanEconEfficiencyOverTime', { 1.0, 1.0}},
+			{ SBC, 'CategoriesNotRestricted', { {'T2', 'T3'} }},
+			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 1.0, 1.0}},
+			{ SIBC, 'GreaterThanEconEfficiency', { 1.0, 1.0 }},
 			{ EBC, 'GreaterThanEconStorageRatio', {0.5, 0}},
         },
         BuilderType = 'Any',		
@@ -206,7 +208,7 @@ BuilderGroup {
 				return returnval
 			end
 			
-			if Random(1,40) == 35 then
+			if Random(1,10) == 7 then
 				returnval = 100
 			end				
 			
@@ -424,7 +426,7 @@ BuilderGroup {
 				return returnval
 			end
 			
-			if Random(1,25) == 25 then
+			if Random(1,15) == 3 then
 				returnval = 100
 			end
 			
@@ -688,6 +690,72 @@ BuilderGroup {
 }
 
 BuilderGroup {
+    BuilderGroupName = 'SorianRushGunUpgrades',
+    BuildersType = 'StrategyBuilder',
+    Builder {
+        BuilderName = 'Sorian Rush Gun Upgrades',
+		StrategyType = 'Intermediate',
+        Priority = 100,
+        InstanceCount = 1,
+		StrategyTime = 300,
+		InterruptStrategy = true,
+		OnStrategyActivate = function(self, aiBrain)
+			Builders[self.BuilderName].Running = true
+		end,
+		PriorityFunction = function(self, aiBrain)
+			if Builders[self.BuilderName].Running then
+				return 100
+			elseif Builders[self.BuilderName].Done then
+				return 0
+			end
+			local returnval = 0
+			
+			if Random(1,5) == 2 then
+				returnval = 100
+			end
+			
+			Builders[self.BuilderName].Done = true
+			
+			return returnval
+		end,
+        BuilderConditions = {
+			{ SBC, 'ClosestEnemyLessThan', { 750 } },
+			{ SBC, 'EnemyToAllyRatioLessOrEqual', { 1.0 } },
+			{ SBC, 'IsBadMap', { false } },
+        },
+        BuilderType = 'Any',		
+        RemoveBuilders = {
+			EngineerManager = {
+				'Sorian UEF CDR Upgrade AdvEng - Pods',
+				'Sorian UEF CDR Upgrade T3 Eng - Shields',
+				'Sorian Aeon CDR Upgrade AdvEng - Resource - Crysalis',
+				'Sorian Aeon CDR Upgrade T3 Eng - ResourceAdv - EnhSensor',
+				'Sorian Cybran CDR Upgrade AdvEng - Laser Gen',
+				'Sorian Cybran CDR Upgrade T3 Eng - Resource',
+				'Sorian Seraphim CDR Upgrade AdvEng - Resource - Crysalis',
+				'Sorian Seraphim CDR Upgrade T3 Eng - ResourceAdv - EnhSensor',
+			},
+		},
+		AddBuilders = {
+			EngineerManager = {
+				'Sorian UEF CDR Upgrade - Rush - Gun',
+				'Sorian UEF CDR Upgrade - Rush - Eng',
+				'Sorian UEF CDR Upgrade - Rush - Shield',
+				'Sorian Aeon CDR Upgrade - Rush - Gun',
+				'Sorian Aeon CDR Upgrade - Rush - Eng',
+				'Sorian Aeon CDR Upgrade T3 - Rush - Shield',
+				'Sorian Cybran CDR Upgrade - Rush - Gun',
+				'Sorian Cybran CDR Upgrade - Rush - Eng',
+				'Sorian Cybran CDR Upgrade - Rush - Laser',
+				'Sorian Seraphim CDR Upgrade - Rush - Gun',
+				'Sorian Seraphim CDR Upgrade - Rush - Eng',
+				'Sorian Seraphim CDR Upgrade - Rush - Regen',
+			},
+		}
+    },
+}
+
+BuilderGroup {
     BuilderGroupName = 'SorianGhettoGunship',
     BuildersType = 'StrategyBuilder',
     Builder {
@@ -925,7 +993,9 @@ BuilderGroup {
     
 			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
 			
-			returnval = enemyThreat * 0.019
+			#If enemy base has more than 2000 anti-surface threat
+			#T2 Arty, T1 PD, T2 PD, Bots, Tanks, Mobile Arty, Gunships, Bombers, ACU, SCUs.
+			returnval = enemyThreat * 0.0375
 			return returnval
 		end,
         BuilderConditions = {
@@ -981,7 +1051,9 @@ BuilderGroup {
     
 			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
 			
-			returnval = enemyThreat * 0.019
+			#If enemy base has more than 2000 anti-surface threat
+			#T2 Arty, T1 PD, T2 PD, Bots, Tanks, Mobile Arty, Gunships, Bombers, ACU, SCUs.
+			returnval = enemyThreat * 0.0375
 			return returnval
 		end,
         BuilderConditions = {

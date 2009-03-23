@@ -146,7 +146,7 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     local foundPathableThreat = false
     local mapSizeX = ScenarioInfo.size[1]
     local mapSizeZ = ScenarioInfo.size[2]
-    local maxMapLengthSq = mapSizeX * mapSizeX + mapSizeZ * mapSizeZ
+    local maxMapLengthSq = math.sqrt((mapSizeX * mapSizeX) + (mapSizeZ * mapSizeZ))
     local logCount = 0
     
     local unitCapRatio = GetArmyUnitCostTotal(aiBrain:GetArmyIndex()) / GetArmyUnitCap(aiBrain:GetArmyIndex())
@@ -185,15 +185,15 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
                     threat[2] = bestGoalPos[3]
                 end
             else
-			local bestPos
-			if string.find(per, 'sorian') then
-				bestPos = CheckNavalPathingSorian(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc, turretPitch)
-			else
-				bestPos = CheckNavalPathing(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc)
-			end
-                if not bestPos then
-                    continue
-                end
+				local bestPos
+				if string.find(per, 'sorian') then
+					bestPos = CheckNavalPathingSorian(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc, turretPitch)
+				else
+					bestPos = CheckNavalPathing(aiBrain, platoon, {threat[1], 0, threat[2]}, maxRange, selectedWeaponArc)
+				end
+				if not bestPos then
+					continue
+				end
             end
         end
         
@@ -247,8 +247,9 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
         # only add distance if there's a threat at all
         local threatDistNorm = -1
         if targetThreat > 0 then
-            threatDist = VDist2(threat[1], threat[2], platoonPosition[1], platoonPosition[3])
+            threatDist = math.sqrt(VDist2Sq(threat[1], threat[2], platoonPosition[1], platoonPosition[3]))
             #distance is 1-100 of the max map length, distance function weights are split by the distance radius
+			
             threatDistNorm = 100 * threatDist / maxMapLengthSq
             if threatDistNorm < 1 then
                 threatDistNorm = 1
@@ -622,8 +623,8 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
 	if aiBrain.PathCache[startNode.name][endNode.name].path and aiBrain.PathCache[startNode.name][endNode.name].path != 'bad'
 	and aiBrain.PathCache[startNode.name][endNode.name].settime + 60 > GetGameTimeSeconds() then
 		return aiBrain.PathCache[startNode.name][endNode.name].path
-	elseif aiBrain.PathCache[startNode.name][endNode.name].path and aiBrain.PathCache[startNode.name][endNode.name].path == 'bad' then
-		return false
+	--elseif aiBrain.PathCache[startNode.name][endNode.name].path and aiBrain.PathCache[startNode.name][endNode.name].path == 'bad' then
+	--	return false
 	end
 	
     threatWeight = threatWeight or 1
@@ -648,7 +649,7 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
 	
 	repeat
 		if closed[lastNode] then 
-			aiBrain.PathCache[startNode.name][endNode.name] = { settime = 36000 , path = 'bad' }
+			--aiBrain.PathCache[startNode.name][endNode.name] = { settime = 36000 , path = 'bad' }
 			return false 
 		end
 		
@@ -672,13 +673,12 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
 				return queue
 			end
             
-            local dist = VDist2Sq(newNode.position[1], newNode.position[3], endNode.position[1], endNode.position[3])
+            #local dist = math.sqrt(VDist2Sq(newNode.position[1], newNode.position[3], endNode.position[1], endNode.position[3]))
+			local dist = VDist2Sq(newNode.position[1], newNode.position[3], endNode.position[1], endNode.position[3])
 
             # this brings the dist value from 0 to 100% of the maximum length with can travel on a map
-            dist = 100 * dist / math.sqrt((mapSizeX * mapSizeX) + (mapSizeZ * mapSizeZ))
-            					#( mapSizeX + mapSizeZ ) - GPGs method made no sense.
-            					#The max distance you can travel would be diagonally across the map.
-            					#Using GPGs method would mean max distance would be 70% of the map, not 100%.
+            #dist = 100 * dist / math.sqrt((mapSizeX * mapSizeX) + (mapSizeZ * mapSizeZ))
+			dist = 100 * dist / ( mapSizeX + mapSizeZ )
 			
             --get threat from current node to adjacent node
             local threat = aiBrain:GetThreatBetweenPositions(newNode.position, lastNode.position, nil, threatType)
@@ -704,7 +704,26 @@ function GeneratePath(aiBrain, startNode, endNode, threatType, threatWeight, des
 	return queue
 end
 
-function GeneratePatholdstyle(aiBrain, startNode, endNode, threatType, threatWeight, destination, location, testPath)
+function GeneratePathOld(aiBrain, startNode, endNode, threatType, threatWeight, destination, location, testPath)
+	if not aiBrain.PathCache then
+		#Create path cache table. Paths are stored in this table and saved for 1 minute so
+		#any other platoons needing to travel the same route can get the path without the extra work.
+		aiBrain.PathCache = {}
+	end
+	if not aiBrain.PathCache[startNode.name] then
+		aiBrain.PathCache[startNode.name] = {}
+		aiBrain.PathCache[startNode.name][endNode.name] = {}
+	end
+	if not aiBrain.PathCache[startNode.name][endNode.name] then
+		aiBrain.PathCache[startNode.name][endNode.name] = {}
+	end
+	
+	if aiBrain.PathCache[startNode.name][endNode.name].path and aiBrain.PathCache[startNode.name][endNode.name].path != 'bad'
+	and aiBrain.PathCache[startNode.name][endNode.name].settime + 60 > GetGameTimeSeconds() then
+		return aiBrain.PathCache[startNode.name][endNode.name].path
+	--elseif aiBrain.PathCache[startNode.name][endNode.name].path and aiBrain.PathCache[startNode.name][endNode.name].path == 'bad' then
+	--	return false
+	end
     threatWeight = threatWeight or 1
     
     local graph = GetPathGraphs()[startNode.layer][startNode.graphName]
@@ -790,6 +809,7 @@ function GeneratePatholdstyle(aiBrain, startNode, endNode, threatType, threatWei
         loopRet = AStarLoopBody()       
         
         if loopRet then
+			aiBrain.PathCache[startNode.name][endNode.name] = { settime = GetGameTimeSeconds(), path = loopRet }
             return loopRet     
         end
     end
@@ -858,11 +878,11 @@ function AIPlatoonSquadAttackVectorSorian( aiBrain, platoon, bAggro )
 		local inBase = false
 		local homeBase = aiBrain.BuilderManagers[platoon.PlatoonData.LocationType].Position
 		
-		if not position or not homeBase then
+		if not position then
 			return {}
 		end
 		
-		if VDist2Sq(position[1], position[3], homeBase[1], homeBase[3]) < 100*100 then
+		if homeBase and VDist2Sq(position[1], position[3], homeBase[1], homeBase[3]) < 100*100 then
 			inBase = true
 		end		
         if (not path and reason == 'NoPath') or bNeedTransports then
@@ -1350,6 +1370,8 @@ function SendPlatoonWithTransports(aiBrain, platoon, destination, bRequired, bSk
 end
 
 function InWaterCheck(platoon)
+	GetMostRestrictiveLayer(platoon)
+	if platoon.MovementLayer == 'Air' then return false end
 	local platPos = platoon:GetPlatoonPosition()
 	local inWater = GetTerrainHeight(platPos[1], platPos[3]) < GetSurfaceHeight(platPos[1], platPos[3])
 	return inWater

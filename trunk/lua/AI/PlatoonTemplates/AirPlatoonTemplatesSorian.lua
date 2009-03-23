@@ -85,7 +85,7 @@ PlatoonTemplate {
 
 PlatoonTemplate {
     Name = 'AntiAirHuntSorian',
-    Plan = 'FighterHuntAI',
+    Plan = 'FighterDistributionHubSorian', #'FighterHuntAI',
     GlobalSquads = {
         { categories.AIR * categories.MOBILE * categories.ANTIAIR * ( categories.TECH1 + categories.TECH2 + categories.TECH3 ) - categories.BOMBER - categories.TRANSPORTFOCUS - categories.EXPERIMENTAL, 1, 10, 'attack', 'none' },
     }

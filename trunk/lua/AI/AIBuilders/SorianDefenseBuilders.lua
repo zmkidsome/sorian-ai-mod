@@ -1442,7 +1442,7 @@ BuilderGroup {
         PlatoonTemplate = 'EngineerBuilderSorian',
         Priority = 900,
         BuilderConditions = {
-            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 75, 'DEFENSE TECH1 ANTINAVY', 20, 2, 0, 1, 1, 'AntiSurface' } },
+            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 300, 'DEFENSE TECH1 ANTINAVY', 20, 3, 0, 1, 1, 'AntiSurface' } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
             { UCBC, 'LocationEngineersBuildingLess', { 'LocationType', 1, categories.DEFENSE * categories.STRUCTURE - categories.SHIELD - categories.ANTIMISSILE } },
@@ -1455,16 +1455,17 @@ BuilderGroup {
                 BuildClose = false,
                 NearMarkerType = 'Naval Defensive Point',
                 MarkerRadius = 20,
-                LocationRadius = 75,
+                LocationRadius = 300,
                 LocationType = 'LocationType',
                 ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 ThreatType = 'AntiSurface',
-                MarkerUnitCount = 2,
+                MarkerUnitCount = 3,
                 MarkerUnitCategory = 'DEFENSE TECH1 ANTINAVY',
                 BuildStructures = {
                     'T1NavalDefense',
+					'T1GroundDefense',
                 },
             }
         }
@@ -1474,7 +1475,7 @@ BuilderGroup {
         PlatoonTemplate = 'EngineerBuilderSorian',
         Priority = 900,
         BuilderConditions = {
-            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 75, 'DEFENSE TECH1 ANTIAIR', 20, 2, 0, 1, 1, 'AntiSurface' } },
+            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 300, 'DEFENSE TECH1 ANTIAIR', 20, 2, 0, 1, 1, 'AntiSurface' } },
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 1, 'Air' } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -1488,7 +1489,7 @@ BuilderGroup {
                 BuildClose = false,
                 NearMarkerType = 'Naval Defensive Point',
                 MarkerRadius = 20,
-                LocationRadius = 75,
+                LocationRadius = 300,
                 LocationType = 'LocationType',
                 ThreatMin = -10000,
                 ThreatMax = 5,
@@ -1512,7 +1513,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         Priority = 925,
         BuilderConditions = {
-            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 75, 'DEFENSE TECH2 ANTINAVY', 20, 2, 0, 1, 1, 'AntiSurface' } },
+            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 300, 'DEFENSE TECH2 ANTINAVY', 20, 3, 0, 1, 1, 'AntiSurface' } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -1526,16 +1527,17 @@ BuilderGroup {
                 BuildClose = false,
                 NearMarkerType = 'Naval Defensive Point',
                 MarkerRadius = 20,
-                LocationRadius = 75,
+                LocationRadius = 300,
                 LocationType = 'LocationType',
                 ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 ThreatType = 'AntiSurface',
-                MarkerUnitCount = 2,
+                MarkerUnitCount = 3,
                 MarkerUnitCategory = 'DEFENSE TECH2 ANTINAVY',
                 BuildStructures = {
                     'T2NavalDefense',
+					'T2Artillery',
                 },
             }
         }
@@ -1545,7 +1547,7 @@ BuilderGroup {
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         Priority = 925,
         BuilderConditions = {
-            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 75, 'DEFENSE TECH2 ANTIAIR', 20, 2, 0, 1, 1, 'AntiSurface' } },
+            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 300, 'DEFENSE TECH2 ANTIAIR', 20, 2, 0, 1, 1, 'AntiSurface' } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH2 } },
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 1, 'Air' } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -1560,7 +1562,7 @@ BuilderGroup {
                 BuildClose = false,
                 NearMarkerType = 'Naval Defensive Point',
                 MarkerRadius = 20,
-                LocationRadius = 75,
+                LocationRadius = 300,
                 LocationType = 'LocationType',
                 ThreatMin = -10000,
                 ThreatMax = 5,
@@ -1584,7 +1586,7 @@ BuilderGroup {
         PlatoonTemplate = 'CybranT3EngineerBuilderSorian',
         Priority = 945,
         BuilderConditions = {
-            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 150, 'DEFENSE TECH3 ANTINAVY', 20, 2, 0, 1, 1, 'AntiSurface' } },
+            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 300, 'DEFENSE TECH3 ANTINAVY', 20, 3, 0, 1, 1, 'AntiSurface' } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { IBC, 'BrainNotLowPowerMode', {} },
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
@@ -1598,16 +1600,17 @@ BuilderGroup {
                 BuildClose = false,
                 NearMarkerType = 'Naval Defensive Point',
                 MarkerRadius = 20,
-                LocationRadius = 150,
+                LocationRadius = 300,
                 LocationType = 'LocationType',
                 ThreatMin = -10000,
                 ThreatMax = 5,
                 ThreatRings = 1,
                 ThreatType = 'AntiSurface',
-                MarkerUnitCount = 2,
+                MarkerUnitCount = 3,
                 MarkerUnitCategory = 'DEFENSE TECH3 ANTINAVY',
                 BuildStructures = {
                     'T3NavalDefense',
+					'T2Artillery',
                 },
             }
         }
@@ -1617,7 +1620,7 @@ BuilderGroup {
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 945,
         BuilderConditions = {
-            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 75, 'DEFENSE TECH3 ANTIAIR', 20, 2, 0, 1, 1, 'AntiSurface' } },
+            { UCBC, 'NavalDefensivePointNeedsStructure', { 'LocationType', 300, 'DEFENSE TECH3 ANTIAIR', 20, 2, 0, 1, 1, 'AntiSurface' } },
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3 } },
             { TBC, 'EnemyThreatGreaterThanValueAtBase', { 'LocationType', 1, 'Air' } },
             { IBC, 'BrainNotLowPowerMode', {} },
@@ -1632,7 +1635,7 @@ BuilderGroup {
                 BuildClose = false,
                 NearMarkerType = 'Naval Defensive Point',
                 MarkerRadius = 20,
-                LocationRadius = 75,
+                LocationRadius = 300,
                 LocationType = 'LocationType',
                 ThreatMin = -10000,
                 ThreatMax = 5,
@@ -1987,7 +1990,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Anti-Nuke Engineer Near Factory',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
-        Priority = 945,
+        Priority = 0, #945,
 		InstanceCount = 1,
         BuilderConditions = {
             #{ UCBC, 'HaveGreaterThanUnitsWithCategory', { 5, categories.ENGINEER * categories.TECH3}},

@@ -549,6 +549,9 @@ AIBrain = Class(oldAIBrain) {
 		if not self.AttackPoints then
 			self.AttackPoints = {}
 		end
+		if not self.AirAttackPoints then
+			self.AirAttackPoints = {}
+		end
 		if not self.TacticalBases then
 			self.TacticalBases = {}
 		end
@@ -653,6 +656,8 @@ AIBrain = Class(oldAIBrain) {
 			if changed then
 				SUtils.AIHandleIntelData(self)
 			end
+			
+			SUtils.AICheckForWeakEnemyBase(self)
             
             WaitSeconds(5)
         end
@@ -982,6 +987,28 @@ AIBrain = Class(oldAIBrain) {
         for k,v in self.AttackPoints do
             if pos[1] == v.Position[1] and pos[3] == v.Position[3] then
                 self.AttackPoints[k] = nil
+                break
+            end
+        end
+    end,
+	
+    AirAttackPointsTimeout = function(self, pos, enemy)
+        local threat
+		local myThreat
+		local overallThreat
+        repeat
+            WaitSeconds(30)
+			myThreat = 0
+            threat = self:GetThreatAtPosition( pos, 1, true, 'AntiAir', enemy:GetArmyIndex())
+			overallThreat = self:GetThreatAtPosition( pos, 1, true, 'Overall', enemy:GetArmyIndex())
+			local bombers = AIUtils.GetOwnUnitsAroundPoint( self, categories.AIR * (categories.BOMBER + categories.GROUNDATTACK), pos, 10000 )
+			for k, unit in bombers do
+				myThreat = myThreat + unit:GetBlueprint().Defense.SurfaceThreatLevel
+			end
+        until threat > myThreat or overallThreat <= 0
+        for k,v in self.AirAttackPoints do
+            if pos[1] == v.Position[1] and pos[3] == v.Position[3] then
+                self.AirAttackPoints[k] = nil
                 break
             end
         end

@@ -63,6 +63,10 @@ BaseBuilderTemplate {
 		'SorianT1BaseDefenses',
 		'SorianT2BaseDefenses',
 		'SorianT3BaseDefenses',
+		
+        'SorianT1NavalDefenses',
+        'SorianT2NavalDefenses',
+        'SorianT3NavalDefenses',
 
 		'SorianT2PerimeterDefenses',
 		'SorianT3PerimeterDefenses',

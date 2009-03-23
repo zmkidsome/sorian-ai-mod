@@ -45,7 +45,7 @@ BaseBuilderTemplate {
         # ACU Builders
         'Sorian Rush Initial ACU Builders',
         'SorianACUBuilders',
-        'SorianACUUpgrades - Rush',
+        'SorianACUUpgrades',
 		'SorianACUAttack',
         
         # ACU Defense
@@ -166,6 +166,7 @@ BaseBuilderTemplate {
 		'SorianEnemyTurtle - In Range',
 		'SorianEnemyTurtle - Out of Range',
 		'Sorian Excess Mass Strategy',
+		'SorianRushGunUpgrades',
 		
 		# ===== Strategy Platoons ===== #
 		'SorianT1BomberHighPrio',
@@ -186,6 +187,7 @@ BaseBuilderTemplate {
 		'Sorian Extractor Upgrades Strategy',
 		'SorianBalancedUpgradeBuildersExpansionStrategy',
 		'SorianEngineerExpansionBuildersStrategy',
+		'SorianACUUpgrades - Rush',
     },
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',

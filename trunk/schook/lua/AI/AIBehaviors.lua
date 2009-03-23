@@ -547,6 +547,7 @@ function CDRHideBehavior(aiBrain, cdr)
 		cdr.Upgrading = false
 		local category = false
 		local runShield = false
+		local runPos = false
 		local nmaShield = aiBrain:GetNumUnitsAroundPoint( categories.SHIELD * categories.STRUCTURE, cdr:GetPosition(), 100, 'Ally' )
 		local nmaPD = aiBrain:GetNumUnitsAroundPoint( categories.DIRECTFIRE * categories.DEFENSE, cdr:GetPosition(), 100, 'Ally' )
 		local nmaAA = aiBrain:GetNumUnitsAroundPoint( categories.ANTIAIR * categories.DEFENSE, cdr:GetPosition(), 100, 'Ally' )
@@ -559,14 +560,15 @@ function CDRHideBehavior(aiBrain, cdr)
 			category = categories.DEFENSE * categories.DIRECTFIRE
 		end
 		if category then
-			local baseLocation = AIUtils.AIFindDefensiveAreaSorian( aiBrain, cdr, category, 100, runShield )
+			runPos = AIUtils.AIFindDefensiveAreaSorian( aiBrain, cdr, category, 100, runShield )
 			IssueClearCommands( {cdr} )
-			IssueMove( {cdr}, baseLocation )
-		else
+			IssueMove( {cdr}, runPos )
+		end
+		if not category or not runPos then
 			local x,z = aiBrain:GetArmyStartPos()
-			local position = AIUtils.RandomLocation(x,z)
+			runPos = AIUtils.RandomLocation(x,z)
 			IssueClearCommands( {cdr} )
-			IssueMove( {cdr}, position )
+			IssueMove( {cdr}, runPos )
 		end
 	end
 end
@@ -637,9 +639,12 @@ function CommanderThreadSorian(cdr, platoon)
 		end
         WaitTicks(2)
         # Overcharge
-        if Mult == 1 and not cdr:IsDead() and not cdr.Upgrading and SBC.GreaterThanGameTime(aiBrain, Delay) and UCBC.HaveGreaterThanUnitsWithCategory(aiBrain,  1, 'FACTORY') and aiBrain:GetNoRushTicks() <= 0 then CDROverChargeSorian( aiBrain, cdr) end #, Mult ) end
+        if Mult == 1 and not cdr:IsDead() and not cdr.Upgrading and SBC.GreaterThanGameTime(aiBrain, Delay) and
+		UCBC.HaveGreaterThanUnitsWithCategory(aiBrain,  1, 'FACTORY') and aiBrain:GetNoRushTicks() <= 0 then
+			CDROverChargeSorian( aiBrain, cdr)
+		end
         WaitTicks(1)
-        # Run away (not really useful right now, without teleport ability kicking in... might as well just go home)
+		# Run Away
         if not cdr:IsDead() then CDRRunAwaySorian( aiBrain, cdr ) end
         WaitTicks(1)
         # Go back to base
@@ -657,7 +662,7 @@ function CommanderThreadSorian(cdr, platoon)
 		and not cdr:IsUnitState("Attacking") and not cdr:IsUnitState("Repairing") and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading")
 		and not cdr:IsUnitState("Enhancing") and not moveOnNext then 
 			moveWait = moveWait + 1
-			if moveWait >= 20 then
+			if moveWait >= 10 then
 				moveWait = 0
 				moveOnNext = true
 			end
@@ -669,7 +674,7 @@ function CommanderThreadSorian(cdr, platoon)
         #call platoon resume building deal...
         if not cdr:IsDead() and cdr:IsIdleState() and not cdr.GoingHome and not cdr.Fighting and not cdr.Upgrading and not cdr:IsUnitState("Building")
 		and not cdr:IsUnitState("Attacking") and not cdr:IsUnitState("Repairing") and not cdr.UnitBeingBuiltBehavior and not cdr:IsUnitState("Upgrading") 
-		and not cdr:IsUnitState("Enhancing") and not ( Utilities.XZDistanceTwoVectors(cdr.CDRHome, cdr:GetPosition()) > 100 ) then
+		and not cdr:IsUnitState("Enhancing") and not ( SUtils.XZDistanceTwoVectorsSq(cdr.CDRHome, cdr:GetPosition()) > 100 ) then
             if not cdr.EngineerBuildQueue or table.getn(cdr.EngineerBuildQueue) == 0 then
 				#LOG('*AI DEBUG: '.. aiBrain.Nickname ..' CommanderThread Assign to pool')
                 local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
@@ -889,7 +894,7 @@ FindExperimentalTargetSorian = function(self)
             local notDeadUnit = false
             
             for _,unit in unitsAtBase do
-                if not unit:IsDead() then
+                if not unit:IsDead() and unit:GetPosition() then
                     notDeadUnit = unit
                     numUnitsAtBase = numUnitsAtBase + 1
                 end
@@ -1317,6 +1322,8 @@ function FatBoyBehaviorSorian(self)
 			else
 				cmd = ExpPathToLocation(aiBrain, self, 'Amphibious', targetUnit:GetPosition(), 'AttackMove')
 			end
+		else
+			LOG('*DEBUG: FatBoy no target.')
         end
         
         #Walk to and kill target loop
@@ -1351,8 +1358,9 @@ function FatBoyBehaviorSorian(self)
             closestBlockingShield = closestBlockingShield or GetClosestShieldProtectingTargetSorian(experimental, targetUnit)
             
             #Kill shields loop
+			local oldTarget = false
             while closestBlockingShield do
-				local oldTarget = targetUnit
+				oldTarget = oldTarget or targetUnit
 				targetUnit = false
 				self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 				useMove = InWaterCheck(self)
@@ -1472,8 +1480,9 @@ function BehemothBehaviorSorian(self)
             closestBlockingShield = closestBlockingShield or GetClosestShieldProtectingTargetSorian(experimental, targetUnit)
             
             #Kill shields loop
+			local oldTarget = false
             while closestBlockingShield do
-				local oldTarget = targetUnit
+				oldTarget = oldTarget or targetUnit
 				targetUnit = false
 				self:MergeWithNearbyPlatoonsSorian('ExperimentalAIHubSorian', 50, true)
 				useMove = InWaterCheck(self)

@@ -32,6 +32,19 @@ function IsBadMap(aiBrain, bool)
 	return false
 end
 
+function CategoriesNotRestricted(aiBrain, resTable)
+	local restrictions = ScenarioInfo.Options.RestrictedCategories
+	if not restrictions then return false end
+	for _, rescheck in resTable do
+		for _, restriction in restrictions do
+			if rescheck == restriction then
+				return false
+			end
+		end
+	end
+	return true
+end
+
 ##############################################################################################################
 # function: IsWaterMap = BuildCondition
 #

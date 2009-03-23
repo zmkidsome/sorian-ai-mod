@@ -35,7 +35,7 @@ BuilderGroup {
         BuilderConditions = {
             { UCBC, 'HaveLessThanUnitsWithCategory', { 3, categories.SCOUT * categories.AIR}},
 			{ SBC, 'LessThanGameTime', { 300 } },
-			{ SBC, 'MapGreaterThan', { 500, 500 }},
+			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
             #{ UCBC, 'HaveLessThanUnitsWithCategory', { 3, categories.FACTORY }},
             #{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.TECH2 * categories.FACTORY * categories.AIR } },
             { UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.AIR * categories.FACTORY * categories.TECH1 } },
