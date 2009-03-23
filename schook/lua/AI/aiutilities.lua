@@ -362,6 +362,47 @@ function AIFindPingTargetInRangeSorian( aiBrain, platoon, squad, maxRange, atkPr
 	return false
 end
 
+function AIFindAirAttackTargetInRangeSorian( aiBrain, platoon, squad, atkPri, position )
+    if not aiBrain or not position then
+        return false
+    end
+	local targetUnits = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, position, 100, 'Enemy' )
+	for k,v in atkPri do
+		local category = ParseEntityCategory( v )
+		local retUnit = false
+		local distance = false
+		local targetShields = 9999
+		for num, unit in targetUnits do
+			if not unit:IsDead() and EntityCategoryContains( category, unit ) and platoon:CanAttackTarget( squad, unit ) then
+				local unitPos = unit:GetPosition()
+				local numShields = aiBrain:GetNumUnitsAroundPoint( categories.DEFENSE * categories.SHIELD * categories.STRUCTURE, unitPos, 50, 'Enemy' )
+				if not retUnit or numShields < targetShields or (numShields == targetShields and Utils.XZDistanceTwoVectors( position, unitPos ) < distance) then
+					retUnit = unit
+					distance = Utils.XZDistanceTwoVectors( position, unitPos )
+					targetShields = numShields
+				end
+			end
+		end
+		if retUnit and targetShields > 0 then
+			local platoonUnits = platoon:GetPlatoonUnits()
+			for k,v in platoonUnits do
+				if not v:IsDead() then
+					unit = v
+					break
+				end
+			end
+			local closestBlockingShield = AIBehaviors.GetClosestShieldProtectingTargetSorian(unit, retUnit)
+			if closestBlockingShield then
+				return closestBlockingShield
+			end
+		end
+		if retUnit then
+			return retUnit
+		end
+	end
+	return false
+end
+
 # We use both Blank Marker that are army names as well as the new Large Expansion Area to determine big expansion bases
 function AIFindStartLocationNeedsEngineerSorian( aiBrain, locationType, radius, tMin, tMax, tRings, tType, eng)
     local pos = aiBrain:PBMGetLocationCoords( locationType )
@@ -572,6 +613,8 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
     if not aiBrain or not position or not maxRange then
         return false
     end
+	#local nukeBP = platoon:GetBlueprint().Weapon[1].ProjectileId
+	local massCost = 12000
     local targetUnits = aiBrain:GetUnitsAroundPoint( categories.ALLUNITS, position, maxRange, 'Enemy' )
     for k,v in atkPri do
         local category = ParseEntityCategory( v )
@@ -584,6 +627,7 @@ function AIFindBrainNukeTargetInRangeSorian( aiBrain, platoon, maxRange, atkPri,
                 local unitPos = unit:GetPosition()
 				#local antiNukes = aiBrain:GetNumUnitsAroundPoint( categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, unitPos, 90, 'Enemy' )
 				local antiNukes = SUtils.NumberofUnitsBetweenPoints(aiBrain, position, unitPos, categories.ANTIMISSILE * categories.TECH3 * categories.STRUCTURE, 90, 'Enemy')
+				if not SUtils.CheckCost(aiBrain, unitPos, massCost * antiNukes) then continue end
 				local dupTarget = false
 				for x,z in oldTarget do
 					if unit == z or (not z:IsDead() and Utils.XZDistanceTwoVectors( z:GetPosition(), unitPos ) < 30) then

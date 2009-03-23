@@ -93,8 +93,8 @@ BaseBuilderTemplate {
         'SorianMiscLandFormBuilders',
         'SorianUnitCapLandAttackFormBuilders',
         
-        'SorianT1LandAA',
-        'SorianT2LandAA',
+        #'SorianT1LandAA',
+        #'SorianT2LandAA',
 		'SorianT3LandResponseBuilders',
 
         'SorianT1ReactionDF',
@@ -205,7 +205,7 @@ BaseBuilderTemplate {
             SCU = 8,
         },
         FactoryCount = {
-            Land = 3,
+            Land = 2,
             Air = 2,
             Sea = 0,
             Gate = 1,

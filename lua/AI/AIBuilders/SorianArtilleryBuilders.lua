@@ -69,7 +69,7 @@ BuilderGroup {
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.STRUCTURE * categories.TECH3 * categories.ARTILLERY}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.EXPERIMENTAL}},
             { SIBC, 'GreaterThanEconIncome', {15, 750}},
-			{ SBC, 'MapGreaterThan', { 500, 500 }},
+			#{ SBC, 'MapGreaterThan', { 500, 500 }},
             { SIBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
             #{ UCBC, 'CheckUnitRange', { 'LocationType', 'T3Artillery', categories.STRUCTURE } },
@@ -89,7 +89,7 @@ BuilderGroup {
         }
     },
     Builder {
-        BuilderName = 'Sorian T3 Artillery Engineer - 10x10',
+        BuilderName = 'Sorian T3 Artillery Engineer - 5x5+',
         PlatoonTemplate = 'T3EngineerBuilderSorian',
         Priority = 949,
         BuilderConditions = {
@@ -99,7 +99,7 @@ BuilderGroup {
 			{ UCBC, 'HaveLessThanUnitsWithCategory', { 1, categories.STRUCTURE * categories.TECH3 * categories.ARTILLERY}},
 			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 1, categories.EXPERIMENTAL}},
             { SIBC, 'GreaterThanEconIncome', {15, 750}},
-			{ SBC, 'MapGreaterThan', { 500, 500 }},
+			#{ SBC, 'MapGreaterThan', { 500, 500 }},
 			{ SBC, 'MapLessThan', { 1000, 1000 }},
             { SIBC, 'GreaterThanEconEfficiency', { 0.9, 1.2}},
             { IBC, 'BrainNotLowPowerMode', {} },
