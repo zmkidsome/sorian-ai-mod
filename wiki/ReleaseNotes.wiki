@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.9.7:* ACU should keep moving when attacking early, AI should have fighters out earlier when needed, Water AI should build more naval defenses, AI will make sure mass value of a Nuke target is greater then the mass value of the Nukes, UEF satellites should now go for unprotected targets again, Opened up the ability of the Rush AI to use T3 Arty, AI should build fewer Anti-Nukes unless the enemy has nukes, Includes LEM 4.3.
+
 *1.9.6:* Misc. tweaks.
 
 *1.9.5:* Air units should no longer land.
