@@ -9,12 +9,19 @@ function NukeCheck(aiBrain)
 	local waitcount = 0
 	local rollcount = 0	
 	local nukeCount = 0
+	local mapSizeX, mapSizeZ = GetMapSize()
+	local size = mapSizeX
+	if mapSizeZ > mapSizeX then
+		size = mapSizeZ
+	end
+	local sizeDiag = math.sqrt((size * size) * 2)
+	local nukeWait = math.max((sizeDiag / 40) - 20, 10)
 	local numNukes = aiBrain:GetCurrentUnits( categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3 )
 	#LOG('*NukeCheck Starting')
 	while true do
 		lastNukes = numNukes
 		repeat
-			WaitSeconds(30)
+			WaitSeconds(nukeWait)
 			waitcount = 0
 			nukeCount = 0
 			numNukes = aiBrain:GetCurrentUnits( categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3 )
@@ -25,12 +32,12 @@ function NukeCheck(aiBrain)
 				end
 				if v:GetNukeSiloAmmoCount() > 0 then
 					nukeCount = nukeCount + 1
-				end            
+				end
 			end
-			if nukeCount > 0 and lastNukes > 0 then				
+			if nukeCount > 0 and lastNukes > 0 then
 				WaitSeconds(5)
 				SUtils.Nuke(aiBrain)
-				#LOG('*AI DEBUG: Moving on!')				
+				#LOG('*AI DEBUG: Moving on!')
 				rollcount = 0
 				WaitSeconds(30)
 			end
@@ -304,7 +311,7 @@ function CDROverChargeSorian( aiBrain, cdr) #, Mult )
     end
     local distressRange = 100
     local beingBuilt = false
-    local maxRadius = weapon.MaxRadius * 4.5 # * Mult
+    local maxRadius = weapon.MaxRadius * 4.55 # * Mult
 	local weapRange = weapon.MaxRadius
     cdr.UnitBeingBuiltBehavior = false
 	

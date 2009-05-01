@@ -35,7 +35,7 @@ function GetBestThreatTarget(aiBrain, platoon, bSkipPathability)
     
     # If the platoon we're sending is weaker than a potential target, lower
     # the desirability of choosing that target by this factor
-    local WeakAttackThreatWeight = 10
+    local WeakAttackThreatWeight = 8 #10
     
     # If the platoon we're sending is stronger than a potential target, raise
     # the desirability of choosing that target by this factor

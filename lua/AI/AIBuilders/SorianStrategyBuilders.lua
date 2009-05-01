@@ -88,7 +88,16 @@ BuilderGroup {
         },
         BuilderType = 'Any',		
         RemoveBuilders = {},
-		AddBuilders = {}
+		AddBuilders = {
+			EngineerManager = {
+				'Sorian T3 Land Exp1 Engineer - Excess Mass',
+				'Sorian T3 Land Exp1 Engineer - Large Map - Excess Mass',
+				'Sorian T3 Engineer Assist Experimental Mobile Land - Excess Mass',
+				'Sorian T3 Air Exp1 Engineer 1 - Excess Mass',
+				'Sorian T3 Air Exp1 Engineer 1 - Small Map - Excess Mass',
+				'Sorian T3 Engineer Assist Experimental Mobile Air - Excess Mass',
+			},
+		}
     },
 }
 
@@ -710,7 +719,7 @@ BuilderGroup {
 			end
 			local returnval = 0
 			
-			if Random(1,5) == 2 then
+			if Random(1,10) > 5 then
 				returnval = 100
 			end
 			

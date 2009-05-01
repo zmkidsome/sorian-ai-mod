@@ -1692,8 +1692,9 @@ Platoon = Class(sorianoldPlatoon) {
 				WaitSeconds(5)
 			end
 		end
-        if not aiBrain:PlatoonExists(self) then #  or assistData.PermanentAssist then
-			#LOG('*AI DEBUG: Engie perma assisting')
+        if not aiBrain:PlatoonExists(self) then #or assistData.PermanentAssist then
+			LOG('*AI DEBUG: Engie perma assisting')
+			SUtils.AISendPing(eng:GetPosition(), 'move', aiBrain:GetArmyIndex())
             return
         end
         self.AssistPlatoon = nil

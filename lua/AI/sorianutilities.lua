@@ -28,6 +28,30 @@ function T4Timeout(aiBrain)
 	aiBrain.T4Building = false
 end
 
+function GiveAwayMyCrap(aiBrain)
+	local giveTo = false
+	for k, v in ArmyBrains do
+		if IsAlly(aiBrain:GetArmyIndex(), v:GetArmyIndex()) and v.BrainType == 'Human' and not v:IsDefeated() then
+			giveTo = v:GetArmyIndex()
+			break
+		end
+	end
+	if giveTo then
+		local myUnits = aiBrain:GetListOfUnits(categories.ALLUNITS, false)
+		for k,v in myUnits do
+			if not v:IsDead() then
+				if v.PlatoonHandle and aiBrain:PlatoonExists(v.PlatoonHandle) then
+					v.PlatoonHandle:Stop()
+					v.PlatoonHandle:PlatoonDisbandNoAssign()
+				end		
+				IssueStop({v})
+				IssueClearCommands({v})
+				ChangeUnitArmy(v,giveTo)
+			end
+		end
+	end
+end
+
 #-----------------------------------------------------
 #   Function: XZDistanceTwoVectorsSq
 #   Args:
