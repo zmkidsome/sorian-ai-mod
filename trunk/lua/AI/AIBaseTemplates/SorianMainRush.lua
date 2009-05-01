@@ -188,6 +188,7 @@ BaseBuilderTemplate {
 		'SorianBalancedUpgradeBuildersExpansionStrategy',
 		'SorianEngineerExpansionBuildersStrategy',
 		'SorianACUUpgrades - Rush',
+		'SorianExcessMassBuilders',
     },
     NonCheatBuilders = {
         'SorianAirScoutFactoryBuilders',
@@ -205,7 +206,7 @@ BaseBuilderTemplate {
         EngineerCount = {
             Tech1 = 15,
             Tech2 = 10,
-            Tech3 = 15,
+            Tech3 = 25, #15,
             SCU = 2,
         },
         FactoryCount = {

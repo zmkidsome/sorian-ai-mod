@@ -43,7 +43,7 @@ function SeaAttackCondition(aiBrain, locationType, targetNumber)
     
     local surfaceThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.NAVAL, position, radius )
     local subThreat = pool:GetPlatoonThreat( 'AntiSub', categories.MOBILE * categories.NAVAL, position, radius )
-    if ( surfaceThreat + subThreat ) > targetNumber then
+    if ( surfaceThreat + subThreat ) >= targetNumber then
         return true
 	elseif UC.UnitCapCheckGreater(aiBrain, .95) then
 		return true

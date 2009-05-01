@@ -132,6 +132,25 @@ AIBrain = Class(oldAIBrain) {
         self.FactoryAssistList = {}
         self.BrainType = 'AI'
     end,
+	
+    OnDefeat = function(self)
+		local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
+		if string.find(per, 'sorian') then
+			SUtils.GiveAwayMyCrap(self)
+		end
+        SetArmyOutOfGame(self:GetArmyIndex())
+        table.insert( Sync.GameResult, { self:GetArmyIndex(), "defeat" } )
+        import('/lua/SimUtils.lua').UpdateUnitCap()
+        import('/lua/SimPing.lua').OnArmyDefeat(self:GetArmyIndex())
+        local function KillArmy()
+            WaitSeconds(20)
+            local units = self:GetListOfUnits(categories.ALLUNITS - categories.WALL, false)
+            for index,unit in units do
+                unit:Kill()
+            end
+        end
+        ForkThread(KillArmy)
+    end,
 
     InitializeSkirmishSystems = function(self)
     
@@ -840,9 +859,9 @@ AIBrain = Class(oldAIBrain) {
             self:SetCurrentEnemy( allyEnemy )
         else
             local findEnemy = false
-            if not self:GetCurrentEnemy() or brainbool and not self.targetoveride then
+            if (not self:GetCurrentEnemy() or brainbool) and not self.targetoveride then
                 findEnemy = true
-            else
+            elseif self:GetCurrentEnemy() then
                 local cIndex = self:GetCurrentEnemy():GetArmyIndex()
                 # If our enemy has been defeated or has less than 20 strength, we need a new enemy
                 if self:GetCurrentEnemy():IsDefeated() or armyStrengthTable[cIndex].Strength < 20 then

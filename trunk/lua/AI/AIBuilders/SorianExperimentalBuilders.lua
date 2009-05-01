@@ -49,10 +49,10 @@ function T4LandAttackCondition(aiBrain, locationType, targetNumber)
     local radius = engineerManager:GetLocationRadius()
     
     local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.LAND * categories.EXPERIMENTAL, position, radius * 2.5 )
-    if surThreat > targetNumber * 2 then
+    if surThreat >= targetNumber then
         return true
-	elseif UC.UnitCapCheckGreater(aiBrain, .95) then
-		return true
+	#elseif UC.UnitCapCheckGreater(aiBrain, .99) then
+	#	return true
 	elseif SInBC.PoolGreaterAtLocationExp(aiBrain, locationType, 4, categories.MOBILE * categories.LAND * categories.EXPERIMENTAL) then
 		return true
     end
@@ -77,10 +77,10 @@ function T4AirAttackCondition(aiBrain, locationType, targetNumber)
     local radius = engineerManager:GetLocationRadius()
     
     local surThreat = pool:GetPlatoonThreat( 'AntiSurface', categories.MOBILE * categories.AIR * categories.EXPERIMENTAL, position, radius * 2.5)
-    if surThreat > targetNumber then
+    if surThreat > targetNumber and targetNumber > 0 then
         return true
-	elseif UC.UnitCapCheckGreater(aiBrain, .95) then
-		return true
+	#elseif UC.UnitCapCheckGreater(aiBrain, .99) then
+	#	return true
 	elseif SInBC.PoolGreaterAtLocationExp(aiBrain, locationType, 4, categories.MOBILE * categories.AIR * categories.EXPERIMENTAL) then
 		return true
     end

@@ -24,7 +24,188 @@ local PlatoonFile = '/lua/platoon.lua'
 local SBC = '/lua/editor/SorianBuildConditions.lua'
 local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
 
-
+BuilderGroup {
+    BuilderGroupName = 'SorianExcessMassBuilders',
+    BuildersType = 'EngineerBuilder',
+    Builder {
+        BuilderName = 'Sorian T3 Land Exp1 Engineer - Excess Mass',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+		Priority = 0.1,
+        ActivePriority = 980,
+		InstanceCount = 5,
+        BuilderConditions = {
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.TECH3 } },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+			{ UCBC, 'HaveGreaterThanUnitsInCategoryBeingBuilt', { 0, 'EXPERIMENTAL LAND', 'LocationType', }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SBC, 'MapLessThan', { 2000, 2000 }},
+			{ SBC, 'MarkerLessThan', { 'LocationType', {'Amphibious Path Node', 'Land Path Node'}, 100, true } },
+			#{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			MinNumAssistees = 6,
+            Construction = {
+                BuildClose = false,
+				#T4 = true,
+                BaseTemplate = ExBaseTmpl,
+                NearMarkerType = 'Rally Point',
+                BuildStructures = {
+                    'T4LandExperimental1',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Land Exp1 Engineer - Large Map - Excess Mass',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+		Priority = 0.1,
+        ActivePriority = 979,
+		InstanceCount = 5,
+        BuilderConditions = {
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.TECH3 } },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2 }},
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+			{ UCBC, 'HaveGreaterThanUnitsInCategoryBeingBuilt', { 0, 'EXPERIMENTAL LAND', 'LocationType', }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SBC, 'MapGreaterThan', { 2000, 2000 }},
+			{ SBC, 'MarkerLessThan', { 'LocationType', {'Amphibious Path Node', 'Land Path Node'}, 100, true } },
+			#{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			MinNumAssistees = 6,
+            Construction = {
+                BuildClose = false,
+				#T4 = true,
+                BaseTemplate = ExBaseTmpl,
+                NearMarkerType = 'Rally Point',
+                BuildStructures = {
+                    'T4LandExperimental1',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Land - Excess Mass',
+        PlatoonTemplate = 'T3EngineerAssistSorian',
+		Priority = 0.1,
+        ActivePriority = 981,
+        InstanceCount = 15,
+        BuilderConditions = {
+            { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.LAND * categories.MOBILE}},
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                AssisteeType = 'Engineer',
+				AssistUntilFinished = true,
+                AssistRange = 250,
+                BeingBuiltCategories = {'EXPERIMENTAL MOBILE LAND'},
+                Time = 60,
+            },
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Air Exp1 Engineer 1 - Excess Mass',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+		Priority = 0.1,
+        ActivePriority = 980,
+		InstanceCount = 5,
+        BuilderConditions = {
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.TECH3 } },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+			{ UCBC, 'HaveGreaterThanUnitsInCategoryBeingBuilt', { 0, 'EXPERIMENTAL AIR', 'LocationType', }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SBC, 'MapGreaterThan', { 1000, 1000 }},
+			#{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			MinNumAssistees = 6,
+            Construction = {
+                BuildClose = false,
+				#T4 = true,
+                NearMarkerType = 'Protected Experimental Construction',
+                BuildStructures = {
+                    'T4AirExperimental1',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Air Exp1 Engineer 1 - Small Map - Excess Mass',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+		Priority = 0.1,
+        ActivePriority = 979,
+		InstanceCount = 5,
+        BuilderConditions = {
+            { SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.ENERGYPRODUCTION * categories.TECH3}},
+			{ SIBC, 'HaveGreaterThanUnitsWithCategory', { 0, categories.MASSPRODUCTION * categories.TECH3}},
+			{ UCBC, 'FactoryGreaterAtLocation', { 'LocationType', 0, categories.FACTORY * categories.TECH3 } },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+			{ SIBC, 'EngineerNeedsAssistance', { false, 'LocationType', 'EXPERIMENTAL' }},
+			{ UCBC, 'HaveGreaterThanUnitsInCategoryBeingBuilt', { 0, 'EXPERIMENTAL AIR', 'LocationType', }},
+            { IBC, 'BrainNotLowPowerMode', {} },
+			{ SBC, 'MapLessThan', { 1000, 1000 }},
+			#{ SIBC, 'T4BuildingCheck', {} },
+			{ SBC, 'EnemyThreatLessThanValueAtBase', { 'LocationType', 1, 'Air', 2 } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+			MinNumAssistees = 6,
+            Construction = {
+                BuildClose = false,
+				#T4 = true,
+                NearMarkerType = 'Protected Experimental Construction',
+                BuildStructures = {
+                    'T4AirExperimental1',
+                },
+                Location = 'LocationType',
+            }
+        }
+    },
+    Builder {
+        BuilderName = 'Sorian T3 Engineer Assist Experimental Mobile Air - Excess Mass',
+        PlatoonTemplate = 'T3EngineerAssistSorian',
+		Priority = 0.1,
+        Priority = 981,
+        InstanceCount = 15,
+        BuilderConditions = {
+            { UCBC, 'LocationEngineersBuildingGreater', { 'LocationType', 0, categories.EXPERIMENTAL * categories.AIR * categories.MOBILE}},
+            { IBC, 'BrainNotLowPowerMode', {} },
+            { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.9, 1.2} },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Assist = {
+                AssistLocation = 'LocationType',
+                AssisteeType = 'Engineer',
+				AssistUntilFinished = true,
+                AssistRange = 250,
+                BeingBuiltCategories = {'EXPERIMENTAL MOBILE AIR'},
+                Time = 60,
+            },
+        }
+    },
+}
 BuilderGroup {
     BuilderGroupName = 'SorianT1BomberHighPrio',
     BuildersType = 'FactoryBuilder',
