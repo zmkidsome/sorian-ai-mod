@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*1.9.8:* Decreased the number of Naval facilities per Naval base, Added more strategies to have the AI burn off excess mass, AI should not build numerous engineers after reaching a new tech level, The AI will adjust the delay between nuke launches based on map size, Adjusted T4 grouping, The AI will give away its units to a human player when it dies, Includes LEM 4.4.
+
 *1.9.7:* ACU should keep moving when attacking early, AI should have fighters out earlier when needed, Water AI should build more naval defenses, AI will make sure mass value of a Nuke target is greater then the mass value of the Nukes, UEF satellites should now go for unprotected targets again, Opened up the ability of the Rush AI to use T3 Arty, AI should build fewer Anti-Nukes unless the enemy has nukes, Includes LEM 4.3.
 
 *1.9.6:* Misc. tweaks.
