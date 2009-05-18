@@ -18,6 +18,10 @@ AIBrain = Class(oldAIBrain) {
 		if self.BrainType == 'AI' then
 			SUtils.AISendChat('enemies', ArmyBrains[self:GetArmyIndex()].Nickname, 'ilost')
 		end
+		local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
+		if string.find(per, 'sorian') then
+			SUtils.GiveAwayMyCrap(self)
+		end
         SetArmyOutOfGame(self:GetArmyIndex())
         table.insert( Sync.GameResult, { self:GetArmyIndex(), "defeat" } )
         import('/lua/SimUtils.lua').UpdateUnitCap()
@@ -131,25 +135,6 @@ AIBrain = Class(oldAIBrain) {
         self.UnitBuiltTriggerList = {}
         self.FactoryAssistList = {}
         self.BrainType = 'AI'
-    end,
-	
-    OnDefeat = function(self)
-		local per = ScenarioInfo.ArmySetup[self.Name].AIPersonality
-		if string.find(per, 'sorian') then
-			SUtils.GiveAwayMyCrap(self)
-		end
-        SetArmyOutOfGame(self:GetArmyIndex())
-        table.insert( Sync.GameResult, { self:GetArmyIndex(), "defeat" } )
-        import('/lua/SimUtils.lua').UpdateUnitCap()
-        import('/lua/SimPing.lua').OnArmyDefeat(self:GetArmyIndex())
-        local function KillArmy()
-            WaitSeconds(20)
-            local units = self:GetListOfUnits(categories.ALLUNITS - categories.WALL, false)
-            for index,unit in units do
-                unit:Kill()
-            end
-        end
-        ForkThread(KillArmy)
     end,
 
     InitializeSkirmishSystems = function(self)
