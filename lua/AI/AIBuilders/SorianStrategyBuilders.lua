@@ -28,6 +28,7 @@ local Behaviors = import('/lua/ai/aibehaviors.lua')
 local AIAttackUtils = import('/lua/AI/aiattackutilities.lua')
 local UnitUpgradeTemplates = import('/lua/upgradetemplates.lua').UnitUpgradeTemplates
 local StructureUpgradeTemplates = import('/lua/upgradetemplates.lua').StructureUpgradeTemplates
+local SUtils = import('/lua/AI/sorianutilities.lua')
 
 BuilderGroup {
     BuilderGroupName = 'Sorian Excess Mass Strategy',
@@ -1000,11 +1001,12 @@ BuilderGroup {
 	
 			local StartX, StartZ = enemy:GetArmyStartPos()
     
-			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
+			--local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
+			local enemyThreat = SUtils.GetThreatAtPosition( aiBrain, {StartX, 0, StartZ}, 1, 'AntiSurface', {'Commander', 'Air', 'Experimental'}, enemyIndex )
 			
-			#If enemy base has more than 2000 anti-surface threat
+			#If enemy base has more than 1750 anti-surface threat
 			#T2 Arty, T1 PD, T2 PD, Bots, Tanks, Mobile Arty, Gunships, Bombers, ACU, SCUs.
-			returnval = enemyThreat * 0.0375
+			returnval = enemyThreat * 0.0429
 			return returnval
 		end,
         BuilderConditions = {
@@ -1058,11 +1060,12 @@ BuilderGroup {
 	
 			local StartX, StartZ = enemy:GetArmyStartPos()
     
-			local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
+			--local enemyThreat = aiBrain:GetThreatAtPosition( {StartX, 0, StartZ}, 1, true, 'AntiSurface', enemyIndex )
+			local enemyThreat = SUtils.GetThreatAtPosition( aiBrain, {StartX, 0, StartZ}, 1, 'AntiSurface', {'Commander', 'Air', 'Experimental'}, enemyIndex )
 			
-			#If enemy base has more than 2000 anti-surface threat
+			#If enemy base has more than 1750 anti-surface threat
 			#T2 Arty, T1 PD, T2 PD, Bots, Tanks, Mobile Arty, Gunships, Bombers, ACU, SCUs.
-			returnval = enemyThreat * 0.0375
+			returnval = enemyThreat * 0.0429
 			return returnval
 		end,
         BuilderConditions = {
