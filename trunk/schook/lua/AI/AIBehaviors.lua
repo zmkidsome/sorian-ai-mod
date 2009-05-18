@@ -15,7 +15,7 @@ function NukeCheck(aiBrain)
 		size = mapSizeZ
 	end
 	local sizeDiag = math.sqrt((size * size) * 2)
-	local nukeWait = math.max((sizeDiag / 40) - 20, 10)
+	local nukeWait = math.max((sizeDiag / 40), 10)
 	local numNukes = aiBrain:GetCurrentUnits( categories.NUKE * categories.SILO * categories.STRUCTURE * categories.TECH3 )
 	#LOG('*NukeCheck Starting')
 	while true do

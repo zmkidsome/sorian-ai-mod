@@ -31,7 +31,7 @@ end
 function GiveAwayMyCrap(aiBrain)
 	local giveTo = false
 	for k, v in ArmyBrains do
-		if IsAlly(aiBrain:GetArmyIndex(), v:GetArmyIndex()) and v.BrainType == 'Human' and not v:IsDefeated() then
+		if not v:IsDefeated() and v.BrainType == 'Human' and IsAlly(aiBrain:GetArmyIndex(), v:GetArmyIndex()) then
 			giveTo = v:GetArmyIndex()
 			break
 		end
@@ -481,10 +481,20 @@ end
 #   Returns:  
 #       Threat level
 #-----------------------------------------------------
-function GetThreatAtPosition( aiBrain, pos, rings, ttype, threatFilters)
-	local threat = aiBrain:GetThreatAtPosition( pos, rings, true, ttype )
+function GetThreatAtPosition( aiBrain, pos, rings, ttype, threatFilters, enemyIndex)
+	local threat
+	if enemyIndex then
+		threat = aiBrain:GetThreatAtPosition( pos, rings, true, ttype, enemyIndex )
+	else
+		threat = aiBrain:GetThreatAtPosition( pos, rings, true, ttype )
+	end
 	for k,v in threatFilters do
-		local rthreat = aiBrain:GetThreatAtPosition( pos, rings, true, v )
+		local rthreat
+		if enemyIndex then
+			rthreat = aiBrain:GetThreatAtPosition( pos, rings, true, v, enemyIndex )
+		else
+			rthreat = aiBrain:GetThreatAtPosition( pos, rings, true, v )
+		end
 		threat = threat - rthreat
 	end
 	return threat
