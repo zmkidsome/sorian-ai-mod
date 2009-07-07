@@ -51,6 +51,7 @@ BuilderGroup {
 				categories.MASSEXTRACTION * categories.TECH3,
 				categories.FACTORY * categories.TECH3,
 			}
+			local numchecks = 0
 			repeat
 				for _,cat in cats do
 					local units = aiBrain:GetListOfUnits( cat, false )
@@ -77,8 +78,9 @@ BuilderGroup {
 					if AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiency < 1.0
 					or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiency < 1.0 then break end
 				end
+				numchecks = numchecks + 1
 			until AIUtils.AIGetEconomyNumbers(aiBrain).MassEfficiency < 1.0
-			or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiency < 1.0
+			or AIUtils.AIGetEconomyNumbers(aiBrain).EnergyEfficiency < 1.0 or numchecks > 1
 		end,
         BuilderConditions = {
 			{ SBC, 'GreaterThanGameTime', { 300 }},
