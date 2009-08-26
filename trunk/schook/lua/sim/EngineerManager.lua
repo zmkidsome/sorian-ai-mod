@@ -662,11 +662,16 @@ EngineerManager = Class(BuilderManager) {
 			end
 			
 			local buildCats = self.Brain:GetUnitBlueprint( v.EngineerBuildQueue[1][1] ).Categories
+			local buildingTypes = SUtils.split(buildingType, ' ')
 			local found = false
+			local count = 0
 			for k,v in buildCats do
-				if v == buildingType then
-					found = true
-					break
+				for x,z in buildingTypes do
+					if v == z then
+						count = count + 1
+					end
+					if table.getn(buildingTypes) == count then found = true end
+					if found then break end
 				end
 			end
             
@@ -708,7 +713,10 @@ EngineerManager = Class(BuilderManager) {
         local guards = unit:GetGuards()
         for k,v in guards do
             if not v:IsDead() and v.AssistPlatoon then
-                if self.Brain:PlatoonExists(v.AssistPlatoon) then
+				local per = ScenarioInfo.ArmySetup[self.Brain.Name].AIPersonality
+				if string.find(per, 'sorian') and self.Brain:PlatoonExists(v.AssistPlatoon) then
+					v.AssistPlatoon:ForkThread(v.AssistPlatoon.SorianEconAssistBody)
+                elseif self.Brain:PlatoonExists(v.AssistPlatoon) then
                     v.AssistPlatoon:ForkThread(v.AssistPlatoon.EconAssistBody)
                 else
                     v.AssistPlatoon = nil
@@ -795,7 +803,10 @@ EngineerManager = Class(BuilderManager) {
         local guards = unit:GetGuards()
         for k,v in guards do
             if not v:IsDead() and v.AssistPlatoon then
-                if self.Brain:PlatoonExists(v.AssistPlatoon) then
+				local per = ScenarioInfo.ArmySetup[self.Brain.Name].AIPersonality
+				if string.find(per, 'sorian') and self.Brain:PlatoonExists(v.AssistPlatoon) then
+					v.AssistPlatoon:ForkThread(v.AssistPlatoon.SorianEconAssistBody)
+                elseif self.Brain:PlatoonExists(v.AssistPlatoon) then
                     v.AssistPlatoon:ForkThread(v.AssistPlatoon.EconAssistBody)
                 else
                     v.AssistPlatoon = nil

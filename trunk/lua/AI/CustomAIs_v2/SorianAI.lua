@@ -9,7 +9,7 @@
 
 AI = {
 	Name = "Sorian AI",
-	Version = "1.9.9d",
+	Version = "2.0.0",
 	AIList = {
 		{
 			key = 'sorian',

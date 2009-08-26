@@ -694,7 +694,7 @@ function CommanderThreadSorian(cdr, platoon)
             end
         end
 		WaitSeconds(1)
-		if GetGameTimeSeconds() > WaitTaunt and (not aiBrain.LastVocTaunt or GetGameTimeSeconds() - aiBrain.LastVocTaunt > WaitTaunt) then
+		if not cdr:IsDead() and GetGameTimeSeconds() > WaitTaunt and (not aiBrain.LastVocTaunt or GetGameTimeSeconds() - aiBrain.LastVocTaunt > WaitTaunt) then
 			SUtils.AIRandomizeTaunt(aiBrain)
 			WaitTaunt = 600 + Random(1,900)
 		end

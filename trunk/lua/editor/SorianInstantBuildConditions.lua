@@ -466,30 +466,32 @@ end
 ##############################################################################################################
 function EngineerNeedsAssistance(aiBrain, doesbool, locationType, category)
 	local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
-	if not engineerManager or not type(category) == 'string' then
+	if not engineerManager then
 		return false
 	end
-	local bCategory = ParseEntityCategory(category)
-
-	local engs = engineerManager:GetEngineersBuildingCategory(bCategory, categories.ALLUNITS )
 	local numFound = 0
-	for k,v in engs do
-		if v.DesiresAssist == true then
-			if v.MinNumAssistees and SUtils.GetGuards(aiBrain, v) < v.MinNumAssistees then
-				numFound = numFound + 1
+	for _,cat in category do
+		local bCategory = ParseEntityCategory(cat)
+
+		local engs = engineerManager:GetEngineersBuildingCategory(bCategory, categories.ALLUNITS )
+		for k,v in engs do
+			if v.DesiresAssist == true then
+				if v.MinNumAssistees and SUtils.GetGuards(aiBrain, v) < v.MinNumAssistees then
+					numFound = numFound + 1
+				end
 			end
+			if numFound > 0 and doesbool then return true end
 		end
-		if numFound > 0 and doesbool then return true end
-	end
-	
-	engs = engineerManager:GetEngineersBuildQueue(category)
-	for k,v in engs do
-		if v.DesiresAssist == true then
-			if v.MinNumAssistees and SUtils.GetGuards(aiBrain, v) < v.MinNumAssistees then
-				numFound = numFound + 1
+		
+		engs = engineerManager:GetEngineersBuildQueue(cat)
+		for k,v in engs do
+			if v.DesiresAssist == true then
+				if v.MinNumAssistees and SUtils.GetGuards(aiBrain, v) < v.MinNumAssistees then
+					numFound = numFound + 1
+				end
 			end
+			if numFound > 0 and doesbool then return true end
 		end
-		if numFound > 0 and doesbool then return true end
 	end
 	
 	if numFound == 0 and not doesbool then return true end

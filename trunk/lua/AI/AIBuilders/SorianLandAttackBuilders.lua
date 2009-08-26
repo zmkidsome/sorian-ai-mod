@@ -32,7 +32,7 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
     local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
     local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
 	if not engineerManager then
-        return false
+        return true
     end
 	if aiBrain:GetCurrentEnemy() then
 		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
@@ -54,6 +54,8 @@ function LandAttackCondition(aiBrain, locationType, targetNumber)
 	elseif targetNumber == 0 then
 		return true
 	elseif UC.UnitCapCheckGreater(aiBrain, .95) then
+		return true
+	elseif SUtils.ThreatBugcheck(aiBrain) then -- added to combat buggy inflated threat
 		return true
 	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 9, categories.MOBILE * categories.LAND * categories.TECH3 - categories.ENGINEER) and surThreat > (500 * adjustForTime) then #25 Units x 20
 		return true

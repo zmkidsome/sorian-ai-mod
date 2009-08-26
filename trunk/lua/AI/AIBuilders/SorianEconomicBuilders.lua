@@ -183,7 +183,7 @@ BuilderGroup {
     Builder {
         BuilderName = 'Sorian T3 Engineer Disband - Filler 3 Econ',
         PlatoonTemplate = 'T3BuildEngineer',
-        Priority = 950,
+        Priority = 960,
         BuilderConditions = {
             { EBC, 'GreaterThanEconStorageRatio', { 0.85, 0.85 } },
 			{ SIBC, 'GreaterThanEconEfficiencyOverTime', { 1.0, 1.2 } },
@@ -1299,25 +1299,21 @@ BuilderGroup {
         }
     },
     Builder {
-        BuilderName = 'Sorian T1 Energy Storage Engineer - T3 Energy Production',
+        BuilderName = 'Sorian T1 Energy Storage Engineer',
         PlatoonTemplate = 'EngineerBuilderSorian',
-        Priority = 825,
+        Priority = 925,
         BuilderConditions = {
-            { UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 0, 'ENERGYPRODUCTION TECH3' }},
+            { UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 0, 'ENERGYPRODUCTION TECH1' }},
             { UCBC, 'UnitCapCheckLess', { .7 } },
-            { SIBC, 'LessThanEconEfficiencyOverTime', { 2.0, 1.3 }},
-            { UCBC, 'AdjacencyCheck', { 'LocationType', 'ENERGYPRODUCTION TECH3', 100, 'ueb1105' } },
+            { UCBC, 'AdjacencyCheck', { 'LocationType', 'ENERGYPRODUCTION TECH1', 100, 'ueb1105' } },
         },
         BuilderType = 'Any',
         BuilderData = {
             Construction = {
-                AdjacencyCategory = 'ENERGYPRODUCTION TECH3',
+                AdjacencyCategory = 'ENERGYPRODUCTION TECH1',
                 AdjacencyDistance = 100,
                 BuildClose = false,
                 BuildStructures = {
-                    'EnergyStorage',
-                    'EnergyStorage',
-                    'EnergyStorage',
                     'EnergyStorage',
                 },
             }
@@ -1550,6 +1546,27 @@ BuilderGroup {
         }
     },
     Builder {
+        BuilderName = 'Sorian T2 Energy Storage Engineer',
+        PlatoonTemplate = 'T2EngineerBuilderSorian',
+        Priority = 850,
+        BuilderConditions = {
+            { UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 0, 'ENERGYPRODUCTION TECH2' }},
+            { UCBC, 'UnitCapCheckLess', { .7 } },
+            { UCBC, 'AdjacencyCheck', { 'LocationType', 'ENERGYPRODUCTION TECH2', 100, 'ueb1105' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                AdjacencyCategory = 'ENERGYPRODUCTION TECH2',
+                AdjacencyDistance = 100,
+                BuildClose = false,
+                BuildStructures = {
+                    'EnergyStorage',
+                },
+            }
+        }
+    },
+    Builder {
         BuilderName = 'Sorian T2 Engineer Reclaim',
         PlatoonTemplate = 'T2EngineerBuilderSorian',
         PlatoonAIPlan = 'ReclaimAISorian',
@@ -1769,6 +1786,27 @@ BuilderGroup {
     # =========================
     #     T3 ENGINEER BUILD
     # =========================
+    Builder {
+        BuilderName = 'Sorian T3 Energy Storage Engineer',
+        PlatoonTemplate = 'T3EngineerBuilderSorian',
+        Priority = 850,
+        BuilderConditions = {
+            { UCBC, 'UnitsGreaterAtLocation', { 'LocationType', 0, 'ENERGYPRODUCTION TECH3' }},
+            { UCBC, 'UnitCapCheckLess', { .7 } },
+            { UCBC, 'AdjacencyCheck', { 'LocationType', 'ENERGYPRODUCTION TECH3', 100, 'ueb1105' } },
+        },
+        BuilderType = 'Any',
+        BuilderData = {
+            Construction = {
+                AdjacencyCategory = 'ENERGYPRODUCTION TECH3',
+                AdjacencyDistance = 100,
+                BuildClose = false,
+                BuildStructures = {
+                    'EnergyStorage',
+                },
+            }
+        }
+    },
     Builder {
         BuilderName = 'Sorian T3 Engineer Reclaim',
         PlatoonTemplate = 'T3EngineerBuilderOnlySorian',
@@ -2957,7 +2995,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.1 }},
             { SIBC, 'LessThanEconEfficiencyOverTime', { 2.0, 1.3 }},
 			{ SIBC, 'LessThanEconEfficiency', { 2.0, 1.3 }},
-			{ SIBC, 'LessThanEconTrend', { 100000, 45}},
+			#{ SIBC, 'LessThanEconTrend', { 100000, 45}},
         },
         BuilderType = 'Any',
         BuilderData = {
@@ -2982,7 +3020,7 @@ BuilderGroup {
             { SIBC, 'GreaterThanEconEfficiencyOverTime', { 0.5, 0.1 }},
 			{ SIBC, 'LessThanEconEfficiencyOverTime', { 2.0, 1.3 }},
 			{ SIBC, 'LessThanEconEfficiency', { 2.0, 1.3 }},
-			{ SIBC, 'LessThanEconTrend', { 100000, 450}},
+			#{ SIBC, 'LessThanEconTrend', { 100000, 450}},
         },
         BuilderData = {
             Construction = {
