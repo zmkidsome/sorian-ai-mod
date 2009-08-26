@@ -25,12 +25,14 @@ local PlatoonFile = '/lua/platoon.lua'
 local SBC = '/lua/editor/SorianBuildConditions.lua'
 local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
 
+local SUtils = import('/lua/AI/sorianutilities.lua')
+
 function AirAttackCondition(aiBrain, locationType, targetNumber )
 	local UC = import('/lua/editor/UnitCountBuildConditions.lua')
     local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
     local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
 	if not engineerManager then
-        return false
+        return true
     end
 	if aiBrain:GetCurrentEnemy() then
 		local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
@@ -46,6 +48,8 @@ function AirAttackCondition(aiBrain, locationType, targetNumber )
     if ( surfaceThreat + airThreat ) >= targetNumber then
         return true
 	elseif UC.UnitCapCheckGreater(aiBrain, .95) then
+		return true
+	elseif SUtils.ThreatBugcheck(aiBrain) then -- added to combat buggy inflated threat
 		return true
 	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.AIR * categories.TECH3 * (categories.GROUNDATTACK + categories.BOMBER)) and surfaceThreat > 120 then #8 Units x 15
 		return true

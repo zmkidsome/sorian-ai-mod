@@ -28,6 +28,19 @@ function T4Timeout(aiBrain)
 	aiBrain.T4Building = false
 end
 
+function split(str, delimiter)
+	local result = { }
+	local from = 1
+	local delim_from, delim_to = string.find( str, delimiter, from  )
+	while delim_from do
+		table.insert( result, string.sub( str, from , delim_from-1 ) )
+		from = delim_to + 1
+		delim_from, delim_to = string.find( str, delimiter, from  )
+	end
+	table.insert( result, string.sub( str, from  ) )
+	return result
+end
+
 function GiveAwayMyCrap(aiBrain)
 	local giveTo = false
 	for k, v in ArmyBrains do
@@ -499,6 +512,49 @@ function GetThreatAtPosition( aiBrain, pos, rings, ttype, threatFilters, enemyIn
 	end
 	return threat
 end
+
+#-----------------------------------------------------
+#   Function: ThreatBugcheck
+#   Args:
+#       aiBrain 		- AI Brain
+#   Description:
+#       Checks to see if the current enemy has a much higher threat. this can indicate inflated threat or
+#		that the AI is close to death. This can allow the AI to send units even if the threat is bugged
+#		or give the AI a last stand ability. Throttled to check every 10 seconds at most.
+#   Returns:  
+#       true or false
+#-----------------------------------------------------
+function ThreatBugcheck(aiBrain)
+	if not aiBrain:GetCurrentEnemy() then return false end
+	if aiBrain.LastThreatBugCheckTime and aiBrain.LastThreatBugCheckTime + 10 > GetGameTimeSeconds() then
+		return aiBrain.LastThreatBugCheckResult
+	end
+	local myStartX, myStartZ = aiBrain:GetArmyStartPos()
+	local myIndex = aiBrain:GetArmyIndex()
+	
+	local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
+	local enemyIndex = aiBrain:GetCurrentEnemy():GetArmyIndex()
+	
+	local enemyThreat = aiBrain:GetThreatAtPosition( {estartX, 0, estartZ}, 1, true, 'Overall', enemyIndex )
+	local myThreat = 0 --aiBrain:GetThreatAtPosition( {myStartX, 0, myStartZ}, 1, true, 'Overall', myIndex )
+	local unitThreat = 0
+	local units = AIUtils.GetOwnUnitsAroundPoint( aiBrain, categories.ALLUNITS, {myStartX, 0, myStartZ}, 200 )
+	for k,v in units do
+		if not v:IsDead() then
+			unitThreat = (v:GetBlueprint().Defense.SurfaceThreatLevel or 0) + (v:GetBlueprint().Defense.AirThreatLevel or 0) + (v:GetBlueprint().Defense.SubThreatLevel or 0) + (v:GetBlueprint().Defense.EconomyThreatLevel or 0)
+			myThreat = myThreat + unitThreat
+		end
+	end
+	#LOG('*AI DEBUG: ThreatBugcheck Units: '..table.getn(units)..' Me: '..myThreat..' Enemy: '..enemyThreat)
+	aiBrain.LastThreatBugCheckTime = GetGameTimeSeconds()
+	aiBrain.LastThreatBugCheckResult = enemyThreat * 3 > myThreat
+	if enemyThreat > myThreat * 3 then
+		LOG('*AI DEBUG: Threat is bugged!')
+		return true
+	end
+	return false
+end
+	
 
 #-----------------------------------------------------
 #   Function: CheckForMapMarkers
@@ -1168,7 +1224,7 @@ end
 #       Number of assisters
 #-----------------------------------------------------
 function GetGuards(aiBrain, Unit)
-	local engs = aiBrain:GetUnitsAroundPoint( categories.ENGINEER, Unit:GetPosition(), 10, 'Ally' )
+	local engs = aiBrain:GetUnitsAroundPoint( categories.ENGINEER - categories.POD, Unit:GetPosition(), 10, 'Ally' )
 	local count = 0
 	local UpgradesFrom = Unit:GetBlueprint().General.UpgradesFrom
 	for k,v in engs do

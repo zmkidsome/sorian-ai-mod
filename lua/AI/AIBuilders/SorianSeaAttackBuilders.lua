@@ -25,12 +25,14 @@ local PlatoonFile = '/lua/platoon.lua'
 local SBC = '/lua/editor/SorianBuildConditions.lua'
 local SIBC = '/lua/editor/SorianInstantBuildConditions.lua'
 
+local SUtils = import('/lua/AI/sorianutilities.lua')
+
 function SeaAttackCondition(aiBrain, locationType, targetNumber)
 	local UC = import('/lua/editor/UnitCountBuildConditions.lua')
     local pool = aiBrain:GetPlatoonUniquelyNamed('ArmyPool')
     local engineerManager = aiBrain.BuilderManagers[locationType].EngineerManager
 	if not engineerManager then
-        return false
+        return true
     end
 	#if aiBrain:GetCurrentEnemy() then
 	#	local estartX, estartZ = aiBrain:GetCurrentEnemy():GetArmyStartPos()
@@ -48,6 +50,8 @@ function SeaAttackCondition(aiBrain, locationType, targetNumber)
     if ( surfaceThreat + subThreat ) >= targetNumber then
         return true
 	elseif UC.UnitCapCheckGreater(aiBrain, .95) then
+		return true
+	elseif SUtils.ThreatBugcheck(aiBrain) then -- added to combat buggy inflated threat
 		return true
 	elseif UC.PoolGreaterAtLocation(aiBrain, locationType, 0, categories.MOBILE * categories.NAVAL * categories.TECH3) and ( surfaceThreat + subThreat ) > 1125 then #5 Units x 225
 		return true

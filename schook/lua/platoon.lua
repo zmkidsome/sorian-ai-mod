@@ -121,16 +121,19 @@ Platoon = Class(sorianoldPlatoon) {
 	FighterDistributionHubSorian = function(self)
 		local aiBrain = self:GetBrain()
 		local location = self.PlatoonData.Location
+		if not aiBrain.FightersHunting then
+			aiBrain.FightersHunting = {}
+		end
 		if not aiBrain.FightersHunting[location] then
-			self.PlatoonData[location] = 0
+			aiBrain.FightersHunting[location] = 0
 		end
 		
 		#Distribute fighters between guarding the base and hunting down targets 3:1
-		if self.PlatoonData[location] < 4 then
-			self.PlatoonData[location] = self.PlatoonData[location] + 1
+		if aiBrain.FightersHunting[location] < 4 then
+			aiBrain.FightersHunting[location] = aiBrain.FightersHunting[location] + 1
 			return self:FighterHuntAI(self)
 		else
-			self.PlatoonData[location] = 0
+			aiBrain.FightersHunting[location] = 0
 			return self:GuardBaseSorian(self)
 		end
 	end,
@@ -1682,7 +1685,7 @@ Platoon = Class(sorianoldPlatoon) {
 		local assistData = self.PlatoonData.Assist
 		local beingBuilt = false
         self:SorianEconAssistBody()
-        WaitSeconds(self.PlatoonData.AssistData.Time or 60)
+        WaitSeconds(assistData.Time or 60)
 		local eng = self:GetPlatoonUnits()[1]
 		if eng:GetGuardedUnit() then
 			beingBuilt = eng:GetGuardedUnit()
@@ -1756,7 +1759,7 @@ Platoon = Class(sorianoldPlatoon) {
             end
         end
         # assist unit
-        if assistee  then
+        if assistee then
             self:Stop()
             eng.AssistSet = true
             IssueGuard( {eng}, assistee )
