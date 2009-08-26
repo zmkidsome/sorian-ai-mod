@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*2.0.0:* AI will focus more on large builds, Raised T4 trigger threshold, Fixed code for keeping a CAP, Added function, to check for inflated threat levels, AI will build more Energy Storage, When checking for assisting engineers, pods will no longer be counted, AI will use Air T4s more on 20x20 maps.
+
 *1.9.9d:* Fix for sim lock issue, Adjusted ACU behavior.
 
 *1.9.9c:* AI fighters should no longer go after pod units, Altered T4 grouping behavior.
