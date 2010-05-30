@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*2.1.0:* The AI's Excess Mass Strategy should work better, Added in recent suggestions from the AI Sim Speed discussion, AI will no longer control the Residual Energy Signature, Fix for inflated threat levels.
+
 *2.0.0:* AI will focus more on large builds, Raised T4 trigger threshold, Fixed code for keeping a CAP, Added function, to check for inflated threat levels, AI will build more Energy Storage, When checking for assisting engineers, pods will no longer be counted, AI will use Air T4s more on 20x20 maps.
 
 *1.9.9d:* Fix for sim lock issue, Adjusted ACU behavior.
