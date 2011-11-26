@@ -2,6 +2,8 @@
 
 == Release Notes ==
 
+*2.1.2:* Updated for Steam version of FA.
+
 *2.1.1:* Improved the Excess Mass strategy, Fixed the transport behavior.
 
 *2.1.0:* The AI's Excess Mass Strategy should work better, Added in recent suggestions from the AI Sim Speed discussion, AI will no longer control the Residual Energy Signature, Fix for inflated threat levels.
